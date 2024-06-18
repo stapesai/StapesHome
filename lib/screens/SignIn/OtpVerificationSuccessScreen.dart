@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui' as ui; // Add this import for PathMetric
-
-import '../../main.dart'; // Import the HomeScreen
+import 'SignUpPage.dart'; // Import the SignUpPage
 
 class OtpVerificationSuccessScreen extends StatefulWidget {
   @override
@@ -34,7 +33,7 @@ class _OtpVerificationSuccessScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour,
+      backgroundColor: Colors.black,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -52,7 +51,7 @@ class _OtpVerificationSuccessScreenState
                             tween: Tween<double>(begin: 0, end: 1),
                             duration: Duration(
                                 milliseconds:
-                                    500), // Set duration to 0.5 seconds for faster animation
+                                    500), // Set duration to 500 milliseconds for faster animation
                             builder: (context, value, child) {
                               return CustomPaint(
                                 painter: CheckPainter(value),
@@ -79,7 +78,7 @@ class _OtpVerificationSuccessScreenState
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => SignUpPage()),
                 );
               },
               style: ElevatedButton.styleFrom(

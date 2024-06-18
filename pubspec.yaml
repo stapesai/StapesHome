@@ -12,6 +12,8 @@ dependencies:
 
   flutter_blue_plus: ^1.32.7
   qr_code_scanner: ^1.0.0
+  image_picker: ^0.8.4+4
+  image_cropper: ^1.5.0
 
 dev_dependencies:
   flutter_test:

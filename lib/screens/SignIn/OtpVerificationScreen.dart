@@ -178,7 +178,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     // Add your OTP verification logic here
     // For example, compare the entered OTP with the actual OTP
     // Return true if correct, false otherwise
-    return false; // Placeholder, change based on actual logic
+    return true; // Placeholder, change based on actual logic
   }
 }
 
