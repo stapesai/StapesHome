@@ -23,7 +23,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.blue, // Change to a specific color
+      color: Colors.primaryColour, // Change to a specific color
       child: FlutterLogo(size: MediaQuery.of(context).size.height),
     );
   }

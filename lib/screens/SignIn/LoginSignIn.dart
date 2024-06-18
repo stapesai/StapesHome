@@ -7,7 +7,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.primaryColour,
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -60,24 +60,24 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.blue),
                     ),
                   ),
-                  const SizedBox(height: 20.0),
-                  _buildSocialButton(
-                    text: 'Continue with Google',
-                    color: Colors.black,
-                    icon: Icons.g_translate,
-                  ),
-                  const SizedBox(height: 10.0),
+                  // const SizedBox(height: 20.0),
+                  // _buildSocialButton(
+                  //   text: 'Continue with Google',
+                  //   color: Colors.black,
+                  //   icon: Icons.g_translate,
+                  // ),
+                  // const SizedBox(height: 10.0),
                   // _buildSocialButton(
                   //   text: 'Continue with Microsoft',
                   //   color: Colors.black,
                   //   // icon: Icons.microsoft,
                   // ),
-                  SizedBox(height: 10.0),
-                  _buildSocialButton(
-                    text: 'Continue with Apple',
-                    color: Colors.black,
-                    icon: Icons.apple,
-                  ),
+                  // SizedBox(height: 10.0),
+                  // _buildSocialButton(
+                  //   text: 'Continue with Apple',
+                  //   color: Colors.black,
+                  //   icon: Icons.apple,
+                  // ),
                 ],
               ),
             ),

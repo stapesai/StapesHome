@@ -34,7 +34,7 @@ class _OtpVerificationSuccessScreenState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Colors.primaryColour,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
