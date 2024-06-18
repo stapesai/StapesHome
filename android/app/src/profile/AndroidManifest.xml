@@ -1,0 +1,56 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+</manifest>
+
+
+
+<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    
+    <uses-permission android:name="android.permission.INTERNET"/>
+    
+</manifest> -->
+
+
+<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.yourapp">
+
+    <!-- Add INTERNET permission if not already present -->
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <!-- Add CAMERA permission -->
+    <uses-permission android:name="android.permission.CAMERA"/>
+
+    <application
+        android:name="io.flutter.app.FlutterApplication"
+        android:label="Your App Name"
+        android:icon="@mipmap/ic_launcher">
+        
+        <!-- Add this meta-data tag if it's not already present -->
+        <meta-data
+            android:name="flutterEmbedding"
+            android:value="2" />
+
+        <!-- Add this activity if it's not already present -->
+        <activity
+            android:name=".MainActivity"
+            android:launchMode="singleTop"
+            android:theme="@style/LaunchTheme"
+            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
+            android:hardwareAccelerated="true"
+            android:windowSoftInputMode="adjustResize">
+            
+            <!-- Add this intent-filter if it's not already present -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+
+        <!-- Add any other activities, services, or receivers here if needed -->
+
+    </application>
+
+</manifest> -->
