@@ -23,7 +23,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: widget.obscureText,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.primaryColour,
+        fillColor: const Color(0xFF161622),
         labelText: widget.hintText,
         labelStyle: const TextStyle(color: Color(0xFFFF9F1C)),
         enabledBorder: OutlineInputBorder(

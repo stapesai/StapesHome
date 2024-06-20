@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
-import 'OtpVerificationErrorScreen.dart'; // Import the OTP error screen
+// import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
+// import 'OtpVerificationErrorScreen.dart'; // Import the OTP error screen
 import 'package:flutter/services.dart'; // Import for TextInputFormatter
 
 class OtpVerificationScreen extends StatefulWidget {
@@ -39,7 +39,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour, // Use your primary color here
+      backgroundColor: const Color(0xFF161622), // Use your primary color here
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -126,7 +126,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             child: Container(
               margin: EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
-                color: Colors.primaryColour,
+                color: const Color(0xFF161622),
                 borderRadius: BorderRadius.circular(8.0),
                 border: Border.all(color: Color(0xFFFFA404), width: 1.0),
               ),
@@ -155,7 +155,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       borderSide: BorderSide.none,
                     ),
                     filled: true,
-                    fillColor: Colors.primaryColour,
+                    fillColor: const Color(0xFF161622),
                   ),
                   onChanged: (value) {
                     if (value.length == 1 && index < 5) {

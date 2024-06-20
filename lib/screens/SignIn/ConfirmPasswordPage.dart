@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'SignedUpSuccessfullyPage.dart'; // Import the next screen
-import '../../widgets/TextField.dart'; // Import the CustomTextField widget
-import '../../Widgets/Button.dart'; // Import the CustomButton widget
+import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 

@@ -25,7 +25,7 @@ class _NodesScreenState extends State<NodesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          Colors.primaryColour, // Adjust this color to match your theme
+          const Color(0xFF161622), // Adjust this color to match your theme
 
       body: SafeArea(
         child: Padding(
@@ -267,7 +267,6 @@ class DashedBorderPainter extends CustomPainter {
 
     final double dashWidth = 5;
     final double dashSpace = 5;
-    double startX = 0;
     final path = Path()
       ..addRRect(RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16)));

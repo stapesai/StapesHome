@@ -1,4 +1,4 @@
-import '../../Widgets/TextField.dart';
+import 'package:jarvis/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatelessWidget {

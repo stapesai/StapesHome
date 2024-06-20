@@ -31,7 +31,7 @@ class _OtpVerificationErrorScreenState extends State<OtpVerificationErrorScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour,
+      backgroundColor: const Color(0xFF161622),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

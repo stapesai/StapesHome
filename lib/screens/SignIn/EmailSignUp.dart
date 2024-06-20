@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'OtpVerification.dart'; // Import the OTP verification screen
 import 'package:http/http.dart' as http;
-import '../../Widgets/button.dart'; // Import the CustomButton widget
-import '../../main.dart'; // Import the MainScreen
+import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'OtpVerificationErrorScreen.dart';
 import 'dart:convert';
 import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
@@ -13,7 +12,7 @@ class EmailSignUp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour,
+      backgroundColor: const Color(0xFF161622),
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(

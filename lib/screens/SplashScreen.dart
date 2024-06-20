@@ -2,8 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'SignIn/LoginSignIn.dart'; // Import the LoginScreen
 
-import '../main.dart'; // Import the MainScreen
-
 class SplashScreen extends StatefulWidget {
   @override
   SplashScreenState createState() => SplashScreenState();
@@ -25,7 +23,7 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.primaryColour, // Change to a specific color
+      color: const Color(0xFF161622), // Change to a specific color
       child: FlutterLogo(size: MediaQuery.of(context).size.height),
     );
   }

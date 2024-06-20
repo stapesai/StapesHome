@@ -221,7 +221,7 @@ class _DeviceButtonState extends State<DeviceButton> {
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF343450), Color(0xFF161622)],
+            colors: [Color(0xFF343450), const Color(0xFF161622)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -294,7 +294,7 @@ class AddDeviceButton extends StatelessWidget {
             ),
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -320,9 +320,8 @@ class DashedBorderPainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
-    final double dashWidth = 5;
-    final double dashSpace = 5;
-    double startX = 0;
+    const double dashWidth = 5;
+    const double dashSpace = 5;
     final path = Path()
       ..addRRect(RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16)));

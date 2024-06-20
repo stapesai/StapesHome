@@ -4,9 +4,9 @@ class SessionsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour,
+      backgroundColor: const Color(0xFF161622),
       appBar: AppBar(
-        backgroundColor: Colors.primaryColour,
+        backgroundColor: const Color(0xFF161622),
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: Colors.orange),

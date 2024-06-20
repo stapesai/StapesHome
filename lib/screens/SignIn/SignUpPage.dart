@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'ConfirmPasswordPage.dart'; // Ensure the import is correct
-import '../../Widgets/CircularImagePicker.dart'; // Import the CircularImagePicker widget
-import '../../widgets/TextField.dart'; // Import the CustomTextField widget
-import '../../Widgets/Button.dart'; // Import the CustomButton widget
+import 'package:jarvis/widgets/CircularImagePicker.dart'; // Import the CircularImagePicker widget
+import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
 class SignUpPage extends StatefulWidget {
   final String transactionId;

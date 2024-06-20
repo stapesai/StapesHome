@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../Widgets/button.dart'; // Import the CustomButton widget
-import '../../main.dart'; // Import the MainScreen
+import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'EmailSignUp.dart'; // Import the EmailSignUp screen
 import 'OtpVerification.dart'; // Import the OTP Verification screen
+import 'package:jarvis/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'OtpVerificationErrorScreen.dart';
@@ -17,9 +17,9 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour, // Set your primary color here
+      backgroundColor: const Color(0xFF161622), // Set your primary color here
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,

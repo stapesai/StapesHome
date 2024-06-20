@@ -4,7 +4,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: Colors.primaryColour,
+      backgroundColor: const Color(0xFF161622),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       title:
           const Text('Confirm Logout?', style: TextStyle(color: Colors.white)),
