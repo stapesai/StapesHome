@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../Widgets/button.dart'; // Import the CustomButton widget
 import '../../main.dart'; // Import the MainScreen
 import 'EmailSignUp.dart'; // Import the EmailSignUp screen
+import 'LoginOtpVerification.dart'; // Import the OTP Verification screen
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,7 +14,7 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blue, // Set your primary color here
+      backgroundColor: Colors.primaryColour, // Set your primary color here
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -63,11 +64,13 @@ class LoginScreen extends StatelessWidget {
                         }),
                       );
                       if (response.statusCode == 200) {
-                        print('Login successful');
-                        print('Response body: ${response.body}');
+                        var responseBody = json.decode(response.body);
+                        String transactionId = responseBody['transaction_id'];
                         Navigator.pushReplacement(
                           context,
-                          MaterialPageRoute(builder: (context) => MainScreen()),
+                          MaterialPageRoute(
+                              builder: (context) => OtpVerificationScreen(
+                                  transactionId: transactionId)),
                         );
                       } else {
                         print('Login failed');
@@ -85,7 +88,7 @@ class LoginScreen extends StatelessWidget {
                     },
                     child: const Text(
                       "Don't have an account? Sign Up",
-                      style: TextStyle(color: Colors.blue),
+                      style: TextStyle(color: Colors.primaryColour),
                     ),
                   ),
                 ],
