@@ -4,6 +4,7 @@ import 'OtpVerificationErrorScreen.dart'; // Import the OTP error screen
 import 'package:flutter/services.dart'; // Import for TextInputFormatter
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import '../../main.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId; // Add transactionId parameter
@@ -104,8 +105,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 if (isOtpCorrect) {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                        builder: (context) => OtpVerificationSuccessScreen()),
+                    MaterialPageRoute(builder: (context) => MainScreen()),
                   );
                 } else {
                   Navigator.push(
