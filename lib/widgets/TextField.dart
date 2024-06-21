@@ -19,19 +19,19 @@ class _CustomTextFieldState extends State<CustomTextField> {
       obscureText: widget.obscureText,
       decoration: InputDecoration(
         filled: true,
-        fillColor: Colors.white24,
+        fillColor: Colors.primaryColour,
         labelText: widget.hintText,
         labelStyle: const TextStyle(color: Color(0xFFFF9F1C)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: Color(0xFFFF9F1C),
             width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: BorderSide(
+          borderSide: const BorderSide(
             color: Color(0xFFFF9F1C),
             width: 2.0,
           ),

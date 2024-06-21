@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import '../../Widgets/button.dart'; // Import the CustomButton widget
-import '../../main.dart'; // Import the HomeScreen
+import '../../main.dart'; // Import the MainScreen
 import 'EmailSignUp.dart'; // Import the EmailSignUp screen
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class LoginScreen extends StatelessWidget {
+  // Define your controllers
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.primaryColour,
+      backgroundColor: Colors.blue, // Set your primary color here
       body: Padding(
         padding: EdgeInsets.all(16.0),
         child: Column(
@@ -30,21 +36,43 @@ class LoginScreen extends StatelessWidget {
                   _buildTextField(
                     hintText: 'Email address',
                     icon: Icons.email,
+                    controller: emailController,
                   ),
                   const SizedBox(height: 20.0),
                   _buildTextField(
                     hintText: 'Password',
                     icon: Icons.lock,
                     obscureText: true,
+                    controller: passwordController,
                   ),
-                  SizedBox(height: 20.0),
+                  const SizedBox(height: 20.0),
                   CustomButton(
                     text: 'Continue',
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
+                    onPressed: () async {
+                      var url = Uri.https(
+                          'auth.jarvishome.in', '/auth/login/request-login');
+                      var response = await http.post(
+                        url,
+                        headers: {
+                          'Content-Type': 'application/json',
+                          'accept': 'application/json'
+                        },
+                        body: jsonEncode({
+                          'email': emailController.text,
+                          'password': passwordController.text,
+                        }),
                       );
+                      if (response.statusCode == 200) {
+                        print('Login successful');
+                        print('Response body: ${response.body}');
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MainScreen()),
+                        );
+                      } else {
+                        print('Login failed');
+                        print('Response status: ${response.statusCode}');
+                      }
                     },
                   ),
                   const SizedBox(height: 10.0),
@@ -60,24 +88,6 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.blue),
                     ),
                   ),
-                  // const SizedBox(height: 20.0),
-                  // _buildSocialButton(
-                  //   text: 'Continue with Google',
-                  //   color: Colors.black,
-                  //   icon: Icons.g_translate,
-                  // ),
-                  // const SizedBox(height: 10.0),
-                  // _buildSocialButton(
-                  //   text: 'Continue with Microsoft',
-                  //   color: Colors.black,
-                  //   // icon: Icons.microsoft,
-                  // ),
-                  // SizedBox(height: 10.0),
-                  // _buildSocialButton(
-                  //   text: 'Continue with Apple',
-                  //   color: Colors.black,
-                  //   icon: Icons.apple,
-                  // ),
                 ],
               ),
             ),
@@ -91,8 +101,10 @@ class LoginScreen extends StatelessWidget {
     required String hintText,
     required IconData icon,
     bool obscureText = false,
+    required TextEditingController controller,
   }) {
     return TextField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         filled: true,

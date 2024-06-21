@@ -46,7 +46,7 @@ class SignedUpSuccessfullyPage extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(
                     horizontal: 50.0, vertical: 15.0),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
@@ -56,7 +56,7 @@ class SignedUpSuccessfullyPage extends StatelessWidget {
                       fontSize: 18.0,
                     ),
                   ),
-                  const SizedBox(width: 5.0),
+                  SizedBox(width: 5.0),
                   Icon(Icons.arrow_forward, color: Colors.white),
                 ],
               ),
