@@ -5,6 +5,7 @@ import 'EmailSignUp.dart'; // Import the EmailSignUp screen
 import 'LoginOtpVerification.dart'; // Import the OTP Verification screen
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'OtpVerificationErrorScreen.dart';
 
 class LoginScreen extends StatelessWidget {
   // Define your controllers
@@ -69,8 +70,27 @@ class LoginScreen extends StatelessWidget {
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => OtpVerificationScreen(
-                                  transactionId: transactionId)),
+                            builder: (context) => OtpVerificationScreen(
+                              transactionId: transactionId,
+                              onSuccess: () {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => MainScreen(),
+                                  ),
+                                );
+                              },
+                              onError: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        OtpVerificationErrorScreen(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
                         );
                       } else {
                         print('Login failed');
@@ -121,25 +141,6 @@ class LoginScreen extends StatelessWidget {
         ),
       ),
       style: const TextStyle(color: Colors.white),
-    );
-  }
-
-  Widget _buildSocialButton({
-    required String text,
-    required Color color,
-    required IconData icon,
-  }) {
-    return ElevatedButton.icon(
-      onPressed: () {},
-      icon: Icon(icon, color: Colors.white),
-      label: Text(text, style: const TextStyle(color: Colors.white)),
-      style: ElevatedButton.styleFrom(
-        backgroundColor: color, // Updated parameter
-        padding: const EdgeInsets.symmetric(vertical: 15.0),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-      ),
     );
   }
 }

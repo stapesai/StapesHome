@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
-import 'OtpVerificationErrorScreen.dart'; // Import the OTP error screen
 import 'package:flutter/services.dart'; // Import for TextInputFormatter
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -8,8 +6,14 @@ import '../../main.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId; // Add transactionId parameter
+  final VoidCallback onSuccess;
+  final VoidCallback onError;
 
-  OtpVerificationScreen({required this.transactionId});
+  OtpVerificationScreen({
+    required this.transactionId,
+    required this.onSuccess,
+    required this.onError,
+  });
 
   @override
   _OtpVerificationScreenState createState() => _OtpVerificationScreenState();
@@ -45,10 +49,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         'code': otp,
       }),
     );
-    print(response.body);
-    print(widget.transactionId);
 
     if (response.statusCode == 200) {
+      var responseBody = jsonDecode(response.body);
+      print("OTP Verification Response: $responseBody");
+
       var sessionUrl =
           Uri.https('auth.jarvishome.in', '/auth/login/complete-login');
       var sessionResponse = await http.post(sessionUrl,
@@ -59,9 +64,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           body: jsonEncode({
             'transaction_id': widget.transactionId,
           }));
-      print(sessionResponse.statusCode);
+
+      print("Complete Login Response: ${sessionResponse.body}");
+
       return sessionResponse.statusCode == 200;
     } else {
+      print("OTP Verification failed: ${response.statusCode}");
+      print("Response body: ${response.body}");
       return false;
     }
   }
@@ -103,16 +112,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 bool isOtpCorrect = await verifyOtp();
 
                 if (isOtpCorrect) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => MainScreen()),
-                  );
+                  widget.onSuccess();
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OtpVerificationErrorScreen()),
-                  );
+                  widget.onError();
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -122,7 +124,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 15.0),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -132,7 +134,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       fontSize: 18.0,
                     ),
                   ),
-                  const SizedBox(width: 5.0),
+                  SizedBox(width: 5.0),
                   Icon(Icons.arrow_forward, color: Colors.white),
                 ],
               ),
@@ -212,10 +214,4 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }),
     );
   }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: OtpVerificationScreen(transactionId: 'your_transaction_id_here'),
-  ));
 }
