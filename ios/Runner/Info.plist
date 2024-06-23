@@ -55,6 +55,9 @@
 <string>We need access to your camera to take photos</string>
 <key>NSMicrophoneUsageDescription</key>
 <string>We need access to your microphone to record videos</string>
+<key>NSDocumentsFolderUsageDescription</key>
+<string>This app needs access to the Documents folder to save files.</string>
+
 
 
 </dict>

@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart'; // Import for TextInputFormatter
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import '../../main.dart';
 
 class OtpVerificationScreen extends StatefulWidget {
-  final String transactionId; // Add transactionId parameter
+  final String transactionId;
   final VoidCallback onSuccess;
   final VoidCallback onError;
 
@@ -35,7 +34,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     super.dispose();
   }
 
-  Future<bool> verifyOtp() async {
+  Future<void> verifyOtp() async {
     String otp = _controllers.map((controller) => controller.text).join();
     var url = Uri.https('auth.jarvishome.in', '/auth/verify_otp');
     var response = await http.post(
@@ -50,28 +49,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }),
     );
 
+    print('OTP Verification response: ${response.body}'); // Log the response
+
     if (response.statusCode == 200) {
-      var responseBody = jsonDecode(response.body);
-      print("OTP Verification Response: $responseBody");
-
-      var sessionUrl =
-          Uri.https('auth.jarvishome.in', '/auth/login/complete-login');
-      var sessionResponse = await http.post(sessionUrl,
-          headers: {
-            'Content-Type': 'application/json',
-            'accept': 'application/json'
-          },
-          body: jsonEncode({
-            'transaction_id': widget.transactionId,
-          }));
-
-      print("Complete Login Response: ${sessionResponse.body}");
-
-      return sessionResponse.statusCode == 200;
+      widget.onSuccess();
     } else {
-      print("OTP Verification failed: ${response.statusCode}");
-      print("Response body: ${response.body}");
-      return false;
+      widget.onError();
     }
   }
 
@@ -108,15 +91,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () async {
-                bool isOtpCorrect = await verifyOtp();
-
-                if (isOtpCorrect) {
-                  widget.onSuccess();
-                } else {
-                  widget.onError();
-                }
-              },
+              onPressed: verifyOtp,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange, // Button color
                 shape: RoundedRectangleBorder(

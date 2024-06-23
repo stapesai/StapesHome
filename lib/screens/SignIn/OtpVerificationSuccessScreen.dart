@@ -4,6 +4,10 @@ import 'dart:ui' as ui; // Add this import for PathMetric
 import 'SignUpPage.dart'; // Import the SignUpPage
 
 class OtpVerificationSuccessScreen extends StatefulWidget {
+  final String transactionId;
+
+  OtpVerificationSuccessScreen({required this.transactionId});
+
   @override
   _OtpVerificationSuccessScreenState createState() =>
       _OtpVerificationSuccessScreenState();
@@ -78,7 +82,9 @@ class _OtpVerificationSuccessScreenState
               onPressed: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => SignUpPage()),
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          SignUpPage(transactionId: widget.transactionId)),
                 );
               },
               style: ElevatedButton.styleFrom(

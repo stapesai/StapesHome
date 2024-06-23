@@ -4,6 +4,18 @@ import 'OtpVerificationErrorScreen.dart'; // Import the OTP error screen
 import 'package:flutter/services.dart'; // Import for TextInputFormatter
 
 class OtpVerificationScreen extends StatefulWidget {
+  final String transactionId;
+  final String email; // Add email parameter
+  final VoidCallback onSuccess;
+  final VoidCallback onError;
+
+  OtpVerificationScreen({
+    required this.transactionId,
+    required this.email, // Add email parameter
+    required this.onSuccess,
+    required this.onError,
+  });
+
   @override
   _OtpVerificationScreenState createState() => _OtpVerificationScreenState();
 }
@@ -63,17 +75,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                     verifyOtp(); // Change this based on actual OTP logic
 
                 if (isOtpCorrect) {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OtpVerificationSuccessScreen()),
-                  );
+                  widget.onSuccess();
                 } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => OtpVerificationErrorScreen()),
-                  );
+                  widget.onError();
                 }
               },
               style: ElevatedButton.styleFrom(
@@ -184,6 +188,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
 void main() {
   runApp(MaterialApp(
-    home: OtpVerificationScreen(),
+    home: OtpVerificationScreen(
+        transactionId: 'example-transaction-id',
+        email: 'example-email@example.com',
+        onSuccess: () {},
+        onError: () {}),
   ));
 }

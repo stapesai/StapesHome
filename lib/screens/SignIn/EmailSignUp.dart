@@ -1,7 +1,15 @@
 import 'package:flutter/material.dart';
-import 'OtpVerificationScreen.dart'; // Import the OTP verification screen
+import 'OtpVerification.dart'; // Import the OTP verification screen
+import 'package:http/http.dart' as http;
+import '../../Widgets/button.dart'; // Import the CustomButton widget
+import '../../main.dart'; // Import the MainScreen
+import 'OtpVerificationErrorScreen.dart';
+import 'dart:convert';
+import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
 
 class EmailSignUp extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,35 +33,61 @@ class EmailSignUp extends StatelessWidget {
             _buildTextField(
               hintText: 'Eg: abc@gmail.com',
               icon: Icons.email,
+              controller: emailController,
             ),
             const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OtpVerificationScreen()),
+            CustomButton(
+              text: 'Continue',
+              onPressed: () async {
+                var url = Uri.https(
+                    'auth.jarvishome.in', '/auth/signup/request-signup');
+                var response = await http.post(
+                  url,
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'accept': 'application/json'
+                  },
+                  body: jsonEncode({
+                    'email': emailController.text,
+                  }),
                 );
-              },
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange, // Button color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Send Code',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
+                print(response.body);
+                if (response.statusCode == 200) {
+                  var responseBody = json.decode(response.body);
+                  String transactionId = responseBody['transaction_id'];
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => OtpVerificationScreen(
+                        transactionId: transactionId,
+                        onSuccess: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  OtpVerificationSuccessScreen(
+                                transactionId: transactionId,
+                              ),
+                            ),
+                          );
+                        },
+                        onError: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  OtpVerificationErrorScreen(),
+                            ),
+                          );
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                  );
+                } else {
+                  print('Login failed');
+                  print('Response status: ${response.statusCode}');
+                }
+              },
             ),
           ],
         ),
@@ -65,8 +99,10 @@ class EmailSignUp extends StatelessWidget {
     required String hintText,
     required IconData icon,
     bool obscureText = false,
+    required TextEditingController controller,
   }) {
     return TextField(
+      controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
         filled: true,

@@ -1,14 +1,33 @@
 import 'package:flutter/material.dart';
 import 'SignedUpSuccessfullyPage.dart'; // Import the next screen
-import '../../Widgets/TextField.dart'; // Import the CustomTextField widget
+import '../../widgets/TextField.dart'; // Import the CustomTextField widget
 import '../../Widgets/Button.dart'; // Import the CustomButton widget
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class ConfirmPasswordPage extends StatefulWidget {
+  final String transactionId;
+  final String firstName;
+  final String lastName;
+  final String dob;
+
+  ConfirmPasswordPage({
+    required this.transactionId,
+    required this.firstName,
+    required this.lastName,
+    required this.dob,
+  });
+
   @override
   _ConfirmPasswordPageState createState() => _ConfirmPasswordPageState();
 }
 
 class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,22 +49,60 @@ class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
               ),
             ),
             const SizedBox(height: 40.0),
-            CustomTextField(hintText: 'Email ID'), // Use CustomTextField
-            const SizedBox(height: 20.0),
-            CustomTextField(hintText: 'Password'), // Use CustomTextField
+            // Use CustomTextField
             const SizedBox(height: 20.0),
             CustomTextField(
-                hintText: 'Confirm Password'), // Use CustomTextField
+              controller: passwordController,
+              hintText: 'Password',
+              obscureText: true,
+            ), // Use CustomTextField
+            const SizedBox(height: 20.0),
+            CustomTextField(
+              controller: confirmPasswordController,
+              hintText: 'Confirm Password',
+              obscureText: true,
+            ), // Use CustomTextField
             const SizedBox(height: 20.0),
             CustomButton(
               text: 'Sign Up',
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => SignedUpSuccessfullyPage(),
-                  ),
-                );
+              onPressed: () async {
+                if (passwordController.text == confirmPasswordController.text) {
+                  var url = Uri.parse(
+                      'https://auth.jarvishome.in/auth/signup/complete-signup');
+                  var response = await http.post(
+                    url,
+                    headers: {
+                      'Content-Type': 'application/json',
+                      'accept': 'application/json',
+                    },
+                    body: jsonEncode({
+                      'user': {
+                        'email': emailController.text,
+                        'first_name': widget.firstName,
+                        'last_name': widget.lastName,
+                        'dob': widget.dob,
+                        'gender':
+                            'Male', // Replace with actual gender from previous screen
+                      },
+                      'password': passwordController.text,
+                      'transaction_id': widget.transactionId,
+                    }),
+                  );
+
+                  if (response.statusCode == 200) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SignedUpSuccessfullyPage(),
+                      ),
+                    );
+                  } else {
+                    print('Sign up failed');
+                    print('Response status: ${response.statusCode}');
+                  }
+                } else {
+                  print('Passwords do not match');
+                }
               },
             ),
           ],

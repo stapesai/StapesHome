@@ -33,14 +33,14 @@ class _DeviceScreenState extends State<DeviceScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'All Devices',
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
               SizedBox(height: 24),
               Row(
                 children: [
-                  Text(
+                  const Text(
                     'Floors',
                     style: TextStyle(fontSize: 18, color: Colors.white),
                   ),

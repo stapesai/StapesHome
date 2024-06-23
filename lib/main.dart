@@ -1,12 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/Cache/sessions_model.dart';
 import 'Screens/SplashScreen.dart';
 import 'Screens/SignIn/LoginSignIn.dart'; // Import the LoginScreen
 import 'screens/Navigation/HomeScreen.dart';
 import 'screens/Navigation/DevicesScreen.dart'; // Make sure this import matches the file name
 import 'screens/Navigation/NodesScreen.dart';
 import 'screens/Navigation/ProfileScreen.dart';
+import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart' as path_provider;
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Initialize Hive
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
+  Hive.init(appDocumentDirectory.path);
+
+  // Register Hive adapters
+  Hive.registerAdapter(
+      SessionsModelAdapter()); // Register SessionsModel adapter
+
   runApp(MyApp());
 }
 

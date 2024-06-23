@@ -2,15 +2,17 @@ import 'package:flutter/material.dart';
 import '../../Widgets/button.dart'; // Import the CustomButton widget
 import '../../main.dart'; // Import the MainScreen
 import 'EmailSignUp.dart'; // Import the EmailSignUp screen
-import 'LoginOtpVerification.dart'; // Import the OTP Verification screen
+import 'OtpVerification.dart'; // Import the OTP Verification screen
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'OtpVerificationErrorScreen.dart';
+import 'package:jarvis/Cache/sessions_model.dart'; // Import your session model
+import 'package:jarvis/Cache/HiveService.dart'; // Import your Hive service
 
 class LoginScreen extends StatelessWidget {
-  // Define your controllers
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final HiveService hiveService = HiveService();
 
   @override
   Widget build(BuildContext context) {
@@ -72,13 +74,57 @@ class LoginScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => OtpVerificationScreen(
                               transactionId: transactionId,
-                              onSuccess: () {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => MainScreen(),
-                                  ),
+                              onSuccess: () async {
+                                var completeLoginUrl = Uri.https(
+                                    'auth.jarvishome.in',
+                                    '/auth/login/complete-login');
+                                var completeLoginResponse = await http.post(
+                                  completeLoginUrl,
+                                  headers: {
+                                    'Content-Type': 'application/json',
+                                    'accept': 'application/json'
+                                  },
+                                  body: jsonEncode({
+                                    'transaction_id': transactionId,
+                                  }),
                                 );
+
+                                if (completeLoginResponse.statusCode == 200) {
+                                  var sessionResponseBody =
+                                      json.decode(completeLoginResponse.body);
+                                  var sessionData = SessionsModel(
+                                    sessionId: sessionResponseBody['session']
+                                        ['session_id'],
+                                    userId: sessionResponseBody['session']
+                                        ['user_id'],
+                                    ipAddress: sessionResponseBody['session']
+                                        ['ip_address'],
+                                    createdAt: DateTime.parse(
+                                        sessionResponseBody['session']
+                                            ['created_at']),
+                                    lastActiveAt: DateTime.parse(
+                                        sessionResponseBody['session']
+                                            ['last_active_at']),
+                                  );
+
+                                  await hiveService
+                                      .addBoxes([sessionData], "SessionBox");
+
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => MainScreen(),
+                                    ),
+                                  );
+                                } else {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          OtpVerificationErrorScreen(),
+                                    ),
+                                  );
+                                }
                               },
                               onError: () {
                                 Navigator.push(
