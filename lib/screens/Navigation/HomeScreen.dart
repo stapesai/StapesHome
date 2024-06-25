@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
 class HomeScreen extends StatelessWidget {
+  final String sessionId;
+  final String userId;
+
+  const HomeScreen({
+    Key? key,
+    required this.sessionId,
+    required this.userId,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       backgroundColor:
           Colors.primaryColour, // Adjust this color to match your theme
       body: SafeArea(
@@ -40,6 +49,17 @@ class HomeScreen extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Text(
+                        "Session ID: $sessionId",
+                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "User ID: $userId",
+                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(height: 20),
                       Text(
                         "Nothing to show here.",
                         style: TextStyle(color: Colors.white70, fontSize: 18),

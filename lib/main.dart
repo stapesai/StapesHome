@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/Cache/sessions_model.dart';
-import 'Screens/SplashScreen.dart';
-import 'Screens/SignIn/LoginSignIn.dart'; // Import the LoginScreen
-import 'screens/Navigation/HomeScreen.dart';
-import 'screens/Navigation/DevicesScreen.dart'; // Make sure this import matches the file name
-import 'screens/Navigation/NodesScreen.dart';
-import 'screens/Navigation/ProfileScreen.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+
+import 'Cache/sessions_model.dart';
+import 'Cache/HiveService.dart';
+import 'Screens/SplashScreen.dart';
+import 'Screens/SignIn/LoginSignIn.dart';
+import 'screens/Navigation/HomeScreen.dart';
+import 'screens/Navigation/DevicesScreen.dart';
+import 'screens/Navigation/NodesScreen.dart';
+import 'screens/Navigation/ProfileScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,8 +20,7 @@ void main() async {
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive adapters
-  Hive.registerAdapter(
-      SessionsModelAdapter()); // Register SessionsModel adapter
+  Hive.registerAdapter(SessionsModelAdapter());
 
   runApp(MyApp());
 }
@@ -41,13 +42,34 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+  final HiveService hiveService = HiveService();
+  String sessionId = '';
+  String userId = '';
 
   static final List<Widget> _screens = <Widget>[
-    HomeScreen(),
+    const HomeScreen(sessionId: '', userId: ''), // Placeholder values
     DeviceScreen(), // Ensure this matches the class name
     NodesScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSessionData();
+  }
+
+  Future<void> _loadSessionData() async {
+    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
+    if (sessions.isNotEmpty) {
+      var session = sessions.first;
+      setState(() {
+        sessionId = session.sessionId;
+        userId = session.userId;
+        _screens[0] = HomeScreen(sessionId: sessionId, userId: userId);
+      });
+    }
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -61,14 +83,13 @@ class _MainScreenState extends State<MainScreen> {
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors
-              .black, // Set the background color of the BottomNavigationBar
+          color: Colors.black,
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.3),
               spreadRadius: 0,
               blurRadius: 10,
-              offset: Offset(0, -3), // changes position of shadow to the top
+              offset: Offset(0, -3),
             ),
           ],
         ),
@@ -94,10 +115,8 @@ class _MainScreenState extends State<MainScreen> {
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.amber[800],
-          backgroundColor: Colors
-              .transparent, // Make the background color transparent to see the container's background color
-          unselectedItemColor:
-              Colors.white, // Set unselected item color to white
+          backgroundColor: Colors.transparent,
+          unselectedItemColor: Colors.white,
           onTap: _onItemTapped,
         ),
       ),

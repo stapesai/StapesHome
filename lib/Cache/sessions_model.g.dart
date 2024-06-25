@@ -22,7 +22,7 @@ class SessionsModelAdapter extends TypeAdapter<SessionsModel> {
       ipAddress: fields[2] as String,
       createdAt: fields[3] as DateTime,
       lastActiveAt: fields[4] as DateTime,
-    );
+    ); 
   }
 
   @override
