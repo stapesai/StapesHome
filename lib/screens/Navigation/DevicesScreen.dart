@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'package:jarvis/Cache/sessions_model.dart';
+import 'package:jarvis/Cache/HiveService.dart';
 import 'package:jarvis/screens/Additional/AddNewDevice.dart';
 
 class DeviceScreen extends StatefulWidget {
@@ -9,6 +13,49 @@ class DeviceScreen extends StatefulWidget {
 class _DeviceScreenState extends State<DeviceScreen> {
   int activeFloor = 1;
   int activeRoom = 1;
+  List<int> floors = [];
+
+  final HiveService hiveService = HiveService();
+  String sessionId = '';
+  String userId = '';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadSessionData();
+  }
+
+  Future<void> _loadSessionData() async {
+    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
+    if (sessions.isNotEmpty) {
+      var session = sessions.first;
+      sessionId = session.sessionId;
+      userId = session.userId;
+      _fetchFloors();
+    }
+  }
+
+  Future<void> _fetchFloors() async {
+    final url = Uri.https('backend.jarvishome.in', '/floors');
+    final response = await http.get(
+      url,
+      headers: {
+        'accept': 'application/json',
+        'X-User-Id': userId,
+        'X-Session-Id': sessionId,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> floorsData = json.decode(response.body);
+      setState(() {
+        floors = floorsData.map((floor) => floor['level'] as int).toList();
+      });
+    } else {
+      // Handle error
+      print('Failed to load floors: ${response.statusCode}');
+    }
+  }
 
   void setActiveFloor(int floor) {
     setState(() {
@@ -50,17 +97,16 @@ class _DeviceScreenState extends State<DeviceScreen> {
               ),
               SizedBox(height: 8),
               Row(
-                children: [
-                  FloorRoomButton(
-                      label: 'Floor 1',
-                      isActive: activeFloor == 1,
-                      onTap: () => setActiveFloor(1)),
-                  SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Floor 2',
-                      isActive: activeFloor == 2,
-                      onTap: () => setActiveFloor(2)),
-                ],
+                children: floors.map((floor) {
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: FloorRoomButton(
+                      label: 'Floor $floor',
+                      isActive: activeFloor == floor,
+                      onTap: () => setActiveFloor(floor),
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 24),
               Row(
@@ -77,19 +123,22 @@ class _DeviceScreenState extends State<DeviceScreen> {
               Row(
                 children: [
                   FloorRoomButton(
-                      label: 'Room 1',
-                      isActive: activeRoom == 1,
-                      onTap: () => setActiveRoom(1)),
+                    label: 'Room 1',
+                    isActive: activeRoom == 1,
+                    onTap: () => setActiveRoom(1),
+                  ),
                   SizedBox(width: 10),
                   FloorRoomButton(
-                      label: 'Room 2',
-                      isActive: activeRoom == 2,
-                      onTap: () => setActiveRoom(2)),
+                    label: 'Room 2',
+                    isActive: activeRoom == 2,
+                    onTap: () => setActiveRoom(2),
+                  ),
                   SizedBox(width: 10),
                   FloorRoomButton(
-                      label: 'Room 3',
-                      isActive: activeRoom == 3,
-                      onTap: () => setActiveRoom(3)),
+                    label: 'Room 3',
+                    isActive: activeRoom == 3,
+                    onTap: () => setActiveRoom(3),
+                  ),
                 ],
               ),
               SizedBox(height: 24),
@@ -136,8 +185,11 @@ class FloorRoomButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const FloorRoomButton(
-      {required this.label, required this.isActive, required this.onTap});
+  const FloorRoomButton({
+    required this.label,
+    required this.isActive,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
