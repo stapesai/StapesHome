@@ -11,9 +11,10 @@ class DeviceScreen extends StatefulWidget {
 }
 
 class _DeviceScreenState extends State<DeviceScreen> {
-  int activeFloor = 1;
-  int activeRoom = 1;
-  List<int> floors = [];
+  String activeFloorId = '';
+  int activeRoomIndex = -1;
+  List<Map<String, dynamic>> floors = [];
+  List<String> rooms = [];
 
   final HiveService hiveService = HiveService();
   String sessionId = '';
@@ -49,7 +50,14 @@ class _DeviceScreenState extends State<DeviceScreen> {
     if (response.statusCode == 200) {
       final List<dynamic> floorsData = json.decode(response.body);
       setState(() {
-        floors = floorsData.map((floor) => floor['level'] as int).toList();
+        floors = floorsData
+            .map((floor) => {
+                  'id': floor['id'],
+                  'label': floor['alias'] != null && floor['alias'].isNotEmpty
+                      ? floor['alias']
+                      : 'Floor ${floor['level']}'
+                })
+            .toList();
       });
     } else {
       // Handle error
@@ -57,15 +65,40 @@ class _DeviceScreenState extends State<DeviceScreen> {
     }
   }
 
-  void setActiveFloor(int floor) {
-    setState(() {
-      activeFloor = floor;
-    });
+  Future<void> _fetchRooms(String floorId) async {
+    final url = Uri.https('backend.jarvishome.in', '/rooms/$floorId');
+    final response = await http.get(
+      url,
+      headers: {
+        'accept': 'application/json',
+        'X-User-Id': userId,
+        'X-Session-Id': sessionId,
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> roomsData = json.decode(response.body);
+      setState(() {
+        rooms = roomsData.map((room) => room['name'] as String).toList();
+      });
+    } else {
+      // Handle error
+      print('Failed to load rooms: ${response.statusCode}');
+    }
   }
 
-  void setActiveRoom(int room) {
+  void setActiveFloor(String floorId) {
     setState(() {
-      activeRoom = room;
+      activeFloorId = floorId;
+      activeRoomIndex = -1; // Reset active room when a new floor is selected
+      rooms = [];
+    });
+    _fetchRooms(floorId);
+  }
+
+  void setActiveRoom(int roomIndex) {
+    setState(() {
+      activeRoomIndex = roomIndex;
     });
   }
 
@@ -101,9 +134,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   return Padding(
                     padding: const EdgeInsets.only(right: 10),
                     child: FloorRoomButton(
-                      label: 'Floor $floor',
-                      isActive: activeFloor == floor,
-                      onTap: () => setActiveFloor(floor),
+                      label: floor['label'],
+                      isActive: activeFloorId == floor['id'],
+                      onTap: () => setActiveFloor(floor['id']),
                     ),
                   );
                 }).toList(),
@@ -121,25 +154,18 @@ class _DeviceScreenState extends State<DeviceScreen> {
               ),
               SizedBox(height: 8),
               Row(
-                children: [
-                  FloorRoomButton(
-                    label: 'Room 1',
-                    isActive: activeRoom == 1,
-                    onTap: () => setActiveRoom(1),
-                  ),
-                  SizedBox(width: 10),
-                  FloorRoomButton(
-                    label: 'Room 2',
-                    isActive: activeRoom == 2,
-                    onTap: () => setActiveRoom(2),
-                  ),
-                  SizedBox(width: 10),
-                  FloorRoomButton(
-                    label: 'Room 3',
-                    isActive: activeRoom == 3,
-                    onTap: () => setActiveRoom(3),
-                  ),
-                ],
+                children: rooms.asMap().entries.map((entry) {
+                  int idx = entry.key;
+                  String room = entry.value;
+                  return Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: FloorRoomButton(
+                      label: room,
+                      isActive: activeRoomIndex == idx,
+                      onTap: () => setActiveRoom(idx),
+                    ),
+                  );
+                }).toList(),
               ),
               SizedBox(height: 24),
               Expanded(
