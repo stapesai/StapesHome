@@ -48,7 +48,7 @@ class CreateRoomPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Room created successfully')),
       );
-      Navigator.pop(context);
+      Navigator.pop(context, true); // Return true to indicate success
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to create room')),

@@ -136,7 +136,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           floorId: activeFloorId,
         ),
       ),
-    );
+    ).then((_) {
+      // Refresh rooms after navigating back
+      _fetchRooms(activeFloorId);
+    });
   }
 
   @override
@@ -151,7 +154,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             SizedBox(width: 8),
-            AddCircleButton(onPressed: widget.onAddFloor),
+            AddCircleButton(onPressed: () {
+              widget.onAddFloor();
+              _fetchFloors(); // Refresh floors after adding a floor
+            }),
           ],
         ),
         SizedBox(height: 8),
