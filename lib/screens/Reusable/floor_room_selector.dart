@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jarvis/screens/Reusable/create_room_page.dart'; // Import CreateRoomPage
+import 'package:jarvis/screens/Reusable/create_floor_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;
@@ -142,6 +143,23 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     });
   }
 
+  void navigateToCreateFloor(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateFloorPage(
+          sessionId: sessionId,
+          userId: userId,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) {
+        // Refresh floors after navigating back if a floor was added
+        _fetchFloors();
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -154,10 +172,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             SizedBox(width: 8),
-            AddCircleButton(onPressed: () {
-              widget.onAddFloor();
-              _fetchFloors(); // Refresh floors after adding a floor
-            }),
+            AddCircleButton(onPressed: () => navigateToCreateFloor(context)),
           ],
         ),
         SizedBox(height: 8),
