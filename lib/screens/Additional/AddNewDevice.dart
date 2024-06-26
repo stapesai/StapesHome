@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import '../../Widgets/TextField.dart'; // Import the CustomTextField widget
 import '../../Widgets/Button.dart'; // Import the CustomButton widget
-import 'package:jarvis/Cache/sessions_model.dart';
-import 'package:jarvis/Cache/HiveService.dart';
 
 class AddNewDevice extends StatefulWidget {
   @override
@@ -17,50 +13,8 @@ class _AddNewDeviceState extends State<AddNewDevice> {
   String? _selectedRoom;
 
   final List<String> _types = ['Type 1', 'Type 2', 'Type 3'];
-  List<String> _floors = [];
+  final List<String> _floors = ['Floor 1', 'Floor 2', 'Floor 3'];
   final List<String> _rooms = ['Room 1', 'Room 2', 'Room 3'];
-
-  final HiveService hiveService = HiveService();
-  String sessionId = '';
-  String userId = '';
-
-  @override
-  void initState() {
-    super.initState();
-    _loadSessionData();
-  }
-
-  Future<void> _loadSessionData() async {
-    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
-    if (sessions.isNotEmpty) {
-      var session = sessions.first;
-      sessionId = session.sessionId;
-      userId = session.userId;
-      _fetchFloors();
-    }
-  }
-
-  Future<void> _fetchFloors() async {
-    final url = Uri.https('backend.jarvishome.in', '/floors');
-    final response = await http.get(
-      url,
-      headers: {
-        'accept': 'application/json',
-        'X-User-Id': userId,
-        'X-Session-Id': sessionId,
-      },
-    );
-
-    if (response.statusCode == 200) {
-      final List<dynamic> floorsData = json.decode(response.body);
-      setState(() {
-        _floors = floorsData.map((floor) => 'Floor ${floor['level']}').toList();
-      });
-    } else {
-      // Handle error
-      print('Failed to load floors: ${response.statusCode}');
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
