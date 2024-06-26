@@ -46,9 +46,10 @@ class _MainScreenState extends State<MainScreen> {
   String sessionId = '';
   String userId = '';
 
-  static final List<Widget> _screens = <Widget>[
+  static List<Widget> _screens = <Widget>[
     const HomeScreen(sessionId: '', userId: ''), // Placeholder values
-    DeviceScreen(), // Ensure this matches the class name
+    DeviceScreen(
+        sessionId: '', userId: ''), // Ensure this matches the class name
     NodesScreen(),
     ProfileScreen(),
   ];
@@ -67,6 +68,7 @@ class _MainScreenState extends State<MainScreen> {
         sessionId = session.sessionId;
         userId = session.userId;
         _screens[0] = HomeScreen(sessionId: sessionId, userId: userId);
+        _screens[1] = DeviceScreen(sessionId: sessionId, userId: userId);
       });
     }
   }

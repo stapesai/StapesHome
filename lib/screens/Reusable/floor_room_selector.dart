@@ -1,33 +1,46 @@
-// floor_room_selector.dart
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'package:jarvis/Cache/sessions_model.dart';
-import 'package:jarvis/Cache/HiveService.dart';
+import 'package:jarvis/screens/Reusable/create_room_page.dart'; // Import CreateRoomPage
 
 class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;
   final Function(int) onRoomSelected;
+  final VoidCallback onAddFloor;
+  final String sessionId;
+  final String userId;
+  final String activeFloorId;
 
   const FloorRoomSelector({
     required this.onFloorSelected,
     required this.onRoomSelected,
+    required this.onAddFloor,
+    required this.sessionId,
+    required this.userId,
+    required this.activeFloorId,
   });
 
   @override
-  _FloorRoomSelectorState createState() => _FloorRoomSelectorState();
+  _FloorRoomSelectorState createState() => _FloorRoomSelectorState(
+        sessionId: sessionId,
+        userId: userId,
+        activeFloorId: activeFloorId,
+      );
 }
 
 class _FloorRoomSelectorState extends State<FloorRoomSelector> {
-  String activeFloorId = '';
+  String activeFloorId;
   int activeRoomIndex = -1;
   List<Map<String, dynamic>> floors = [];
   List<String> rooms = [];
+  final String sessionId;
+  final String userId;
 
-  final HiveService hiveService = HiveService();
-  String sessionId = '';
-  String userId = '';
+  _FloorRoomSelectorState({
+    required this.sessionId,
+    required this.userId,
+    required this.activeFloorId,
+  });
 
   @override
   void initState() {
@@ -36,13 +49,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
   }
 
   Future<void> _loadSessionData() async {
-    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
-    if (sessions.isNotEmpty) {
-      var session = sessions.first;
-      sessionId = session.sessionId;
-      userId = session.userId;
-      _fetchFloors();
-    }
+    _fetchFloors();
   }
 
   Future<void> _fetchFloors() async {
@@ -113,6 +120,25 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     widget.onRoomSelected(roomIndex);
   }
 
+  void navigateToCreateRoom(BuildContext context) {
+    if (activeFloorId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a floor first')),
+      );
+      return;
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateRoomPage(
+          sessionId: sessionId,
+          userId: userId,
+          floorId: activeFloorId,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -125,21 +151,24 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             SizedBox(width: 8),
-            AddCircleButton(),
+            AddCircleButton(onPressed: widget.onAddFloor),
           ],
         ),
         SizedBox(height: 8),
-        Row(
-          children: floors.map((floor) {
-            return Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: FloorRoomButton(
-                label: floor['label'],
-                isActive: activeFloorId == floor['id'],
-                onTap: () => setActiveFloor(floor['id']),
-              ),
-            );
-          }).toList(),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: floors.map((floor) {
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: FloorRoomButton(
+                  label: floor['label'],
+                  isActive: activeFloorId == floor['id'],
+                  onTap: () => setActiveFloor(floor['id']),
+                ),
+              );
+            }).toList(),
+          ),
         ),
         SizedBox(height: 24),
         Row(
@@ -149,23 +178,26 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             SizedBox(width: 8),
-            AddCircleButton(),
+            AddCircleButton(onPressed: () => navigateToCreateRoom(context)),
           ],
         ),
         SizedBox(height: 8),
-        Row(
-          children: rooms.asMap().entries.map((entry) {
-            int idx = entry.key;
-            String room = entry.value;
-            return Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: FloorRoomButton(
-                label: room,
-                isActive: activeRoomIndex == idx,
-                onTap: () => setActiveRoom(idx),
-              ),
-            );
-          }).toList(),
+        SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: rooms.asMap().entries.map((entry) {
+              int idx = entry.key;
+              String room = entry.value;
+              return Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: FloorRoomButton(
+                  label: room,
+                  isActive: activeRoomIndex == idx,
+                  onTap: () => setActiveRoom(idx),
+                ),
+              );
+            }).toList(),
+          ),
         ),
       ],
     );
@@ -173,16 +205,23 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 }
 
 class AddCircleButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  AddCircleButton({required this.onPressed});
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 18,
-      height: 18,
-      decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Color(0xFF3F3F63),
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 18,
+        height: 18,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Color(0xFF3F3F63),
+        ),
+        child: Icon(Icons.add, color: Colors.white, size: 14),
       ),
-      child: Icon(Icons.add, color: Colors.white, size: 14),
     );
   }
 }
@@ -200,28 +239,26 @@ class FloorRoomButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.grey,
+    return GestureDetector(
+      onTap: onTap,
+      child: Column(
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? Colors.white : Colors.grey,
+            ),
+          ),
+          if (isActive)
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.white,
               ),
             ),
-            if (isActive)
-              Container(
-                width: 6,
-                height: 6,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: Colors.white,
-                ),
-              ),
-          ],
-        ),
+        ],
       ),
     );
   }

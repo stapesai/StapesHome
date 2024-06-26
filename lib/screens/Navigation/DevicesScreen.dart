@@ -2,8 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:jarvis/screens/Additional/AddNewDevice.dart';
 import 'package:jarvis/Cache/HiveService.dart';
 import 'package:jarvis/screens/Reusable/floor_room_selector.dart'; // Import the new component
+import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
+import 'package:jarvis/screens/Reusable/create_room_page.dart';
 
 class DeviceScreen extends StatefulWidget {
+  final String sessionId;
+  final String userId;
+
+  const DeviceScreen({
+    Key? key,
+    required this.sessionId,
+    required this.userId,
+  }) : super(key: key);
+
   @override
   _DeviceScreenState createState() => _DeviceScreenState();
 }
@@ -30,6 +41,37 @@ class _DeviceScreenState extends State<DeviceScreen> {
     });
   }
 
+  void navigateToCreateFloor(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateFloorPage(
+          sessionId: widget.sessionId,
+          userId: widget.userId,
+        ),
+      ),
+    );
+  }
+
+  void navigateToCreateRoom(BuildContext context) {
+    if (activeFloorId.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please select a floor first')),
+      );
+      return;
+    }
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateRoomPage(
+          sessionId: widget.sessionId,
+          userId: widget.userId,
+          floorId: activeFloorId,
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,6 +91,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
               FloorRoomSelector(
                 onFloorSelected: handleFloorSelected,
                 onRoomSelected: handleRoomSelected,
+                onAddFloor: () =>
+                    navigateToCreateFloor(context), // Pass callback
+                sessionId: widget.sessionId, // Pass sessionId
+                userId: widget.userId, // Pass userId
+                activeFloorId: activeFloorId, // Pass active floor ID
               ),
               SizedBox(height: 24),
               Expanded(
