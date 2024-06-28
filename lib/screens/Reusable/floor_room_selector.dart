@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'package:jarvis/screens/Reusable/create_room_page.dart'; // Import CreateRoomPage
-import 'package:jarvis/screens/Reusable/create_floor_page.dart';
+import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
 
 class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;
@@ -104,6 +104,31 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     }
   }
 
+  Future<void> _deleteFloor(String floorId) async {
+    print(floorId);
+    final url = Uri.https('backend.jarvishome.in', '/floors/$floorId');
+    final response = await http.delete(
+      url,
+      headers: {
+        'accept': '*/*',
+        'X-User-Id': userId,
+        'X-Session-Id': sessionId,
+      },
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 204) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Floor deleted successfully')),
+      );
+      _fetchFloors();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Failed to delete floor')),
+      );
+    }
+    print(response.body);
+  }
+
   void setActiveFloor(String floorId) {
     setState(() {
       activeFloorId = floorId;
@@ -160,6 +185,33 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     });
   }
 
+  void showDeleteDialog(BuildContext context, String floorId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Delete Floor"),
+          content: Text("Are you sure you want to delete this floor?"),
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("Delete"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _deleteFloor(floorId);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -182,10 +234,13 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             children: floors.map((floor) {
               return Padding(
                 padding: const EdgeInsets.only(right: 10),
-                child: FloorRoomButton(
-                  label: floor['label'],
-                  isActive: activeFloorId == floor['id'],
-                  onTap: () => setActiveFloor(floor['id']),
+                child: GestureDetector(
+                  onLongPress: () => showDeleteDialog(context, floor['id']),
+                  child: FloorRoomButton(
+                    label: floor['label'],
+                    isActive: activeFloorId == floor['id'],
+                    onTap: () => setActiveFloor(floor['id']),
+                  ),
                 ),
               );
             }).toList(),
