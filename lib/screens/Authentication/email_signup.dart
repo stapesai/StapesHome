@@ -88,7 +88,7 @@ class EmailSignUp extends StatelessWidget {
                       ),
                     ),
                   );
-                  // hello world
+                  // test
                 } else {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
