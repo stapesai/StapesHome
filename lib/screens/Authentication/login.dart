@@ -71,15 +71,17 @@ class LoginScreen extends StatelessWidget {
                           'password': passwordController.text,
                         }),
                       );
+                      var responseBody = json.decode(response.body);
                       if (response.statusCode == 200) {
-                        var responseBody = json.decode(response.body);
+
                         String transactionId = responseBody['transaction_id'];
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
                             builder: (context) => OtpVerificationScreen(
                               transactionId: transactionId,
-                              time: DateTime.parse(responseBody["otp_expires_at"]),
+                              time: DateTime.parse(
+                                  responseBody["otp_expires_at"]),
                               onSuccess: () async {
                                 var completeLoginUrl = Uri.https(
                                     'auth.jarvishome.in',
@@ -145,8 +147,12 @@ class LoginScreen extends StatelessWidget {
                           ),
                         );
                       } else {
-                        print('Login failed');
-                        print('Response status: ${response.statusCode}');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(
+                                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                          ),
+                        );
                       }
                     },
                   ),
@@ -173,7 +179,6 @@ class LoginScreen extends StatelessWidget {
                       style: TextStyle(color: AppColor.blueColor),
                     ),
                   ),
-
                   const SizedBox(height: 20.0),
                   Container(
                     child: Row(
@@ -198,7 +203,6 @@ class LoginScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-
                   GestureDetector(
                     onTap: () {
                       print("continue with google");
@@ -211,7 +215,8 @@ class LoginScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColor.containerColor,
                         borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(color: AppColor.primaryColor,width: 2.0),
+                        border: Border.all(
+                            color: AppColor.primaryColor, width: 2.0),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -246,7 +251,8 @@ class LoginScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColor.containerColor,
                         borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(color: AppColor.primaryColor,width: 2.0),
+                        border: Border.all(
+                            color: AppColor.primaryColor, width: 2.0),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -281,18 +287,16 @@ class LoginScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: AppColor.containerColor,
                         borderRadius: BorderRadius.circular(20.0),
-                        border: Border.all(color: AppColor.primaryColor,width: 2.0),
+                        border: Border.all(
+                            color: AppColor.primaryColor, width: 2.0),
                       ),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
-
                         children: [
-
                           Image.asset(
                             'assets/icons/microsoft.png',
                             height: 30,
                             width: 30,
-
                           ),
                           const SizedBox(width: 10.0),
                           const Text(

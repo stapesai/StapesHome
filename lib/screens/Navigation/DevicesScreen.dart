@@ -216,7 +216,7 @@ class AddDeviceButton extends StatelessWidget {
         painter: DashedBorderPainter(),
         child: Container(
           width: 396,
-          height: 56,
+          height: 70,
           decoration: BoxDecoration(
             color: const Color(0xFF1C1C2B),
             borderRadius: BorderRadius.circular(16),
