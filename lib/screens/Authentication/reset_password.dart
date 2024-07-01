@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'OtpVerification.dart'; // Import the OTP verification screen
 import 'package:http/http.dart' as http;
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'OtpVerificationErrorScreen.dart';
+import 'ErrorScreens/OtpVerificationErrorScreen.dart';
 import 'dart:convert';
-import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
+import 'SuccessScreens/OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
 import 'package:jarvis/widgets/TextField.dart';
 
 class ResetPassword extends StatelessWidget {

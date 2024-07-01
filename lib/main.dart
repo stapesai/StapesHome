@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:jarvis/Constants/colors.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'Cache/sessions_model.dart';
 import 'Cache/HiveService.dart';
@@ -14,7 +15,7 @@ void main() async {
 
   // Initialize Hive
   final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
+  await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive adapters
@@ -73,10 +74,13 @@ class _MainScreenState extends State<MainScreen> {
         _screens[1] = DeviceScreen(sessionId: sessionId, userId: userId);
       });
     }
+
+
+
   }
 
   void _onItemTapped(int index) {
-    if(mounted){
+    if (mounted) {
       setState(() {
         _selectedIndex = index;
       });
@@ -101,22 +105,26 @@ class _MainScreenState extends State<MainScreen> {
         ),
         child: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
-          items: const <BottomNavigationBarItem>[
-            BottomNavigationBarItem(
-              icon: Icon(Icons.home),
+          items: [
+            _buildBottomNavigationBarItem(
+              icon: Icons.home,
               label: 'Home',
+              isActive: _selectedIndex == 0,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.lightbulb_outline),
+            _buildBottomNavigationBarItem(
+              icon: Icons.lightbulb_outline,
               label: 'Devices',
+              isActive: _selectedIndex == 1,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.memory),
+            _buildBottomNavigationBarItem(
+              icon: Icons.memory,
               label: 'Nodes',
+              isActive: _selectedIndex == 2,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.settings),
+            _buildBottomNavigationBarItem(
+              icon: Icons.settings,
               label: 'Settings',
+              isActive: _selectedIndex == 3,
             ),
           ],
           currentIndex: _selectedIndex,
@@ -125,6 +133,45 @@ class _MainScreenState extends State<MainScreen> {
           unselectedItemColor: Colors.white,
           onTap: _onItemTapped,
         ),
+      ),
+    );
+  }
+
+  BottomNavigationBarItem _buildBottomNavigationBarItem({
+    required IconData icon,
+    required String label,
+    required bool isActive,
+  }) {
+    return BottomNavigationBarItem(
+      icon: Column(
+        children: [
+          AnimatedBar(isActive: isActive),
+          Icon(icon),
+        ],
+      ),
+      label: label,
+    );
+  }
+}
+
+class AnimatedBar extends StatelessWidget {
+  const AnimatedBar({
+    super.key,
+    required this.isActive,
+  });
+
+  final bool isActive;
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 200),
+      margin: const EdgeInsets.only(bottom: 2),
+      height: 4,
+      width: isActive ? 50 : 0,
+      decoration: const BoxDecoration(
+        color: AppColor.iconBarColor,
+        borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
   }

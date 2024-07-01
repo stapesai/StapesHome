@@ -1,7 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/Cache/HiveService.dart';
+import 'package:jarvis/Cache/sessions_model.dart';
+import 'package:jarvis/screens/Authentication/login.dart';
 
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});
+
+  Future<void> _logout(BuildContext context) async {
+    final HiveService hiveService = HiveService();
+    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
+
+    sessions.clear();
+
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,10 +39,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
               style: TextStyle(color: Colors.orange)),
         ),
         TextButton(
-          onPressed: () {
-            Navigator.of(context).pop(); // Close the dialog
-            // Implement logout functionality here
-          },
+          onPressed: () => _logout(context),
           child: const Text('Yes, Log me out',
               style: TextStyle(color: Colors.orange)),
         ),

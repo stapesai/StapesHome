@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/Constants/Colors.dart';
+import 'package:jarvis/Constants/colors.dart';
 import 'package:jarvis/widgets/TextField.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'email_signup.dart'; // Import the EmailSignUp screen
@@ -7,7 +7,7 @@ import 'OtpVerification.dart'; // Import the OTP Verification screen
 import 'package:jarvis/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'OtpVerificationErrorScreen.dart';
+import 'ErrorScreens/OtpVerificationErrorScreen.dart';
 import 'reset_password.dart';
 import 'package:jarvis/Cache/sessions_model.dart'; // Import your session model
 import 'package:jarvis/Cache/HiveService.dart'; // Import your Hive service
@@ -118,6 +118,7 @@ class LoginScreen extends StatelessWidget {
 
                                   await hiveService
                                       .addBoxes([sessionData], "SessionBox");
+
 
                                   Navigator.pushReplacement(
                                     context,
@@ -325,27 +326,4 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildTextField({
-    required String hintText,
-    required IconData icon,
-    bool obscureText = false,
-    required TextEditingController controller,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white24,
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
-        prefixIcon: Icon(icon, color: Colors.orange),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      style: const TextStyle(color: Colors.white),
-    );
-  }
 }
