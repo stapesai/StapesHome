@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui' as ui; // Add this import for PathMetric
-import 'SignUpPage.dart'; // Import the SignUpPage
+import 'signup_page.dart'; // Import the SignUpPage
 
 class OtpVerificationSuccessScreen extends StatefulWidget {
   final String transactionId;

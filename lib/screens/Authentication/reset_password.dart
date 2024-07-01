@@ -5,11 +5,17 @@ import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'OtpVerificationErrorScreen.dart';
 import 'dart:convert';
 import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
+import 'package:jarvis/widgets/TextField.dart';
 
-class EmailSignUp extends StatelessWidget {
-  final TextEditingController emailController = TextEditingController();
+class ResetPassword extends StatelessWidget {
+  final String email;
+  final TextEditingController passWord = TextEditingController();
+  final TextEditingController confirmPassWord = TextEditingController();
 
-  EmailSignUp({super.key});
+  ResetPassword({
+    super.key,
+    required this.email,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +29,7 @@ class EmailSignUp extends StatelessWidget {
           children: [
             const SizedBox(height: 40.0),
             const Text(
-              'Enter your email to send the verification code.',
+              'Reset Your Password',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24.0,
@@ -31,17 +37,23 @@ class EmailSignUp extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40.0),
-            _buildTextField(
-              hintText: 'Eg: abc@gmail.com',
-              icon: Icons.email,
-              controller: emailController,
+            CustomTextField(
+              hintText: 'New Password',
+              icon: Icons.lock,
+              controller: passWord,
+            ),
+            const SizedBox(height: 20.0),
+            CustomTextField(
+              hintText: 'Confirm Password',
+              icon: Icons.lock,
+              controller: confirmPassWord,
             ),
             const SizedBox(height: 20.0),
             CustomButton(
               text: 'Continue',
               onPressed: () async {
                 var url = Uri.https(
-                    'auth.jarvishome.in', '/auth/signup/request-signup');
+                    'auth.jarvishome.in', '/auth/reset-password/request-reset');
                 var response = await http.post(
                   url,
                   headers: {
@@ -49,11 +61,12 @@ class EmailSignUp extends StatelessWidget {
                     'accept': 'application/json'
                   },
                   body: jsonEncode({
-                    'email': emailController.text,
+                    'email': email,
                   }),
                 );
                 print(response.body);
-                if (response.statusCode == 200) {
+                if (response.statusCode == 200 &&
+                    passWord.text == confirmPassWord.text) {
                   var responseBody = json.decode(response.body);
                   String transactionId = responseBody['transaction_id'];
                   Navigator.pushReplacement(
@@ -62,7 +75,6 @@ class EmailSignUp extends StatelessWidget {
                       builder: (context) => OtpVerificationScreen(
                         transactionId: transactionId,
                         time: DateTime.parse(responseBody["otp_expires_at"]),
-
                         onSuccess: () {
                           Navigator.pushReplacement(
                             context,
@@ -86,6 +98,10 @@ class EmailSignUp extends StatelessWidget {
                       ),
                     ),
                   );
+                } else if (passWord.text != confirmPassWord.text ||
+                    passWord.text.isEmpty ||
+                    confirmPassWord.text.isEmpty) {
+                  print('Passwords do not match');
                 } else {
                   print('Login failed');
                   print('Response status: ${response.statusCode}');
@@ -95,30 +111,6 @@ class EmailSignUp extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildTextField({
-    required String hintText,
-    required IconData icon,
-    bool obscureText = false,
-    required TextEditingController controller,
-  }) {
-    return TextField(
-      controller: controller,
-      obscureText: obscureText,
-      decoration: InputDecoration(
-        filled: true,
-        fillColor: Colors.white24,
-        hintText: hintText,
-        hintStyle: const TextStyle(color: Colors.white70),
-        prefixIcon: Icon(icon, color: Colors.orange),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10.0),
-          borderSide: BorderSide.none,
-        ),
-      ),
-      style: const TextStyle(color: Colors.white),
     );
   }
 }

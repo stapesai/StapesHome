@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:jarvis/Constants/Colors.dart';
 import 'package:jarvis/widgets/TextField.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'EmailSignUp.dart'; // Import the EmailSignUp screen
+import 'email_signup.dart'; // Import the EmailSignUp screen
 import 'OtpVerification.dart'; // Import the OTP Verification screen
 import 'package:jarvis/main.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'OtpVerificationErrorScreen.dart';
+import 'reset_password.dart';
 import 'package:jarvis/Cache/sessions_model.dart'; // Import your session model
 import 'package:jarvis/Cache/HiveService.dart'; // Import your Hive service
 
@@ -172,8 +173,12 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 10.0),
                   GestureDetector(
                     onTap: () {
-                      // Add your forgot password logic here
-                    },
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ResetPassword(
+                          email: emailController.text,
+                        )),
+                      );                    },
                     child: const Text(
                       'Forgot password?',
                       style: TextStyle(color: AppColor.blueColor),
