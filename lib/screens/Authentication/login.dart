@@ -74,7 +74,6 @@ class LoginScreen extends StatelessWidget {
                       );
                       var responseBody = json.decode(response.body);
                       if (response.statusCode == 200) {
-
                         String transactionId = responseBody['transaction_id'];
                         Navigator.pushReplacement(
                           context,
@@ -118,7 +117,6 @@ class LoginScreen extends StatelessWidget {
 
                                   await hiveService
                                       .addBoxes([sessionData], "SessionBox");
-
 
                                   Navigator.pushReplacement(
                                     context,
@@ -166,9 +164,19 @@ class LoginScreen extends StatelessWidget {
                         MaterialPageRoute(builder: (context) => EmailSignUp()),
                       );
                     },
-                    child: const Text(
-                      "Don't have an account? Sign Up",
-                      style: TextStyle(color: Colors.white),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                         Text(
+                          "Don't have an account?",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        SizedBox(width: 5.0),
+                        Text(
+                          'Sign up',
+                          style: TextStyle(color: AppColor.blueColor),
+                        ),
+                      ],
                     ),
                   ),
                   const SizedBox(height: 10.0),
@@ -176,38 +184,38 @@ class LoginScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => ResetPassword(
-                          email: emailController.text,
-                        )),
-                      );                    },
+                        MaterialPageRoute(
+                            builder: (context) => ResetPassword(
+                                  email: emailController.text,
+                                )),
+                      );
+                    },
                     child: const Text(
                       'Forgot password?',
                       style: TextStyle(color: AppColor.blueColor),
                     ),
                   ),
                   const SizedBox(height: 20.0),
-                  Container(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 1,
-                          width: 100,
-                          color: Colors.white,
-                        ),
-                        const SizedBox(width: 10.0),
-                        const Text(
-                          'or',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                        const SizedBox(width: 10.0),
-                        Container(
-                          height: 1,
-                          width: 100,
-                          color: Colors.white,
-                        ),
-                      ],
-                    ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        height: 1,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                      const SizedBox(width: 10.0),
+                      const Text(
+                        'or',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                      const SizedBox(width: 10.0),
+                      Container(
+                        height: 1,
+                        width: 100,
+                        color: Colors.white,
+                      ),
+                    ],
                   ),
                   GestureDetector(
                     onTap: () {
@@ -325,5 +333,4 @@ class LoginScreen extends StatelessWidget {
       ),
     );
   }
-
 }

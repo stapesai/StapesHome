@@ -107,17 +107,17 @@ class _MainScreenState extends State<MainScreen> {
           type: BottomNavigationBarType.fixed,
           items: [
             _buildBottomNavigationBarItem(
-              icon: Icons.home,
+              icon: Icons.add_home_work_rounded,
               label: 'Home',
               isActive: _selectedIndex == 0,
             ),
             _buildBottomNavigationBarItem(
-              icon: Icons.lightbulb_outline,
+              icon: Icons.lightbulb_outline_rounded,
               label: 'Devices',
               isActive: _selectedIndex == 1,
             ),
             _buildBottomNavigationBarItem(
-              icon: Icons.memory,
+              icon: Icons.memory_outlined,
               label: 'Nodes',
               isActive: _selectedIndex == 2,
             ),
@@ -146,7 +146,7 @@ class _MainScreenState extends State<MainScreen> {
       icon: Column(
         children: [
           AnimatedBar(isActive: isActive),
-          Icon(icon),
+          Icon(icon,size: 43,),
         ],
       ),
       label: label,

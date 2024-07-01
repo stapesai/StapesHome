@@ -21,21 +21,26 @@ class _AddNewDeviceState extends State<AddNewDevice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
+
       backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            const Row(
+            const Column(
+
               children: [
+
                 Text(
                   'Add new device',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
+
                   ),
                 ),
                 SizedBox(width: 8),
@@ -77,8 +82,10 @@ class _AddNewDeviceState extends State<AddNewDevice> {
               value: _selectedType,
               items: _types.map((String type) {
                 return DropdownMenuItem<String>(
+
                   value: type,
                   child: Text(type),
+
                 );
               }).toList(),
               onChanged: (newValue) {

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'ConfirmPasswordPage.dart'; // Ensure the import is correct
+import 'confirm_password.dart'; // Ensure the import is correct
 import 'package:jarvis/widgets/CircularImagePicker.dart'; // Import the CircularImagePicker widget
 import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget

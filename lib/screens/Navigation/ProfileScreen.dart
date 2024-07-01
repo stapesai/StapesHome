@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/screens/Additional/EditProfile.dart'; // Ensure the correct import path
 import 'package:jarvis/screens/Additional/SessionsScreen.dart';
+import 'package:jarvis/Constants/colors.dart'; // Ensure the correct import path
 import 'package:jarvis/screens/Additional/LogoutConfirmationDialog.dart';
 
 class ProfileScreen extends StatelessWidget {
@@ -9,7 +10,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black, // Adjust this color to match your theme
+      backgroundColor: AppColor.backgroundColor, // Adjust this color to match your theme
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -48,9 +49,12 @@ class ProfileScreen extends StatelessWidget {
                   );
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.orange,
+                  backgroundColor: Colors.transparent,
+
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
+                    side: const BorderSide(color: Colors.orange, width: 2)
+
                   ),
                   padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
@@ -61,12 +65,14 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               ProfileOption(
-                icon: Icons.dark_mode,
+
+                icon: Icons.dark_mode_outlined,
                 text: 'Dark mode',
                 trailing: Switch(
                   value: true,
                   onChanged: (value) {},
                   activeColor: Colors.orange,
+
                 ),
               ),
               const SizedBox(height: 16),
@@ -84,6 +90,22 @@ class ProfileScreen extends StatelessWidget {
               ProfileOption(
                 icon: Icons.logout,
                 text: 'Logout',
+                onTap: () {
+                  _showLogoutDialog(context);
+                },
+              ),
+              const SizedBox(height: 16),
+              ProfileOption(
+                icon: Icons.location_history,
+                text: 'About Us',
+                onTap: () {
+                  _showLogoutDialog(context);
+                },
+              ),
+              const SizedBox(height: 16),
+              ProfileOption(
+                icon: Icons.help,
+                text: 'Get Help',
                 onTap: () {
                   _showLogoutDialog(context);
                 },
@@ -126,7 +148,7 @@ class ProfileOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
-          color: const Color(0xFF2C2C2C),
+          color: const Color(0xFF11111A),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(
@@ -134,11 +156,11 @@ class ProfileOption extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: Colors.white),
+                Icon(icon, color: Colors.white,size: 40,),
                 const SizedBox(width: 16),
                 Text(
                   text,
-                  style: const TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white, fontSize: 20,fontFamily: 'Malgun Gothic'),
                 ),
               ],
             ),

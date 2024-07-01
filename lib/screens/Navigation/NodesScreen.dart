@@ -28,10 +28,15 @@ class _NodesScreenState extends State<NodesScreen> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-      const Color(0xFF161622), // Adjust this color to match your theme
+          const Color(0xFF161622), // Adjust this color to match your theme
 
       body: SafeArea(
         child: Padding(
@@ -145,7 +150,10 @@ class FloorRoomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const FloorRoomButton(
-      {super.key, required this.label, required this.isActive, required this.onTap});
+      {super.key,
+      required this.label,
+      required this.isActive,
+      required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -281,7 +289,8 @@ class DashedBorderPainter extends CustomPainter {
     const double dashSpace = 5;
     final path = Path()
       ..addRRect(RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
+          Rect.fromLTWH(0, 0, size.width, size.height),
+          const Radius.circular(16)));
     final dashPath = Path();
     final pathMetrics = path.computeMetrics();
     for (var pathMetric in pathMetrics) {

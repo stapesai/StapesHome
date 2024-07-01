@@ -12,131 +12,139 @@ class FloorRoomSelector extends StatefulWidget {
   final String userId;
   final String activeFloorId;
 
-  const FloorRoomSelector({super.key, 
+  const FloorRoomSelector({
+    Key? key, // Added Key? key parameter
     required this.onFloorSelected,
     required this.onRoomSelected,
     required this.onAddFloor,
     required this.sessionId,
     required this.userId,
     required this.activeFloorId,
-  });
+  }) : super(key: key);
 
   @override
-  _FloorRoomSelectorState createState() => _FloorRoomSelectorState(
-        sessionId: sessionId,
-        userId: userId,
-        activeFloorId: activeFloorId,
-      );
+  _FloorRoomSelectorState createState() => _FloorRoomSelectorState();
 }
 
 class _FloorRoomSelectorState extends State<FloorRoomSelector> {
-  String activeFloorId;
   int activeRoomIndex = -1;
   List<Map<String, dynamic>> floors = [];
   List<String> rooms = [];
-  final String sessionId;
-  final String userId;
-
-  _FloorRoomSelectorState({
-    required this.sessionId,
-    required this.userId,
-    required this.activeFloorId,
-  });
 
   @override
   void initState() {
     super.initState();
-    _loadSessionData();
-  }
-
-  Future<void> _loadSessionData() async {
     _fetchFloors();
   }
 
   Future<void> _fetchFloors() async {
-    final url = Uri.https('backend.jarvishome.in', '/floors');
-    final response = await http.get(
-      url,
-      headers: {
-        'accept': 'application/json',
-        'X-User-Id': userId,
-        'X-Session-Id': sessionId,
-      },
-    );
+    try {
+      final url = Uri.https('backend.jarvishome.in', '/floors');
+      final response = await http.get(
+        url,
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final List<dynamic> floorsData = json.decode(response.body);
-      setState(() {
-        floors = floorsData
-            .map((floor) => {
-                  'id': floor['id'],
-                  'label': floor['alias'] != null && floor['alias'].isNotEmpty
-                      ? floor['alias']
-                      : 'Floor ${floor['level']}'
-                })
-            .toList();
-      });
-    } else {
-      // Handle error
-      print('Failed to load floors: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final List<dynamic> floorsData = json.decode(response.body);
+        if (mounted) {
+          setState(() {
+            floors = floorsData
+                .map((floor) => {
+                      'id': floor['id'],
+                      'label':
+                          floor['alias'] != null && floor['alias'].isNotEmpty
+                              ? floor['alias']
+                              : 'Floor ${floor['level']}'
+                    })
+                .toList();
+          });
+        }
+
+        // Fetch rooms for the initially active floor
+        if (floors.isNotEmpty) {
+          if (mounted) {
+            setActiveFloor(floors.first['id']);
+          }
+        }
+      } else {
+        // Handle error
+        print('Failed to load floors: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network errors or other exceptions
+      print('Error fetching floors: $e');
     }
   }
 
   Future<void> _fetchRooms(String floorId) async {
-    final url = Uri.https('backend.jarvishome.in', '/rooms/$floorId');
-    final response = await http.get(
-      url,
-      headers: {
-        'accept': 'application/json',
-        'X-User-Id': userId,
-        'X-Session-Id': sessionId,
-      },
-    );
+    try {
+      final url = Uri.https('backend.jarvishome.in', '/rooms/$floorId');
+      final response = await http.get(
+        url,
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
 
-    if (response.statusCode == 200) {
-      final List<dynamic> roomsData = json.decode(response.body);
-      setState(() {
-        rooms = roomsData.map((room) => room['name'] as String).toList();
-      });
-    } else {
-      // Handle error
-      print('Failed to load rooms: ${response.statusCode}');
+      if (response.statusCode == 200) {
+        final List<dynamic> roomsData = json.decode(response.body);
+        setState(() {
+          rooms = roomsData.map((room) => room['name'] as String).toList();
+        });
+      } else {
+        // Handle error
+        print('Failed to load rooms: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle network errors or other exceptions
+      print('Error fetching rooms: $e');
     }
   }
 
   Future<void> _deleteFloor(String floorId) async {
-    print(floorId);
-    final url = Uri.https('backend.jarvishome.in', '/floors/$floorId');
-    final response = await http.delete(
-      url,
-      headers: {
-        'accept': '*/*',
-        'X-User-Id': userId,
-        'X-Session-Id': sessionId,
-      },
-    );
+    try {
+      final url = Uri.https('backend.jarvishome.in', '/floors/$floorId');
+      final response = await http.delete(
+        url,
+        headers: {
+          'accept': '*/*',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
 
-    if (response.statusCode == 200 || response.statusCode == 204) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Floor deleted successfully')),
-      );
-      _fetchFloors();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to delete floor')),
-      );
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Floor deleted successfully')),
+        );
+        _fetchFloors();
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to delete floor')),
+        );
+      }
+    } catch (e) {
+      // Handle network errors or other exceptions
+      print('Error deleting floor: $e');
     }
-    print(response.body);
   }
 
   void setActiveFloor(String floorId) {
     setState(() {
-      activeFloorId = floorId;
-      activeRoomIndex = -1; // Reset active room when a new floor is selected
+      widget.onFloorSelected(floorId);
+      widget
+          .onRoomSelected(-1); // Reset active room when a new floor is selected
       rooms = [];
     });
+
     _fetchRooms(floorId);
-    widget.onFloorSelected(floorId);
   }
 
   void setActiveRoom(int roomIndex) {
@@ -147,7 +155,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
   }
 
   void navigateToCreateRoom(BuildContext context) {
-    if (activeFloorId.isEmpty) {
+    if (widget.activeFloorId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a floor first')),
       );
@@ -157,14 +165,14 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       context,
       MaterialPageRoute(
         builder: (context) => CreateRoomPage(
-          sessionId: sessionId,
-          userId: userId,
-          floorId: activeFloorId,
+          sessionId: widget.sessionId,
+          userId: widget.userId,
+          floorId: widget.activeFloorId,
         ),
       ),
     ).then((_) {
       // Refresh rooms after navigating back
-      _fetchRooms(activeFloorId);
+      _fetchRooms(widget.activeFloorId);
     });
   }
 
@@ -173,8 +181,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       context,
       MaterialPageRoute(
         builder: (context) => CreateFloorPage(
-          sessionId: sessionId,
-          userId: userId,
+          sessionId: widget.sessionId,
+          userId: widget.userId,
         ),
       ),
     ).then((result) {
@@ -224,7 +232,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             const SizedBox(width: 8),
-            AddCircleButton(onPressed: () => navigateToCreateFloor(context)),
+            AddCircleButton(
+              onPressed: () =>
+                  navigateToCreateFloor(context), // Pass context here
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -238,7 +249,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
                   onLongPress: () => showDeleteDialog(context, floor['id']),
                   child: FloorRoomButton(
                     label: floor['label'],
-                    isActive: activeFloorId == floor['id'],
+                    isActive: widget.activeFloorId == floor['id'],
                     onTap: () => setActiveFloor(floor['id']),
                   ),
                 ),
@@ -254,7 +265,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
             const SizedBox(width: 8),
-            AddCircleButton(onPressed: () => navigateToCreateRoom(context)),
+            AddCircleButton(
+              onPressed: () =>
+                  navigateToCreateFloor(context), // Pass context here
+            ),
           ],
         ),
         const SizedBox(height: 8),
@@ -283,12 +297,14 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 class AddCircleButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const AddCircleButton({super.key, required this.onPressed});
+  const AddCircleButton({Key? key, required this.onPressed}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onPressed,
+      onTap: () {
+        onPressed();
+      },
       child: Container(
         width: 18,
         height: 18,
@@ -307,11 +323,12 @@ class FloorRoomButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const FloorRoomButton({super.key, 
+  const FloorRoomButton({
+    Key? key,
     required this.label,
     required this.isActive,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
