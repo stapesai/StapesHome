@@ -1,6 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
@@ -11,12 +12,13 @@ class CreateRoomPage extends StatelessWidget {
   final String userId;
   final String floorId;
 
-  CreateRoomPage({super.key, 
+  CreateRoomPage({
+    super.key,
     required this.sessionId,
     required this.userId,
     required this.floorId,
   });
- 
+
   Future<void> _createRoom(BuildContext context) async {
     final String name = nameController.text;
     final String type = typeController.text;
@@ -45,14 +47,18 @@ class CreateRoomPage extends StatelessWidget {
     );
 
     if (response.statusCode == 200 || response.statusCode == 201) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Room created successfully')),
-      );
-      Navigator.pop(context, true); // Return true to indicate success
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Room created successfully')),
+        );
+        Navigator.pop(context, true);
+      }
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Failed to create room')),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to create room')),
+        );
+      }
     }
   }
 

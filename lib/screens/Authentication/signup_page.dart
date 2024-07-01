@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
-import 'confirm_password.dart'; // Ensure the import is correct
 import 'package:jarvis/widgets/CircularImagePicker.dart'; // Import the CircularImagePicker widget
 import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
+
+import 'confirm_password.dart'; // Ensure the import is correct
 
 class SignUpPage extends StatefulWidget {
   final String transactionId;
@@ -10,7 +11,7 @@ class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key, required this.transactionId});
 
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  createState() => _SignUpPageState();
 }
 
 class _SignUpPageState extends State<SignUpPage> {

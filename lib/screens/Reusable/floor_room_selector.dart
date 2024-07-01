@@ -1,8 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:jarvis/screens/Reusable/create_room_page.dart'; // Import CreateRoomPage
 import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
+import 'package:jarvis/screens/Reusable/create_room_page.dart'; // Import CreateRoomPage
 
 class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;
@@ -13,17 +14,17 @@ class FloorRoomSelector extends StatefulWidget {
   final String activeFloorId;
 
   const FloorRoomSelector({
-    Key? key, // Added Key? key parameter
+    super.key, // Added Key? key parameter
     required this.onFloorSelected,
     required this.onRoomSelected,
     required this.onAddFloor,
     required this.sessionId,
     required this.userId,
     required this.activeFloorId,
-  }) : super(key: key);
+  });
 
   @override
-  _FloorRoomSelectorState createState() => _FloorRoomSelectorState();
+  createState() => _FloorRoomSelectorState();
 }
 
 class _FloorRoomSelectorState extends State<FloorRoomSelector> {
@@ -73,11 +74,20 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
         }
       } else {
         // Handle error
-        print('Failed to load floors: ${response.statusCode}');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to load floors: ${response.statusCode}')),
+          );
+        }
       }
     } catch (e) {
       // Handle network errors or other exceptions
-      print('Error fetching floors: $e');
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error fetching floors: $e')),
+        );
+      }
     }
   }
 
@@ -100,11 +110,18 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
         });
       } else {
         // Handle error
-        print('Failed to load rooms: ${response.statusCode}');
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Failed to load rooms: ${response.statusCode}')),
+          );
+        }
       }
     } catch (e) {
-      // Handle network errors or other exceptions
-      print('Error fetching rooms: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+           SnackBar(content: Text('Error fetching rooms : $e')),
+        );
+      }
     }
   }
 
@@ -121,18 +138,28 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       );
 
       if (response.statusCode == 200 || response.statusCode == 204) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Floor deleted successfully')),
-        );
-        _fetchFloors();
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Floor deleted successfully')),
+          );
+          _fetchFloors();
+        }
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to delete floor')),
-        );
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to delete floor')),
+          );
+        }
       }
     } catch (e) {
       // Handle network errors or other exceptions
-      print('Error deleting floor: $e');
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error deleting floor: $e')),
+        );
+      }
+
     }
   }
 
@@ -297,7 +324,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 class AddCircleButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const AddCircleButton({Key? key, required this.onPressed}) : super(key: key);
+  const AddCircleButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -324,11 +351,11 @@ class FloorRoomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const FloorRoomButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.isActive,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

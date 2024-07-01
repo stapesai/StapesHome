@@ -51,12 +51,14 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Session ID: $sessionId",
-                        style: const TextStyle(color: Colors.white70, fontSize: 18),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 18),
                       ),
                       const SizedBox(height: 10),
                       Text(
                         "User ID: $userId",
-                        style: const TextStyle(color: Colors.white70, fontSize: 14),
+                        style: const TextStyle(
+                            color: Colors.white70, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 20),

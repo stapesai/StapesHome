@@ -1,11 +1,13 @@
-import 'package:flutter/material.dart';
-import 'OtpVerification.dart'; // Import the OTP verification screen
-import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'ErrorScreens/OtpVerificationErrorScreen.dart';
 import 'dart:convert';
-import 'SuccessScreens/OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
+
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:jarvis/widgets/TextField.dart';
+import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
+
+import 'ErrorScreens/OtpVerificationErrorScreen.dart';
+import 'OtpVerification.dart'; // Import the OTP verification screen
+import 'SuccessScreens/OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
 
 class EmailSignUp extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -53,49 +55,51 @@ class EmailSignUp extends StatelessWidget {
                     'email': emailController.text,
                   }),
                 );
-                print(response.body);
+
                 var responseBody = json.decode(response.body);
                 if (response.statusCode == 200) {
-
                   String transactionId = responseBody['transaction_id'];
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => OtpVerificationScreen(
-                        transactionId: transactionId,
-                        time: DateTime.parse(responseBody["otp_expires_at"]),
-
-                        onSuccess: () {
-                          Navigator.pushReplacement(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  OtpVerificationSuccessScreen(
-                                transactionId: transactionId,
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => OtpVerificationScreen(
+                          transactionId: transactionId,
+                          time: DateTime.parse(responseBody["otp_expires_at"]),
+                          onSuccess: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    OtpVerificationSuccessScreen(
+                                  transactionId: transactionId,
+                                ),
                               ),
-                            ),
-                          );
-                        },
-                        onError: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const OtpVerificationErrorScreen(),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                          onError: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const OtpVerificationErrorScreen(),
+                              ),
+                            );
+                          },
+                        ),
                       ),
-                    ),
-                  );
+                    );
+                  }
                   // tes
                 } else {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          'Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                    ),
-                  );
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                      ),
+                    );
+                  }
                 }
               },
             ),

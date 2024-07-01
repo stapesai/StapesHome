@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
-import 'SuccessScreens/SignedUpSuccessfullyPage.dart'; // Import the next screen
+import 'package:http/http.dart' as http;
 import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+
+import 'SuccessScreens/SignedUpSuccessfullyPage.dart'; // Import the next screen
 
 class ConfirmPasswordPage extends StatefulWidget {
   final String transactionId;
@@ -11,7 +13,8 @@ class ConfirmPasswordPage extends StatefulWidget {
   final String lastName;
   final String dob;
 
-  const ConfirmPasswordPage({super.key, 
+  const ConfirmPasswordPage({
+    super.key,
     required this.transactionId,
     required this.firstName,
     required this.lastName,
@@ -19,7 +22,7 @@ class ConfirmPasswordPage extends StatefulWidget {
   });
 
   @override
-  _ConfirmPasswordPageState createState() => _ConfirmPasswordPageState();
+  createState() => _ConfirmPasswordPageState();
 }
 
 class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
@@ -81,8 +84,8 @@ class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
                         'first_name': widget.firstName,
                         'last_name': widget.lastName,
                         'dob': widget.dob,
-                        'gender':
-                            'Male', // Replace with actual gender from previous screen
+                        'gender': 'Male',
+                        // Replace with actual gender from previous screen
                       },
                       'password': passwordController.text,
                       'transaction_id': widget.transactionId,
@@ -90,18 +93,33 @@ class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
                   );
 
                   if (response.statusCode == 200) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignedUpSuccessfullyPage(),
-                      ),
-                    );
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              const SignedUpSuccessfullyPage(),
+                        ),
+                      );
+                    }
                   } else {
-                    print('Sign up failed');
-                    print('Response status: ${response.statusCode}');
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content:
+                              Text('Sign up failed: ${response.statusCode}'),
+                        ),
+                      );
+                    }
                   }
                 } else {
-                  print('Passwords do not match');
+                  if (mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Passwords do not match'),
+                      ),
+                    );
+                  }
                 }
               },
             ),

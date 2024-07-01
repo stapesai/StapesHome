@@ -11,14 +11,15 @@ class LogoutConfirmationDialog extends StatelessWidget {
     var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
 
     sessions.clear();
-
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginScreen(),
-      ),
-      (Route<dynamic> route) => false,
-    );
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
 
   @override

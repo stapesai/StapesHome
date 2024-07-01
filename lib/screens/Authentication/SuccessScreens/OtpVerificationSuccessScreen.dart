@@ -1,6 +1,8 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui' as ui; // Add this import for PathMetric
+
+import 'package:flutter/material.dart';
+
 import '../signup_page.dart'; // Import the SignUpPage
 
 class OtpVerificationSuccessScreen extends StatefulWidget {
@@ -9,8 +11,7 @@ class OtpVerificationSuccessScreen extends StatefulWidget {
   const OtpVerificationSuccessScreen({super.key, required this.transactionId});
 
   @override
-  _OtpVerificationSuccessScreenState createState() =>
-      _OtpVerificationSuccessScreenState();
+  createState() => _OtpVerificationSuccessScreenState();
 }
 
 class _OtpVerificationSuccessScreenState
@@ -53,9 +54,8 @@ class _OtpVerificationSuccessScreenState
                     child: _controller.value == 1
                         ? TweenAnimationBuilder(
                             tween: Tween<double>(begin: 0, end: 1),
-                            duration: const Duration(
-                                milliseconds:
-                                    500), // Set duration to 500 milliseconds for faster animation
+                            duration: const Duration(milliseconds: 500),
+                            // Set duration to 500 milliseconds for faster animation
                             builder: (context, value, child) {
                               return CustomPaint(
                                 painter: CheckPainter(value),

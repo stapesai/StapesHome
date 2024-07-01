@@ -5,7 +5,7 @@ class CustomButton extends StatelessWidget {
   final String text;
   final VoidCallback onPressed;
   final Color backgroundColor;
-  final IconData ?icon;
+  final IconData? icon;
 
   const CustomButton({
     super.key,
@@ -22,17 +22,12 @@ class CustomButton extends StatelessWidget {
       width: 364,
       // add icon if it is not null
       child: ElevatedButton(
-
         onPressed: onPressed,
-
         style: ElevatedButton.styleFrom(
-
           backgroundColor: backgroundColor,
-
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(15.0),
-
           ),
         ),
         child: Text(

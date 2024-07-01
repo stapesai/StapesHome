@@ -1,12 +1,13 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:io';
 
 class CircularImagePicker extends StatefulWidget {
   const CircularImagePicker({super.key});
 
   @override
-  _CircularImagePickerState createState() => _CircularImagePickerState();
+  createState() => _CircularImagePickerState();
 }
 
 class _CircularImagePickerState extends State<CircularImagePicker> {

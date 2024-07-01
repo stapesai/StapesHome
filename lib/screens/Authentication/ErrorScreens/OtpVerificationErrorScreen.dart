@@ -1,13 +1,13 @@
-import 'package:flutter/material.dart';
 import 'dart:math';
 import 'dart:ui' as ui; // Add this import for PathMetric
+
+import 'package:flutter/material.dart';
 
 class OtpVerificationErrorScreen extends StatefulWidget {
   const OtpVerificationErrorScreen({super.key});
 
   @override
-  _OtpVerificationErrorScreenState createState() =>
-      _OtpVerificationErrorScreenState();
+  createState() => _OtpVerificationErrorScreenState();
 }
 
 class _OtpVerificationErrorScreenState extends State<OtpVerificationErrorScreen>
@@ -49,9 +49,8 @@ class _OtpVerificationErrorScreenState extends State<OtpVerificationErrorScreen>
                     child: _controller.value == 1
                         ? TweenAnimationBuilder(
                             tween: Tween<double>(begin: 0, end: 1),
-                            duration: const Duration(
-                                milliseconds:
-                                    500), // Set duration to 500 milliseconds for faster animation
+                            duration: const Duration(milliseconds: 500),
+                            // Set duration to 500 milliseconds for faster animation
                             builder: (context, value, child) {
                               return CustomPaint(
                                 painter: CrossPainter(value),

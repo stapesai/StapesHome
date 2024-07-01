@@ -6,7 +6,7 @@ class AddNewDevice extends StatefulWidget {
   const AddNewDevice({super.key});
 
   @override
-  _AddNewDeviceState createState() => _AddNewDeviceState();
+  createState() => _AddNewDeviceState();
 }
 
 class _AddNewDeviceState extends State<AddNewDevice> {
@@ -21,8 +21,6 @@ class _AddNewDeviceState extends State<AddNewDevice> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-
-
       backgroundColor: Colors.black,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 32.0),
@@ -31,16 +29,13 @@ class _AddNewDeviceState extends State<AddNewDevice> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             const Column(
-
               children: [
-
                 Text(
                   'Add new device',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
                     color: Colors.white,
-
                   ),
                 ),
                 SizedBox(width: 8),
@@ -82,10 +77,8 @@ class _AddNewDeviceState extends State<AddNewDevice> {
               value: _selectedType,
               items: _types.map((String type) {
                 return DropdownMenuItem<String>(
-
                   value: type,
                   child: Text(type),
-
                 );
               }).toList(),
               onChanged: (newValue) {

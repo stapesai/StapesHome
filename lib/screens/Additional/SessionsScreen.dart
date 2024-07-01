@@ -64,7 +64,8 @@ class SessionItem extends StatelessWidget {
   final String deviceName;
   final String lastActive;
 
-  const SessionItem({super.key, 
+  const SessionItem({
+    super.key,
     required this.deviceIcon,
     required this.deviceName,
     required this.lastActive,

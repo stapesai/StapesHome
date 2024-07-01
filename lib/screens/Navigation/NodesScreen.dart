@@ -4,7 +4,7 @@ class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});
 
   @override
-  _NodesScreenState createState() => _NodesScreenState();
+  createState() => _NodesScreenState();
 }
 
 class _NodesScreenState extends State<NodesScreen> {
@@ -190,7 +190,7 @@ class NodeButton extends StatefulWidget {
   const NodeButton({super.key, required this.label});
 
   @override
-  _NodeButtonState createState() => _NodeButtonState();
+  createState() => _NodeButtonState();
 }
 
 class _NodeButtonState extends State<NodeButton> {

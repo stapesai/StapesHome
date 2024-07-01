@@ -2,20 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:jarvis/Constants/colors.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'Cache/sessions_model.dart';
+
 import 'Cache/HiveService.dart';
-import 'screens/SplashScreen.dart';
-import 'screens/Navigation/HomeScreen.dart';
+import 'Cache/sessions_model.dart';
 import 'screens/Navigation/DevicesScreen.dart';
+import 'screens/Navigation/HomeScreen.dart';
 import 'screens/Navigation/NodesScreen.dart';
 import 'screens/Navigation/ProfileScreen.dart';
+import 'screens/SplashScreen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Hive
   final appDocumentDirectory =
-  await path_provider.getApplicationDocumentsDirectory();
+      await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive adapters
@@ -40,7 +41,7 @@ class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
 
   @override
-  _MainScreenState createState() => _MainScreenState();
+  createState() => _MainScreenState();
 }
 
 class _MainScreenState extends State<MainScreen> {
@@ -74,9 +75,6 @@ class _MainScreenState extends State<MainScreen> {
         _screens[1] = DeviceScreen(sessionId: sessionId, userId: userId);
       });
     }
-
-
-
   }
 
   void _onItemTapped(int index) {
@@ -146,7 +144,10 @@ class _MainScreenState extends State<MainScreen> {
       icon: Column(
         children: [
           AnimatedBar(isActive: isActive),
-          Icon(icon,size: 43,),
+          Icon(
+            icon,
+            size: 43,
+          ),
         ],
       ),
       label: label,

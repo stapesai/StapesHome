@@ -1,16 +1,16 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:jarvis/Cache/HiveService.dart'; // Import your Hive service
+import 'package:jarvis/Cache/sessions_model.dart'; // Import your session model
 import 'package:jarvis/Constants/colors.dart';
+import 'package:jarvis/main.dart';
 import 'package:jarvis/widgets/TextField.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'email_signup.dart'; // Import the EmailSignUp screen
-import 'OtpVerification.dart'; // Import the OTP Verification screen
-import 'package:jarvis/main.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 import 'ErrorScreens/OtpVerificationErrorScreen.dart';
+import 'OtpVerification.dart'; // Import the OTP Verification screen
+import 'email_signup.dart'; // Import the EmailSignUp screen
 import 'reset_password.dart';
-import 'package:jarvis/Cache/sessions_model.dart'; // Import your session model
-import 'package:jarvis/Cache/HiveService.dart'; // Import your Hive service
 
 class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -18,6 +18,102 @@ class LoginScreen extends StatelessWidget {
   final HiveService hiveService = HiveService();
 
   LoginScreen({super.key});
+
+  Future<void> handleLogin(BuildContext context) async {
+    var url = Uri.https('auth.jarvishome.in', '/auth/login/request-login');
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: jsonEncode({
+        'email': emailController.text,
+        'password': passwordController.text,
+      }),
+    );
+    var responseBody = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      String transactionId = responseBody['transaction_id'];
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
+              transactionId: transactionId,
+              time: DateTime.parse(responseBody["otp_expires_at"]),
+              onSuccess: () async {
+                var completeLoginUrl = Uri.https(
+                    'auth.jarvishome.in', '/auth/login/complete-login');
+                var completeLoginResponse = await http.post(
+                  completeLoginUrl,
+                  headers: {
+                    'Content-Type': 'application/json',
+                    'accept': 'application/json'
+                  },
+                  body: jsonEncode({
+                    'transaction_id': transactionId,
+                  }),
+                );
+
+                if (completeLoginResponse.statusCode == 200) {
+                  var sessionResponseBody =
+                      json.decode(completeLoginResponse.body);
+                  var sessionData = SessionsModel(
+                    sessionId: sessionResponseBody['session']['session_id'],
+                    userId: sessionResponseBody['session']['user_id'],
+                    ipAddress: sessionResponseBody['session']['ip_address'],
+                    createdAt: DateTime.parse(
+                        sessionResponseBody['session']['created_at']),
+                    lastActiveAt: DateTime.parse(
+                        sessionResponseBody['session']['last_active_at']),
+                  );
+
+                  await hiveService.addBoxes([sessionData], "SessionBox");
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MainScreen(),
+                      ),
+                    );
+                  }
+                } else {
+                  if (context.mounted) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const OtpVerificationErrorScreen(),
+                      ),
+                    );
+                  }
+                }
+              },
+              onError: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OtpVerificationErrorScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -58,103 +154,7 @@ class LoginScreen extends StatelessWidget {
                   const SizedBox(height: 20.0),
                   CustomButton(
                     text: 'Continue',
-                    onPressed: () async {
-                      var url = Uri.https(
-                          'auth.jarvishome.in', '/auth/login/request-login');
-                      var response = await http.post(
-                        url,
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'accept': 'application/json'
-                        },
-                        body: jsonEncode({
-                          'email': emailController.text,
-                          'password': passwordController.text,
-                        }),
-                      );
-                      var responseBody = json.decode(response.body);
-                      if (response.statusCode == 200) {
-                        String transactionId = responseBody['transaction_id'];
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => OtpVerificationScreen(
-                              transactionId: transactionId,
-                              time: DateTime.parse(
-                                  responseBody["otp_expires_at"]),
-                              onSuccess: () async {
-                                var completeLoginUrl = Uri.https(
-                                    'auth.jarvishome.in',
-                                    '/auth/login/complete-login');
-                                var completeLoginResponse = await http.post(
-                                  completeLoginUrl,
-                                  headers: {
-                                    'Content-Type': 'application/json',
-                                    'accept': 'application/json'
-                                  },
-                                  body: jsonEncode({
-                                    'transaction_id': transactionId,
-                                  }),
-                                );
-
-                                if (completeLoginResponse.statusCode == 200) {
-                                  var sessionResponseBody =
-                                      json.decode(completeLoginResponse.body);
-                                  var sessionData = SessionsModel(
-                                    sessionId: sessionResponseBody['session']
-                                        ['session_id'],
-                                    userId: sessionResponseBody['session']
-                                        ['user_id'],
-                                    ipAddress: sessionResponseBody['session']
-                                        ['ip_address'],
-                                    createdAt: DateTime.parse(
-                                        sessionResponseBody['session']
-                                            ['created_at']),
-                                    lastActiveAt: DateTime.parse(
-                                        sessionResponseBody['session']
-                                            ['last_active_at']),
-                                  );
-
-                                  await hiveService
-                                      .addBoxes([sessionData], "SessionBox");
-
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const MainScreen(),
-                                    ),
-                                  );
-                                } else {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const OtpVerificationErrorScreen(),
-                                    ),
-                                  );
-                                }
-                              },
-                              onError: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        const OtpVerificationErrorScreen(),
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        );
-                      } else {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text(
-                                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                          ),
-                        );
-                      }
-                    },
+                    onPressed: () => handleLogin(context),
                   ),
                   const SizedBox(height: 10.0),
                   GestureDetector(
@@ -167,7 +167,7 @@ class LoginScreen extends StatelessWidget {
                     child: const Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                         Text(
+                        Text(
                           "Don't have an account?",
                           style: TextStyle(color: Colors.white),
                         ),

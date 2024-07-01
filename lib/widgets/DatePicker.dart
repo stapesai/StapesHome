@@ -1,13 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
 import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:image_cropper/image_cropper.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CircularImagePicker extends StatefulWidget {
   const CircularImagePicker({super.key});
 
   @override
-  _CircularImagePickerState createState() => _CircularImagePickerState();
+  createState() => _CircularImagePickerState();
 }
 
 class _CircularImagePickerState extends State<CircularImagePicker> {

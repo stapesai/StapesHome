@@ -1,8 +1,9 @@
+import 'dart:async';
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:async';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
@@ -10,7 +11,8 @@ class OtpVerificationScreen extends StatefulWidget {
   final VoidCallback onError;
   final DateTime time;
 
-  const OtpVerificationScreen({super.key,
+  const OtpVerificationScreen({
+    super.key,
     required this.transactionId,
     required this.onSuccess,
     required this.onError,
@@ -18,12 +20,12 @@ class OtpVerificationScreen extends StatefulWidget {
   });
 
   @override
-  _OtpVerificationScreenState createState() => _OtpVerificationScreenState();
+  createState() => _OtpVerificationScreenState();
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final List<TextEditingController> _controllers =
-  List.generate(6, (index) => TextEditingController());
+      List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   late int _remainingTime;
@@ -77,7 +79,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }),
     );
 
-    print('OTP Verification response: ${response.body}'); // Log the response
+    // print('OTP Verification response: ${response.body}'); // Log the response
+
 
     if (response.statusCode == 200) {
       widget.onSuccess();
@@ -188,8 +191,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   textInputAction: TextInputAction.next,
                   decoration: InputDecoration(
                     counterText: '',
-                    contentPadding: EdgeInsets
-                        .zero, // Set padding to zero to center text and cursor
+                    contentPadding: EdgeInsets.zero,
+                    // Set padding to zero to center text and cursor
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide.none,

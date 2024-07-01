@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/screens/Additional/AddNewDevice.dart';
 import 'package:jarvis/Cache/HiveService.dart';
-import 'package:jarvis/screens/Reusable/floor_room_selector.dart'; // Import the new component
+import 'package:jarvis/screens/Additional/AddNewDevice.dart';
 import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
 import 'package:jarvis/screens/Reusable/create_room_page.dart';
+import 'package:jarvis/screens/Reusable/floor_room_selector.dart'; // Import the new component
 
 class DeviceScreen extends StatefulWidget {
   final String sessionId;
@@ -16,7 +16,7 @@ class DeviceScreen extends StatefulWidget {
   });
 
   @override
-  _DeviceScreenState createState() => _DeviceScreenState();
+  createState() => _DeviceScreenState();
 }
 
 class _DeviceScreenState extends State<DeviceScreen> {
@@ -91,10 +91,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
               FloorRoomSelector(
                 onFloorSelected: handleFloorSelected,
                 onRoomSelected: handleRoomSelected,
-                onAddFloor: () =>
-                    navigateToCreateFloor(context), // Pass callback
-                sessionId: widget.sessionId, // Pass sessionId
-                userId: widget.userId, // Pass userId
+                onAddFloor: () => navigateToCreateFloor(context),
+                // Pass callback
+                sessionId: widget.sessionId,
+                // Pass sessionId
+                userId: widget.userId,
+                // Pass userId
                 activeFloorId: activeFloorId, // Pass active floor ID
               ),
               const SizedBox(height: 24),
@@ -127,7 +129,7 @@ class DeviceButton extends StatefulWidget {
   const DeviceButton({super.key, required this.label});
 
   @override
-  _DeviceButtonState createState() => _DeviceButtonState();
+  createState() => _DeviceButtonState();
 }
 
 class _DeviceButtonState extends State<DeviceButton> {
@@ -259,7 +261,8 @@ class DashedBorderPainter extends CustomPainter {
     const double dashSpace = 5;
     final path = Path()
       ..addRRect(RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
+          Rect.fromLTWH(0, 0, size.width, size.height),
+          const Radius.circular(16)));
     final dashPath = Path();
     final pathMetrics = path.computeMetrics();
     for (var pathMetric in pathMetrics) {

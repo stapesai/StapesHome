@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/screens/Additional/EditProfile.dart'; // Ensure the correct import path
-import 'package:jarvis/screens/Additional/SessionsScreen.dart';
 import 'package:jarvis/Constants/colors.dart'; // Ensure the correct import path
+import 'package:jarvis/screens/Additional/EditProfile.dart'; // Ensure the correct import path
 import 'package:jarvis/screens/Additional/LogoutConfirmationDialog.dart';
+import 'package:jarvis/screens/Additional/SessionsScreen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -10,7 +10,8 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundColor, // Adjust this color to match your theme
+      backgroundColor: AppColor.backgroundColor,
+      // Adjust this color to match your theme
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -50,13 +51,11 @@ class ProfileScreen extends StatelessWidget {
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.transparent,
-
                   shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                    side: const BorderSide(color: Colors.orange, width: 2)
-
-                  ),
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      borderRadius: BorderRadius.circular(30),
+                      side: const BorderSide(color: Colors.orange, width: 2)),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
                 child: const Text(
                   'Edit',
@@ -65,14 +64,12 @@ class ProfileScreen extends StatelessWidget {
               ),
               const SizedBox(height: 32),
               ProfileOption(
-
                 icon: Icons.dark_mode_outlined,
                 text: 'Dark mode',
                 trailing: Switch(
                   value: true,
                   onChanged: (value) {},
                   activeColor: Colors.orange,
-
                 ),
               ),
               const SizedBox(height: 16),
@@ -82,7 +79,8 @@ class ProfileScreen extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SessionsScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const SessionsScreen()),
                   );
                 },
               ),
@@ -133,7 +131,8 @@ class ProfileOption extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
 
-  const ProfileOption({super.key, 
+  const ProfileOption({
+    super.key,
     required this.icon,
     required this.text,
     this.trailing,
@@ -156,11 +155,18 @@ class ProfileOption extends StatelessWidget {
           children: [
             Row(
               children: [
-                Icon(icon, color: Colors.white,size: 40,),
+                Icon(
+                  icon,
+                  color: Colors.white,
+                  size: 40,
+                ),
                 const SizedBox(width: 16),
                 Text(
                   text,
-                  style: const TextStyle(color: Colors.white, fontSize: 20,fontFamily: 'Malgun Gothic'),
+                  style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 20,
+                      fontFamily: 'Malgun Gothic'),
                 ),
               ],
             ),
