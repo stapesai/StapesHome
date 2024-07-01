@@ -11,7 +11,7 @@ class CreateRoomPage extends StatelessWidget {
   final String userId;
   final String floorId;
 
-  CreateRoomPage({
+  CreateRoomPage({super.key, 
     required this.sessionId,
     required this.userId,
     required this.floorId,
@@ -23,7 +23,7 @@ class CreateRoomPage extends StatelessWidget {
 
     if (name.isEmpty || type.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please provide valid room details')),
+        const SnackBar(content: Text('Please provide valid room details')),
       );
       return;
     }
@@ -46,12 +46,12 @@ class CreateRoomPage extends StatelessWidget {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Room created successfully')),
+        const SnackBar(content: Text('Room created successfully')),
       );
       Navigator.pop(context, true); // Return true to indicate success
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create room')),
+        const SnackBar(content: Text('Failed to create room')),
       );
     }
   }
@@ -59,10 +59,10 @@ class CreateRoomPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1C1C2B),
+      backgroundColor: const Color(0xFF1C1C2B),
       appBar: AppBar(
-        title: Text('Create a new room'),
-        backgroundColor: Color(0xFF1C1C2B),
+        title: const Text('Create a new room'),
+        backgroundColor: const Color(0xFF1C1C2B),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -72,12 +72,12 @@ class CreateRoomPage extends StatelessWidget {
               hintText: 'Eg: Parent’s room',
               controller: nameController,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             CustomTextField(
               hintText: 'Room type',
               controller: typeController,
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             CustomButton(
               text: 'Create',
               onPressed: () => _createRoom(context),

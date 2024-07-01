@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SignedUpSuccessfullyPage extends StatelessWidget {
+  const SignedUpSuccessfullyPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,7 +11,7 @@ class SignedUpSuccessfullyPage extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircleAvatar(
+            const CircleAvatar(
               radius: 50,
               backgroundColor: Colors.grey,
               child: Icon(Icons.person, size: 50, color: Colors.white),

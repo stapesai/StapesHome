@@ -9,12 +9,14 @@ import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
 class EmailSignUp extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
 
+  EmailSignUp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFF161622),
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,6 +61,8 @@ class EmailSignUp extends StatelessWidget {
                     MaterialPageRoute(
                       builder: (context) => OtpVerificationScreen(
                         transactionId: transactionId,
+                        time: DateTime.parse(responseBody["otp_expires_at"]),
+
                         onSuccess: () {
                           Navigator.pushReplacement(
                             context,
@@ -75,7 +79,7 @@ class EmailSignUp extends StatelessWidget {
                             context,
                             MaterialPageRoute(
                               builder: (context) =>
-                                  OtpVerificationErrorScreen(),
+                                  const OtpVerificationErrorScreen(),
                             ),
                           );
                         },

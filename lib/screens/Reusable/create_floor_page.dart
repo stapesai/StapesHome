@@ -11,7 +11,7 @@ class CreateFloorPage extends StatelessWidget {
   final String sessionId;
   final String userId;
 
-  CreateFloorPage({required this.sessionId, required this.userId});
+  CreateFloorPage({super.key, required this.sessionId, required this.userId});
 
   Future<void> _createFloor(BuildContext context) async {
     final String alias = aliasController.text;
@@ -19,7 +19,7 @@ class CreateFloorPage extends StatelessWidget {
 
     if (alias.isEmpty || level == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please provide valid floor details')),
+        const SnackBar(content: Text('Please provide valid floor details')),
       );
       return;
     }
@@ -41,12 +41,12 @@ class CreateFloorPage extends StatelessWidget {
 
     if (response.statusCode == 200 || response.statusCode == 201) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Floor created successfully')),
+        const SnackBar(content: Text('Floor created successfully')),
       );
       Navigator.pop(context, true); // Return true to indicate success
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to create floor')),
+        const SnackBar(content: Text('Failed to create floor')),
       );
     }
   }
@@ -54,10 +54,10 @@ class CreateFloorPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFF1C1C2B),
+      backgroundColor: const Color(0xFF1C1C2B),
       appBar: AppBar(
-        title: Text('Create a new floor'),
-        backgroundColor: Color(0xFF1C1C2B),
+        title: const Text('Create a new floor'),
+        backgroundColor: const Color(0xFF1C1C2B),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,14 +67,14 @@ class CreateFloorPage extends StatelessWidget {
               hintText: 'Eg: Parent’s Floor',
               controller: aliasController,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             TextField(
               controller: levelController,
               keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               decoration: InputDecoration(
                 filled: true,
-                fillColor: Color(0xFF1C1C2B),
+                fillColor: const Color(0xFF1C1C2B),
                 labelText: 'Floor level',
                 labelStyle: const TextStyle(color: Color(0xFFFF9F1C)),
                 enabledBorder: OutlineInputBorder(
@@ -94,7 +94,7 @@ class CreateFloorPage extends StatelessWidget {
               ),
               style: const TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 24),
+            const SizedBox(height: 24),
             CustomButton(
               text: 'Create',
               onPressed: () => _createFloor(context),

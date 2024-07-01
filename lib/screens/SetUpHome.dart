@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       theme: ThemeData.dark(),
-      home: SetupHomeScreen(),
+      home: const SetupHomeScreen(),
     );
   }
 }
 
 class SetupHomeScreen extends StatefulWidget {
+  const SetupHomeScreen({super.key});
+
   @override
   _SetupHomeScreenState createState() => _SetupHomeScreenState();
 }
@@ -33,7 +37,7 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Center(
+            const Center(
               child: Column(
                 children: [
                   Icon(
@@ -53,30 +57,30 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 32),
-            Text(
+            const SizedBox(height: 32),
+            const Text(
               'Select number of Floors',
               style: TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             DropdownButtonFormField<int>(
               decoration: InputDecoration(
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFFA500)),
+                  borderSide: const BorderSide(color: Color(0xFFFFA500)),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: Color(0xFFFFA500)),
+                  borderSide: const BorderSide(color: Color(0xFFFFA500)),
                   borderRadius: BorderRadius.circular(8),
                 ),
-                contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                contentPadding: const EdgeInsets.symmetric(horizontal: 12),
               ),
               dropdownColor: Colors.black,
               value: _numberOfFloors,
               items: [1, 2, 3, 4, 5].map((int value) {
                 return DropdownMenuItem<int>(
                   value: value,
-                  child: Text(value.toString(), style: TextStyle(color: Colors.white)),
+                  child: Text(value.toString(), style: const TextStyle(color: Colors.white)),
                 );
               }).toList(),
               onChanged: (value) {
@@ -86,12 +90,12 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                 });
               },
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'Select number of Rooms in each floor',
               style: TextStyle(color: Colors.white),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Column(
               children: List.generate(_numberOfFloors, (index) {
                 return Padding(
@@ -99,25 +103,25 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                   child: DropdownButtonFormField<int>(
                     decoration: InputDecoration(
                       filled: true,
-                      fillColor: Color(0xFF333333),
+                      fillColor: const Color(0xFF333333),
                       labelText: 'Floor ${index + 1}',
-                      labelStyle: TextStyle(color: Colors.white),
+                      labelStyle: const TextStyle(color: Colors.white),
                       enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF333333)),
+                        borderSide: const BorderSide(color: Color(0xFF333333)),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF333333)),
+                        borderSide: const BorderSide(color: Color(0xFF333333)),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      contentPadding: EdgeInsets.symmetric(horizontal: 12),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                     ),
-                    dropdownColor: Color(0xFF333333),
+                    dropdownColor: const Color(0xFF333333),
                     value: _roomsPerFloor[index],
                     items: [1, 2, 3, 4, 5].map((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
-                        child: Text(value.toString(), style: TextStyle(color: Colors.white)),
+                        child: Text(value.toString(), style: const TextStyle(color: Colors.white)),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -129,19 +133,19 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                 );
               }),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
                 onPressed: () {},
                 style: ElevatedButton.styleFrom(
                   // primary: Color(0xFFA52A2A),
-                  padding: EdgeInsets.symmetric(vertical: 16),
+                  padding: const EdgeInsets.symmetric(vertical: 16),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(8),
                   ),
                 ),
-                child: Row(
+                child: const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(

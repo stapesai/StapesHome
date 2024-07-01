@@ -12,7 +12,7 @@ class FloorRoomSelector extends StatefulWidget {
   final String userId;
   final String activeFloorId;
 
-  const FloorRoomSelector({
+  const FloorRoomSelector({super.key, 
     required this.onFloorSelected,
     required this.onRoomSelected,
     required this.onAddFloor,
@@ -118,12 +118,12 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 
     if (response.statusCode == 200 || response.statusCode == 204) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Floor deleted successfully')),
+        const SnackBar(content: Text('Floor deleted successfully')),
       );
       _fetchFloors();
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to delete floor')),
+        const SnackBar(content: Text('Failed to delete floor')),
       );
     }
     print(response.body);
@@ -149,7 +149,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
   void navigateToCreateRoom(BuildContext context) {
     if (activeFloorId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a floor first')),
+        const SnackBar(content: Text('Please select a floor first')),
       );
       return;
     }
@@ -190,17 +190,17 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text("Delete Floor"),
-          content: Text("Are you sure you want to delete this floor?"),
+          title: const Text("Delete Floor"),
+          content: const Text("Are you sure you want to delete this floor?"),
           actions: [
             TextButton(
-              child: Text("Cancel"),
+              child: const Text("Cancel"),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              child: Text("Delete"),
+              child: const Text("Delete"),
               onPressed: () {
                 Navigator.of(context).pop();
                 _deleteFloor(floorId);
@@ -223,11 +223,11 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
               'Floors',
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             AddCircleButton(onPressed: () => navigateToCreateFloor(context)),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -246,18 +246,18 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             }).toList(),
           ),
         ),
-        SizedBox(height: 24),
+        const SizedBox(height: 24),
         Row(
           children: [
-            Text(
+            const Text(
               'Rooms',
               style: TextStyle(fontSize: 18, color: Colors.white),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             AddCircleButton(onPressed: () => navigateToCreateRoom(context)),
           ],
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: Row(
@@ -283,7 +283,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 class AddCircleButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  AddCircleButton({required this.onPressed});
+  const AddCircleButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -292,11 +292,11 @@ class AddCircleButton extends StatelessWidget {
       child: Container(
         width: 18,
         height: 18,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
           shape: BoxShape.circle,
           color: Color(0xFF3F3F63),
         ),
-        child: Icon(Icons.add, color: Colors.white, size: 14),
+        child: const Icon(Icons.add, color: Colors.white, size: 14),
       ),
     );
   }
@@ -307,7 +307,7 @@ class FloorRoomButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const FloorRoomButton({
+  const FloorRoomButton({super.key, 
     required this.label,
     required this.isActive,
     required this.onTap,
@@ -329,7 +329,7 @@ class FloorRoomButton extends StatelessWidget {
             Container(
               width: 6,
               height: 6,
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 shape: BoxShape.circle,
                 color: Colors.white,
               ),

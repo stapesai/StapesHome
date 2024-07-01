@@ -10,9 +10,9 @@ class VerifyOtp {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['transaction_id'] = this.transactionId;
-    data['code'] = this.code;
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['transaction_id'] = transactionId;
+    data['code'] = code;
     return data;
   }
 }

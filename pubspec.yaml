@@ -29,3 +29,12 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/
+    - assets/icons/
+    - assets/fonts/
+  fonts:
+    - family: Malgun Gothic
+      fonts:
+        - asset: assets/fonts/malgun-gothic.ttf
+

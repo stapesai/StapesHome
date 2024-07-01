@@ -3,6 +3,8 @@ import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField wi
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
 class AddNewDevice extends StatefulWidget {
+  const AddNewDevice({super.key});
+
   @override
   _AddNewDeviceState createState() => _AddNewDeviceState();
 }
@@ -26,7 +28,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Row(
+            const Row(
               children: [
                 Text(
                   'Add new device',
@@ -44,29 +46,29 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                 ),
               ],
             ),
-            SizedBox(height: 32),
-            CustomTextField(
+            const SizedBox(height: 32),
+            const CustomTextField(
               hintText: 'Name',
             ),
-            SizedBox(height: 16),
-            CustomTextField(
+            const SizedBox(height: 16),
+            const CustomTextField(
               hintText: 'Channel Id',
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(
                 labelText: 'Type',
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   color: Color(0xFFFFA500),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFFFA500),
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFFFA500),
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -84,24 +86,24 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                   _selectedType = newValue;
                 });
               },
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               dropdownColor: Colors.black,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(
                 labelText: 'Floor',
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   color: Color(0xFFFFA500),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFFFA500),
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFFFA500),
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -119,24 +121,24 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                   _selectedFloor = newValue;
                 });
               },
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               dropdownColor: Colors.black,
             ),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             DropdownButtonFormField<String>(
               decoration: InputDecoration(
                 labelText: 'Room',
-                labelStyle: TextStyle(
+                labelStyle: const TextStyle(
                   color: Color(0xFFFFA500),
                 ),
                 enabledBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFFFA500),
                   ),
                   borderRadius: BorderRadius.circular(8),
                 ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(
+                  borderSide: const BorderSide(
                     color: Color(0xFFFFA500),
                   ),
                   borderRadius: BorderRadius.circular(8),
@@ -154,18 +156,18 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                   _selectedRoom = newValue;
                 });
               },
-              style: TextStyle(color: Colors.white),
+              style: const TextStyle(color: Colors.white),
               dropdownColor: Colors.black,
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             CustomButton(
               text: 'Create',
               onPressed: () {
                 // Handle button press
               },
             ),
-            SizedBox(height: 16),
-            Center(
+            const SizedBox(height: 16),
+            const Center(
               child: Text(
                 'Need Help?',
                 style: TextStyle(

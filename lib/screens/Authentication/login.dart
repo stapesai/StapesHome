@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/Constants/Colors.dart';
+import 'package:jarvis/widgets/TextField.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'EmailSignUp.dart'; // Import the EmailSignUp screen
 import 'OtpVerification.dart'; // Import the OTP Verification screen
@@ -13,6 +15,8 @@ class LoginScreen extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final HiveService hiveService = HiveService();
+
+  LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -29,21 +33,22 @@ class LoginScreen extends StatelessWidget {
                 children: [
                   const SizedBox(height: 40.0),
                   const Text(
-                    'Welcome to JARVIS',
+                    'Welcome to J.A.R.V.I.S',
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                    ),
+                        color: Colors.white,
+                        fontSize: 30.0,
+                        fontFamily: 'Malgun Gothic',
+                        fontWeight: FontWeight.w900,
+                        fontStyle: FontStyle.normal),
                   ),
                   const SizedBox(height: 40.0),
-                  _buildTextField(
+                  CustomTextField(
                     hintText: 'Email address',
                     icon: Icons.email,
                     controller: emailController,
                   ),
                   const SizedBox(height: 20.0),
-                  _buildTextField(
+                  CustomTextField(
                     hintText: 'Password',
                     icon: Icons.lock,
                     obscureText: true,
@@ -74,6 +79,7 @@ class LoginScreen extends StatelessWidget {
                           MaterialPageRoute(
                             builder: (context) => OtpVerificationScreen(
                               transactionId: transactionId,
+                              time: DateTime.parse(responseBody["otp_expires_at"]),
                               onSuccess: () async {
                                 var completeLoginUrl = Uri.https(
                                     'auth.jarvishome.in',
@@ -113,7 +119,7 @@ class LoginScreen extends StatelessWidget {
                                   Navigator.pushReplacement(
                                     context,
                                     MaterialPageRoute(
-                                      builder: (context) => MainScreen(),
+                                      builder: (context) => const MainScreen(),
                                     ),
                                   );
                                 } else {
@@ -121,7 +127,7 @@ class LoginScreen extends StatelessWidget {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) =>
-                                          OtpVerificationErrorScreen(),
+                                          const OtpVerificationErrorScreen(),
                                     ),
                                   );
                                 }
@@ -131,7 +137,7 @@ class LoginScreen extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        OtpVerificationErrorScreen(),
+                                        const OtpVerificationErrorScreen(),
                                   ),
                                 );
                               },
@@ -155,6 +161,150 @@ class LoginScreen extends StatelessWidget {
                     child: const Text(
                       "Don't have an account? Sign Up",
                       style: TextStyle(color: Colors.white),
+                    ),
+                  ),
+                  const SizedBox(height: 10.0),
+                  GestureDetector(
+                    onTap: () {
+                      // Add your forgot password logic here
+                    },
+                    child: const Text(
+                      'Forgot password?',
+                      style: TextStyle(color: AppColor.blueColor),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20.0),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 1,
+                          width: 100,
+                          color: Colors.white,
+                        ),
+                        const SizedBox(width: 10.0),
+                        const Text(
+                          'or',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        const SizedBox(width: 10.0),
+                        Container(
+                          height: 1,
+                          width: 100,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () {
+                      print("continue with google");
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.all(10.0),
+                      width: 364,
+                      height: 71,
+                      decoration: BoxDecoration(
+                        color: AppColor.containerColor,
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(color: AppColor.primaryColor,width: 2.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/icons/google.png',
+                            height: 30,
+                            width: 30,
+                          ),
+                          const SizedBox(width: 10.0),
+                          const Text(
+                            'Continue with google',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontFamily: 'Malgun Gothic',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print("continue with apple");
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.all(10.0),
+                      width: 364,
+                      height: 71,
+                      decoration: BoxDecoration(
+                        color: AppColor.containerColor,
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(color: AppColor.primaryColor,width: 2.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Image.asset(
+                            'assets/icons/apple.png',
+                            height: 50,
+                            width: 50,
+                          ),
+                          const SizedBox(width: 10.0),
+                          const Text(
+                            'Continue with apple',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontFamily: 'Malgun Gothic',
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      print("continue with Microsoft");
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.only(top: 20.0),
+                      padding: const EdgeInsets.all(10.0),
+                      width: 364,
+                      height: 71,
+                      decoration: BoxDecoration(
+                        color: AppColor.containerColor,
+                        borderRadius: BorderRadius.circular(20.0),
+                        border: Border.all(color: AppColor.primaryColor,width: 2.0),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+
+                        children: [
+
+                          Image.asset(
+                            'assets/icons/microsoft.png',
+                            height: 30,
+                            width: 30,
+
+                          ),
+                          const SizedBox(width: 10.0),
+                          const Text(
+                            'Continue with Microsoft',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20.0,
+                              fontFamily: 'Malgun Gothic',
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ],

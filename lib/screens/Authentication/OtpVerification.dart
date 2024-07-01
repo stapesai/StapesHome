@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
-// import 'OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
-// import 'OtpVerificationErrorScreen.dart'; // Import the OTP error screen
-import 'package:flutter/services.dart'; // Import for TextInputFormatter
+import 'package:flutter/services.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+import 'dart:async';
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
-  final String email; // Add email parameter
   final VoidCallback onSuccess;
   final VoidCallback onError;
+  final DateTime time;
 
-  OtpVerificationScreen({
+  const OtpVerificationScreen({super.key,
     required this.transactionId,
-    required this.email, // Add email parameter
     required this.onSuccess,
     required this.onError,
+    required this.time,
   });
 
   @override
@@ -22,8 +23,31 @@ class OtpVerificationScreen extends StatefulWidget {
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   final List<TextEditingController> _controllers =
-      List.generate(6, (index) => TextEditingController());
+  List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
+
+  late int _remainingTime;
+  late Timer _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _remainingTime = widget.time.difference(DateTime.now()).inSeconds;
+    _startTimer();
+  }
+
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingTime > 0 && mounted) {
+        setState(() {
+          _remainingTime--;
+        });
+      } else {
+        _timer.cancel();
+        // Handle expiration (optional)
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -33,7 +57,33 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     for (var focusNode in _focusNodes) {
       focusNode.dispose();
     }
+    _timer.cancel();
+
     super.dispose();
+  }
+
+  Future<void> verifyOtp() async {
+    String otp = _controllers.map((controller) => controller.text).join();
+    var url = Uri.https('auth.jarvishome.in', '/auth/verify_otp');
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: jsonEncode({
+        'transaction_id': widget.transactionId,
+        'code': otp,
+      }),
+    );
+
+    print('OTP Verification response: ${response.body}'); // Log the response
+
+    if (response.statusCode == 200) {
+      widget.onSuccess();
+    } else {
+      widget.onError();
+    }
   }
 
   @override
@@ -41,7 +91,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     return Scaffold(
       backgroundColor: const Color(0xFF161622), // Use your primary color here
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -59,9 +109,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             const SizedBox(height: 40.0),
             _buildOtpFields(context), // Pass context to _buildOtpFields
             const SizedBox(height: 20.0),
-            const Text(
-              'Your code will expire in X seconds',
-              style: TextStyle(
+            Text(
+              'Your code will expire in $_remainingTime seconds',
+              style: const TextStyle(
                 color: Colors.white70,
                 fontSize: 16.0,
               ),
@@ -69,17 +119,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             ),
             const SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: () {
-                // Assume OTP verification logic here
-                bool isOtpCorrect =
-                    verifyOtp(); // Change this based on actual OTP logic
-
-                if (isOtpCorrect) {
-                  widget.onSuccess();
-                } else {
-                  widget.onError();
-                }
-              },
+              onPressed: verifyOtp,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.orange, // Button color
                 shape: RoundedRectangleBorder(
@@ -87,7 +127,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ),
                 padding: const EdgeInsets.symmetric(vertical: 15.0),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
@@ -97,7 +137,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                       fontSize: 18.0,
                     ),
                   ),
-                  const SizedBox(width: 5.0),
+                  SizedBox(width: 5.0),
                   Icon(Icons.arrow_forward, color: Colors.white),
                 ],
               ),
@@ -113,10 +153,10 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(6, (index) {
         return Expanded(
-          child: RawKeyboardListener(
+          child: KeyboardListener(
             focusNode: FocusNode(), // Unique focus node for RawKeyboardListener
-            onKey: (event) {
-              if (event is RawKeyDownEvent &&
+            onKeyEvent: (event) {
+              if (event is KeyDownEvent &&
                   event.logicalKey == LogicalKeyboardKey.backspace &&
                   _controllers[index].text.isEmpty &&
                   index > 0) {
@@ -124,11 +164,11 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
               }
             },
             child: Container(
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              margin: const EdgeInsets.symmetric(horizontal: 5.0),
               decoration: BoxDecoration(
                 color: const Color(0xFF161622),
                 borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(color: Color(0xFFFFA404), width: 1.0),
+                border: Border.all(color: const Color(0xFFFFA404), width: 1.0),
               ),
               child: Center(
                 child: TextField(
@@ -137,7 +177,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   keyboardType: TextInputType.number,
                   textAlign: TextAlign.center,
                   maxLength: 1,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.white,
                     fontSize: 24.0, // Larger font size to cover the box
                     fontWeight: FontWeight.bold, // Thicker text
@@ -177,21 +217,4 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }),
     );
   }
-
-  bool verifyOtp() {
-    // Add your OTP verification logic here
-    // For example, compare the entered OTP with the actual OTP
-    // Return true if correct, false otherwise
-    return true; // Placeholder, change based on actual logic
-  }
-}
-
-void main() {
-  runApp(MaterialApp(
-    home: OtpVerificationScreen(
-        transactionId: 'example-transaction-id',
-        email: 'example-email@example.com',
-        onSuccess: () {},
-        onError: () {}),
-  ));
 }

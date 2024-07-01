@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class NodesScreen extends StatefulWidget {
+  const NodesScreen({super.key});
+
   @override
   _NodesScreenState createState() => _NodesScreenState();
 }
@@ -10,22 +12,26 @@ class _NodesScreenState extends State<NodesScreen> {
   int activeRoom = 1;
 
   void setActiveFloor(int floor) {
-    setState(() {
-      activeFloor = floor;
-    });
+    if (mounted) {
+      setState(() {
+        activeFloor = floor;
+      });
+    }
   }
 
   void setActiveRoom(int room) {
-    setState(() {
-      activeRoom = room;
-    });
+    if (mounted) {
+      setState(() {
+        activeRoom = room;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          const Color(0xFF161622), // Adjust this color to match your theme
+      const Color(0xFF161622), // Adjust this color to match your theme
 
       body: SafeArea(
         child: Padding(
@@ -33,12 +39,12 @@ class _NodesScreenState extends State<NodesScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Linked Nodes',
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
-              SizedBox(height: 24),
-              Row(
+              const SizedBox(height: 24),
+              const Row(
                 children: [
                   Text(
                     'Floors',
@@ -48,22 +54,22 @@ class _NodesScreenState extends State<NodesScreen> {
                   AddCircleButton(),
                 ],
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   FloorRoomButton(
                       label: 'Floor 1',
                       isActive: activeFloor == 1,
                       onTap: () => setActiveFloor(1)),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   FloorRoomButton(
                       label: 'Floor 2',
                       isActive: activeFloor == 2,
                       onTap: () => setActiveFloor(2)),
                 ],
               ),
-              SizedBox(height: 24),
-              Row(
+              const SizedBox(height: 24),
+              const Row(
                 children: [
                   Text(
                     'Rooms',
@@ -73,39 +79,39 @@ class _NodesScreenState extends State<NodesScreen> {
                   AddCircleButton(),
                 ],
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Row(
                 children: [
                   FloorRoomButton(
                       label: 'Room 1',
                       isActive: activeRoom == 1,
                       onTap: () => setActiveRoom(1)),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   FloorRoomButton(
                       label: 'Room 2',
                       isActive: activeRoom == 2,
                       onTap: () => setActiveRoom(2)),
-                  SizedBox(width: 10),
+                  const SizedBox(width: 10),
                   FloorRoomButton(
                       label: 'Room 3',
                       isActive: activeRoom == 3,
                       onTap: () => setActiveRoom(3)),
                 ],
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  children: [
+                  children: const [
                     NodeButton(label: 'Node 1'),
                     NodeButton(label: 'Node 2'),
                   ],
                 ),
               ),
-              SizedBox(height: 16),
-              Center(
+              const SizedBox(height: 16),
+              const Center(
                 child: ScanNodeButton(),
               ),
             ],
@@ -117,16 +123,18 @@ class _NodesScreenState extends State<NodesScreen> {
 }
 
 class AddCircleButton extends StatelessWidget {
+  const AddCircleButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 18,
       height: 18,
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         shape: BoxShape.circle,
         color: Color(0xFF3F3F63),
       ),
-      child: Icon(Icons.add, color: Colors.white, size: 14),
+      child: const Icon(Icons.add, color: Colors.white, size: 14),
     );
   }
 }
@@ -137,7 +145,7 @@ class FloorRoomButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const FloorRoomButton(
-      {required this.label, required this.isActive, required this.onTap});
+      {super.key, required this.label, required this.isActive, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -156,7 +164,7 @@ class FloorRoomButton extends StatelessWidget {
               Container(
                 width: 6,
                 height: 6,
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   shape: BoxShape.circle,
                   color: Colors.white,
                 ),
@@ -171,7 +179,7 @@ class FloorRoomButton extends StatelessWidget {
 class NodeButton extends StatefulWidget {
   final String label;
 
-  const NodeButton({required this.label});
+  const NodeButton({super.key, required this.label});
 
   @override
   _NodeButtonState createState() => _NodeButtonState();
@@ -181,9 +189,11 @@ class _NodeButtonState extends State<NodeButton> {
   bool isActive = false;
 
   void toggleButton() {
-    setState(() {
-      isActive = !isActive;
-    });
+    if (mounted) {
+      setState(() {
+        isActive = !isActive;
+      });
+    }
   }
 
   @override
@@ -203,7 +213,7 @@ class _NodeButtonState extends State<NodeButton> {
             ),
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              offset: Offset(0, 6),
+              offset: const Offset(0, 6),
               blurRadius: 10,
               spreadRadius: -3,
             ),
@@ -212,7 +222,7 @@ class _NodeButtonState extends State<NodeButton> {
         child: Center(
           child: Text(
             widget.label,
-            style: TextStyle(color: Colors.white, fontSize: 24),
+            style: const TextStyle(color: Colors.white, fontSize: 24),
           ),
         ),
       ),
@@ -221,25 +231,27 @@ class _NodeButtonState extends State<NodeButton> {
 }
 
 class ScanNodeButton extends StatelessWidget {
+  const ScanNodeButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: DashedBorderPainter(),
       child: Container(
         width: double.infinity,
-        height: 56,
+        height: 70,
         decoration: BoxDecoration(
-          color: Color(0xFF1C1C2B),
+          color: const Color(0xFF1C1C2B),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.5),
-              offset: Offset(4, 4),
+              offset: const Offset(4, 4),
               blurRadius: 10,
             ),
           ],
         ),
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -265,11 +277,11 @@ class DashedBorderPainter extends CustomPainter {
       ..strokeWidth = 2
       ..style = PaintingStyle.stroke;
 
-    final double dashWidth = 5;
-    final double dashSpace = 5;
+    const double dashWidth = 5;
+    const double dashSpace = 5;
     final path = Path()
       ..addRRect(RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16)));
+          Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
     final dashPath = Path();
     final pathMetrics = path.computeMetrics();
     for (var pathMetric in pathMetrics) {

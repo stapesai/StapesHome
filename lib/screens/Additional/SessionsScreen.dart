@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class SessionsScreen extends StatelessWidget {
+  const SessionsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -9,12 +11,12 @@ class SessionsScreen extends StatelessWidget {
         backgroundColor: const Color(0xFF161622),
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Colors.orange),
+          icon: const Icon(Icons.arrow_back, color: Colors.orange),
           onPressed: () => Navigator.of(context).pop(),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
+      body: const Padding(
+        padding: EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,7 +64,7 @@ class SessionItem extends StatelessWidget {
   final String deviceName;
   final String lastActive;
 
-  const SessionItem({
+  const SessionItem({super.key, 
     required this.deviceIcon,
     required this.deviceName,
     required this.lastActive,
@@ -71,10 +73,10 @@ class SessionItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(16),
-      margin: EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.all(16),
+      margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
-        color: Color(0xFF2C2C2C),
+        color: const Color(0xFF2C2C2C),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
@@ -83,23 +85,23 @@ class SessionItem extends StatelessWidget {
           Row(
             children: [
               Icon(deviceIcon, color: Colors.white),
-              SizedBox(width: 16),
+              const SizedBox(width: 16),
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     deviceName,
-                    style: TextStyle(color: Colors.white),
+                    style: const TextStyle(color: Colors.white),
                   ),
                   Text(
                     'Last active at $lastActive',
-                    style: TextStyle(color: Colors.white70, fontSize: 12),
+                    style: const TextStyle(color: Colors.white70, fontSize: 12),
                   ),
                 ],
               ),
             ],
           ),
-          Icon(Icons.logout, color: Colors.orange),
+          const Icon(Icons.logout, color: Colors.orange),
         ],
       ),
     );

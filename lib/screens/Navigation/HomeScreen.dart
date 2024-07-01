@@ -5,10 +5,10 @@ class HomeScreen extends StatelessWidget {
   final String userId;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +21,7 @@ class HomeScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Good morning,\nMarvin',
                 style: TextStyle(
                   color: Colors.white,
@@ -29,8 +29,8 @@ class HomeScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 20),
-              Row(
+              const SizedBox(height: 20),
+              const Row(
                 children: [
                   Text(
                     '❤️ Favourites',
@@ -43,7 +43,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 20),
+              const SizedBox(height: 20),
               Expanded(
                 child: Center(
                   child: Column(
@@ -51,21 +51,21 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Session ID: $sessionId",
-                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                        style: const TextStyle(color: Colors.white70, fontSize: 18),
                       ),
-                      SizedBox(height: 10),
+                      const SizedBox(height: 10),
                       Text(
                         "User ID: $userId",
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
+                        style: const TextStyle(color: Colors.white70, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
-                      SizedBox(height: 20),
-                      Text(
+                      const SizedBox(height: 20),
+                      const Text(
                         "Nothing to show here.",
                         style: TextStyle(color: Colors.white70, fontSize: 18),
                       ),
-                      SizedBox(height: 10),
-                      Text(
+                      const SizedBox(height: 10),
+                      const Text(
                         "Go to Devices or Nodes page and add a device to favorites list.",
                         style: TextStyle(color: Colors.white70, fontSize: 14),
                         textAlign: TextAlign.center,

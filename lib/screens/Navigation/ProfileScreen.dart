@@ -4,6 +4,8 @@ import 'package:jarvis/screens/Additional/SessionsScreen.dart';
 import 'package:jarvis/screens/Additional/LogoutConfirmationDialog.dart';
 
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,13 +16,13 @@ class ProfileScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 50,
                 backgroundImage: AssetImage(
-                    'assets/profile_picture.png'), // Replace with actual image asset
+                    'assets/icons/demo.png'), // Replace with actual image asset
               ),
-              SizedBox(height: 16),
-              Text(
+              const SizedBox(height: 16),
+              const Text(
                 'John Doe',
                 style: TextStyle(
                   color: Colors.white,
@@ -28,21 +30,21 @@ class ProfileScreen extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(height: 8),
-              Text(
+              const SizedBox(height: 8),
+              const Text(
                 'john@email.com',
                 style: TextStyle(
                   color: Colors.white70,
                   fontSize: 16,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => EditProfileScreen()),
+                        builder: (context) => const EditProfileScreen()),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -50,14 +52,14 @@ class ProfileScreen extends StatelessWidget {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
-                  padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                 ),
-                child: Text(
+                child: const Text(
                   'Edit',
                   style: TextStyle(color: Colors.white),
                 ),
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               ProfileOption(
                 icon: Icons.dark_mode,
                 text: 'Dark mode',
@@ -67,18 +69,18 @@ class ProfileScreen extends StatelessWidget {
                   activeColor: Colors.orange,
                 ),
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ProfileOption(
                 icon: Icons.computer,
                 text: 'Your sessions',
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => SessionsScreen()),
+                    MaterialPageRoute(builder: (context) => const SessionsScreen()),
                   );
                 },
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               ProfileOption(
                 icon: Icons.logout,
                 text: 'Logout',
@@ -97,7 +99,7 @@ class ProfileScreen extends StatelessWidget {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return LogoutConfirmationDialog();
+        return const LogoutConfirmationDialog();
       },
     );
   }
@@ -109,7 +111,7 @@ class ProfileOption extends StatelessWidget {
   final Widget? trailing;
   final VoidCallback? onTap;
 
-  const ProfileOption({
+  const ProfileOption({super.key, 
     required this.icon,
     required this.text,
     this.trailing,
@@ -124,7 +126,7 @@ class ProfileOption extends StatelessWidget {
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
         margin: const EdgeInsets.symmetric(vertical: 4),
         decoration: BoxDecoration(
-          color: Color(0xFF2C2C2C),
+          color: const Color(0xFF2C2C2C),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Row(

@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-
 import 'Cache/sessions_model.dart';
 import 'Cache/HiveService.dart';
 import 'screens/SplashScreen.dart';
-// import 'screens/SignIn/LoginSignIn.dart';
 import 'screens/Navigation/HomeScreen.dart';
 import 'screens/Navigation/DevicesScreen.dart';
 import 'screens/Navigation/NodesScreen.dart';
@@ -22,13 +20,15 @@ void main() async {
   // Register Hive adapters
   Hive.registerAdapter(SessionsModelAdapter());
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
     );
@@ -36,6 +36,8 @@ class MyApp extends StatelessWidget {
 }
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
   @override
   _MainScreenState createState() => _MainScreenState();
 }
@@ -46,12 +48,12 @@ class _MainScreenState extends State<MainScreen> {
   String sessionId = '';
   String userId = '';
 
-  static List<Widget> _screens = <Widget>[
+  static final List<Widget> _screens = <Widget>[
     const HomeScreen(sessionId: '', userId: ''), // Placeholder values
-    DeviceScreen(
+    const DeviceScreen(
         sessionId: '', userId: ''), // Ensure this matches the class name
-    NodesScreen(),
-    ProfileScreen(),
+    const NodesScreen(),
+    const ProfileScreen(),
   ];
 
   @override
@@ -74,9 +76,11 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   void _onItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
+    if(mounted){
+      setState(() {
+        _selectedIndex = index;
+      });
+    }
   }
 
   @override
@@ -91,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
               color: Colors.black.withOpacity(0.3),
               spreadRadius: 0,
               blurRadius: 10,
-              offset: Offset(0, -3),
+              offset: const Offset(0, -3),
             ),
           ],
         ),

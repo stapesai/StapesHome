@@ -11,7 +11,7 @@ class ConfirmPasswordPage extends StatefulWidget {
   final String lastName;
   final String dob;
 
-  ConfirmPasswordPage({
+  const ConfirmPasswordPage({super.key, 
     required this.transactionId,
     required this.firstName,
     required this.lastName,
@@ -93,7 +93,7 @@ class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SignedUpSuccessfullyPage(),
+                        builder: (context) => const SignedUpSuccessfullyPage(),
                       ),
                     );
                   } else {

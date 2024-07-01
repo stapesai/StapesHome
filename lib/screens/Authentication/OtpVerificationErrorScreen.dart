@@ -3,6 +3,8 @@ import 'dart:math';
 import 'dart:ui' as ui; // Add this import for PathMetric
 
 class OtpVerificationErrorScreen extends StatefulWidget {
+  const OtpVerificationErrorScreen({super.key});
+
   @override
   _OtpVerificationErrorScreenState createState() =>
       _OtpVerificationErrorScreenState();
@@ -47,7 +49,7 @@ class _OtpVerificationErrorScreenState extends State<OtpVerificationErrorScreen>
                     child: _controller.value == 1
                         ? TweenAnimationBuilder(
                             tween: Tween<double>(begin: 0, end: 1),
-                            duration: Duration(
+                            duration: const Duration(
                                 milliseconds:
                                     500), // Set duration to 500 milliseconds for faster animation
                             builder: (context, value, child) {
@@ -84,7 +86,7 @@ class _OtpVerificationErrorScreenState extends State<OtpVerificationErrorScreen>
                 padding: const EdgeInsets.symmetric(
                     horizontal: 50.0, vertical: 15.0),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
@@ -94,7 +96,7 @@ class _OtpVerificationErrorScreenState extends State<OtpVerificationErrorScreen>
                       fontSize: 18.0,
                     ),
                   ),
-                  const SizedBox(width: 5.0),
+                  SizedBox(width: 5.0),
                   Icon(Icons.arrow_forward, color: Colors.white),
                 ],
               ),

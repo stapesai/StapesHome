@@ -10,10 +10,10 @@ class DeviceScreen extends StatefulWidget {
   final String userId;
 
   const DeviceScreen({
-    Key? key,
+    super.key,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   _DeviceScreenState createState() => _DeviceScreenState();
@@ -56,7 +56,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
   void navigateToCreateRoom(BuildContext context) {
     if (activeFloorId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Please select a floor first')),
+        const SnackBar(content: Text('Please select a floor first')),
       );
       return;
     }
@@ -87,7 +87,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
                 'All Devices',
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               FloorRoomSelector(
                 onFloorSelected: handleFloorSelected,
                 onRoomSelected: handleRoomSelected,
@@ -97,20 +97,20 @@ class _DeviceScreenState extends State<DeviceScreen> {
                 userId: widget.userId, // Pass userId
                 activeFloorId: activeFloorId, // Pass active floor ID
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Expanded(
                 child: GridView.count(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  children: [
+                  children: const [
                     DeviceButton(label: 'Bedroom Light'),
                     DeviceButton(label: 'Bedroom Light'),
                   ],
                 ),
               ),
-              SizedBox(height: 16),
-              Center(
+              const SizedBox(height: 16),
+              const Center(
                 child: AddDeviceButton(),
               ),
             ],
@@ -124,7 +124,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
 class DeviceButton extends StatefulWidget {
   final String label;
 
-  const DeviceButton({required this.label});
+  const DeviceButton({super.key, required this.label});
 
   @override
   _DeviceButtonState createState() => _DeviceButtonState();
@@ -145,8 +145,8 @@ class _DeviceButtonState extends State<DeviceButton> {
       onTap: toggleButton,
       child: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [Color(0xFF343450), const Color(0xFF161622)],
+          gradient: const LinearGradient(
+            colors: [Color(0xFF343450), Color(0xFF161622)],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -161,7 +161,7 @@ class _DeviceButtonState extends State<DeviceButton> {
             ),
             BoxShadow(
               color: Colors.black.withOpacity(0.2),
-              offset: Offset(0, 6),
+              offset: const Offset(0, 6),
               blurRadius: 10,
               spreadRadius: -3,
             ),
@@ -178,12 +178,12 @@ class _DeviceButtonState extends State<DeviceButton> {
                 gradient: LinearGradient(
                   colors: isActive
                       ? [Colors.orange.shade700, Colors.orange.shade400]
-                      : [Color(0xFF2A2A40), Color(0xFF1C1C2B)],
+                      : [const Color(0xFF2A2A40), const Color(0xFF1C1C2B)],
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
               ),
-              child: Center(
+              child: const Center(
                 child: Icon(
                   Icons.lightbulb_outline,
                   color: Colors.white,
@@ -191,8 +191,8 @@ class _DeviceButtonState extends State<DeviceButton> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
-            Text(widget.label, style: TextStyle(color: Colors.white)),
+            const SizedBox(height: 8),
+            Text(widget.label, style: const TextStyle(color: Colors.white)),
           ],
         ),
       ),
@@ -201,13 +201,15 @@ class _DeviceButtonState extends State<DeviceButton> {
 }
 
 class AddDeviceButton extends StatelessWidget {
+  const AddDeviceButton({super.key});
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
         Navigator.push(
           context,
-          MaterialPageRoute(builder: (context) => AddNewDevice()),
+          MaterialPageRoute(builder: (context) => const AddNewDevice()),
         );
       },
       child: CustomPaint(
@@ -216,17 +218,17 @@ class AddDeviceButton extends StatelessWidget {
           width: 396,
           height: 56,
           decoration: BoxDecoration(
-            color: Color(0xFF1C1C2B),
+            color: const Color(0xFF1C1C2B),
             borderRadius: BorderRadius.circular(16),
             boxShadow: [
               BoxShadow(
                 color: Colors.black.withOpacity(0.5),
-                offset: Offset(4, 4),
+                offset: const Offset(4, 4),
                 blurRadius: 10,
               ),
             ],
           ),
-          child: Center(
+          child: const Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -257,7 +259,7 @@ class DashedBorderPainter extends CustomPainter {
     const double dashSpace = 5;
     final path = Path()
       ..addRRect(RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height), Radius.circular(16)));
+          Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
     final dashPath = Path();
     final pathMetrics = path.computeMetrics();
     for (var pathMetric in pathMetrics) {

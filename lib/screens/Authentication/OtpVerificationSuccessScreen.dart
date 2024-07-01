@@ -6,7 +6,7 @@ import 'SignUpPage.dart'; // Import the SignUpPage
 class OtpVerificationSuccessScreen extends StatefulWidget {
   final String transactionId;
 
-  OtpVerificationSuccessScreen({required this.transactionId});
+  const OtpVerificationSuccessScreen({super.key, required this.transactionId});
 
   @override
   _OtpVerificationSuccessScreenState createState() =>
@@ -53,7 +53,7 @@ class _OtpVerificationSuccessScreenState
                     child: _controller.value == 1
                         ? TweenAnimationBuilder(
                             tween: Tween<double>(begin: 0, end: 1),
-                            duration: Duration(
+                            duration: const Duration(
                                 milliseconds:
                                     500), // Set duration to 500 milliseconds for faster animation
                             builder: (context, value, child) {
@@ -95,7 +95,7 @@ class _OtpVerificationSuccessScreenState
                 padding: const EdgeInsets.symmetric(
                     horizontal: 50.0, vertical: 15.0),
               ),
-              child: Row(
+              child: const Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
@@ -105,7 +105,7 @@ class _OtpVerificationSuccessScreenState
                       fontSize: 18.0,
                     ),
                   ),
-                  const SizedBox(width: 5.0),
+                  SizedBox(width: 5.0),
                   Icon(Icons.arrow_forward, color: Colors.white),
                 ],
               ),

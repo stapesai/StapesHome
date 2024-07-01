@@ -2,6 +2,8 @@ import 'package:jarvis/widgets/TextField.dart';
 import 'package:flutter/material.dart';
 
 class EditProfileScreen extends StatelessWidget {
+  const EditProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -10,7 +12,7 @@ class EditProfileScreen extends StatelessWidget {
         backgroundColor: Colors.black,
         elevation: 0,
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: Color(0xFFFFA500)),
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFFFA500)),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -24,7 +26,7 @@ class EditProfileScreen extends StatelessWidget {
             Stack(
               alignment: Alignment.bottomRight,
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   radius: 60,
                   backgroundImage: AssetImage(
                       'assets/avatar.png'), // Add your image asset here
@@ -36,7 +38,7 @@ class EditProfileScreen extends StatelessWidget {
                     onTap: () {
                       // Handle edit profile picture
                     },
-                    child: CircleAvatar(
+                    child: const CircleAvatar(
                       backgroundColor: Colors.white,
                       radius: 20,
                       child: Icon(Icons.edit, color: Colors.black),
@@ -45,8 +47,8 @@ class EditProfileScreen extends StatelessWidget {
                 ),
               ],
             ),
-            SizedBox(height: 16),
-            Text(
+            const SizedBox(height: 16),
+            const Text(
               'John Doe',
               style: TextStyle(
                 fontSize: 24,
@@ -54,13 +56,13 @@ class EditProfileScreen extends StatelessWidget {
                 color: Colors.white,
               ),
             ),
-            SizedBox(height: 32),
+            const SizedBox(height: 32),
             _buildEditableField('Name'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildEditableField('Date of Birth'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildEditableField('Phone No.'),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildEditableField('Email'),
           ],
         ),
@@ -74,11 +76,11 @@ class EditProfileScreen extends StatelessWidget {
       children: [
         Text(
           label,
-          style: TextStyle(
+          style: const TextStyle(
             color: Color(0xFFFFA500),
           ),
         ),
-        SizedBox(height: 8),
+        const SizedBox(height: 8),
         CustomTextField(
           hintText: label,
         ),

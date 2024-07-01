@@ -7,7 +7,7 @@ import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 class SignUpPage extends StatefulWidget {
   final String transactionId;
 
-  SignUpPage({required this.transactionId});
+  const SignUpPage({super.key, required this.transactionId});
 
   @override
   _SignUpPageState createState() => _SignUpPageState();
@@ -38,12 +38,12 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: Colors.black,
       body: Padding(
-        padding: EdgeInsets.all(16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            CircularImagePicker(), // Use the CircularImagePicker widget
+            const CircularImagePicker(), // Use the CircularImagePicker widget
             const SizedBox(height: 20.0),
             const Text(
               'Sign Up',

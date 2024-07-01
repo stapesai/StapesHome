@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
 class CircularImagePicker extends StatefulWidget {
+  const CircularImagePicker({super.key});
+
   @override
   _CircularImagePickerState createState() => _CircularImagePickerState();
 }
@@ -31,7 +33,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
             backgroundColor: Colors.grey[300],
             backgroundImage: _image != null ? FileImage(_image!) : null,
             child: _image == null
-                ? Icon(Icons.person, size: 86.5, color: Colors.white)
+                ? const Icon(Icons.person, size: 86.5, color: Colors.white)
                 : null,
           ),
           Positioned(
@@ -39,7 +41,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
             right: 8, // Adjust the position as needed
             child: InkWell(
               onTap: _pickImage,
-              child: CircleAvatar(
+              child: const CircleAvatar(
                 radius: 11,
                 backgroundColor:
                     Color(0xFFBABABA), // Background color of the circle
