@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:jarvis/screens/QrScannerScreen.dart';
 
 class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});
@@ -116,8 +118,15 @@ class _NodesScreenState extends State<NodesScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Center(
-                child: ScanNodeButton(),
+               Center(
+                child: GestureDetector(
+                  onTap: () {
+                    if(context.mounted){
+                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const QrScannerScreen()  ));
+                    }
+                  },
+                  child: const ScanNodeButton(),
+                ),
               ),
             ],
           ),
