@@ -1,6 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/screens/QrScannerScreen.dart';
+import 'package:jarvis/screens/qr_scanner.dart';
 
 class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});

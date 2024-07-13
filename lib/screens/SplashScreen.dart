@@ -28,7 +28,22 @@ class SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Container(
       color: const Color(0xFF161622), // Change to a specific color
-      child: FlutterLogo(size: MediaQuery.of(context).size.height),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            Image.asset(
+              'assets/icons/logo.png',
+              width: 400.0,
+              height: 400.0,
+            ),
+            const SizedBox(height: 20.0),
+            const CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          ],
+        ),
+      )
     );
   }
 }

@@ -8,7 +8,7 @@ class HiveService {
   }
 
   Future<void> addBoxes<T>(List<T> items, String boxName) async {
-    final openBox = await Hive.openBox<T>(boxName);
+    final openBox =  await Hive.openBox<T>(boxName);
     for (var item in items) {
       await openBox.add(item);
     }

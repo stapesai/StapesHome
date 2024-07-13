@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:jarvis/Constants/colors.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-
 import 'Cache/HiveService.dart';
 import 'Cache/sessions_model.dart';
 import 'screens/Navigation/DevicesScreen.dart';
@@ -30,9 +29,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: SplashScreen(),
+    return  MaterialApp(
+      home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        splashFactory: NoSplash.splashFactory
+      ),
     );
   }
 }
@@ -101,35 +103,39 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ],
         ),
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          items: [
-            _buildBottomNavigationBarItem(
-              icon: Icons.add_home_work_rounded,
-              label: 'Home',
-              isActive: _selectedIndex == 0,
-            ),
-            _buildBottomNavigationBarItem(
-              icon: Icons.lightbulb_outline_rounded,
-              label: 'Devices',
-              isActive: _selectedIndex == 1,
-            ),
-            _buildBottomNavigationBarItem(
-              icon: Icons.memory_outlined,
-              label: 'Nodes',
-              isActive: _selectedIndex == 2,
-            ),
-            _buildBottomNavigationBarItem(
-              icon: Icons.settings,
-              label: 'Settings',
-              isActive: _selectedIndex == 3,
-            ),
-          ],
-          currentIndex: _selectedIndex,
-          selectedItemColor: Colors.amber[800],
-          backgroundColor: Colors.transparent,
-          unselectedItemColor: Colors.white,
-          onTap: _onItemTapped,
+        child: Ink(
+          child: BottomNavigationBar(
+            type: BottomNavigationBarType.fixed,
+            // disable ripple effect
+
+            items: [
+              _buildBottomNavigationBarItem(
+                icon: Icons.add_home_work_rounded,
+                label: 'Home',
+                isActive: _selectedIndex == 0,
+              ),
+              _buildBottomNavigationBarItem(
+                icon: Icons.lightbulb_outline_rounded,
+                label: 'Devices',
+                isActive: _selectedIndex == 1,
+              ),
+              _buildBottomNavigationBarItem(
+                icon: Icons.memory_outlined,
+                label: 'Nodes',
+                isActive: _selectedIndex == 2,
+              ),
+              _buildBottomNavigationBarItem(
+                icon: Icons.settings,
+                label: 'Settings',
+                isActive: _selectedIndex == 3,
+              ),
+            ],
+            currentIndex: _selectedIndex,
+            selectedItemColor: Colors.amber[800],
+            backgroundColor: Colors.transparent,
+            unselectedItemColor: Colors.white,
+            onTap: _onItemTapped,
+          ),
         ),
       ),
     );

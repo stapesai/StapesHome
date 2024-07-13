@@ -9,7 +9,7 @@ class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
   final VoidCallback onSuccess;
   final VoidCallback onError;
-  final DateTime time;
+    final DateTime time;
 
   const OtpVerificationScreen({
     super.key,
@@ -88,6 +88,40 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       widget.onError();
     }
   }
+  Future<void> resendOtp() async {
+    var url = Uri.https('auth.jarvishome.in', '/auth/resend_otp');
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: jsonEncode({
+        'transaction_id': widget.transactionId,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      // Handle success, update UI or show feedback
+      // Optionally, restart timer or update UI to show new countdown
+      setState(() {
+        _remainingTime = widget.time.difference(DateTime.now()).inSeconds;
+        _startTimer();
+      });
+    } else {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+
+          SnackBar(
+
+            content: Text(
+              'Error: ${response.statusCode} - ${response.body}',
+            ),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -143,6 +177,17 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   SizedBox(width: 5.0),
                   Icon(Icons.arrow_forward, color: Colors.white),
                 ],
+              ),
+            ),
+            // Add a button to resend the OTP
+            TextButton(
+              onPressed: resendOtp,
+              child: const Text(
+                'Resend OTP',
+                style: TextStyle(
+                  color: Colors.orange,
+                  fontSize: 16.0,
+                ),
               ),
             ),
           ],

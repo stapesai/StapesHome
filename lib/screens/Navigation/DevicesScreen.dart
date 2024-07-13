@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/Cache/HiveService.dart';
-import 'package:jarvis/screens/Additional/AddNewDevice.dart';
+import 'package:jarvis/screens/Additional/add_device.dart';
 import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
 import 'package:jarvis/screens/Reusable/create_room_page.dart';
 import 'package:jarvis/screens/Reusable/floor_room_selector.dart'; // Import the new component

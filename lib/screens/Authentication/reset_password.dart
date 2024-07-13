@@ -5,9 +5,9 @@ import 'package:http/http.dart' as http;
 import 'package:jarvis/widgets/TextField.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
-import 'ErrorScreens/OtpVerificationErrorScreen.dart';
-import 'OtpVerification.dart'; // Import the OTP verification screen
-import 'SuccessScreens/OtpVerificationSuccessScreen.dart'; // Import the OTP success screen
+import 'ErrorScreens/otp_verify_error.dart';
+import 'otp_verify.dart'; // Import the OTP verification screen
+import 'SuccessScreens/otp_verify_success.dart'; // Import the OTP success screen
 
 class ResetPassword extends StatelessWidget {
   final String email;
