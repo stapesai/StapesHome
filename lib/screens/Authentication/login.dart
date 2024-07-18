@@ -73,15 +73,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   print("Userid:"+sessionResponseBody['session']['user_id']);
                   print( "CREATE AT: ${DateTime.parse(sessionResponseBody['session']['created_at'])}" );
                   print("LaST TIME: ${DateTime.parse(sessionResponseBody['session']['last_active_at'])}");
-                  // var sessionData = SessionsModel(
-                  //   sessionId: sessionResponseBody['session']['session_id'],
-                  //   userId: sessionResponseBody['session']['user_id'],
-                  //   createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
-                  //   lastActiveAt:
-                  //       DateTime.parse(sessionResponseBody['session']['last_active_at']),
-                  // );
-                  //
-                  //   await hiveService.addBoxes([sessionData], "SessionBox");
+                  var sessionData = SessionsModel(
+                    sessionId: sessionResponseBody['session']['session_id'],
+                    userId: sessionResponseBody['session']['user_id'],
+                    createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
+                    lastActiveAt:
+                        DateTime.parse(sessionResponseBody['session']['last_active_at']),
+                  );
+                  
+                    await hiveService.addBoxes([sessionData], "SessionBox");
                   if (context.mounted) {
                     Navigator.pushReplacement(
                       context,

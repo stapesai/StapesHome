@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
@@ -9,7 +8,7 @@ class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
   final VoidCallback onSuccess;
   final VoidCallback onError;
-    final DateTime time;
+  final DateTime time;
 
   const OtpVerificationScreen({
     super.key,
@@ -30,6 +29,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   late int _remainingTime;
   late Timer _timer;
+  bool _isResendEnabled = false;
 
   @override
   void initState() {
@@ -46,7 +46,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         });
       } else {
         _timer.cancel();
-        // Handle expiration (optional)
+        setState(() {
+          _isResendEnabled = true; // Enable resend button when timer expires
+        });
       }
     });
   }
@@ -79,15 +81,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       }),
     );
 
-    // print('OTP Verification response: ${response.body}'); // Log the response
-
-
     if (response.statusCode == 200) {
       widget.onSuccess();
     } else {
       widget.onError();
     }
   }
+
   Future<void> resendOtp() async {
     var url = Uri.https('auth.jarvishome.in', '/auth/resend_otp');
     var response = await http.post(
@@ -102,18 +102,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     );
 
     if (response.statusCode == 200) {
-      // Handle success, update UI or show feedback
-      // Optionally, restart timer or update UI to show new countdown
       setState(() {
         _remainingTime = widget.time.difference(DateTime.now()).inSeconds;
+        _isResendEnabled = false; // Disable resend button and restart timer
         _startTimer();
       });
     } else {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-
           SnackBar(
-
             content: Text(
               'Error: ${response.statusCode} - ${response.body}',
             ),
@@ -179,17 +176,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                 ],
               ),
             ),
-            // Add a button to resend the OTP
-            TextButton(
-              onPressed: resendOtp,
-              child: const Text(
-                'Resend OTP',
-                style: TextStyle(
-                  color: Colors.orange,
-                  fontSize: 16.0,
+            // Conditionally render the "Resend OTP" button
+            if (_isResendEnabled)
+              TextButton(
+                onPressed: resendOtp,
+                child: const Text(
+                  'Resend OTP',
+                  style: TextStyle(
+                    color: Colors.orange,
+                    fontSize: 16.0,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),
