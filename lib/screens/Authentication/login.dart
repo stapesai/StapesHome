@@ -16,15 +16,14 @@ class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
-   createState() => _LoginScreenState();
+  createState() => _LoginScreenState();
 }
+
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final HiveService hiveService = HiveService();
   bool _isLoading = false;
-
-
 
   Future<void> handleLogin(BuildContext context) async {
     setState(() {

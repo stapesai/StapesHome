@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:jarvis/Constants/colors.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'Cache/HiveService.dart';
 import 'Cache/sessions_model.dart';
@@ -14,8 +13,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Hive
-  final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive adapters
@@ -29,7 +27,7 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return MaterialApp(
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
@@ -52,13 +50,7 @@ class _MainScreenState extends State<MainScreen> {
   String sessionId = '';
   String userId = '';
 
-  static final List<Widget> _screens = <Widget>[
-    const HomeScreen(sessionId: '', userId: ''), // Placeholder values
-    const DeviceScreen(
-        sessionId: '', userId: ''), // Ensure this matches the class name
-    const NodesScreen(),
-    const ProfileScreen(),
-  ];
+  late List<Widget> _screens;
 
   @override
   void initState() {
@@ -67,14 +59,18 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Future<void> _loadSessionData() async {
-    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
+    var sessions = await hiveService.getSessionData();
     if (sessions.isNotEmpty) {
       var session = sessions.first;
       setState(() {
         sessionId = session.sessionId;
         userId = session.userId;
-        _screens[0] = HomeScreen(sessionId: sessionId, userId: userId);
-        _screens[1] = DeviceScreen(sessionId: sessionId, userId: userId);
+        _screens = [
+          HomeScreen(sessionId: sessionId, userId: userId),
+          DeviceScreen(sessionId: sessionId, userId: userId),
+          const NodesScreen(),
+          const ProfileScreen(),
+        ];
       });
     }
   }
@@ -89,6 +85,17 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_screens == null) {
+      return Scaffold(
+        backgroundColor: const Color(0xFF161622),
+        body: Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+          ),
+        ),
+      );
+    }
+
     return Scaffold(
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
@@ -106,8 +113,6 @@ class _MainScreenState extends State<MainScreen> {
         child: Ink(
           child: BottomNavigationBar(
             type: BottomNavigationBarType.fixed,
-            // disable ripple effect
-
             items: [
               _buildBottomNavigationBarItem(
                 icon: Icons.add_home_work_rounded,
@@ -177,7 +182,7 @@ class AnimatedBar extends StatelessWidget {
       height: 4,
       width: isActive ? 50 : 0,
       decoration: const BoxDecoration(
-        color: AppColor.iconBarColor,
+        // color: AppColor.iconBarColor,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );
