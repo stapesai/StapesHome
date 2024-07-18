@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'Cache/HiveService.dart';
+import 'Cache/hive.dart';
 import 'Cache/sessions_model.dart';
-import 'screens/Navigation/DevicesScreen.dart';
-import 'screens/Navigation/HomeScreen.dart';
-import 'screens/Navigation/NodesScreen.dart';
-import 'screens/Navigation/ProfileScreen.dart';
-import 'screens/SplashScreen.dart';
+import 'screens/Navigation/devices.dart';
+import 'screens/Navigation/home.dart';
+import 'screens/Navigation/nodes.dart';
+import 'screens/Navigation/profile.dart';
+import 'screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -18,7 +19,7 @@ void main() async {
 
   // Register Hive adapters
   Hive.registerAdapter(SessionsModelAdapter());
-
+  debugPaintSizeEnabled = true;
   runApp(const MyApp());
 }
 
@@ -50,7 +51,7 @@ class _MainScreenState extends State<MainScreen> {
   String sessionId = '';
   String userId = '';
 
-  late List<Widget> _screens;
+ List<Widget> _screens=[];
 
   @override
   void initState() {
@@ -85,9 +86,9 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_screens == null) {
-      return Scaffold(
-        backgroundColor: const Color(0xFF161622),
+    if (_screens.isEmpty) {
+      return const Scaffold(
+        backgroundColor: Color(0xFF161622),
         body: Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
@@ -97,6 +98,7 @@ class _MainScreenState extends State<MainScreen> {
     }
 
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: _screens[_selectedIndex],
       bottomNavigationBar: Container(
         decoration: BoxDecoration(

@@ -8,4 +8,6 @@ class AppColor {
   static const Color containerColor = Color(0xFF28282F);
   static const Color iconBarColor = Color(0xFFFF9F1C);
   static const Color backgroundColor = Color(0xFF161622);
+  static const Color textColor = Color(0xFFE1E1E6);
+  static const Color secondaryTextColor = Color(0xFFA8A8B3);
 }
