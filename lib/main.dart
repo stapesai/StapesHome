@@ -13,7 +13,8 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Hive
-  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive adapters
@@ -30,9 +31,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        splashFactory: NoSplash.splashFactory
-      ),
+      theme: ThemeData(splashFactory: NoSplash.splashFactory),
     );
   }
 }
@@ -86,8 +85,8 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     if (_screens == null) {
-      return Scaffold(
-        backgroundColor: const Color(0xFF161622),
+      return const Scaffold(
+        backgroundColor: Color(0xFF161622),
         body: Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.white),

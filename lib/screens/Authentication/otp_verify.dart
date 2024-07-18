@@ -199,63 +199,50 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: List.generate(6, (index) {
         return Expanded(
-          child: KeyboardListener(
-            focusNode: FocusNode(), // Unique focus node for RawKeyboardListener
-            onKeyEvent: (event) {
-              if (event is KeyDownEvent &&
-                  event.logicalKey == LogicalKeyboardKey.backspace &&
-                  _controllers[index].text.isEmpty &&
-                  index > 0) {
-                FocusScope.of(context).requestFocus(_focusNodes[index - 1]);
-              }
-            },
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 5.0),
-              decoration: BoxDecoration(
-                color: const Color(0xFF161622),
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(color: const Color(0xFFFFA404), width: 1.0),
-              ),
-              child: Center(
-                child: TextField(
-                  controller: _controllers[index],
-                  focusNode: _focusNodes[index],
-                  keyboardType: TextInputType.number,
-                  textAlign: TextAlign.center,
-                  maxLength: 1,
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 24.0, // Larger font size to cover the box
-                    fontWeight: FontWeight.bold, // Thicker text
-                  ),
-                  inputFormatters: [
-                    FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                  ],
-                  textInputAction: TextInputAction.next,
-                  decoration: InputDecoration(
-                    counterText: '',
-                    contentPadding: EdgeInsets.zero,
-                    // Set padding to zero to center text and cursor
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide.none,
-                    ),
-                    filled: true,
-                    fillColor: const Color(0xFF161622),
-                  ),
-                  onChanged: (value) {
-                    if (value.length == 1 && index < 5) {
-                      FocusScope.of(context)
-                          .requestFocus(_focusNodes[index + 1]);
-                    }
-                  },
-                  onSubmitted: (value) {
-                    if (index < 5) {
-                      FocusScope.of(context)
-                          .requestFocus(_focusNodes[index + 1]);
-                    }
-                  },
+          child: Container(
+            margin: const EdgeInsets.symmetric(horizontal: 5.0),
+            decoration: BoxDecoration(
+              color: const Color(0xFF161622),
+              borderRadius: BorderRadius.circular(8.0),
+              border: Border.all(color: const Color(0xFFFFA404), width: 1.0),
+            ),
+            child: Center(
+              child: TextField(
+                controller: _controllers[index],
+                focusNode: _focusNodes[index],
+                keyboardType: TextInputType.number,
+                textAlign: TextAlign.center,
+                maxLength: 1,
+                style: const TextStyle(
+                  color: Colors.white,
+                  fontSize: 24.0, // Larger font size to cover the box
+                  fontWeight: FontWeight.bold, // Thicker text
                 ),
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                ],
+                textInputAction: TextInputAction.next,
+                decoration: InputDecoration(
+                  counterText: '',
+                  contentPadding: EdgeInsets.zero,
+                  // Set padding to zero to center text and cursor
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(8.0),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: const Color(0xFF161622),
+                ),
+                onChanged: (value) {
+                  if (value.length == 1 && index < 5) {
+                    FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+                  }
+                },
+                onSubmitted: (value) {
+                  if (index < 5) {
+                    FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
+                  }
+                },
               ),
             ),
           ),
