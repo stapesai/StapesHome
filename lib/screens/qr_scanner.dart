@@ -43,7 +43,6 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     _controller.toggleTorch();
   }
 
-  
   void _handleQRCode(List<Barcode> barcodes) {
     if (barcodes.isNotEmpty && !_isProcessing) {
       setState(() {
@@ -100,40 +99,43 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
-          // back button
-          
           MobileScanner(
             controller: _controller,
             onDetect: (barcode) => _handleQRCode(barcode.barcodes),
-            overlayBuilder: (context, constraints) {
-              // return two buttons
-              return Row(
+          ),
+          Positioned(
+            top: 0,
+            left: 0,
+            right: 0,
+            child: SafeArea(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
-                
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      _flashOn ? Icons.flash_off : Icons.flash_on,
-                      color: Colors.white,
-                    ),
-                    onPressed: _toggleFlash,
-                  ),
                   IconButton(
                     icon: Icon(
                       Icons.close,
                       color: Colors.white,
                     ),
                     onPressed: () {
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
-                      // destroy the controller
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => MainScreen()));
                       _controller.dispose();
                     },
                   ),
+                  IconButton(
+                    icon: Icon(
+                      _flashOn ? Icons.flash_off : Icons.flash_on,
+                      color: Colors.white,
+                    ),
+                    onPressed: _toggleFlash,
+                  )
                 ],
-              );
-            },
-           ),
+              ),
+            ),
+          ),
           Positioned(
             left: 0,
             right: 0,
@@ -144,29 +146,28 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                   _isPanelVisible = !_isPanelVisible;
                 });
               },
-              child: AnimatedContainer(
+              child: AnimatedSize(
                 duration: Duration(milliseconds: 300),
                 curve: Curves.easeInOut,
-                width: MediaQuery.of(context).size.width,
-                height: _isPanelVisible ? 300 : 60,
-                padding: const EdgeInsets.all(16),
-                decoration: BoxDecoration(
-                  color: AppColor.backgroundColor,
-                  borderRadius: BorderRadius.circular(20),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.3),
-                      spreadRadius: 2,
-                      blurRadius: 5,
-                      offset: const Offset(0, -3),
-                    ),
-                  ],
-                ),
-                child: Column(
+                child: Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: _isPanelVisible ? 300 : 60,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: AppColor.backgroundColor,
+                    borderRadius: BorderRadius.circular(20),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        spreadRadius: 2,
+                        blurRadius: 5,
+                        offset: const Offset(0, -3),
+                      ),
+                    ],
+                  ),
+                  child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisSize: MainAxisSize.min,
-                    // fix bottom overflow
-                  
                     children: [
                       Container(
                         width: 60,
@@ -185,8 +186,15 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      _buildInstructionsPanel(),
-                    ]),
+                      if (_isPanelVisible)
+                        Expanded(
+                          child: SingleChildScrollView(
+                            child: _buildInstructionsPanel(),
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
