@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../Cache/sessions_model.dart';
-import 'Navigation/HomeScreen.dart';
+import 'Navigation/home.dart';
 import 'Authentication/login.dart';
 import '../main.dart'; // Import the main.dart for MainScreen
 
@@ -26,7 +26,7 @@ class SplashScreenState extends State<SplashScreen> {
     bool isLoggedIn = sessionBox.isNotEmpty;
 
     Timer(
-      const Duration(seconds: 5),
+      const Duration(milliseconds: 200),
       () {
         if (isLoggedIn) {
           Navigator.pushReplacement(
