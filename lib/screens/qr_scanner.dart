@@ -1,9 +1,9 @@
 import 'dart:convert';
-import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:jarvis/main.dart';
+import 'package:lottie/lottie.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:jarvis/Constants/colors.dart';
 
 class QrScannerScreen extends StatefulWidget {
@@ -16,11 +16,11 @@ class QrScannerScreen extends StatefulWidget {
 class _QrScannerScreenState extends State<QrScannerScreen>
     with SingleTickerProviderStateMixin {
   late MobileScannerController _controller;
-
   bool _flashOn = false;
   bool _isProcessing = false;
   bool _isPanelVisible = true;
   late AnimationController _panelController;
+  late Animation<double> _fadeAnimation;
 
   // Variable to hold connection status
   Future<bool>? _connectionFuture;
@@ -33,6 +33,14 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _panelController,
+      curve: Curves.easeInOut,
+    );
+
+    // Start the animation controller
+    _panelController.forward();
   }
 
   @override
@@ -49,7 +57,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     _controller.toggleTorch();
   }
 
-  Future<bool> _connectToDevice(String deviceName, String serviceUuid, String characteristicUuid) async {
+  Future<bool> _connectToDevice(
+      String deviceName, String serviceUuid, String characteristicUuid) async {
     // Simulate a connection attempt with a delay
     await Future.delayed(Duration(seconds: 2));
     // Simulate success or failure randomly for demonstration purposes
@@ -73,10 +82,11 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       print('Device Name: $deviceName');
       print('Service UUID: $serviceUuid');
       print('Characteristic UUID: $characteristicUuid');
-      
+
       // Set the connection future
       setState(() {
-        _connectionFuture = _connectToDevice(deviceName, serviceUuid, characteristicUuid);
+        _connectionFuture =
+            _connectToDevice(deviceName, serviceUuid, characteristicUuid);
       });
     }
   }
@@ -112,11 +122,6 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   }
 
   Widget _buildLottieAnimation(bool isSuccess) {
-    const  double successWidth = 150;
-  const double successHeight = 150;
-  const double failureWidth = 100;
-  const double failureHeight = 100;
-
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -125,9 +130,12 @@ class _QrScannerScreenState extends State<QrScannerScreen>
         children: [
           SizedBox(height: 12),
           Lottie.asset(
-            isSuccess ? 'assets/lottie/success.json' : 'assets/lottie/failure.json',
-            width: isSuccess ? successWidth : failureWidth,
-          height: isSuccess ? successHeight : failureHeight,
+            isSuccess
+                ? 'assets/lottie/success.json'
+                : 'assets/lottie/failure.json',
+            width:
+                MediaQuery.of(context).size.width / 3 , 
+            height: MediaQuery.of(context).size.width /3,
             repeat: true,
           ),
           Text(
@@ -147,52 +155,52 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          MobileScanner(
-            controller: _controller,
-            onDetect: (barcode) => _handleQRCode(barcode.barcodes),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Container(
+        color: AppColor
+            .backgroundColor, // Ensure the background color matches your app theme
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScreen()));
-                      _controller.dispose();
-                    },
+                  MobileScanner(
+                    controller: _controller,
+                    onDetect: (barcode) => _handleQRCode(barcode.barcodes),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      _flashOn ? Icons.flash_off : Icons.flash_on,
-                      color: Colors.white,
+                  SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.close, color: Colors.white),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainScreen()));
+                            _controller.dispose();
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                              _flashOn ? Icons.flash_off : Icons.flash_on,
+                              color: Colors.white),
+                          onPressed: _toggleFlash,
+                        ),
+                      ],
                     ),
-                    onPressed: _toggleFlash,
-                  )
+                  ),
                 ],
               ),
             ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: GestureDetector(
+            GestureDetector(
               onTap: () {
                 setState(() {
+                  if (_isPanelVisible) {
+                    _panelController.reverse();
+                  } else {
+                    _panelController.forward();
+                  }
                   _isPanelVisible = !_isPanelVisible;
                 });
               },
@@ -204,7 +212,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                   height: _isPanelVisible ? 300 : 60,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColor.backgroundColor,
+                    color: AppColor
+                        .backgroundColor, // Ensure this matches your app's theme
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -237,11 +246,12 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                         ),
                       ),
                       if (_isPanelVisible)
-                        Expanded(
+                        FadeTransition(
+                          opacity: _fadeAnimation,
                           child: FutureBuilder<bool>(
                             future: _connectionFuture,
                             builder: (context, snapshot) {
-                              // return _buildLottieAnimation(true);
+                              
                               if (snapshot.connectionState == ConnectionState.waiting) {
                                 return _buildInstructionsPanel();
                               } else if (snapshot.connectionState == ConnectionState.done) {
@@ -257,8 +267,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
