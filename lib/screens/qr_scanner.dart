@@ -1,11 +1,13 @@
 import 'dart:convert';
+import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:jarvis/Constants/colors.dart';
 import 'package:jarvis/main.dart';
+import 'package:jarvis/Constants/colors.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({Key? key}) : super(key: key);
+  const QrScannerScreen({super.key});
 
   @override
   _QrScannerScreenState createState() => _QrScannerScreenState();
@@ -14,10 +16,14 @@ class QrScannerScreen extends StatefulWidget {
 class _QrScannerScreenState extends State<QrScannerScreen>
     with SingleTickerProviderStateMixin {
   late MobileScannerController _controller;
+
   bool _flashOn = false;
   bool _isProcessing = false;
   bool _isPanelVisible = true;
   late AnimationController _panelController;
+
+  // Variable to hold connection status
+  Future<bool>? _connectionFuture;
 
   @override
   void initState() {
@@ -43,6 +49,13 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     _controller.toggleTorch();
   }
 
+  Future<bool> _connectToDevice(String deviceName, String serviceUuid, String characteristicUuid) async {
+    // Simulate a connection attempt with a delay
+    await Future.delayed(Duration(seconds: 2));
+    // Simulate success or failure randomly for demonstration purposes
+    return Future.value(true); // or false
+  }
+
   void _handleQRCode(List<Barcode> barcodes) {
     if (barcodes.isNotEmpty && !_isProcessing) {
       setState(() {
@@ -60,6 +73,11 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       print('Device Name: $deviceName');
       print('Service UUID: $serviceUuid');
       print('Characteristic UUID: $characteristicUuid');
+      
+      // Set the connection future
+      setState(() {
+        _connectionFuture = _connectToDevice(deviceName, serviceUuid, characteristicUuid);
+      });
     }
   }
 
@@ -88,6 +106,38 @@ class _QrScannerScreenState extends State<QrScannerScreen>
           _buildInstruction('1. Scan the QR code on the device.'),
           _buildInstruction('2. Enter Wi-Fi credentials.'),
           _buildInstruction('3. Enter entity name and correct node number.'),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLottieAnimation(bool isSuccess) {
+    const  double successWidth = 150;
+  const double successHeight = 150;
+  const double failureWidth = 100;
+  const double failureHeight = 100;
+
+    return Padding(
+      padding: EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(height: 12),
+          Lottie.asset(
+            isSuccess ? 'assets/lottie/success.json' : 'assets/lottie/failure.json',
+            width: isSuccess ? successWidth : failureWidth,
+          height: isSuccess ? successHeight : failureHeight,
+            repeat: true,
+          ),
+          Text(
+            isSuccess ? 'Connection Successful!' : 'Connection Failed!',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );
@@ -188,8 +238,18 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                       ),
                       if (_isPanelVisible)
                         Expanded(
-                          child: SingleChildScrollView(
-                            child: _buildInstructionsPanel(),
+                          child: FutureBuilder<bool>(
+                            future: _connectionFuture,
+                            builder: (context, snapshot) {
+                              // return _buildLottieAnimation(true);
+                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                return _buildInstructionsPanel();
+                              } else if (snapshot.connectionState == ConnectionState.done) {
+                                return _buildLottieAnimation(snapshot.data ?? false);
+                              } else {
+                                return _buildInstructionsPanel();
+                              }
+                            },
                           ),
                         ),
                     ],

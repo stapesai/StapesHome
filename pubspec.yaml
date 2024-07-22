@@ -19,6 +19,7 @@ dependencies:
   path_provider: ^2.0.11
   hive: ^2.2.3
   mobile_scanner: ^5.1.1
+  lottie: ^3.1.2
 
 dev_dependencies:
   flutter_test:
@@ -33,6 +34,7 @@ flutter:
     - assets/
     - assets/icons/
     - assets/fonts/
+    - assets/lottie/
   fonts:
     - family: Malgun Gothic
       fonts:

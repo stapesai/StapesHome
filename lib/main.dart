@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'Cache/hive.dart';
@@ -20,7 +19,7 @@ void main() async {
 
   // Register Hive adapters
   Hive.registerAdapter(SessionsModelAdapter());
-  debugPaintSizeEnabled = true;
+  // debugPaintSizeEnabled = true;
   runApp(const MyApp());
 }
 

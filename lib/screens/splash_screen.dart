@@ -2,7 +2,6 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import '../Cache/sessions_model.dart';
-import 'Navigation/home.dart';
 import 'Authentication/login.dart';
 import '../main.dart'; // Import the main.dart for MainScreen
 
@@ -10,7 +9,7 @@ class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
 
   @override
-  SplashScreenState createState() => SplashScreenState();
+  createState() => SplashScreenState();
 }
 
 class SplashScreenState extends State<SplashScreen> {
@@ -31,7 +30,8 @@ class SplashScreenState extends State<SplashScreen> {
         if (isLoggedIn) {
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (context) => MainScreen()), // Redirect to MainScreen
+            MaterialPageRoute(
+                builder: (context) => MainScreen()), // Redirect to MainScreen
           );
         } else {
           Navigator.pushReplacement(

@@ -13,102 +13,104 @@ class ProfileScreen extends StatelessWidget {
       backgroundColor: AppColor.backgroundColor,
       // Adjust this color to match your theme
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const CircleAvatar(
-                radius: 50,
-                backgroundImage: AssetImage(
-                    'assets/icons/demo.png'), // Replace with actual image asset
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'John Doe',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                const CircleAvatar(
+                  radius: 50,
+                  backgroundImage: AssetImage(
+                      'assets/icons/demo.png'), // Replace with actual image asset
                 ),
-              ),
-              const SizedBox(height: 8),
-              const Text(
-                'john@email.com',
-                style: TextStyle(
-                  color: Colors.white70,
-                  fontSize: 16,
+                const SizedBox(height: 16),
+                const Text(
+                  'John Doe',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const EditProfileScreen()),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.transparent,
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                      side: const BorderSide(color: Colors.orange, width: 2)),
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                const SizedBox(height: 8),
+                const Text(
+                  'john@email.com',
+                  style: TextStyle(
+                    color: Colors.white70,
+                    fontSize: 16,
+                  ),
                 ),
-                child: const Text(
-                  'Edit',
-                  style: TextStyle(color: Colors.white),
+                const SizedBox(height: 16),
+                ElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const EditProfileScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.transparent,
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30),
+                        side: const BorderSide(color: Colors.orange, width: 2)),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                  ),
+                  child: const Text(
+                    'Edit',
+                    style: TextStyle(color: Colors.white),
+                  ),
                 ),
-              ),
-              const SizedBox(height: 32),
-              ProfileOption(
-                icon: Icons.dark_mode_outlined,
-                text: 'Dark mode',
-                trailing: Switch(
-                  value: true,
-                  onChanged: (value) {},
-                  activeColor: Colors.orange,
+                const SizedBox(height: 32),
+                ProfileOption(
+                  icon: Icons.dark_mode_outlined,
+                  text: 'Dark mode',
+                  trailing: Switch(
+                    value: true,
+                    onChanged: (value) {},
+                    activeColor: Colors.orange,
+                  ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              ProfileOption(
-                icon: Icons.computer,
-                text: 'Your sessions',
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SessionsScreen()),
-                  );
-                },
-              ),
-              const SizedBox(height: 16),
-              ProfileOption(
-                icon: Icons.logout,
-                text: 'Logout',
-                onTap: () {
-                  _showLogoutDialog(context);
-                },
-              ),
-              const SizedBox(height: 16),
-              ProfileOption(
-                icon: Icons.location_history,
-                text: 'About Us',
-                onTap: () {
-                  _showLogoutDialog(context);
-                },
-              ),
-              const SizedBox(height: 16),
-              ProfileOption(
-                icon: Icons.help,
-                text: 'Get Help',
-                onTap: () {
-                  _showLogoutDialog(context);
-                },
-              ),
-            ],
+                const SizedBox(height: 16),
+                ProfileOption(
+                  icon: Icons.computer,
+                  text: 'Your sessions',
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SessionsScreen()),
+                    );
+                  },
+                ),
+                const SizedBox(height: 16),
+                ProfileOption(
+                  icon: Icons.logout,
+                  text: 'Logout',
+                  onTap: () {
+                    _showLogoutDialog(context);
+                  },
+                ),
+                const SizedBox(height: 16),
+                ProfileOption(
+                  icon: Icons.location_history,
+                  text: 'About Us',
+                  onTap: () {
+                    _showLogoutDialog(context);
+                  },
+                ),
+                const SizedBox(height: 16),
+                ProfileOption(
+                  icon: Icons.help,
+                  text: 'Get Help',
+                  onTap: () {
+                    _showLogoutDialog(context);
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
