@@ -1,26 +1,28 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:jarvis/main.dart';
 import 'package:lottie/lottie.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter/material.dart';
 import 'package:jarvis/Constants/colors.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:jarvis/screens/Additional/provisioning.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
 
   @override
-  _QrScannerScreenState createState() => _QrScannerScreenState();
+  createState() => _QrScannerScreenState();
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late MobileScannerController _controller;
   bool _flashOn = false;
   bool _isProcessing = false;
   bool _isPanelVisible = true;
   late AnimationController _panelController;
   late Animation<double> _fadeAnimation;
+  late AnimationController _lottieController;
 
   // Variable to hold connection status
   Future<bool>? _connectionFuture;
@@ -38,6 +40,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       parent: _panelController,
       curve: Curves.easeInOut,
     );
+      _lottieController = AnimationController(vsync: this);
+
 
     // Start the animation controller
     _panelController.forward();
@@ -47,6 +51,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   void dispose() {
     _controller.dispose();
     _panelController.dispose();
+    _lottieController.dispose();
     super.dispose();
   }
 
@@ -133,10 +138,24 @@ class _QrScannerScreenState extends State<QrScannerScreen>
             isSuccess
                 ? 'assets/lottie/success.json'
                 : 'assets/lottie/failure.json',
-            width:
-                MediaQuery.of(context).size.width / 3 , 
-            height: MediaQuery.of(context).size.width /3,
+            width: MediaQuery.of(context).size.width / 3,
+            height: MediaQuery.of(context).size.width / 3,
             repeat: true,
+            onLoaded: (composition) {
+            _lottieController
+              ..duration = composition.duration
+              ..forward();
+            
+            if (isSuccess) {
+              _lottieController.addStatusListener((status) {
+                if (status == AnimationStatus.completed) {
+                   Navigator.of(context).pushReplacement(
+    MaterialPageRoute(builder: (context) => ProvisioningScreen()));
+                }
+              },
+  );
+                }
+              }
           ),
           Text(
             isSuccess ? 'Connection Successful!' : 'Connection Failed!',
@@ -251,14 +270,17 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                           child: FutureBuilder<bool>(
                             future: _connectionFuture,
                             builder: (context, snapshot) {
-                              
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return _buildInstructionsPanel();
-                              } else if (snapshot.connectionState == ConnectionState.done) {
-                                return _buildLottieAnimation(snapshot.data ?? false);
-                              } else {
-                                return _buildInstructionsPanel();
-                              }
+                              return _buildLottieAnimation(true);
+                              // if (snapshot.connectionState ==
+                              //     ConnectionState.waiting) {
+                              //   return _buildInstructionsPanel();
+                              // } else if (snapshot.connectionState ==
+                              //     ConnectionState.done) {
+                              //   return _buildLottieAnimation(
+                              //       snapshot.data ?? false);
+                              // } else {
+                              //   return _buildInstructionsPanel();
+                              // }
                             },
                           ),
                         ),

@@ -24,23 +24,24 @@ class SplashScreenState extends State<SplashScreen> {
     var sessionBox = Hive.box<SessionsModel>('SessionBox');
     bool isLoggedIn = sessionBox.isNotEmpty;
 
-    Timer(
-      const Duration(milliseconds: 200),
-      () {
-        if (isLoggedIn) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-                builder: (context) => MainScreen()), // Redirect to MainScreen
-          );
-        } else {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => LoginScreen()),
-          );
-        }
-      },
-    );
+    if (isLoggedIn) {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => MainScreen()), // Redirect to MainScreen
+        );
+      }
+    } else {
+      if (mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => LoginScreen()),
+        );
+      }
+    }
+
+
   }
 
   @override
@@ -55,10 +56,6 @@ class SplashScreenState extends State<SplashScreen> {
               'assets/icons/logo.png',
               width: 400.0,
               height: 400.0,
-            ),
-            const SizedBox(height: 20.0),
-            const CircularProgressIndicator(
-              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
             ),
           ],
         ),
