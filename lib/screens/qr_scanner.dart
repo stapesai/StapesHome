@@ -40,8 +40,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       parent: _panelController,
       curve: Curves.easeInOut,
     );
-      _lottieController = AnimationController(vsync: this);
-
+    _lottieController = AnimationController(vsync: this);
 
     // Start the animation controller
     _panelController.forward();
@@ -135,28 +134,27 @@ class _QrScannerScreenState extends State<QrScannerScreen>
         children: [
           SizedBox(height: 12),
           Lottie.asset(
-            isSuccess
-                ? 'assets/lottie/success.json'
-                : 'assets/lottie/failure.json',
-            width: MediaQuery.of(context).size.width / 3,
-            height: MediaQuery.of(context).size.width / 3,
-            repeat: true,
-            onLoaded: (composition) {
+              isSuccess
+                  ? 'assets/lottie/success.json'
+                  : 'assets/lottie/failure.json',
+              width: MediaQuery.of(context).size.width / 3,
+              height: MediaQuery.of(context).size.width / 3,
+              repeat: true, onLoaded: (composition) {
             _lottieController
               ..duration = composition.duration
               ..forward();
-            
+
             if (isSuccess) {
-              _lottieController.addStatusListener((status) {
-                if (status == AnimationStatus.completed) {
-                   Navigator.of(context).pushReplacement(
-    MaterialPageRoute(builder: (context) => ProvisioningScreen()));
-                }
-              },
-  );
-                }
-              }
-          ),
+              _lottieController.addStatusListener(
+                (status) {
+                  if (status == AnimationStatus.completed) {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => ProvisioningScreen()));
+                  }
+                },
+              );
+            }
+          }),
           Text(
             isSuccess ? 'Connection Successful!' : 'Connection Failed!',
             style: TextStyle(
@@ -270,17 +268,16 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                           child: FutureBuilder<bool>(
                             future: _connectionFuture,
                             builder: (context, snapshot) {
-                              return _buildLottieAnimation(true);
-                              // if (snapshot.connectionState ==
-                              //     ConnectionState.waiting) {
-                              //   return _buildInstructionsPanel();
-                              // } else if (snapshot.connectionState ==
-                              //     ConnectionState.done) {
-                              //   return _buildLottieAnimation(
-                              //       snapshot.data ?? false);
-                              // } else {
-                              //   return _buildInstructionsPanel();
-                              // }
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return _buildInstructionsPanel();
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return _buildLottieAnimation(
+                                    snapshot.data ?? false);
+                              } else {
+                                return _buildInstructionsPanel();
+                              }
                             },
                           ),
                         ),
