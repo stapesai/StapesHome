@@ -24,7 +24,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   late Animation<double> _fadeAnimation;
   late AnimationController _lottieController;
 
-  // Variable to hold connection status
+
   Future<bool>? _connectionFuture;
 
   @override
@@ -230,7 +230,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: AppColor
-                        .backgroundColor, // Ensure this matches your app's theme
+                        .backgroundColor, 
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
