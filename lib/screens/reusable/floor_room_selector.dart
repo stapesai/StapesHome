@@ -2,8 +2,8 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
-import 'package:jarvis/screens/Reusable/create_room_page.dart'; // Import CreateRoomPage
+import 'package:jarvis/screens/reusable/create_floor_page.dart'; // Import CreateFloorPage
+import 'package:jarvis/screens/reusable/create_room_page.dart'; // Import CreateRoomPage
 
 class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;

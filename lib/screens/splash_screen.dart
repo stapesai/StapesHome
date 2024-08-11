@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import '../Cache/sessions_model.dart';
-import 'Authentication/login.dart';
+import '../cache/sessions_model.dart';
+import 'authentication/login.dart';
 import '../main.dart'; // Import the main.dart for MainScreen
 
 class SplashScreen extends StatefulWidget {

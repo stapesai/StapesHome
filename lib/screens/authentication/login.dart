@@ -1,13 +1,13 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/Cache/hive.dart'; // Import your Hive service
-import 'package:jarvis/Cache/sessions_model.dart'; // Import your session model
-import 'package:jarvis/Constants/colors.dart';
+import 'package:jarvis/cache/hive.dart'; // Import your Hive service
+import 'package:jarvis/cache/sessions_model.dart'; // Import your session model
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/main.dart';
-import 'package:jarvis/widgets/TextField.dart';
+import 'package:jarvis/widgets/text_field.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'ErrorScreens/otp_verify_error.dart';
+import 'error_screens/otp_verify_error.dart';
 import 'otp_verify.dart'; // Import the OTP Verification screen
 import 'email_signup.dart'; // Import the EmailSignUp screen
 import 'reset_password.dart';
@@ -145,10 +145,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
               children: [
 
-                Center(
-                  child: Column(
-                    children: [
-                      const Image(image: AssetImage('assets/icons/logo.png') ,height:100,width: 100,),
+              Center(
+                child: Column(
+                  children: [
+                    const Image(image: AssetImage('assets/icons/logo.png') ,height:100,width: 100,),
 
                       const SizedBox(height: 40.0),
                       const Text(

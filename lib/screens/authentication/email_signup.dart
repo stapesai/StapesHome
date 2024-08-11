@@ -2,22 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/TextField.dart';
+import 'package:jarvis/widgets/text_field.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
-import 'ErrorScreens/otp_verify_error.dart';
+import 'error_screens/otp_verify_error.dart';
 import 'otp_verify.dart'; // Import the OTP verification screen
-import 'SuccessScreens/otp_verify_success.dart'; // Import the OTP success screen
+import 'success_screens/otp_verify_success.dart'; // Import the OTP success screen
 
-class ResetPassword extends StatelessWidget {
-  final String email;
-  final TextEditingController passWord = TextEditingController();
-  final TextEditingController confirmPassWord = TextEditingController();
+class EmailSignUp extends StatelessWidget {
+  final TextEditingController emailController = TextEditingController();
 
-  ResetPassword({
-    super.key,
-    required this.email,
-  });
+  EmailSignUp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +26,7 @@ class ResetPassword extends StatelessWidget {
           children: [
             const SizedBox(height: 40.0),
             const Text(
-              'Reset Your Password',
+              'Enter your email to send the verification code.',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24.0,
@@ -40,22 +35,16 @@ class ResetPassword extends StatelessWidget {
             ),
             const SizedBox(height: 40.0),
             CustomTextField(
-              hintText: 'New Password',
-              icon: Icons.lock,
-              controller: passWord,
-            ),
-            const SizedBox(height: 20.0),
-            CustomTextField(
-              hintText: 'Confirm Password',
-              icon: Icons.lock,
-              controller: confirmPassWord,
+              hintText: 'Eg: abc@gmail.com',
+              icon: Icons.email,
+              controller: emailController,
             ),
             const SizedBox(height: 20.0),
             CustomButton(
               text: 'Continue',
               onPressed: () async {
                 var url = Uri.https(
-                    'auth.jarvishome.in', '/auth/reset-password/request-reset');
+                    'auth.jarvishome.in', '/auth/signup/request-signup');
                 var response = await http.post(
                   url,
                   headers: {
@@ -63,13 +52,12 @@ class ResetPassword extends StatelessWidget {
                     'accept': 'application/json'
                   },
                   body: jsonEncode({
-                    'email': email,
+                    'email': emailController.text,
                   }),
                 );
-                // print(response.body);
-                if (response.statusCode == 200 &&
-                    passWord.text == confirmPassWord.text) {
-                  var responseBody = json.decode(response.body);
+
+                var responseBody = json.decode(response.body);
+                if (response.statusCode == 200) {
                   String transactionId = responseBody['transaction_id'];
                   if (context.mounted) {
                     Navigator.pushReplacement(
@@ -102,23 +90,15 @@ class ResetPassword extends StatelessWidget {
                       ),
                     );
                   }
-                } else if (passWord.text != confirmPassWord.text ||
-                    passWord.text.isEmpty ||
-                    confirmPassWord.text.isEmpty) {
-
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Passwords do not match')),
-                    );
-                    Navigator.pop(context, true);
-                  }
+                  // tes
                 } else {
-
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text("Failed to reset password: ${response.statusCode}")),
+                      SnackBar(
+                        content: Text(
+                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                      ),
                     );
-                    Navigator.pop(context, true);
                   }
                 }
               },

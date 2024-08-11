@@ -2,10 +2,9 @@ import 'dart:convert';
 import 'package:jarvis/main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/Constants/colors.dart';
+import 'package:jarvis/constants/colors.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:jarvis/screens/Additional/provisioning.dart';
+import 'package:jarvis/screens/additional/provisioning.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
