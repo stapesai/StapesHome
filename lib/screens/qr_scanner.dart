@@ -1,27 +1,29 @@
 import 'dart:convert';
+import 'package:jarvis/main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
-import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:jarvis/main.dart';
 import 'package:jarvis/constants/colors.dart';
+import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:jarvis/screens/additional/provisioning.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
 
   @override
-  _QrScannerScreenState createState() => _QrScannerScreenState();
+  createState() => _QrScannerScreenState();
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late MobileScannerController _controller;
-
   bool _flashOn = false;
   bool _isProcessing = false;
   bool _isPanelVisible = true;
   late AnimationController _panelController;
+  late Animation<double> _fadeAnimation;
+  late AnimationController _lottieController;
 
-  // Variable to hold connection status
+
   Future<bool>? _connectionFuture;
 
   @override
@@ -32,12 +34,22 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       vsync: this,
       duration: Duration(milliseconds: 300),
     );
+
+    _fadeAnimation = CurvedAnimation(
+      parent: _panelController,
+      curve: Curves.easeInOut,
+    );
+    _lottieController = AnimationController(vsync: this);
+
+    // Start the animation controller
+    _panelController.forward();
   }
 
   @override
   void dispose() {
     _controller.dispose();
     _panelController.dispose();
+    _lottieController.dispose();
     super.dispose();
   }
 
@@ -48,7 +60,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     _controller.toggleTorch();
   }
 
-  Future<bool> _connectToDevice(String deviceName, String serviceUuid, String characteristicUuid) async {
+  Future<bool> _connectToDevice(
+      String deviceName, String serviceUuid, String characteristicUuid) async {
     // Simulate a connection attempt with a delay
     await Future.delayed(Duration(seconds: 2));
     // Simulate success or failure randomly for demonstration purposes
@@ -72,10 +85,11 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       print('Device Name: $deviceName');
       print('Service UUID: $serviceUuid');
       print('Characteristic UUID: $characteristicUuid');
-      
+
       // Set the connection future
       setState(() {
-        _connectionFuture = _connectToDevice(deviceName, serviceUuid, characteristicUuid);
+        _connectionFuture =
+            _connectToDevice(deviceName, serviceUuid, characteristicUuid);
       });
     }
   }
@@ -111,11 +125,6 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   }
 
   Widget _buildLottieAnimation(bool isSuccess) {
-    const  double successWidth = 150;
-  const double successHeight = 150;
-  const double failureWidth = 100;
-  const double failureHeight = 100;
-
     return Padding(
       padding: EdgeInsets.all(16),
       child: Column(
@@ -124,11 +133,27 @@ class _QrScannerScreenState extends State<QrScannerScreen>
         children: [
           SizedBox(height: 12),
           Lottie.asset(
-            isSuccess ? 'assets/lottie/success.json' : 'assets/lottie/failure.json',
-            width: isSuccess ? successWidth : failureWidth,
-          height: isSuccess ? successHeight : failureHeight,
-            repeat: true,
-          ),
+              isSuccess
+                  ? 'assets/lottie/success.json'
+                  : 'assets/lottie/failure.json',
+              width: MediaQuery.of(context).size.width / 3,
+              height: MediaQuery.of(context).size.width / 3,
+              repeat: true, onLoaded: (composition) {
+            _lottieController
+              ..duration = composition.duration
+              ..forward();
+
+            if (isSuccess) {
+              _lottieController.addStatusListener(
+                (status) {
+                  if (status == AnimationStatus.completed) {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(
+                        builder: (context) => ProvisioningScreen()));
+                  }
+                },
+              );
+            }
+          }),
           Text(
             isSuccess ? 'Connection Successful!' : 'Connection Failed!',
             style: TextStyle(
@@ -146,52 +171,52 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: Stack(
-        children: [
-          MobileScanner(
-            controller: _controller,
-            onDetect: (barcode) => _handleQRCode(barcode.barcodes),
-          ),
-          Positioned(
-            top: 0,
-            left: 0,
-            right: 0,
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
+      body: Container(
+        color: AppColor
+            .backgroundColor, // Ensure the background color matches your app theme
+        child: Column(
+          children: [
+            Expanded(
+              child: Stack(
                 children: [
-                  IconButton(
-                    icon: Icon(
-                      Icons.close,
-                      color: Colors.white,
-                    ),
-                    onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => MainScreen()));
-                      _controller.dispose();
-                    },
+                  MobileScanner(
+                    controller: _controller,
+                    onDetect: (barcode) => _handleQRCode(barcode.barcodes),
                   ),
-                  IconButton(
-                    icon: Icon(
-                      _flashOn ? Icons.flash_off : Icons.flash_on,
-                      color: Colors.white,
+                  SafeArea(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.close, color: Colors.white),
+                          onPressed: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => MainScreen()));
+                            _controller.dispose();
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(
+                              _flashOn ? Icons.flash_off : Icons.flash_on,
+                              color: Colors.white),
+                          onPressed: _toggleFlash,
+                        ),
+                      ],
                     ),
-                    onPressed: _toggleFlash,
-                  )
+                  ),
                 ],
               ),
             ),
-          ),
-          Positioned(
-            left: 0,
-            right: 0,
-            bottom: 0,
-            child: GestureDetector(
+            GestureDetector(
               onTap: () {
                 setState(() {
+                  if (_isPanelVisible) {
+                    _panelController.reverse();
+                  } else {
+                    _panelController.forward();
+                  }
                   _isPanelVisible = !_isPanelVisible;
                 });
               },
@@ -203,7 +228,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                   height: _isPanelVisible ? 300 : 60,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColor.backgroundColor,
+                    color: AppColor
+                        .backgroundColor, 
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -236,15 +262,18 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                         ),
                       ),
                       if (_isPanelVisible)
-                        Expanded(
+                        FadeTransition(
+                          opacity: _fadeAnimation,
                           child: FutureBuilder<bool>(
                             future: _connectionFuture,
                             builder: (context, snapshot) {
-                              // return _buildLottieAnimation(true);
-                              if (snapshot.connectionState == ConnectionState.waiting) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
                                 return _buildInstructionsPanel();
-                              } else if (snapshot.connectionState == ConnectionState.done) {
-                                return _buildLottieAnimation(snapshot.data ?? false);
+                              } else if (snapshot.connectionState ==
+                                  ConnectionState.done) {
+                                return _buildLottieAnimation(
+                                    snapshot.data ?? false);
                               } else {
                                 return _buildInstructionsPanel();
                               }
@@ -256,8 +285,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
