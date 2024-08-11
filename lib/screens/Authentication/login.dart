@@ -131,7 +131,7 @@ class LoginScreen extends StatelessWidget {
               Center(
                 child: Column(
                   children: [
-                    Image(image: AssetImage('assets/icons/logo.png') ,height:100,width: 100,),
+                    const Image(image: AssetImage('assets/icons/logo.png') ,height:100,width: 100,),
 
                     const SizedBox(height: 40.0),
                     const Text(
