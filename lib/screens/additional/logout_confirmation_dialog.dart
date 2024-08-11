@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/Cache/hive.dart';
-import 'package:jarvis/Cache/sessions_model.dart';
-import 'package:jarvis/screens/Authentication/login.dart';
+import 'package:jarvis/cache/hive.dart';
+import 'package:jarvis/cache/sessions_model.dart';
+import 'package:jarvis/screens/authentication/login.dart';
 
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});

@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/text_field.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
-import 'SuccessScreens/signup_success.dart'; // Import the next screen
+import 'success_screens/signup_success.dart'; // Import the next screen
 
 class ConfirmPasswordPage extends StatefulWidget {
   final String transactionId;

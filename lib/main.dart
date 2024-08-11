@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'Cache/hive.dart';
-import 'Cache/sessions_model.dart';
-import 'screens/Navigation/devices.dart';
-import 'screens/Navigation/home.dart';
-import 'screens/Navigation/nodes.dart';
-import 'screens/Navigation/profile.dart';
+import 'cache/hive.dart';
+import 'cache/sessions_model.dart';
+import 'screens/navigation/devices.dart';
+import 'screens/navigation/home.dart';
+import 'screens/navigation/nodes.dart';
+import 'screens/navigation/profile.dart';
 import 'screens/splash_screen.dart';
 
 void main() async {

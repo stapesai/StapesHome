@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/widgets/TextField.dart';
+import 'package:jarvis/widgets/text_field.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});

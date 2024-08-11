@@ -1,8 +1,8 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
+// import 'package:image_cropper/image_cropper.dart';
+// import 'package:image_picker/image_picker.dart';
 
 class CircularImagePicker extends StatefulWidget {
   const CircularImagePicker({super.key});
@@ -15,8 +15,8 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
   File? _image;
 
   Future<void> _pickImage() async {
-    final picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    // final picker = ImagePicker();
+    // final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
     // if (pickedFile != null) {
     //   File?? croppedFile = await ImageCropper().cropImage(

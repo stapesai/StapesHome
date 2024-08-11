@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/Cache/hive.dart';
-import 'package:jarvis/screens/Additional/add_device.dart';
-import 'package:jarvis/screens/Reusable/create_floor_page.dart'; // Import CreateFloorPage
-import 'package:jarvis/screens/Reusable/create_room_page.dart';
-import 'package:jarvis/screens/Reusable/floor_room_selector.dart'; // Import the new component
+import 'package:jarvis/cache/hive.dart';
+import 'package:jarvis/screens/additional/add_device.dart';
+import 'package:jarvis/screens/reusable/create_floor_page.dart'; // Import CreateFloorPage
+import 'package:jarvis/screens/reusable/create_room_page.dart';
+import 'package:jarvis/screens/reusable/floor_room_selector.dart'; // Import the new component
 
 class DeviceScreen extends StatefulWidget {
   final String sessionId;

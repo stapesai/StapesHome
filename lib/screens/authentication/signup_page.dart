@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/widgets/CircularImagePicker.dart'; // Import the CircularImagePicker widget
-import 'package:jarvis/widgets/TextField.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/circular_image_picker.dart'; // Import the CircularImagePicker widget
+import 'package:jarvis/widgets/text_field.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
 import 'confirm_password.dart'; // Ensure the import is correct
