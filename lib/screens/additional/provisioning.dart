@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/Constants/colors.dart';
+import 'package:jarvis/constants/colors.dart';
 
 class ProvisioningScreen extends StatefulWidget {
   const ProvisioningScreen({super.key});
