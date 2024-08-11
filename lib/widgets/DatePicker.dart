@@ -18,30 +18,30 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
     final picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
-    if (pickedFile != null) {
-      File? croppedFile = await ImageCropper().cropImage(
-        sourcePath: pickedFile.path,
-        aspectRatioPresets: [
-          CropAspectRatioPreset.square,
-        ],
-        androidUiSettings: const AndroidUiSettings(
-          toolbarTitle: 'Crop Image',
-          toolbarColor: Colors.deepOrange,
-          toolbarWidgetColor: Colors.white,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: true,
-        ),
-        iosUiSettings: const IOSUiSettings(
-          minimumAspectRatio: 1.0,
-        ),
-      );
+    // if (pickedFile != null) {
+    //   File?? croppedFile = await ImageCropper().cropImage(
+    //     sourcePath: pickedFile.path,
+    //     aspectRatioPresets: [
+    //       CropAspectRatioPreset.square,
+    //     ],
+    //     androidUiSettings: const AndroidUiSettings(
+    //       toolbarTitle: 'Crop Image',
+    //       toolbarColor: Colors.deepOrange,
+    //       toolbarWidgetColor: Colors.white,
+    //       initAspectRatio: CropAspectRatioPreset.original,
+    //       lockAspectRatio: true,
+    //     ),
+    //     iosUiSettings: const IOSUiSettings(
+    //       minimumAspectRatio: 1.0,
+    //     ),
+    //   );
 
-      if (croppedFile != null) {
-        setState(() {
-          _image = croppedFile;
-        });
-      }
-    }
+    //   if (croppedFile != null) {
+    //     setState(() {
+    //       _image = croppedFile;
+    //     });
+    //   }
+    // }
   }
 
   @override

@@ -13,8 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-          const Color(0xFF161622), // Adjust this color to match your theme
+      backgroundColor: const Color(0xFF161622), // Adjust this color to match your theme
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -51,14 +50,12 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       Text(
                         "Session ID: $sessionId",
-                        style: const TextStyle(
-                            color: Colors.white70, fontSize: 18),
+                        style: const TextStyle(color: Colors.white70, fontSize: 18),
                       ),
                       const SizedBox(height: 10),
                       Text(
                         "User ID: $userId",
-                        style: const TextStyle(
-                            color: Colors.white70, fontSize: 14),
+                        style: const TextStyle(color: Colors.white70, fontSize: 14),
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 20),
