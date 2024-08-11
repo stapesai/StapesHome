@@ -68,10 +68,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 if (completeLoginResponse.statusCode == 200) {
                   var sessionResponseBody = json.decode(completeLoginResponse.body);
-                  print("SessionId:"+sessionResponseBody['session']['session_id']);
-                  print("Userid:"+sessionResponseBody['session']['user_id']);
-                  print( "CREATE AT: ${DateTime.parse(sessionResponseBody['session']['created_at'])}" );
-                  print("LaST TIME: ${DateTime.parse(sessionResponseBody['session']['last_active_at'])}");
+                  // print("SessionId:"+sessionResponseBody['session']['session_id']);
+                  // print("Userid:"+sessionResponseBody['session']['user_id']);
+                  // print( "CREATE AT: ${DateTime.parse(sessionResponseBody['session']['created_at'])}" );
+                  // print("LaST TIME: ${DateTime.parse(sessionResponseBody['session']['last_active_at'])}");
                   var sessionData = SessionsModel(
                     sessionId: sessionResponseBody['session']['session_id'],
                     userId: sessionResponseBody['session']['user_id'],

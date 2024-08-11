@@ -73,7 +73,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
               ],
             ),
             SizedBox(height: 30),
-            ...steps.map((step) => _buildStepIndicator(step)).toList(),
+            ...steps.map((step) => _buildStepIndicator(step)),
           ],
         ),
       ),

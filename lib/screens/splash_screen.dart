@@ -20,7 +20,7 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    await Hive.openBox<SessionsModel>('SessionBox'); // Open the Hive box
+    await Hive.openBox<SessionsModel>('SessionBox');
     var sessionBox = Hive.box<SessionsModel>('SessionBox');
     bool isLoggedIn = sessionBox.isNotEmpty;
 
@@ -40,8 +40,6 @@ class SplashScreenState extends State<SplashScreen> {
         );
       }
     }
-
-
   }
 
   @override

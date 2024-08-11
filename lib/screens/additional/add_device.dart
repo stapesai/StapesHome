@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/widgets/text_field.dart'; // Import the CustomTextField widget
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
+import 'package:jarvis/widgets/text_field.dart';
+import 'package:jarvis/widgets/button.dart';
 
 class AddNewDevice extends StatefulWidget {
   const AddNewDevice({super.key});

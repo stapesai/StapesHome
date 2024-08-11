@@ -23,7 +23,6 @@ class _QrScannerScreenState extends State<QrScannerScreen>
   late Animation<double> _fadeAnimation;
   late AnimationController _lottieController;
 
-
   Future<bool>? _connectionFuture;
 
   @override
@@ -172,8 +171,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        color: AppColor
-            .backgroundColor, // Ensure the background color matches your app theme
+        color: AppColor.backgroundColor,
         child: Column(
           children: [
             Expanded(
@@ -228,8 +226,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                   height: _isPanelVisible ? 300 : 60,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColor
-                        .backgroundColor, 
+                    color: AppColor.backgroundColor,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
