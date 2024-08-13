@@ -1,22 +1,53 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import "package:jarvis/widgets/button.dart";
 import 'package:http/http.dart' as http;
 import 'package:jarvis/cache/hive.dart'; // Import your Hive service
 import 'package:jarvis/cache/sessions_model.dart'; // Import your session model
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/main.dart';
 import 'package:jarvis/widgets/text_field.dart';
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
+// import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'error_screens/otp_verify_error.dart';
 import 'otp_verify.dart'; // Import the OTP Verification screen
-import 'email_signup.dart'; // Import the EmailSignUp screen
-import 'reset_password.dart';
+// import 'email_signup.dart'; // Import the EmailSignUp screen
+// import 'reset_password.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
 
   @override
   createState() => _LoginScreenState();
+}
+
+class WaveClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    var path = Path();
+    path.lineTo(0,
+        size.height * 0.1); // Start the curve at 30% of the container's height
+
+    // First curve
+    var firstControlPoint = Offset(size.width * 0.15, size.height * 0.01);
+    var firstEndPoint = Offset(size.width * 0.4, size.height * 0.1);
+    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+        firstEndPoint.dx, firstEndPoint.dy);
+
+    // Second curve
+    var secondControlPoint = Offset(size.width * 0.75, size.height * 0.2);
+    var secondEndPoint = Offset(size.width, size.height * 0.1);
+    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+        secondEndPoint.dx, secondEndPoint.dy);
+
+    path.lineTo(size.width, size.height);
+    path.lineTo(0, size.height);
+    path.close();
+
+    return path;
+  }
+
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }
 
 class _LoginScreenState extends State<LoginScreen> {
@@ -67,7 +98,8 @@ class _LoginScreenState extends State<LoginScreen> {
                 );
 
                 if (completeLoginResponse.statusCode == 200) {
-                  var sessionResponseBody = json.decode(completeLoginResponse.body);
+                  var sessionResponseBody =
+                      json.decode(completeLoginResponse.body);
                   // print("SessionId:"+sessionResponseBody['session']['session_id']);
                   // print("Userid:"+sessionResponseBody['session']['user_id']);
                   // print( "CREATE AT: ${DateTime.parse(sessionResponseBody['session']['created_at'])}" );
@@ -75,12 +107,13 @@ class _LoginScreenState extends State<LoginScreen> {
                   var sessionData = SessionsModel(
                     sessionId: sessionResponseBody['session']['session_id'],
                     userId: sessionResponseBody['session']['user_id'],
-                    createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
-                    lastActiveAt:
-                        DateTime.parse(sessionResponseBody['session']['last_active_at']),
+                    createdAt: DateTime.parse(
+                        sessionResponseBody['session']['created_at']),
+                    lastActiveAt: DateTime.parse(
+                        sessionResponseBody['session']['last_active_at']),
                   );
-                  
-                    await hiveService.addBoxes([sessionData], "SessionBox");
+
+                  await hiveService.addBoxes([sessionData], "SessionBox");
                   if (context.mounted) {
                     Navigator.pushReplacement(
                       context,
@@ -130,229 +163,241 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF161622), // Set your primary color here
-      body: _isLoading
-          ? const Center(
-        child: CircularProgressIndicator(), // Shows loading indicator
-      ):SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            // Top section with image and wave
+            Stack(
+              clipBehavior: Clip.none,
               children: [
-
-              Center(
-                child: Column(
-                  children: [
-                    const Image(image: AssetImage('assets/icons/logo.png') ,height:100,width: 100,),
-
-                      const SizedBox(height: 40.0),
-                      const Text(
-                        'Welcome to J.A.R.V.I.S',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.0,
-                            fontFamily: 'Malgun Gothic',
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.normal),
-                      ),
-                      const SizedBox(height: 40.0),
-                      CustomTextField(
-                        hintText: 'Email address',
-                        icon: Icons.email,
-                        controller: emailController,
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomTextField(
-                        hintText: 'Password',
-                        icon: Icons.lock,
-                        obscureText: true,
-                        controller: passwordController,
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomButton(
-                        text: 'Continue',
-                        onPressed: () => handleLogin(context),
-                      ),
-                      const SizedBox(height: 10.0),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EmailSignUp()),
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account?",
-                              style: TextStyle(color: Colors.white),
-                            ),
-                            SizedBox(width: 5.0),
-                            Text(
-                              'Sign up',
-                              style: TextStyle(color: AppColor.blueColor),
-                            ),
+                // Background image
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.4 - 1,
+                  decoration: BoxDecoration(
+                    image: DecorationImage(
+                      image: AssetImage(
+                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/images/login.png'),
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                // Wave clipper
+                Positioned(
+                  top: MediaQuery.of(context).size.height * 0.2 - 40,
+                  left: 0,
+                  right: 0,
+                  child: ClipPath(
+                    clipper: WaveClipper(),
+                    child: Container(
+                      height: MediaQuery.of(context).size.height,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: const [
+                            AppColor.primaryColor,
+                            AppColor.secondaryColor
                           ],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
                       ),
-                      const SizedBox(height: 10.0),
+                    ),
+                  ),
+                ),
+                // Top icons
+                Positioned(
+                  top: 40,
+                  left: 20,
+                  child: LogoutButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.all(25),
+              child: Column(
+                children: [
+                  CustomTextField(
+                      hintText: "Enter your email",
+                      controller: emailController,
+                      icon: Icons.email),
+                  const SizedBox(height: 20),
+                  CustomTextField(
+                      hintText: "Enter you password",
+                      obscureText: true,
+                      controller: passwordController,
+                      icon: Icons.lock),
+                  const SizedBox(height: 20),
+                  // Forgot password
+                  GestureDetector(
+                    onTap: () {
+                      // Navigator.push(
+                      //   context,
+                      //   MaterialPageRoute(
+                      //     builder: (context) => const ResetPasswordScreen(),
+                      //   ),
+                      // );
+                    },
+                    child: const Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Forgot Password?",
+                        style: TextStyle(
+                          color: AppColor.themecolor,
+                          fontSize: 15,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Login button
+                  const SizedBox(height: 20),
+                  CustomButton(
+                    text: "Login",
+                    onPressed: () {
+                      handleLogin(context);
+                    },
+                  ),
+                  const SizedBox(height: 20),
+                  // sign up
+                  GestureDetector(
+                      onTap: () {
+                        // Navigator.push(
+                        //   context,
+                        //   MaterialPageRoute(
+                        //     builder: (context) => const EmailSignUpScreen(),
+                        //   ),
+                        // );
+                      },
+                      child: const Align(
+                        alignment: Alignment.center,
+                        child: Text.rich(
+                          TextSpan(
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: "Don't have an account? ",
+                                style: TextStyle(
+                                  color: Colors.white, // First part color
+                                  fontSize: 15,
+                                ),
+                              ),
+                              TextSpan(
+                                text: "Sign up",
+                                style: TextStyle(
+                                  color: AppColor.themecolor, // Second part color
+                                  fontSize: 15,
+                                  fontWeight: FontWeight
+                                      .bold, // Optional, to make it stand out
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      )),
+                  // divider with or
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          height: 1,
+                          color: AppColor.primaryColorLight,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      const Text(
+                        "or",
+                        style: TextStyle(
+                          color: AppColor.primaryColorLight,
+                          fontSize: 15,
+                        ),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: Container(
+                          height: 1,
+                          color: AppColor.primaryColorLight,
+                        ),
+                      ),
+                    ],
+                  ),
+                  // sso's
+                  const SizedBox(height: 20),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      // Google
                       GestureDetector(
                         onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ResetPassword(
-                                      email: emailController.text,
-                                    )),
-                          );
+                          // handleGoogleLogin(context);
                         },
-                        child: const Text(
-                          'Forgot password?',
-                          style: TextStyle(color: AppColor.blueColor),
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 1,
-                            width: 100,
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
                             color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          const SizedBox(width: 10.0),
-                          const Text(
-                            'or',
-                            style: TextStyle(color: Colors.white),
+                          child: const Center(
+                            child: Image(
+                              image: AssetImage(
+                                  '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/google.png'),
+                              height: 30,
+                            ),
                           ),
-                          const SizedBox(width: 10.0),
-                          Container(
-                            height: 1,
-                            width: 100,
+                        ),
+                      ),
+                      const SizedBox(width: 20),
+                      // Facebook
+                      GestureDetector(
+                        onTap: () {
+                          // handleFacebookLogin(context);
+                        },
+                        child: Container(
+                          height: 50,
+                          width: 50,
+                          decoration: BoxDecoration(
                             color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print("continue with google");
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          padding: const EdgeInsets.all(10.0),
-                          width: 364,
-                          height: 71,
-                          decoration: BoxDecoration(
-                            color: AppColor.containerColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                                color: AppColor.primaryColor, width: 2.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/google.png',
-                                height: 30,
-                                width: 30,
-                              ),
-                              const SizedBox(width: 10.0),
-                              const Text(
-                                'Continue with google',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontFamily: 'Malgun Gothic',
-                                ),
-                              ),
-                            ],
+                          child: const Center(
+                            child: Image(
+                              image: AssetImage(
+                                  '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/microsoft.png'),
+                              height: 30,
+                            ),
                           ),
                         ),
                       ),
+                      const SizedBox(width: 20),
+                      // Facebook
                       GestureDetector(
                         onTap: () {
-                          print("continue with apple");
+                          // handleFacebookLogin(context);
                         },
                         child: Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          padding: const EdgeInsets.all(10.0),
-                          width: 364,
-                          height: 71,
+                          height: 50,
+                          width: 50,
                           decoration: BoxDecoration(
-                            color: AppColor.containerColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                                color: AppColor.primaryColor, width: 2.0),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/apple.png',
-                                height: 50,
-                                width: 50,
-                              ),
-                              const SizedBox(width: 10.0),
-                              const Text(
-                                'Continue with apple',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontFamily: 'Malgun Gothic',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print("continue with Microsoft");
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          padding: const EdgeInsets.all(10.0),
-                          width: 364,
-                          height: 71,
-                          decoration: BoxDecoration(
-                            color: AppColor.containerColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                                color: AppColor.primaryColor, width: 2.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/microsoft.png',
-                                height: 30,
-                                width: 30,
-                              ),
-                              const SizedBox(width: 10.0),
-                              const Text(
-                                'Continue with Microsoft',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontFamily: 'Malgun Gothic',
-                                ),
-                              ),
-                            ],
+                          child: const Center(
+                            child: Image(
+                              image: AssetImage(
+                                  '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/apple.png'),
+                              height: 30,
+                            ),
                           ),
                         ),
                       ),
                     ],
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
-          ),
+          ],
         ),
       ),
     );

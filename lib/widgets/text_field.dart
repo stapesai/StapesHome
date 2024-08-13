@@ -27,23 +27,23 @@ class _CustomTextFieldState extends State<CustomTextField> {
       decoration: InputDecoration(
         suffixIcon: Icon(
           widget.icon,
-          color: const Color(0xFFFF9F1C),
+          color: Color.fromARGB(132, 254, 252, 251),
         ),
         filled: true,
         fillColor: const Color(0xFF161622),
         labelText: widget.hintText,
-        labelStyle: const TextStyle(color: Color(0xFFFF9F1C)),
+        labelStyle: const TextStyle(color: Color.fromARGB(132, 254, 252, 251)),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
           borderSide: const BorderSide(
-            color: Color(0xFFFF9F1C),
+            color: Color.fromARGB(132, 254, 252, 251),
             width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
           borderSide: const BorderSide(
-            color: Color(0xFFFF9F1C),
+            color: Color.fromARGB(132, 254, 252, 251),
             width: 2.0,
           ),
         ),
