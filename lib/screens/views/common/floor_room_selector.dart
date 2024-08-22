@@ -1,9 +1,9 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/screens/views/common/create_floor_page.dart';
 import 'package:StapesHome/screens/views/common/create_room_page.dart';
 
@@ -16,14 +16,14 @@ class FloorRoomSelector extends StatefulWidget {
   final String activeFloorId;
 
   const FloorRoomSelector({
-    super.key,
+    Key? key,
     required this.context,
     required this.onFloorSelected,
     required this.onRoomSelected,
     required this.sessionId,
     required this.userId,
     required this.activeFloorId,
-  });
+  }) : super(key: key);
 
   @override
   createState() => _FloorRoomSelectorState();
@@ -31,8 +31,10 @@ class FloorRoomSelector extends StatefulWidget {
 
 class _FloorRoomSelectorState extends State<FloorRoomSelector> {
   int activeRoomIndex = -1;
-  List<Map<String, dynamic>> floors = [];
-  List<String> rooms = [];
+  List<Floor> floors = [];
+  List<Room> rooms = [];
+  bool isLoading = true;
+  String? errorMessage;
 
   @override
   void initState() {
@@ -40,7 +42,13 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     _fetchFloors();
   }
 
+  // Fetch floors from the API
   Future<void> _fetchFloors() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
     try {
       final response = await http.get(
         BackendRoutes.getFloors,
@@ -53,44 +61,39 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 
       if (response.statusCode == 200) {
         final List<dynamic> floorsData = json.decode(response.body);
-        if (mounted) {
-          setState(() {
-            floors = floorsData
-                .map((floor) => {
-                      'id': floor['id'],
-                      'label': floor['alias'] != null && floor['alias'].isNotEmpty
-                          ? floor['alias']
-                          : 'Floor ${floor['level']}'
-                    })
-                .toList();
-          });
-        }
+        floors = floorsData
+            .map((floor) => Floor(
+                  id: floor['id'],
+                  level: floor['level'],
+                  alias: floor['alias'],
+                ))
+            .toList();
 
         // Fetch rooms for the initially active floor
         if (floors.isNotEmpty) {
-          if (mounted) {
-            setActiveFloor(floors.first['id']);
-          }
+          setActiveFloor(floors.first.id);
         }
       } else {
-        // Handle error
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to load floors: ${response.statusCode}')),
-          );
-        }
+        throw Exception('Failed to load floors: ${response.statusCode}');
       }
     } catch (e) {
-      // Handle network errors or other exceptions
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error fetching floors: $e')),
-        );
-      }
+      setState(() {
+        errorMessage = 'Error fetching floors: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
+  // Fetch rooms for a specific floor
   Future<void> _fetchRooms(String floorId) async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
     try {
       final response = await http.get(
         BackendRoutes.getRoomsByFloorId(floorId),
@@ -103,71 +106,37 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 
       if (response.statusCode == 200) {
         final List<dynamic> roomsData = json.decode(response.body);
-        setState(() {
-          rooms = roomsData.map((room) => room['name'] as String).toList();
-        });
+        rooms = roomsData
+            .map((room) => Room(
+                  id: room['id'],
+                  floorId: room['floor_id'],
+                  name: room['name'],
+                  type: room['type'],
+                ))
+            .toList();
       } else {
-        // Handle error
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Failed to load rooms: ${response.statusCode}')),
-          );
-        }
+        throw Exception('Failed to load rooms: ${response.statusCode}');
       }
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error fetching rooms : $e')),
-        );
-      }
+      setState(() {
+        errorMessage = 'Error fetching rooms: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
-  Future<void> _deleteFloor(String floorId) async {
-    try {
-      final response = await http.delete(
-        BackendRoutes.deleteFloor(floorId),
-        headers: {
-          'accept': '*/*',
-          'X-User-Id': widget.userId,
-          'X-Session-Id': widget.sessionId,
-        },
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 204) {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Floor deleted successfully')),
-          );
-          _fetchFloors();
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to delete floor')),
-          );
-        }
-      }
-    } catch (e) {
-      // Handle network errors or other exceptions
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error deleting floor: $e')),
-        );
-      }
-    }
-  }
-
+  // Set the active floor and fetch its rooms
   void setActiveFloor(String floorId) {
-    setState(() {
-      widget.onFloorSelected(floorId);
-      widget.onRoomSelected(-1); // Reset active room when a new floor is selected
-      rooms = [];
-    });
-
+    widget.onFloorSelected(floorId);
+    widget.onRoomSelected(-1); // Reset active room when a new floor is selected
+    rooms = [];
     _fetchRooms(floorId);
   }
 
+  // Set the active room
   void setActiveRoom(int roomIndex) {
     setState(() {
       activeRoomIndex = roomIndex;
@@ -175,6 +144,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     widget.onRoomSelected(roomIndex);
   }
 
+  // Navigate to create room page
   void navigateToCreateRoom(BuildContext context) {
     if (widget.activeFloorId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -191,12 +161,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           floorId: widget.activeFloorId,
         ),
       ),
-    ).then((_) {
-      // Refresh rooms after navigating back
-      _fetchRooms(widget.activeFloorId);
-    });
+    ).then((_) => _fetchRooms(widget.activeFloorId));
   }
 
+  // Navigate to create floor page
   void navigateToCreateFloor(BuildContext context) {
     Navigator.push(
       context,
@@ -208,146 +176,133 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       ),
     ).then((result) {
       if (result == true) {
-        // Refresh floors after navigating back if a floor was added
         _fetchFloors();
       }
     });
   }
 
-  void showDeleteDialog(BuildContext context, String floorId) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Delete Floor"),
-          content: const Text("Are you sure you want to delete this floor?"),
-          actions: [
-            TextButton(
-              child: const Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: const Text("Delete"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                _deleteFloor(floorId);
-              },
-            ),
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _buildSectionHeader('Floors', () => navigateToCreateFloor(context)),
+            const SizedBox(height: 8),
+            _buildFloorList(constraints.maxWidth),
+            const SizedBox(height: 24),
+            _buildSectionHeader('Rooms', () => navigateToCreateRoom(context)),
+            const SizedBox(height: 8),
+            _buildRoomList(constraints.maxWidth),
           ],
         );
       },
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  Widget _buildSectionHeader(String title, VoidCallback onAddPressed) {
+    return Row(
       children: [
-        Row(
-          children: [
-            const Text(
-              'Floors',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-            const SizedBox(width: 8),
-            AddCircleButton(
-              onPressed: () => navigateToCreateFloor(context),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: floors.map((floor) {
-              return Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: GestureDetector(
-                  onLongPress: () => showDeleteDialog(context, floor['id']),
-                  child: FloorRoomButton(
-                    label: floor['label'],
-                    isActive: widget.activeFloorId == floor['id'],
-                    onTap: () => setActiveFloor(floor['id']),
-                  ),
-                ),
-              );
-            }).toList(),
+        Text(
+          title,
+          style: const TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+            fontFamily: 'Ubuntu',
           ),
         ),
-        const SizedBox(height: 24),
-        Row(
-          children: [
-            const Text(
-              'Rooms',
-              style: TextStyle(fontSize: 18, color: Colors.white),
-            ),
-            const SizedBox(width: 8),
-            AddCircleButton(
-              onPressed: () => navigateToCreateFloor(context),
-            ),
-          ],
-        ),
-        const SizedBox(height: 8),
-        SingleChildScrollView(
-          scrollDirection: Axis.horizontal,
-          child: Row(
-            children: rooms.asMap().entries.map((entry) {
-              int idx = entry.key;
-              String room = entry.value;
-              return Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: FloorRoomButton(
-                  label: room,
-                  isActive: activeRoomIndex == idx,
-                  onTap: () => setActiveRoom(idx),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
+        const SizedBox(width: 30),
+        PlusButton(onPressed: onAddPressed),
       ],
     );
   }
-}
 
-class AddCircleButton extends StatelessWidget {
-  final VoidCallback onPressed;
+  Widget _buildFloorList(double maxWidth) {
+    if (isLoading) {
+      return const CircularProgressIndicator();
+    }
+    if (errorMessage != null) {
+      return Text(errorMessage!, style: const TextStyle(color: Colors.red));
+    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: floors.map((floor) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: FloorRoomNameButton(
+              label: floor.alias,
+              isActive: widget.activeFloorId == floor.id,
+              onTap: () => setActiveFloor(floor.id),
+            ),
+          );
+        }).toList(),
+      ),
+    );
+  }
 
-  const AddCircleButton({super.key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        onPressed();
-      },
-      child: Container(
-        width: 18,
-        height: 18,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Color(0xFF3F3F63),
-        ),
-        child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
+  Widget _buildRoomList(double maxWidth) {
+    if (isLoading) {
+      return const CircularProgressIndicator();
+    }
+    if (errorMessage != null) {
+      return Text(errorMessage!, style: const TextStyle(color: Colors.red));
+    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: rooms.asMap().entries.map((entry) {
+          int idx = entry.key;
+          Room room = entry.value;
+          return Padding(
+            padding: const EdgeInsets.only(right: 15),
+            child: FloorRoomNameButton(
+              label: room.name,
+              isActive: activeRoomIndex == idx,
+              onTap: () => setActiveRoom(idx),
+            ),
+          );
+        }).toList(),
       ),
     );
   }
 }
 
-class FloorRoomButton extends StatelessWidget {
+class PlusButton extends StatelessWidget {
+  final VoidCallback onPressed;
+
+  const PlusButton({Key? key, required this.onPressed}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onPressed,
+      child: Container(
+        width: 20,
+        height: 20,
+        decoration: const BoxDecoration(
+          shape: BoxShape.circle,
+          color: Color(0xFF3E3E62),
+        ),
+        child: const Icon(Icons.add, color: Colors.white, size: 14),
+      ),
+    );
+  }
+}
+
+class FloorRoomNameButton extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
 
-  const FloorRoomButton({
-    super.key,
+  const FloorRoomNameButton({
+    Key? key,
     required this.label,
     required this.isActive,
     required this.onTap,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -358,7 +313,10 @@ class FloorRoomButton extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.grey,
+              color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
+              fontSize: 16,
+              fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.w700,
             ),
           ),
           if (isActive)
@@ -367,7 +325,7 @@ class FloorRoomButton extends StatelessWidget {
               height: 6,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: AppColor.whiteColor,
+                color: Colors.white,
               ),
             ),
         ],
