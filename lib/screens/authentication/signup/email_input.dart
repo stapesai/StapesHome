@@ -131,7 +131,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(height: screenSize.height * 0.05),
                         SizedBox(
                           width: double.infinity,
                           child: Text(

@@ -100,11 +100,6 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          appBar: AppBar(
-            title: const Text('Create a new room'),
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-          ),
           body: _isLoading
               ? const Center(
                   child: CircularProgressIndicator(
@@ -117,7 +112,7 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(height: screenSize.height * 0.05),
                         SizedBox(
                           child: Text(
                             'Create a new room',
@@ -145,13 +140,11 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                         NTextField(
                           hintText: 'Room Name',
                           controller: nameController,
-                          icon: Icons.room_rounded,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
                         NTextField(
                           hintText: 'Room type',
                           controller: typeController,
-                          icon: Icons.category_rounded,
                         ),
                         const Spacer(),
                         AnimatedContainer(

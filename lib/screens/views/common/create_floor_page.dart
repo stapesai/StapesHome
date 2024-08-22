@@ -109,7 +109,7 @@ class _CreateFloorPageState extends State<CreateFloorPage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(height: screenSize.height * 0.05),
                         Text(
                           'Create a new floor',
                           style: TextStyle(

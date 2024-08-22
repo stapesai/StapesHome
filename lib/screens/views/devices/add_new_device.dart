@@ -87,7 +87,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: screenSize.height * 0.08),
+                  SizedBox(height: screenSize.height * 0.05),
                   Text(
                     'Add a new device',
                     style: TextStyle(

@@ -118,7 +118,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(height: screenSize.height * 0.05),
                         SizedBox(
                           child: Text(
                             'Forgot Password',

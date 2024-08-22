@@ -164,7 +164,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: screenSize.height * 0.08),
+                            SizedBox(height: screenSize.height * 0.05),
                             SizedBox(
                               width: double.infinity,
                               child: Text(
