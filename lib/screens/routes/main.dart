@@ -37,8 +37,8 @@ class _MainScreenState extends State<MainScreen> {
         userId = session.userId;
         _screens = [
           HomeScreen(sessionId: sessionId, userId: userId),
-          DeviceScreen(sessionId: sessionId, userId: userId),
-          const NodesScreen(),
+          DevicesScreen(sessionId: sessionId, userId: userId),
+          NodesScreen(sessionId: sessionId, userId: userId),
           const ProfileScreen(),
         ];
       });
