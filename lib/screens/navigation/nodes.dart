@@ -37,7 +37,7 @@ class _NodesScreenState extends State<NodesScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          const Color(0xFF161622), // Adjust this color to match your theme
+       Colors.transparent, // Adjust this color to match your theme
 
       body: SafeArea(
         child: Padding(
@@ -111,8 +111,8 @@ class _NodesScreenState extends State<NodesScreen> {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   children: const [
-                    NodeButton(label: 'Node 1'),
-                    NodeButton(label: 'Node 2'),
+                    // NodeButton(label: 'Node 1'),
+                    // NodeButton(label: 'Node 2'),
                   ],
                 ),
               ),
@@ -257,7 +257,7 @@ class ScanNodeButton extends StatelessWidget {
         width: double.infinity,
         height: 70,
         decoration: BoxDecoration(
-          color: const Color(0xFF1C1C2B),
+          color: const Color(0xFF1D1D1D),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -271,11 +271,11 @@ class ScanNodeButton extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.qr_code_scanner, color: Colors.orange, size: 24),
+              Icon(Icons.qr_code_scanner, color: Colors.white, size: 24),
               SizedBox(height: 4),
               Text(
                 'Scan a new node',
-                style: TextStyle(color: Colors.orange, fontSize: 18),
+                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
               ),
             ],
           ),

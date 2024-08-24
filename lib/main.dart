@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
+import 'package:jarvis/constants/colors.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'cache/hive.dart';
 import 'cache/sessions_model.dart';
@@ -85,65 +86,82 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     if (_screens.isEmpty) {
-      return const Scaffold(
-        backgroundColor: Color(0xFF161622),
-        body: Center(
-          child: CircularProgressIndicator(
-            valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+      return Container(
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
           ),
         ),
       );
     }
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: _screens[_selectedIndex],
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              spreadRadius: 0,
-              blurRadius: 10,
-              offset: const Offset(0, -3),
-            ),
-          ],
-        ),
-        child: Ink(
-          child: BottomNavigationBar(
-            type: BottomNavigationBarType.fixed,
-            items: [
-              _buildBottomNavigationBarItem(
-                icon: Icons.add_home_work_rounded,
-                label: 'Home',
-                isActive: _selectedIndex == 0,
-              ),
-              _buildBottomNavigationBarItem(
-                icon: Icons.lightbulb_outline_rounded,
-                label: 'Devices',
-                isActive: _selectedIndex == 1,
-              ),
-              _buildBottomNavigationBarItem(
-                icon: Icons.memory_outlined,
-                label: 'Nodes',
-                isActive: _selectedIndex == 2,
-              ),
-              _buildBottomNavigationBarItem(
-                icon: Icons.settings,
-                label: 'Settings',
-                isActive: _selectedIndex == 3,
-              ),
-            ],
-            currentIndex: _selectedIndex,
-            selectedItemColor: Colors.amber[800],
-            backgroundColor: Colors.transparent,
-            unselectedItemColor: Colors.white,
-            onTap: _onItemTapped,
+    return Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
           ),
         ),
-      ),
-    );
+        child:  Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: _screens[_selectedIndex],
+          bottomNavigationBar: Container(
+          decoration: BoxDecoration(
+              color: Colors.transparent,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  spreadRadius: 0,
+                  blurRadius: 10,
+                  offset: const Offset(0, -3),
+                ),
+              ],
+            ),
+            child: Ink(
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                items: [
+                  _buildBottomNavigationBarItem(
+                    icon: Icons.add_home_work_rounded,
+                    label: 'Home',
+                    isActive: _selectedIndex == 0,
+                  ),
+                  _buildBottomNavigationBarItem(
+                    icon: Icons.lightbulb_outline_rounded,
+                    label: 'Devices',
+                    isActive: _selectedIndex == 1,
+                  ),
+                  _buildBottomNavigationBarItem(
+                    icon: Icons.memory_outlined,
+                    label: 'Nodes',
+                    isActive: _selectedIndex == 2,
+                  ),
+                  _buildBottomNavigationBarItem(
+                    icon: Icons.settings,
+                    label: 'Settings',
+                    isActive: _selectedIndex == 3,
+                  ),
+                ],
+                currentIndex: _selectedIndex,
+                selectedItemColor: Colors.amber[800],
+                backgroundColor: Colors.transparent,
+                unselectedItemColor: Colors.white,
+                onTap: _onItemTapped,
+              ),
+            ),
+          ),
+        ));
   }
 
   BottomNavigationBarItem _buildBottomNavigationBarItem({
@@ -177,12 +195,13 @@ class AnimatedBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AnimatedContainer(
+      
       duration: const Duration(milliseconds: 200),
       margin: const EdgeInsets.only(bottom: 2),
       height: 4,
       width: isActive ? 50 : 0,
       decoration: const BoxDecoration(
-        // color: AppColor.iconBarColor,
+        color: Colors.transparent,
         borderRadius: BorderRadius.all(Radius.circular(12)),
       ),
     );

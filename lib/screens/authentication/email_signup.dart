@@ -1,10 +1,11 @@
 import 'dart:convert';
+import 'package:jarvis/constants/colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/widgets/text_field.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-
+import 'package:jarvis/screens/authentication/reset_password.dart';
 import 'error_screens/otp_verify_error.dart';
 import 'otp_verify.dart'; // Import the OTP verification screen
 import 'success_screens/otp_verify_success.dart'; // Import the OTP success screen
@@ -16,96 +17,100 @@ class EmailSignUp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF161622),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 40.0),
-            const Text(
-              'Enter your email to send the verification code.',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 40.0),
-            CustomTextField(
-              hintText: 'Eg: abc@gmail.com',
-              icon: Icons.email,
-              controller: emailController,
-            ),
-            const SizedBox(height: 20.0),
-            CustomButton(
-              text: 'Continue',
-              onPressed: () async {
-                var url = Uri.https(
-                    'auth.jarvishome.in', '/auth/signup/request-signup');
-                var response = await http.post(
-                  url,
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'accept': 'application/json'
-                  },
-                  body: jsonEncode({
-                    'email': emailController.text,
-                  }),
-                );
-
-                var responseBody = json.decode(response.body);
-                if (response.statusCode == 200) {
-                  String transactionId = responseBody['transaction_id'];
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => OtpVerificationScreen(
-                          transactionId: transactionId,
-                          time: DateTime.parse(responseBody["otp_expires_at"]),
-                          onSuccess: () {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    OtpVerificationSuccessScreen(
-                                  transactionId: transactionId,
-                                ),
-                              ),
-                            );
-                          },
-                          onError: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    const OtpVerificationErrorScreen(),
-                              ),
-                            );
-                          },
-                        ),
-                      ),
-                    );
-                  }
-                  // tes
-                } else {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                      ),
-                    );
-                  }
-                }
-              },
-            ),
-          ],
+    return Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
         ),
-      ),
-    );
+        child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Container(
+                child: Stack(
+              children: [
+                Positioned(
+                    left: 10,
+                    top: 90,
+                    right: 0,
+                    child: Container(
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                              width: double.infinity,
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 1),
+                              child: Padding(
+                                padding: const EdgeInsets.all(10),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SizedBox(
+                                      width: double.infinity,
+                                      child: Text(
+                                        'Sign Up',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 44,
+                                          fontFamily: 'Ubuntu',
+                                          fontWeight: FontWeight.w700,
+                                          height: 0,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 10),
+                                    SizedBox(
+                                      width: 380,
+                                      child: Text(
+                                        'Please enter your personal details.',
+                                        style: TextStyle(
+                                          color: Colors.white,
+                                          fontSize: 20,
+                                          fontFamily: 'Ubuntu',
+                                          fontWeight: FontWeight.w400,
+                                          height: 0,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(height: 40),
+                                    CustomTextField(
+                                        hintText: 'First Name',
+                                        controller: emailController),
+                                    SizedBox(height: 20),
+                                    CustomTextField(
+                                        hintText: 'Last Name',
+                                        controller: emailController),
+                                    SizedBox(height: 20),
+                                    CustomTextField(
+                                        hintText: 'Date of Birth',
+                                        controller: emailController),
+                                    SizedBox(height: 20),
+                                    CustomTextField(
+                                        hintText: 'Gender',
+                                        controller: emailController),
+
+                                    SizedBox(height: 40),
+                                    CustomButton(text: "Next", onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ResetPassword(email: emailController.text,),
+                                        ),
+                                      );
+                                    }),
+                                  ],
+                                ),
+                              )),
+                        ],
+                      ),
+                    ))
+              ],
+            ))));
   }
 }

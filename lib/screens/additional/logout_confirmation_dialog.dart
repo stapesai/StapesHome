@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:jarvis/cache/hive.dart';
 import 'package:jarvis/cache/sessions_model.dart';
 import 'package:jarvis/screens/authentication/login.dart';
+import 'package:jarvis/constants/colors.dart';
+import "package:jarvis/widgets/button.dart";
 
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});
@@ -24,27 +26,67 @@ class LogoutConfirmationDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AlertDialog(
-      backgroundColor: const Color(0xFF161622),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      title:
-          const Text('Confirm Logout?', style: TextStyle(color: Colors.white)),
-      content: const Text(
-        'Are you sure you want to logout from Jarvis?',
-        style: TextStyle(color: Colors.white70),
+    return Dialog(
+      backgroundColor: Colors.transparent,
+      child: Container(
+        height: 285,
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+          shadows: [
+            BoxShadow(
+              color: Color(0x3F000000),
+              blurRadius: 7.50,
+              offset: Offset(0, 4),
+              spreadRadius: 13,
+            )
+          ],
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Confirm Logout?',
+                textAlign: TextAlign.start,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w700,
+                  height: 0,
+                ),
+              ),
+              SizedBox(height: 20),
+              Text(
+                "Are you sure you want to logout \nfrom Jarvis",
+                style: TextStyle(color: Colors.white),
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Column(
+                children: [
+                  CustomButton(
+                      text: "No, Take me back",
+                      onPressed: () {
+                        Navigator.pop(context);
+                      }),
+                  SizedBox(height: 10),
+                  CustomButton(
+                      text: "Yes,Log me out",
+                      onPressed: () {
+                        _logout(context);
+                      }),
+                ],
+              ),
+            ],
+          ),
+        ),
       ),
-      actions: [
-        TextButton(
-          onPressed: () => Navigator.of(context).pop(),
-          child: const Text('No, Take me back',
-              style: TextStyle(color: Colors.orange)),
-        ),
-        TextButton(
-          onPressed: () => _logout(context),
-          child: const Text('Yes, Log me out',
-              style: TextStyle(color: Colors.orange)),
-        ),
-      ],
     );
   }
 }

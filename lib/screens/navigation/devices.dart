@@ -76,7 +76,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor:
-          const Color(0xFF161622), // Adjust this color to match your theme
+          Colors.transparent, // Adjust this color to match your theme
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),

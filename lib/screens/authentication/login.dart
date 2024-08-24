@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:jarvis/screens/authentication/email_signup.dart';
 import 'package:flutter/material.dart';
 import "package:jarvis/widgets/button.dart";
 import 'package:http/http.dart' as http;
@@ -121,7 +122,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         builder: (context) => const MainScreen(),
                       ),
                     );
-                    
                   }
                 } else {
                   if (context.mounted) {
@@ -246,16 +246,20 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(
-                                  'Forgot Password?',
-                                  style: TextStyle(
-                                    color: Color(0xFF0084FF),
-                                    fontSize: 15,
-                                    fontFamily: 'Ubuntu',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0,
+                                
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text(
+                                    'Forgot Password?',
+                                    style: TextStyle(
+                                      color: Color(0xFF0084FF),
+                                      fontSize: 15,
+                                      fontFamily: 'Ubuntu',
+                                      fontWeight: FontWeight.w400,
+                                      height: 0,
+                                    ),
                                   ),
-                                ),
+                                )
                               ],
                             ),
                           ),
@@ -280,12 +284,12 @@ class _LoginScreenState extends State<LoginScreen> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(
-                                  //     builder: (context) => EmailSignUpScreen(),
-                                  //   ),
-                                  // );
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => EmailSignUp(),
+                                    ),
+                                  );
                                 },
                                 child: Text(
                                   'Sign Up',
