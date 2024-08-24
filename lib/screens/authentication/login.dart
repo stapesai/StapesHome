@@ -20,35 +20,35 @@ class LoginScreen extends StatefulWidget {
   createState() => _LoginScreenState();
 }
 
-class WaveClipper extends CustomClipper<Path> {
-  @override
-  Path getClip(Size size) {
-    var path = Path();
-    path.lineTo(0,
-        size.height * 0.1); // Start the curve at 30% of the container's height
+// class WaveClipper extends CustomClipper<Path> {
+//   @override
+//   Path getClip(Size size) {
+//     var path = Path();
+//     path.lineTo(0,
+//         size.height * 0.1); // Start the curve at 30% of the container's height
 
-    // First curve
-    var firstControlPoint = Offset(size.width * 0.15, size.height * 0.01);
-    var firstEndPoint = Offset(size.width * 0.4, size.height * 0.1);
-    path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
-        firstEndPoint.dx, firstEndPoint.dy);
+//     // First curve
+//     var firstControlPoint = Offset(size.width * 0.15, size.height * 0.01);
+//     var firstEndPoint = Offset(size.width * 0.4, size.height * 0.1);
+//     path.quadraticBezierTo(firstControlPoint.dx, firstControlPoint.dy,
+//         firstEndPoint.dx, firstEndPoint.dy);
 
-    // Second curve
-    var secondControlPoint = Offset(size.width * 0.75, size.height * 0.2);
-    var secondEndPoint = Offset(size.width, size.height * 0.1);
-    path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
-        secondEndPoint.dx, secondEndPoint.dy);
+//     // Second curve
+//     var secondControlPoint = Offset(size.width * 0.75, size.height * 0.2);
+//     var secondEndPoint = Offset(size.width, size.height * 0.1);
+//     path.quadraticBezierTo(secondControlPoint.dx, secondControlPoint.dy,
+//         secondEndPoint.dx, secondEndPoint.dy);
 
-    path.lineTo(size.width, size.height);
-    path.lineTo(0, size.height);
-    path.close();
+//     path.lineTo(size.width, size.height);
+//     path.lineTo(0, size.height);
+//     path.close();
 
-    return path;
-  }
+//     return path;
+//   }
 
-  @override
-  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
-}
+//   @override
+//   bool shouldReclip(CustomClipper<Path> oldClipper) => false;
+// }
 
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
@@ -121,6 +121,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         builder: (context) => const MainScreen(),
                       ),
                     );
+                    
                   }
                 } else {
                   if (context.mounted) {
@@ -162,244 +163,283 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            // Top section with image and wave
-            Stack(
-              clipBehavior: Clip.none,
+    return Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Container(
+            child: Stack(
               children: [
-                // Background image
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.4 - 1,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: AssetImage(
-                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/images/login.png'),
-                      fit: BoxFit.cover,
-                    ),
-                  ),
-                ),
-                // Wave clipper
                 Positioned(
-                  top: MediaQuery.of(context).size.height * 0.2 - 40,
-                  left: 0,
                   right: 0,
-                  child: ClipPath(
-                    clipper: WaveClipper(),
-                    child: Container(
-                      height: MediaQuery.of(context).size.height,
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: const [
-                            AppColor.primaryColor,
-                            AppColor.secondaryColor
-                          ],
-                          begin: Alignment.topCenter,
-                          end: Alignment.bottomCenter,
+                  left: 0,
+                  top: 117,
+                  child: Container(
+                    width: 430,
+                    height: 210,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          width: 267,
+                          height: 150,
+                          decoration: BoxDecoration(
+                            image: DecorationImage(
+                              image: NetworkImage(
+                                  "https://via.placeholder.com/267x150"),
+                              fit: BoxFit.fill,
+                            ),
+                          ),
                         ),
-                      ),
+                        Text(
+                          'stapes.ai',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 46,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w400,
+                            height: 0,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
-                // Top icons
                 Positioned(
-                  top: 40,
-                  left: 20,
-                  child: LogoutButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: EdgeInsets.all(25),
-              child: Column(
-                children: [
-                  CustomTextField(
-                      hintText: "Enter your email",
-                      controller: emailController,
-                      icon: Icons.email),
-                  const SizedBox(height: 20),
-                  CustomTextField(
-                      hintText: "Enter you password",
-                      obscureText: true,
-                      controller: passwordController,
-                      icon: Icons.lock),
-                  const SizedBox(height: 20),
-                  // Forgot password
-                  GestureDetector(
-                    onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => const ResetPasswordScreen(),
-                      //   ),
-                      // );
-                    },
-                    child: const Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        "Forgot Password?",
-                        style: TextStyle(
-                          color: AppColor.themecolor,
-                          fontSize: 15,
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  // Login button
-                  const SizedBox(height: 20),
-                  CustomButton(
-                    text: "Login",
-                    onPressed: () {
-                      handleLogin(context);
-                    },
-                  ),
-                  const SizedBox(height: 20),
-                  // sign up
-                  GestureDetector(
-                      onTap: () {
-                        // Navigator.push(
-                        //   context,
-                        //   MaterialPageRoute(
-                        //     builder: (context) => const EmailSignUpScreen(),
-                        //   ),
-                        // );
-                      },
-                      child: const Align(
-                        alignment: Alignment.center,
-                        child: Text.rich(
-                          TextSpan(
-                            children: <TextSpan>[
-                              TextSpan(
-                                text: "Don't have an account? ",
+                    right: 0,
+                    left: 0,
+                    top: 339,
+                    child: Container(
+                      padding: EdgeInsets.all(20),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          CustomTextField(
+                            hintText: 'Email',
+                            controller: emailController,
+                            icon: Icons.email_rounded,
+                          ),
+                          SizedBox(height: 20),
+                          CustomTextField(
+                              hintText: 'Password',
+                              controller: passwordController,
+                              icon: Icons.lock_rounded,
+                              obscureText: true),
+                          const SizedBox(height: 4),
+                          Container(
+                            width: double.infinity,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 10),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Forgot Password?',
+                                  style: TextStyle(
+                                    color: Color(0xFF0084FF),
+                                    fontSize: 15,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          CustomButton(
+                            text: 'Login',
+                            onPressed: () {
+                              handleLogin(context);
+                            },
+                          ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Don\'t have an account?',
                                 style: TextStyle(
-                                  color: Colors.white, // First part color
-                                  fontSize: 15,
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              TextSpan(
-                                text: "Sign up",
-                                style: TextStyle(
-                                  color: AppColor.themecolor, // Second part color
-                                  fontSize: 15,
-                                  fontWeight: FontWeight
-                                      .bold, // Optional, to make it stand out
+                              TextButton(
+                                onPressed: () {
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(
+                                  //     builder: (context) => EmailSignUpScreen(),
+                                  //   ),
+                                  // );
+                                },
+                                child: Text(
+                                  'Sign Up',
+                                  style: TextStyle(
+                                    color: AppColor.blueColor,
+                                    fontSize: 16,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w400,
+                                  ),
                                 ),
                               ),
                             ],
                           ),
-                        ),
-                      )),
-                  // divider with or
-                  Row(
-                    children: [
-                      Expanded(
-                        child: Container(
-                          height: 1,
-                          color: AppColor.primaryColorLight,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      const Text(
-                        "or",
-                        style: TextStyle(
-                          color: AppColor.primaryColorLight,
-                          fontSize: 15,
-                        ),
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Container(
-                          height: 1,
-                          color: AppColor.primaryColorLight,
-                        ),
-                      ),
-                    ],
-                  ),
-                  // sso's
-                  const SizedBox(height: 20),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      // Google
-                      GestureDetector(
-                        onTap: () {
-                          // handleGoogleLogin(context);
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Center(
-                            child: Image(
-                              image: AssetImage(
-                                  '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/google.png'),
-                              height: 30,
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 30),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Expanded(
+                                  child: Divider(
+                                    color: AppColor.DividerColor,
+                                    thickness: 1,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20),
+                                  child: Text(
+                                    'OR',
+                                    style: TextStyle(
+                                      color: AppColor.DividerColor,
+                                      fontSize: 16,
+                                      fontFamily: 'Ubuntu',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: Divider(
+                                    color: AppColor.DividerColor,
+                                    thickness: 1,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
-                        ),
+                          SizedBox(height: 10),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              // Google
+                              GestureDetector(
+                                onTap: () {
+                                  // handleGoogleLogin(context);
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFF34373F),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x26000000),
+                                        blurRadius: 5.40,
+                                        offset: Offset(1, 3),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
+                                  ),
+                                  child: const Center(
+                                    child: Image(
+                                      image: AssetImage(
+                                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/google.png'),
+                                      height: 30,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              // Facebook
+                              GestureDetector(
+                                onTap: () {
+                                  // handleFacebookLogin(context);
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFF34373F),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x26000000),
+                                        blurRadius: 5.40,
+                                        offset: Offset(1, 3),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
+                                  ),
+                                  child: const Center(
+                                    child: Image(
+                                      image: AssetImage(
+                                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/microsoft.png'),
+                                      height: 30,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 20),
+                              // Facebook
+                              GestureDetector(
+                                onTap: () {
+                                  // handleFacebookLogin(context);
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width: 50,
+                                  decoration: ShapeDecoration(
+                                    color: Color(0xFF34373F),
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(25),
+                                    ),
+                                    shadows: [
+                                      BoxShadow(
+                                        color: Color(0x26000000),
+                                        blurRadius: 5.40,
+                                        offset: Offset(1, 3),
+                                        spreadRadius: 0,
+                                      )
+                                    ],
+                                  ),
+                                  child: const Center(
+                                    child: Image(
+                                      image: AssetImage(
+                                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/apple.png'),
+                                      height: 30,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 20),
-                      // Facebook
-                      GestureDetector(
-                        onTap: () {
-                          // handleFacebookLogin(context);
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Center(
-                            child: Image(
-                              image: AssetImage(
-                                  '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/microsoft.png'),
-                              height: 30,
-                            ),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(width: 20),
-                      // Facebook
-                      GestureDetector(
-                        onTap: () {
-                          // handleFacebookLogin(context);
-                        },
-                        child: Container(
-                          height: 50,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                          child: const Center(
-                            child: Image(
-                              image: AssetImage(
-                                  '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/apple.png'),
-                              height: 30,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
+                    )),
+              ],
             ),
-          ],
-        ),
-      ),
-    );
+          ),
+        ));
   }
 }

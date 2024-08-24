@@ -11,7 +11,7 @@ class CustomButton extends StatelessWidget {
     super.key,
     required this.text,
     required this.onPressed,
-    this.backgroundColor = AppColor.themecolor,
+    this.backgroundColor = AppColor.iconBarColor,
     this.icon,
   });
 
@@ -35,7 +35,7 @@ class CustomButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
-            color: Colors.black,
+            color: Colors.white,
           ),
         ),
       ),

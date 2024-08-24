@@ -42,7 +42,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundColor,
+      // backgroundColor: AppColor.backgroundColor,
       body: SafeArea(
         child: Column(
           children: [

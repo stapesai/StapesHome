@@ -10,7 +10,7 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundColor,
+      // backgroundColor: AppColor.backgroundColor,
       // Adjust this color to match your theme
       body: SafeArea(
         child: SingleChildScrollView(
