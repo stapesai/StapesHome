@@ -42,17 +42,15 @@ class _EmailSignUpState extends State<EmailSignUp> {
 
       if (response.statusCode == 200) {
         String transactionId = responseBody['transaction_id'];
-        print('test trans_id' + transactionId);
         if (context.mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => OtpVerificationScreen(
                 transactionId: transactionId,
-                time: DateTime.parse(responseBody["otp_expires_at"]),
+                expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
                 onSuccess: () async {
                   if (context.mounted) {
-                    print('inside context' + transactionId);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -71,16 +69,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
                     );
                   } else {
                     print('context not mounted');
-                  }
-                },
-                onError: () {
-                  print('Error :  ${responseBody["detail"]} ');
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                      ),
-                    );
                   }
                 },
               ),

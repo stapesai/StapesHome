@@ -52,7 +52,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ))
                 : OtpVerificationScreen(
                     transactionId: transactionId,
-                    time: DateTime.parse(responseBody["otp_expires_at"]),
+                    expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
                     onSuccess: () async {
                       setState(() {
                         _isLoading = true;
@@ -97,16 +97,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         _isLoading = false;
                       });
                     },
-                    onError: () {
-                      print('Error :  ${responseBody["detail"]} ');
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                          ),
-                        );
-                      }
-                    },
                   ),
           ),
         );
@@ -128,7 +118,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    
+
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(

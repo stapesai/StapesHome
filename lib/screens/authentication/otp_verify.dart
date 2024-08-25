@@ -10,15 +10,13 @@ import "package:jarvis/widgets/button.dart";
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
   final VoidCallback onSuccess;
-  final VoidCallback onError;
-  final DateTime time;
+  final DateTime expiry_time;
 
   const OtpVerificationScreen({
     super.key,
     required this.transactionId,
     required this.onSuccess,
-    required this.onError,
-    required this.time,
+    required this.expiry_time,
   });
 
   @override
@@ -36,7 +34,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    _remainingSeconds = widget.time.difference(DateTime.now()).inSeconds;
+    _remainingSeconds = widget.expiry_time.difference(DateTime.now()).inSeconds;
     _startTimer();
   }
 
@@ -44,8 +42,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     setState(() {
       _isLoading = true;
     });
-  
-  String otp = _controllers.map((controller) => controller.text).join();
+
+    String otp = _controllers.map((controller) => controller.text).join();
     var response = await http.post(
       AuthRoutes.verifyOtp,
       headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
@@ -58,7 +56,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     if (response.statusCode == 200) {
       widget.onSuccess();
     } else {
-      widget.onError();
+      // Handle error
+      if (context.mounted) {
+        var responseBody = json.decode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
+          ),
+        );
+      }
     }
     setState(() {
       _isLoading = false;
