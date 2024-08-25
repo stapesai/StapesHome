@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/screens/authentication/signup/details_form.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
@@ -34,11 +35,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
     setState(() {
       _isLoading = true;
     });
-    var url = Uri.https('auth.jarvishome.in', '/check/password', {
-      'password': password,
-    });
     var response = await http.post(
-      url,
+      AuthRoutes.checkPassword(password),
       headers: {
         'accept': 'application/json',
       },
@@ -55,11 +53,10 @@ class _PasswordScreenState extends State<PasswordScreen> {
       }
     } else {
       var responseBody = json.decode(response.body);
-      String errorMessage = responseBody['detail'] ?? 'Unknown error occurred';
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error: $errorMessage'),
+            content: Text('Error: ${responseBody['detail']}'),
           ),
         );
       }

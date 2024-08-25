@@ -9,7 +9,7 @@ import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/utils/sessions_model.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/screens/authentication/forgot_password.dart';
-import 'package:jarvis/screens/authentication/otp_verify.dart';
+import 'package:jarvis/screens/authentication/common/otp_verify.dart';
 import 'package:jarvis/screens/authentication/signup/email_input.dart';
 
 class LoginScreen extends StatefulWidget {

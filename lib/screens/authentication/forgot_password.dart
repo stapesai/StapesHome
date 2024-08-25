@@ -6,8 +6,8 @@ import 'package:jarvis/screens/authentication/login.dart';
 import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/screens/authentication/password.dart';
-import 'package:jarvis/screens/authentication/otp_verify.dart';
+import 'package:jarvis/screens/authentication/common/password.dart';
+import 'package:jarvis/screens/authentication/common/otp_verify.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
