@@ -1,14 +1,11 @@
 import 'dart:convert';
-import 'package:jarvis/constants/colors.dart';
-
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:jarvis/widgets/button.dart'; 
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'package:jarvis/screens/authentication/password.dart';
-import 'error_screens/otp_verify_error.dart';
-import 'otp_verify.dart'; // Import the OTP verification screen
-import 'success_screens/otp_verify_success.dart'; // Import the OTP success screen
+import 'package:jarvis/screens/authentication/otp_verify.dart'; 
 
 class EmailSignUp extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
@@ -46,7 +43,7 @@ class EmailSignUp extends StatelessWidget {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ResetPassword(),
+                      builder: (context) => CreatePassword(),
                     ),
                   );
                 } else {
@@ -63,12 +60,14 @@ class EmailSignUp extends StatelessWidget {
               },
               onError: () {
                 print('Error :  ${responseBody["detail"]} ');
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OtpVerificationErrorScreen(),
-                  ),
-                );
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                    ),
+                  );
+                }
               },
             ),
           ),

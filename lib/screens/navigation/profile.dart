@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart'; // Ensure the correct import path
 import 'package:jarvis/screens/additional/edit_profile.dart'; // Ensure the correct import path
-import 'package:jarvis/screens/additional/logout_confirmation_dialog.dart';
+import 'package:jarvis/screens/additional/logout_dialog.dart';
 import 'package:jarvis/screens/additional/sessions_screen.dart';
 
 class ProfileScreen extends StatelessWidget {

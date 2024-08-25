@@ -1,15 +1,16 @@
 import 'dart:convert';
-import 'package:jarvis/screens/authentication/signup.dart';
+import 'package:jarvis/screens/authentication/password.dart';
+import 'package:jarvis/screens/authentication/signup_email.dart';
 import 'package:flutter/material.dart';
 import "package:jarvis/widgets/button.dart";
 import 'package:http/http.dart' as http;
 import 'package:jarvis/cache/hive.dart'; // Import your Hive service
 import 'package:jarvis/cache/sessions_model.dart'; // Import your session model
 import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/main.dart';
+import 'package:jarvis/screens/main.dart'; // Import the MainScreen
 import 'package:jarvis/widgets/input_fields.dart';
 // import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'error_screens/otp_verify_error.dart';
+
 import 'otp_verify.dart'; // Import the OTP Verification screen
 // import 'email_signup.dart'; // Import the EmailSignUp screen
 // import 'reset_password.dart';
@@ -101,10 +102,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 if (completeLoginResponse.statusCode == 200) {
                   var sessionResponseBody =
                       json.decode(completeLoginResponse.body);
-                  // print("SessionId:"+sessionResponseBody['session']['session_id']);
-                  // print("Userid:"+sessionResponseBody['session']['user_id']);
-                  // print( "CREATE AT: ${DateTime.parse(sessionResponseBody['session']['created_at'])}" );
-                  // print("LaST TIME: ${DateTime.parse(sessionResponseBody['session']['last_active_at'])}");
                   var sessionData = SessionsModel(
                     sessionId: sessionResponseBody['session']['session_id'],
                     userId: sessionResponseBody['session']['user_id'],
@@ -135,12 +132,15 @@ class _LoginScreenState extends State<LoginScreen> {
                 }
               },
               onError: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OtpVerificationErrorScreen(),
-                  ),
-                );
+                print('Error :  ${responseBody["detail"]} ');
+                if (context.mounted) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                          'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                    ),
+                  );
+                }
               },
             ),
           ),
@@ -247,7 +247,16 @@ class _LoginScreenState extends State<LoginScreen> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    if (context.mounted) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ResetPassword(),
+                                        ),
+                                      );
+                                    }
+                                  },
                                   child: Text(
                                     'Forgot Password?',
                                     style: TextStyle(

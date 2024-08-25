@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:jarvis/main.dart';
+import 'package:jarvis/screens/main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';

@@ -31,7 +31,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   late int _remainingSeconds;
   late Timer _timer;
-  bool _isResendEnabled = false;
+
 
   @override
   void initState() {
@@ -49,7 +49,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       } else {
         _timer.cancel();
         setState(() {
-          _isResendEnabled = true; // Enable resend button when timer expires
+          // Enable resend button when timer expires
         });
       }
     });
