@@ -1,14 +1,18 @@
+// Dart and Flutter imports
 import 'package:flutter/material.dart';
+
+// Third-party package imports
 import 'package:hive/hive.dart';
-import 'package:jarvis/constants/colors.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'cache/hive.dart';
-import 'cache/sessions_model.dart';
-import 'screens/navigation/devices.dart';
-import 'screens/navigation/home.dart';
-import 'screens/navigation/nodes.dart';
-import 'screens/navigation/profile.dart';
-import 'screens/splash_screen.dart';
+
+// Local imports
+import 'package:jarvis/cache/sessions_model.dart';
+import 'package:jarvis/constants/colors.dart';
+import 'package:jarvis/screens/navigation/devices.dart';
+import 'package:jarvis/screens/navigation/home.dart';
+import 'package:jarvis/screens/navigation/nodes.dart';
+import 'package:jarvis/screens/navigation/profile.dart';
+import 'package:jarvis/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
