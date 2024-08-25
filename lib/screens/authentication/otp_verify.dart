@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/constants/colors.dart';
 import "package:jarvis/widgets/button.dart";
@@ -29,22 +29,22 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
-  late int _remainingTime;
+  late int _remainingSeconds;
   late Timer _timer;
   bool _isResendEnabled = false;
 
   @override
   void initState() {
     super.initState();
-    _remainingTime = widget.time.difference(DateTime.now()).inSeconds;
+    _remainingSeconds = widget.time.difference(DateTime.now()).inSeconds;
     _startTimer();
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingTime > 0 && mounted) {
+      if (_remainingSeconds > 0 && mounted) {
         setState(() {
-          _remainingTime--;
+          _remainingSeconds--;
         });
       } else {
         _timer.cancel();
@@ -90,8 +90,35 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     }
   }
 
+  String _RemainingTime() {
+    int minutes = _remainingSeconds ~/ 60;
+    int seconds = _remainingSeconds % 60;
+
+    String minuteString = minutes > 0 ? '$minutes min' : '';
+    String secondString = seconds > 0 ? '$seconds sec' : '';
+    return '$minuteString $secondString';
+  }
+
   @override
   Widget build(BuildContext context) {
+    final defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      textStyle: TextStyle(
+          fontSize: 20,
+          color: AppColor.whiteColor,
+          fontWeight: FontWeight.w600),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(0.00, -1.00),
+          end: Alignment(0, 1),
+          colors: [Color(0xFF292B30), Color(0xFF26272C), Color(0xFF1A1B1E)],
+        ),
+      ),
+    );
+    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+      border: Border.all(color: Colors.white, width: 2),
+    );
     return Container(
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
@@ -105,13 +132,6 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             body: Container(
               child: Stack(
                 children: [
-                  Positioned(
-                      child: IconButton(
-                          color: AppColor.whiteColor,
-                          icon: Icon(Icons.arrow_back_ios),
-                          onPressed: () => Navigator.pop(context)),
-                      top: 50,
-                      left: 20),
                   Positioned(
                     top: 150,
                     left: 0,
@@ -152,66 +172,26 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           SizedBox(
                             height: 40,
                           ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              6,
-                              (index) => Container(
-                                width: 50,
-
-                                margin: EdgeInsets.only(
-                                    right: index < 6 ? 10 : 0), // Spacing
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment(0.00, -1.00),
-                                    end: Alignment(0, 1),
-                                    colors: [
-                                      Color(0xFF292B30),
-                                      Color(0xFF26272C),
-                                      Color(0xFF1A1B1E)
-                                    ],
-                                  ),
-                                ),
-                                child: TextField(
-                                  controller: _controllers[index],
-                                  focusNode: _focusNodes[index],
-                                  textAlign: TextAlign.center,
-                                  cursorColor: AppColor.whiteColor,
-                                  keyboardType: TextInputType.number,
-                                  maxLength: 1,
-                                  style: TextStyle(
-                                      color: AppColor.whiteColor, fontSize: 24),
-                                  decoration: InputDecoration(
-                                    counterText: '',
-                                    border: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColor.whiteColor),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColor.whiteColor),
-                                    ),
-                                    enabledBorder: UnderlineInputBorder(
-                                      borderSide: BorderSide(
-                                          color: AppColor.whiteColor),
-                                    ),
-                                  ),
-                                  onChanged: (value) {
-                                    if (value.length == 1 && index < 5) {
-                                      _focusNodes[index + 1].requestFocus();
-                                    }
-                                  },
-                                ),
-                              ),
-                            ),
+                          Pinput(
+                            length: 6,
+                            showCursor: false,
+                            defaultPinTheme: defaultPinTheme,
+                            focusedPinTheme: focusedPinTheme,
+                            focusNode: _focusNodes[0],
+                            controller: _controllers[0],
+                            onChanged: (String value) {
+                              if (value.length == 1) {
+                                _focusNodes[1].requestFocus();
+                              }
+                            },
                           ),
                           SizedBox(
                             height: 20,
                           ),
                           Text(
-                            'Your verification code will expire in $_remainingTime seconds',
+                            'Your verification code will expire in ${_RemainingTime()} ',
                             style: const TextStyle(
-                              color: Colors.white70,
+                              color: Colors.white,
                               fontSize: 16.0,
                             ),
                             textAlign: TextAlign.center,
@@ -219,7 +199,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                           SizedBox(
                             height: 250,
                           ),
-                          CustomButton(text: "NEXT", onPressed: verifyOtp)
+                          CustomButton(text: "Next", onPressed: verifyOtp)
                         ],
                       ),
                     ),

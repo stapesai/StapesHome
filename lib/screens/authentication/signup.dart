@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/widgets/text_field.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'package:jarvis/screens/authentication/reset_password.dart';
+import 'package:jarvis/screens/authentication/password.dart';
 import 'error_screens/otp_verify_error.dart';
 import 'otp_verify.dart'; // Import the OTP verification screen
 import 'success_screens/otp_verify_success.dart'; // Import the OTP success screen
@@ -14,6 +14,78 @@ class EmailSignUp extends StatelessWidget {
   final TextEditingController emailController = TextEditingController();
 
   EmailSignUp({super.key});
+
+  Future<void> handleSignup(BuildContext context) async {
+    // setState(() {
+    //   _isLoading = true; // Start loading indicator
+    // });
+    var url = Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
+    var response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'accept': 'application/json'
+      },
+      body: jsonEncode({
+        'email': emailController.text,
+      }),
+    );
+    var responseBody = json.decode(response.body);
+
+    if (response.statusCode == 200) {
+      String transactionId = responseBody['transaction_id'];
+      if (context.mounted) {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => OtpVerificationScreen(
+              transactionId: transactionId,
+              time: DateTime.parse(responseBody["otp_expires_at"]),
+              onSuccess: () async {
+                if (context.mounted) {
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ResetPassword(),
+                    ),
+                  );
+                } else {
+                  print('Error :  ${responseBody} ');
+                  if (context.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                      ),
+                    );
+                  }
+                }
+              },
+              onError: () {
+                print('Error :  ${responseBody["detail"]} ');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OtpVerificationErrorScreen(),
+                  ),
+                );
+              },
+            ),
+          ),
+        );
+      }
+    } else {
+      if (context.mounted) {
+        print('Error :  ${responseBody["detail"]} ');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+          ),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,7 +140,7 @@ class EmailSignUp extends StatelessWidget {
                                     SizedBox(
                                       width: 380,
                                       child: Text(
-                                        'Please enter your personal details.',
+                                        'Enter your email to receive verification code.',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 20,
@@ -80,30 +152,16 @@ class EmailSignUp extends StatelessWidget {
                                     ),
                                     SizedBox(height: 40),
                                     CustomTextField(
-                                        hintText: 'First Name',
-                                        controller: emailController),
-                                    SizedBox(height: 20),
-                                    CustomTextField(
-                                        hintText: 'Last Name',
-                                        controller: emailController),
-                                    SizedBox(height: 20),
-                                    CustomTextField(
-                                        hintText: 'Date of Birth',
-                                        controller: emailController),
-                                    SizedBox(height: 20),
-                                    CustomTextField(
-                                        hintText: 'Gender',
-                                        controller: emailController),
-
-                                    SizedBox(height: 40),
-                                    CustomButton(text: "Next", onPressed: () {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => ResetPassword(email: emailController.text,),
-                                        ),
-                                      );
-                                    }),
+                                      hintText: 'Enter your email',
+                                      controller: emailController,
+                                      icon: Icons.email_rounded,
+                                    ),
+                                    SizedBox(height: 330),
+                                    CustomButton(
+                                        text: "Send Code",
+                                        onPressed: () {
+                                          handleSignup(context);
+                                        }),
                                   ],
                                 ),
                               )),

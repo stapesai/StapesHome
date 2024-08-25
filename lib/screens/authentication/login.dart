@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:jarvis/screens/authentication/email_signup.dart';
+import 'package:jarvis/screens/authentication/signup.dart';
 import 'package:flutter/material.dart';
 import "package:jarvis/widgets/button.dart";
 import 'package:http/http.dart' as http;
@@ -181,8 +181,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   left: 0,
                   top: 117,
                   child: Container(
-                    width: 430,
-                    height: 210,
+                    width: double.infinity,
+                    height: MediaQuery.of(context).size.height * 0.3,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -234,7 +234,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           CustomTextField(
                               hintText: 'Password',
                               controller: passwordController,
-                              icon: Icons.lock_rounded,
+                              icon: Icons.remove_red_eye_rounded,
                               obscureText: true),
                           const SizedBox(height: 4),
                           Container(
@@ -246,7 +246,6 @@ class _LoginScreenState extends State<LoginScreen> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                
                                 TextButton(
                                   onPressed: () {},
                                   child: Text(
@@ -365,8 +364,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   child: const Center(
                                     child: Image(
-                                      image: AssetImage(
-                                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/google.png'),
+                                      image:
+                                          AssetImage('assets/icons/google.png'),
                                       height: 30,
                                     ),
                                   ),
@@ -398,7 +397,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   child: const Center(
                                     child: Image(
                                       image: AssetImage(
-                                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/microsoft.png'),
+                                          'assets/icons/microsoft.png'),
                                       height: 30,
                                     ),
                                   ),
@@ -429,8 +428,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                   child: const Center(
                                     child: Image(
-                                      image: AssetImage(
-                                          '/Users/swarnimburnwal/Desktop/JarvisHome-FrontEnd/assets/icons/apple.png'),
+                                      image:
+                                          AssetImage('assets/icons/apple.png'),
                                       height: 30,
                                     ),
                                   ),

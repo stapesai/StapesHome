@@ -23,6 +23,7 @@ class CustomButton extends StatelessWidget {
       // add icon if it is not null
       child: ElevatedButton(
         onPressed: onPressed,
+        
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
