@@ -31,7 +31,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
 
   late int _remainingSeconds;
   late Timer _timer;
-
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -69,6 +69,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   Future<void> verifyOtp() async {
+    setState(() {
+      _isLoading = true;
+    });
     String otp = _controllers.map((controller) => controller.text).join();
     var url = Uri.https('auth.jarvishome.in', '/auth/verify_otp');
     var response = await http.post(
@@ -88,6 +91,9 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     } else {
       widget.onError();
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   String _RemainingTime() {
@@ -127,85 +133,88 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
             borderRadius: BorderRadius.circular(30),
           ),
         ),
-        child: Scaffold(
-            backgroundColor: Colors.transparent, // Use your primary color here
-            body: Container(
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 150,
-                    left: 0,
-                    right: 0,
-                    child: Padding(
-                      padding: const EdgeInsets.all(10),
-                      child: Column(
-                        children: [
-                          SizedBox(
-                            width: 380,
-                            child: Text(
-                              'OTP Verification',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 44,
-                                fontFamily: 'Ubuntu',
-                                fontWeight: FontWeight.w700,
-                                height: 0,
+        child: _isLoading
+            ? const Center(child: CircularProgressIndicator(color: AppColor.whiteColor,))
+            : Scaffold(
+                backgroundColor:
+                    Colors.transparent, // Use your primary color here
+                body: Container(
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 150,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: 380,
+                                child: Text(
+                                  'OTP Verification',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 44,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          SizedBox(
-                            width: 380,
-                            child: Text(
-                              'Enter the verification code sent to your email address.',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                fontFamily: 'Ubuntu',
-                                fontWeight: FontWeight.w400,
-                                height: 0,
+                              SizedBox(
+                                height: 20,
                               ),
-                            ),
+                              SizedBox(
+                                width: 380,
+                                child: Text(
+                                  'Enter the verification code sent to your email address.',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 20,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Pinput(
+                                length: 6,
+                                showCursor: false,
+                                defaultPinTheme: defaultPinTheme,
+                                focusedPinTheme: focusedPinTheme,
+                                focusNode: _focusNodes[0],
+                                controller: _controllers[0],
+                                onChanged: (String value) {
+                                  if (value.length == 1) {
+                                    _focusNodes[1].requestFocus();
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'Your verification code will expire in ${_RemainingTime()} ',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16.0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 250,
+                              ),
+                              CustomButton(text: "Next", onPressed: verifyOtp)
+                            ],
                           ),
-                          SizedBox(
-                            height: 40,
-                          ),
-                          Pinput(
-                            length: 6,
-                            showCursor: false,
-                            defaultPinTheme: defaultPinTheme,
-                            focusedPinTheme: focusedPinTheme,
-                            focusNode: _focusNodes[0],
-                            controller: _controllers[0],
-                            onChanged: (String value) {
-                              if (value.length == 1) {
-                                _focusNodes[1].requestFocus();
-                              }
-                            },
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
-                          Text(
-                            'Your verification code will expire in ${_RemainingTime()} ',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16.0,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                          SizedBox(
-                            height: 250,
-                          ),
-                          CustomButton(text: "Next", onPressed: verifyOtp)
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            )));
+                        ),
+                      )
+                    ],
+                  ),
+                )));
   }
 }

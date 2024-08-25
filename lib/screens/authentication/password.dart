@@ -250,7 +250,7 @@ class ResetPassword extends StatelessWidget {
                                     SizedBox(
                                       width: double.infinity,
                                       child: Text(
-                                        'Forgot Password',
+                                        'Reset Password',
                                         style: TextStyle(
                                           color: Colors.white,
                                           fontSize: 44,

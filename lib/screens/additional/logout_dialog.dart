@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/cache/hive.dart';
-import 'package:jarvis/cache/sessions_model.dart';
 import 'package:jarvis/screens/authentication/login.dart';
 import 'package:jarvis/constants/colors.dart';
 import "package:jarvis/widgets/button.dart";
@@ -8,21 +7,25 @@ import "package:jarvis/widgets/button.dart";
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});
 
-  Future<void> _logout(BuildContext context) async {
-    final HiveService hiveService = HiveService();
-    var sessions = await hiveService.getBoxes<SessionsModel>("SessionBox");
+ Future<void> _logout(BuildContext context) async {
+  final HiveService hiveService = HiveService();
+  
+  // Clear the SessionBox
+  await hiveService.clearBox("SessionBox");
 
-    sessions.clear();
-    if (context.mounted) {
-      Navigator.pushAndRemoveUntil(
-        context,
-        MaterialPageRoute(
-          builder: (context) => LoginScreen(),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    }
+  // Optionally, close all boxes to ensure clean state
+  await hiveService.closeAllBoxes();
+
+  if (context.mounted) {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(
+        builder: (context) => LoginScreen(),
+      ),
+      (Route<dynamic> route) => false,
+    );
   }
+}
 
   @override
   Widget build(BuildContext context) {
