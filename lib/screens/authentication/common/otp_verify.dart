@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/api_routes.dart';
+import 'package:jarvis/constants/font_sizes.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/constants/colors.dart';
@@ -122,7 +123,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(fontSize: 20, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
+      textStyle: TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
       margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -168,7 +169,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 'OTP Verification',
                                 style: TextStyle(
                                   color: AppColor.whiteColor,
-                                  fontSize: 44,
+                                  fontSize: AppFontSizes.pageHeading,
                                   fontFamily: 'Ubuntu',
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -180,7 +181,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 'Enter the verification code sent to your email address.',
                                 style: TextStyle(
                                   color: AppColor.whiteColor,
-                                  fontSize: 20,
+                                  fontSize: AppFontSizes.pageSubHeading,
                                   fontFamily: 'Ubuntu',
                                   fontWeight: FontWeight.w400,
                                 ),

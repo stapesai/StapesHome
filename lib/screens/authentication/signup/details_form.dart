@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/font_sizes.dart';
 import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/utils/sessions_model.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
@@ -138,7 +139,7 @@ class _SignupFormState extends State<SignupForm> {
                             'Sign Up',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: screenSize.width * 0.1,
+                              fontSize: AppFontSizes.pageHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w700,
                             ),
@@ -151,7 +152,7 @@ class _SignupFormState extends State<SignupForm> {
                             'Please enter your personal details.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: screenSize.width * 0.04,
+                              fontSize: AppFontSizes.pageSubHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w400,
                             ),

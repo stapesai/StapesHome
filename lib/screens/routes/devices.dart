@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/screens/views/add_device.dart';
-import 'package:jarvis/screens/views/create_floor_page.dart'; // Import CreateFloorPage
+import 'package:jarvis/screens/views/create_floor_page.dart';
 import 'package:jarvis/screens/views/create_room_page.dart';
-import 'package:jarvis/screens/views/floor_room_selector.dart'; // Import the new component
+import 'package:jarvis/screens/views/floor_room_selector.dart';
 
 class DeviceScreen extends StatefulWidget {
   final String sessionId;

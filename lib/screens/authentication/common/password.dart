@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/constants/api_routes.dart';
+import 'package:jarvis/constants/font_sizes.dart';
 import 'package:jarvis/screens/authentication/signup/details_form.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
@@ -31,6 +32,8 @@ class PasswordScreen extends StatefulWidget {
 
 class _PasswordScreenState extends State<PasswordScreen> {
   bool _isLoading = false;
+  String? _errorMessage;
+
   Future<void> checkPassword(String password, BuildContext context, Widget nextScreen) async {
     setState(() {
       _isLoading = true;
@@ -66,117 +69,137 @@ class _PasswordScreenState extends State<PasswordScreen> {
     });
   }
 
+  void _showErrorMessage(String message) {
+    setState(() {
+      _errorMessage = message;
+    });
+    Future.delayed(const Duration(seconds: 3), () {
+      if (mounted) {
+        setState(() {
+          _errorMessage = null;
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: ShapeDecoration(
-        gradient: AppColor.backgroundColorgradient,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
         ),
-      ),
-      child: _isLoading
-          ? Center(child: CircularProgressIndicator(color: AppColor.whiteColor))
-          : Scaffold(
-              backgroundColor: Colors.transparent,
-              body: Container(
-                child: Stack(
-                  children: [
-                    Positioned(
-                      left: 10,
-                      top: 90,
-                      right: 0,
-                      child: Container(
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(color: AppColor.whiteColor),
+                )
+              : SafeArea(
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
                         child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Container(
+                            SizedBox(height: screenSize.height * 0.08),
+                            SizedBox(
                               width: double.infinity,
-                              padding: const EdgeInsets.symmetric(horizontal: 1),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        widget.title,
-                                        style: TextStyle(
-                                          color: AppColor.whiteColor,
-                                          fontSize: 44,
-                                          fontFamily: 'Ubuntu',
-                                          fontWeight: FontWeight.w700,
-                                          height: 0,
+                              child: Text(
+                                widget.title,
+                                style: const TextStyle(
+                                  color: AppColor.whiteColor,
+                                  fontSize: AppFontSizes.pageHeading,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            Text(
+                              widget.subtitle,
+                              style: const TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.pageSubHeading,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.04),
+                            PasswordTextField(
+                              hintText: 'Password',
+                              controller: widget.passWord,
+                              icon: Icons.remove_red_eye_outlined,
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            PasswordTextField(
+                              hintText: 'Confirm Password',
+                              controller: widget.confirmPassWord,
+                              icon: Icons.remove_red_eye_outlined,
+                            ),
+                            const Spacer(),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                              margin: EdgeInsets.only(
+                                bottom: keyboardHeight > 0
+                                    ? keyboardHeight + screenSize.height * 0.02
+                                    : screenSize.height * 0.1,
+                              ),
+                              child: Center(
+                                child: CustomButton(
+                                  text: "Continue",
+                                  onPressed: () {
+                                    if (widget.passWord.text == widget.confirmPassWord.text) {
+                                      checkPassword(
+                                        widget.passWord.text,
+                                        context,
+                                        SignupForm(
+                                          password: widget.passWord.text,
+                                          transaction_id: widget.transaction_id,
+                                          email: widget.email,
                                         ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    SizedBox(
-                                      width: 380,
-                                      child: Text(
-                                        widget.subtitle,
-                                        style: TextStyle(
-                                          color: AppColor.whiteColor,
-                                          fontSize: 20,
-                                          fontFamily: 'Ubuntu',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 20),
-                                    PasswordTextField(
-                                      hintText: 'Password',
-                                      controller: widget.passWord,
-                                      icon: Icons.remove_red_eye_outlined,
-                                    ),
-                                    SizedBox(height: 20),
-                                    PasswordTextField(
-                                      hintText: 'Confirm Password',
-                                      controller: widget.confirmPassWord,
-                                      icon: Icons.remove_red_eye_outlined,
-                                    ),
-                                    SizedBox(height: 330),
-                                    CustomButton(
-                                      text: "Continue",
-                                      onPressed: () {
-                                        if (widget.passWord.text == widget.confirmPassWord.text) {
-                                          checkPassword(
-                                              widget.passWord.text,
-                                              context,
-                                              SignupForm(
-                                                password: widget.passWord.text,
-                                                transaction_id: widget.transaction_id,
-                                                email: widget.email,
-                                              ));
-                                        } else {
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(
-                                              content: Text('Passwords do not match'),
-                                              backgroundColor: Colors.red,
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ],
+                                      );
+                                    } else {
+                                      _showErrorMessage('Passwords do not match');
+                                    }
+                                  },
                                 ),
                               ),
                             ),
                           ],
                         ),
                       ),
-                    ),
-                  ],
+                      if (_errorMessage != null)
+                        Positioned(
+                          left: 0,
+                          right: 0,
+                          bottom: keyboardHeight > 0 ? keyboardHeight : screenSize.height * 0.05,
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+                            color: Colors.red,
+                            child: Text(
+                              _errorMessage!,
+                              style: const TextStyle(color: Colors.white),
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
                 ),
-              ),
-            ),
+        ),
+      ),
     );
   }
 }

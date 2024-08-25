@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/api_routes.dart';
+import 'package:jarvis/constants/font_sizes.dart';
 import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
@@ -137,7 +138,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                             style: TextStyle(
                               color: AppColor.whiteColor,
                               // fontSize: screenSize.width * 0.1,
-                              fontSize: 44,
+                              fontSize: AppFontSizes.pageHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w700,
                             ),
@@ -149,8 +150,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                             'Enter your email to receive verification code.',
                             style: TextStyle(
                               color: AppColor.whiteColor,
-                              // fontSize: screenSize.width * 0.04,
-                              fontSize: 20,
+                              fontSize: AppFontSizes.pageSubHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w400,
                             ),
