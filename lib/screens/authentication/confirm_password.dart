@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/text_field.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/input_fields.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
 import 'success_screens/signup_success.dart'; // Import the next screen
@@ -54,13 +54,13 @@ class _ConfirmPasswordPageState extends State<ConfirmPasswordPage> {
             const SizedBox(height: 40.0),
             // Use CustomTextField
             const SizedBox(height: 20.0),
-            CustomTextField(
+            PasswordTextField(
               controller: passwordController,
               hintText: 'Password',
               obscureText: true,
             ), // Use CustomTextField
             const SizedBox(height: 20.0),
-            CustomTextField(
+            PasswordTextField(
               controller: confirmPasswordController,
               hintText: 'Confirm Password',
               obscureText: true,

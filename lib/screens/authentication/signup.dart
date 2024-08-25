@@ -3,7 +3,7 @@ import 'package:jarvis/constants/colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/text_field.dart';
+import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'package:jarvis/screens/authentication/password.dart';
 import 'error_screens/otp_verify_error.dart';
@@ -151,7 +151,7 @@ class EmailSignUp extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(height: 40),
-                                    CustomTextField(
+                                    NTextField(
                                       hintText: 'Enter your email',
                                       controller: emailController,
                                       icon: Icons.email_rounded,

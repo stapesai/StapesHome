@@ -7,7 +7,7 @@ import 'package:jarvis/cache/hive.dart'; // Import your Hive service
 import 'package:jarvis/cache/sessions_model.dart'; // Import your session model
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/main.dart';
-import 'package:jarvis/widgets/text_field.dart';
+import 'package:jarvis/widgets/input_fields.dart';
 // import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'error_screens/otp_verify_error.dart';
 import 'otp_verify.dart'; // Import the OTP Verification screen
@@ -225,17 +225,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          CustomTextField(
+                          NTextField(
                             hintText: 'Email',
                             controller: emailController,
                             icon: Icons.email_rounded,
                           ),
                           SizedBox(height: 20),
-                          CustomTextField(
-                              hintText: 'Password',
-                              controller: passwordController,
-                              icon: Icons.remove_red_eye_rounded,
-                              obscureText: true),
+                          PasswordTextField(
+                            hintText: 'Password',
+                            controller: passwordController,
+                            icon: Icons.remove_red_eye_rounded,
+                          ),
                           const SizedBox(height: 4),
                           Container(
                             width: double.infinity,

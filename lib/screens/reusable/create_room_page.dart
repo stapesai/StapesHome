@@ -2,7 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/text_field.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/input_fields.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
 class CreateRoomPage extends StatelessWidget {
@@ -74,12 +74,12 @@ class CreateRoomPage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            CustomTextField(
+            NTextField(
               hintText: 'Eg: Parent’s room',
               controller: nameController,
             ),
             const SizedBox(height: 16),
-            CustomTextField(
+            NTextField(
               hintText: 'Room type',
               controller: typeController,
             ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/widgets/text_field.dart';
+import 'package:jarvis/widgets/input_fields.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
@@ -80,7 +80,7 @@ class EditProfileScreen extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 8),
-        CustomTextField(
+        NTextField(
           hintText: label,
         ),
       ],

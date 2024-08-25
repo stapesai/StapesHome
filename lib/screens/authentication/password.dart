@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/screens/authentication/signup_form.dart';
-import 'package:jarvis/widgets/text_field.dart';
+import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'package:jarvis/constants/colors.dart';
 class ResetPassword extends StatelessWidget {
@@ -78,13 +78,13 @@ class ResetPassword extends StatelessWidget {
                                       ),
                                     ),
                                     SizedBox(height: 20),
-                                    CustomTextField(
+                                    PasswordTextField(
                                       hintText: 'Password',
                                       controller: passWord,
                                       icon: Icons.remove_red_eye_outlined,
                                     ),
                                     SizedBox(height: 20),
-                                    CustomTextField(
+                                    PasswordTextField(
                                       hintText: 'Confirm Password',
                                       controller: confirmPassWord,
                                       icon: Icons.remove_red_eye_outlined,

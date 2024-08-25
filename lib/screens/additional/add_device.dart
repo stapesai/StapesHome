@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/widgets/text_field.dart';
+import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart';
 
 class AddNewDevice extends StatefulWidget {
@@ -47,11 +47,11 @@ class _AddNewDeviceState extends State<AddNewDevice> {
               ],
             ),
             const SizedBox(height: 32),
-            const CustomTextField(
+            const NTextField(
               hintText: 'Name',
             ),
             const SizedBox(height: 16),
-            const CustomTextField(
+            const NTextField(
               hintText: 'Channel Id',
             ),
             const SizedBox(height: 16),

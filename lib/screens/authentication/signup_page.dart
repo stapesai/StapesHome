@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/widgets/circular_image_picker.dart'; // Import the CircularImagePicker widget
-import 'package:jarvis/widgets/text_field.dart'; // Import the CustomTextField widget
+import 'package:jarvis/widgets/input_fields.dart'; // Import the CustomTextField widget
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 
 import 'confirm_password.dart'; // Ensure the import is correct
@@ -56,12 +56,12 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
             const SizedBox(height: 40.0),
-            CustomTextField(
+            NTextField(
               hintText: 'First Name',
               controller: firstNameController,
             ), // Use CustomTextField
             const SizedBox(height: 20.0),
-            CustomTextField(
+            NTextField(
               hintText: 'Last Name',
               controller: lastNameController,
             ), // Use CustomTextField
@@ -70,7 +70,7 @@ class _SignUpPageState extends State<SignUpPage> {
               onTap: () =>
                   _selectDate(context), // Show the date picker when tapped
               child: AbsorbPointer(
-                child: CustomTextField(
+                child: NTextField(
                   hintText: _selectedDate == null
                       ? 'Date of Birth'
                       : '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}',
