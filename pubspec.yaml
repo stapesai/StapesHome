@@ -32,10 +32,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
   assets:
-
-    - assets/icons/
-    - assets/fonts/
-    - assets/lottie/
+    - assets/
   fonts:
     - family: Malgun Gothic
       fonts:
