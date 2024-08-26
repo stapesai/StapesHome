@@ -20,8 +20,8 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   final HiveService hiveService = HiveService();
   bool _isLoading = false;
 
@@ -128,296 +128,215 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
-        child: Scaffold(
-          backgroundColor: Colors.transparent,
-          body: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(
-                  color: AppColor.whiteColor,
-                ))
-              : Container(
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        right: 0,
-                        left: 0,
-                        top: 117,
-                        child: Container(
-                          width: double.infinity,
-                          height: MediaQuery.of(context).size.height * 0.3,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: 267,
-                                height: 150,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    image: NetworkImage("https://via.placeholder.com/267x150"),
-                                    fit: BoxFit.fill,
-                                  ),
-                                ),
+      decoration: BoxDecoration(
+        gradient: AppColor.backgroundColorgradient,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator(color: AppColor.whiteColor))
+            : SafeArea(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                          child: IntrinsicHeight(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: constraints.maxHeight * 0.1),
+                                  _buildLogo(),
+                                  SizedBox(height: constraints.maxHeight * 0.05),
+                                  _buildLoginForm(),
+                                  Spacer(),
+                                  _buildSocialLogin(),
+                                  SizedBox(height: 20),
+                                ],
                               ),
-                              Text(
-                                'stapes.ai',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  color: AppColor.whiteColor,
-                                  fontSize: 46,
-                                  fontFamily: 'Ubuntu',
-                                  fontWeight: FontWeight.w400,
-                                  height: 0,
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
-                      Positioned(
-                          right: 0,
-                          left: 0,
-                          top: 339,
-                          child: Container(
-                            padding: EdgeInsets.all(20),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                NTextField(
-                                  hintText: 'Email',
-                                  controller: emailController,
-                                  icon: Icons.email_rounded,
-                                ),
-                                SizedBox(height: 20),
-                                PasswordTextField(
-                                  hintText: 'Password',
-                                  controller: passwordController,
-                                  icon: Icons.remove_red_eye_rounded,
-                                ),
-                                const SizedBox(height: 4),
-                                Container(
-                                  width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      TextButton(
-                                        onPressed: () {
-                                          if (context.mounted) {
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) => _isLoading
-                                                    ? Center(child: CircularProgressIndicator())
-                                                    : ForgotPassword(),
-                                              ),
-                                            );
-                                          }
-                                        },
-                                        child: Text(
-                                          'Forgot Password?',
-                                          style: TextStyle(
-                                            color: AppColor.textHyperlinkColor,
-                                            fontSize: 15,
-                                            fontFamily: 'Ubuntu',
-                                            fontWeight: FontWeight.w400,
-                                            height: 0,
-                                          ),
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                ),
-                                CustomButton(
-                                  text: 'Log In',
-                                  onPressed: () {
-                                    handleLogin(context);
-                                  },
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      'Don\'t have an account?',
-                                      style: TextStyle(
-                                        color: AppColor.whiteColor,
-                                        fontSize: 16,
-                                        fontFamily: 'Ubuntu',
-                                        fontWeight: FontWeight.w400,
-                                      ),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                _isLoading ? Center(child: CircularProgressIndicator()) : EmailSignUp(),
-                                          ),
-                                        );
-                                      },
-                                      child: Text(
-                                        'Sign Up',
-                                        style: TextStyle(
-                                          color: AppColor.textHyperlinkColor,
-                                          fontSize: 16,
-                                          fontFamily: 'Ubuntu',
-                                          fontWeight: FontWeight.w400,
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.symmetric(horizontal: 30),
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Divider(
-                                          color: AppColor.whiteColor50,
-                                          thickness: 1,
-                                        ),
-                                      ),
-                                      Padding(
-                                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                                        child: Text(
-                                          'or continue with',
-                                          style: TextStyle(
-                                            color: AppColor.whiteColor50,
-                                            fontSize: 16,
-                                            fontFamily: 'Ubuntu',
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                      Expanded(
-                                        child: Divider(
-                                          color: AppColor.whiteColor50,
-                                          thickness: 1,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                SizedBox(height: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    // Google
-                                    GestureDetector(
-                                      onTap: () {
-                                        // handleGoogleLogin(context);
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: ShapeDecoration(
-                                          color: Color(0xFF34373F),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(25),
-                                          ),
-                                          shadows: [
-                                            BoxShadow(
-                                              color: Color(0x26000000),
-                                              blurRadius: 5.40,
-                                              offset: Offset(1, 3),
-                                              spreadRadius: 0,
-                                            )
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Image(
-                                            image: AssetImage('assets/icons/sso/google.png'),
-                                            height: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 20),
-                                    // Facebook
-                                    GestureDetector(
-                                      onTap: () {
-                                        // handleFacebookLogin(context);
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: ShapeDecoration(
-                                          color: Color(0xFF34373F),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(25),
-                                          ),
-                                          shadows: [
-                                            BoxShadow(
-                                              color: Color(0x26000000),
-                                              blurRadius: 5.40,
-                                              offset: Offset(1, 3),
-                                              spreadRadius: 0,
-                                            )
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Image(
-                                            image: AssetImage('assets/icons/sso/microsoft.png'),
-                                            height: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                    const SizedBox(width: 20),
-                                    // Facebook
-                                    GestureDetector(
-                                      onTap: () {
-                                        // handleFacebookLogin(context);
-                                      },
-                                      child: Container(
-                                        height: 50,
-                                        width: 50,
-                                        decoration: ShapeDecoration(
-                                          color: Color(0xFF34373F),
-                                          shape: RoundedRectangleBorder(
-                                            borderRadius: BorderRadius.circular(25),
-                                          ),
-                                          shadows: [
-                                            BoxShadow(
-                                              color: Color(0x26000000),
-                                              blurRadius: 5.40,
-                                              offset: Offset(1, 3),
-                                              spreadRadius: 0,
-                                            )
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Image(
-                                            image: AssetImage('assets/icons/sso/apple.png'),
-                                            height: 30,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          )),
-                    ],
+                      );
+                    },
                   ),
                 ),
-        ));
+              ),
+      ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Column(
+      children: [
+        Container(
+          width: 180,
+          height: 90,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/icons/logo.png'),
+              fit: BoxFit.contain,
+            ),
+          ),
+        ),
+        Text(
+          'stapes.ai',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: AppColor.whiteColor,
+            fontSize: 46,
+            fontFamily: 'Ubuntu',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return Column(
+      children: [
+        NTextField(
+          hintText: 'Email',
+          controller: emailController,
+          icon: Icons.email_rounded,
+        ),
+        SizedBox(height: 20),
+        PasswordTextField(
+          hintText: 'Password',
+          controller: passwordController,
+          icon: Icons.remove_red_eye_rounded,
+        ),
+        // SizedBox(height: 5),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ForgotPassword()),
+              );
+            },
+            child: Text(
+              'Forgot Password?',
+              style: TextStyle(
+                color: AppColor.textHyperlinkColor,
+                fontSize: 15,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 20),
+        CustomButton(
+          text: 'Log In',
+          onPressed: () => handleLogin(context),
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Don\'t have an account?',
+              style: TextStyle(
+                color: AppColor.whiteColor,
+                fontSize: 16,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EmailSignUp()),
+                );
+              },
+              child: Text(
+                'Sign Up',
+                style: TextStyle(
+                  color: AppColor.textHyperlinkColor,
+                  fontSize: 16,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialLogin() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            children: [
+              Expanded(child: Divider(color: AppColor.whiteColor50, thickness: 1)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'or continue with',
+                  style: TextStyle(
+                    color: AppColor.whiteColor50,
+                    fontSize: 16,
+                    fontFamily: 'Ubuntu',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              Expanded(child: Divider(color: AppColor.whiteColor50, thickness: 1)),
+            ],
+          ),
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSocialButton('assets/icons/sso/google.png', () {}),
+            SizedBox(width: 20),
+            _buildSocialButton('assets/icons/sso/microsoft.png', () {}),
+            SizedBox(width: 20),
+            _buildSocialButton('assets/icons/sso/apple.png', () {}),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialButton(String asset, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        width: 50,
+        decoration: ShapeDecoration(
+          color: Color(0xFF34373F),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          shadows: [
+            BoxShadow(
+              color: Color(0x26000000),
+              blurRadius: 5.40,
+              offset: Offset(1, 3),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: Center(
+          child: Image(
+            image: AssetImage(asset),
+            height: 30,
+          ),
+        ),
+      ),
+    );
   }
 }
