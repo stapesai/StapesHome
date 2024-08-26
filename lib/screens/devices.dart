@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -119,7 +120,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
       bottomNavigationBar: BottomNavigationBar(
         backgroundColor: const Color(0xFF1C1C2B),
         selectedItemColor: Colors.orange,
-        unselectedItemColor: Colors.white,
+        unselectedItemColor: AppColor.whiteColor,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
           BottomNavigationBarItem(icon: Icon(Icons.lightbulb_outline), label: 'Devices'),
@@ -144,7 +145,7 @@ class AddCircleButton extends StatelessWidget {
         shape: BoxShape.circle,
         color: Color(0xFF3F3F63),
       ),
-      child: const Icon(Icons.add, color: Colors.white, size: 14),
+      child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
     );
   }
 }
@@ -175,7 +176,7 @@ class FloorRoomButton extends StatelessWidget {
                 height: 6,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                 ),
               ),
           ],
@@ -248,7 +249,7 @@ class _DeviceButtonState extends State<DeviceButton> {
               child: const Center(
                 child: Icon(
                   Icons.lightbulb_outline,
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                   size: 30,
                 ),
               ),

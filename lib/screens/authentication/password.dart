@@ -25,8 +25,7 @@ class PasswordScreen extends StatefulWidget {
 
 class _PasswordScreenState extends State<PasswordScreen> {
   bool _isLoading = false;
-  Future<void> checkPassword(
-      String password, BuildContext context, Widget nextScreen) async {
+  Future<void> checkPassword(String password, BuildContext context, Widget nextScreen) async {
     setState(() {
       _isLoading = true;
     });
@@ -76,9 +75,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
         ),
       ),
       child: _isLoading
-          ? Center(child: CircularProgressIndicator(
-            color: AppColor.whiteColor
-          ))
+          ? Center(child: CircularProgressIndicator(color: AppColor.whiteColor))
           : Scaffold(
               backgroundColor: Colors.transparent,
               body: Container(
@@ -109,7 +106,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                       child: Text(
                                         widget.title,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColor.whiteColor,
                                           fontSize: 44,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w700,
@@ -123,7 +120,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                       child: Text(
                                         widget.subtitle,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColor.whiteColor,
                                           fontSize: 20,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w400,
@@ -147,10 +144,8 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                     CustomButton(
                                       text: "Continue",
                                       onPressed: () {
-                                        if (widget.passWord.text ==
-                                            widget.confirmPassWord.text) {
-                                          checkPassword(widget.passWord.text,
-                                              context, widget.nextScreen);
+                                        if (widget.passWord.text == widget.confirmPassWord.text) {
+                                          checkPassword(widget.passWord.text, context, widget.nextScreen);
                                         } else {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(

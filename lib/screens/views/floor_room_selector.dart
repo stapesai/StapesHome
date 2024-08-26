@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/screens/views/create_floor_page.dart'; // Import CreateFloorPage
 import 'package:jarvis/screens/views/create_room_page.dart'; // Import CreateRoomPage
 
@@ -334,7 +335,7 @@ class AddCircleButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: Color(0xFF3F3F63),
         ),
-        child: const Icon(Icons.add, color: Colors.white, size: 14),
+        child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
       ),
     );
   }
@@ -370,7 +371,7 @@ class FloorRoomButton extends StatelessWidget {
               height: 6,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                color: AppColor.whiteColor,
               ),
             ),
         ],

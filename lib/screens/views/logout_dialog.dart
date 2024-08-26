@@ -57,7 +57,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
                 'Confirm Logout?',
                 textAlign: TextAlign.start,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                   fontSize: 24,
                   fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.w700,

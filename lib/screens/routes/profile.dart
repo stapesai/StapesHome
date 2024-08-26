@@ -34,7 +34,7 @@ class ProfileScreen extends StatelessWidget {
                   const Text(
                     'John Doe',
                     style: TextStyle(
-                      color: Colors.white,
+                      color: AppColor.whiteColor,
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
@@ -163,17 +163,17 @@ class ProfileOption extends StatelessWidget {
               children: [
                 Icon(
                   icon,
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                   size: 40,
                 ),
                 const SizedBox(width: 16),
                 Text(
                   text,
-                  style: const TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Malgun Gothic'),
+                  style: const TextStyle(color: AppColor.whiteColor, fontSize: 20, fontFamily: 'Malgun Gothic'),
                 ),
               ],
             ),
-            trailing ?? const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
+            trailing ?? const Icon(Icons.arrow_forward_ios, color: AppColor.whiteColor, size: 16),
           ],
         ),
       ),

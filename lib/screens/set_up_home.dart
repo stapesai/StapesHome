@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +52,7 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColor.whiteColor,
                     ),
                   ),
                 ],
@@ -151,14 +152,14 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                     Text(
                       'Create',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColor.whiteColor,
                         fontSize: 18,
                       ),
                     ),
                     SizedBox(width: 8),
                     Icon(
                       Icons.arrow_right_alt,
-                      color: Colors.white,
+                      color: AppColor.whiteColor,
                     ),
                   ],
                 ),

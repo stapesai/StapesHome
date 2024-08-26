@@ -94,7 +94,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.white,
+          color: AppColor.whiteColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -148,7 +148,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
           Text(
             isSuccess ? 'Connection Successful!' : 'Connection Failed!',
             style: TextStyle(
-              color: Colors.white,
+              color: AppColor.whiteColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),

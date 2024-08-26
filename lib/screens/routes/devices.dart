@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/screens/views/add_device.dart';
 import 'package:jarvis/screens/views/create_floor_page.dart'; // Import CreateFloorPage
@@ -185,7 +186,7 @@ class _DeviceButtonState extends State<DeviceButton> {
               child: const Center(
                 child: Icon(
                   Icons.lightbulb_outline,
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                   size: 30,
                 ),
               ),

@@ -116,7 +116,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       ),
     );
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: Colors.white, width: 2),
+      border: Border.all(color: AppColor.whiteColor, width: 2),
     );
     return Container(
         clipBehavior: Clip.antiAlias,
@@ -149,7 +149,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 child: Text(
                                   'OTP Verification',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColor.whiteColor,
                                     fontSize: 44,
                                     fontFamily: 'Ubuntu',
                                     fontWeight: FontWeight.w700,
@@ -165,7 +165,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 child: Text(
                                   'Enter the verification code sent to your email address.',
                                   style: TextStyle(
-                                    color: Colors.white,
+                                    color: AppColor.whiteColor,
                                     fontSize: 20,
                                     fontFamily: 'Ubuntu',
                                     fontWeight: FontWeight.w400,
@@ -195,7 +195,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                               Text(
                                 'Your verification code will expire in ${_RemainingTime()} ',
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppColor.whiteColor,
                                   fontSize: 16.0,
                                 ),
                                 textAlign: TextAlign.center,

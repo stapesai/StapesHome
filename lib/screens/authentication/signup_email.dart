@@ -23,13 +23,10 @@ class _EmailSignUpState extends State<EmailSignUp> {
     setState(() {
       _isLoading = true;
     });
-    
+
     var check_email_response = await http.post(
       AuthRoutes.checkEmail,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'email': emailController.text,
       }),
@@ -39,10 +36,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
     if (check_email_response.statusCode == 200) {
       var response = await http.post(
         AuthRoutes.requestSignup,
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        },
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: jsonEncode({
           'email': emailController.text,
         }),
@@ -65,8 +59,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                       MaterialPageRoute(
                         builder: (context) => PasswordScreen(
                           title: 'Create Password',
-                          subtitle:
-                              'Lets create a password to secure your account.',
+                          subtitle: 'Lets create a password to secure your account.',
                           nextScreen: SignupForm(),
                         ),
                       ),
@@ -76,8 +69,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                          content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                         ),
                       );
                     }
@@ -88,8 +80,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                       ),
                     );
                   }
@@ -102,8 +93,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                  'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+              content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
             ),
           );
         }
@@ -112,8 +102,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
+            content: Text('Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
           ),
         );
       }
@@ -169,7 +158,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                             child: Text(
                                               'Sign Up',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppColor.whiteColor,
                                                 fontSize: 44,
                                                 fontFamily: 'Ubuntu',
                                                 fontWeight: FontWeight.w700,
@@ -183,7 +172,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                             child: Text(
                                               'Enter your email to receive verification code.',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppColor.whiteColor,
                                                 fontSize: 20,
                                                 fontFamily: 'Ubuntu',
                                                 fontWeight: FontWeight.w400,
@@ -201,8 +190,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                           CustomButton(
                                               text: "Send Code",
                                               onPressed: () {
-                                                handleSignup(context,
-                                                    emailController.text);
+                                                handleSignup(context, emailController.text);
                                               }),
                                         ],
                                       ),

@@ -46,9 +46,10 @@ class _LoginScreenState extends State<LoginScreen> {
           context,
           MaterialPageRoute(
             builder: (context) => _isLoading
-                ? Center(child: CircularProgressIndicator(
-                  color: AppColor.whiteColor,
-                ))
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ))
                 : OtpVerificationScreen(
                     transactionId: transactionId,
                     time: DateTime.parse(responseBody["otp_expires_at"]),
@@ -170,7 +171,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 'stapes.ai',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
-                                  color: Colors.white,
+                                  color: AppColor.whiteColor,
                                   fontSize: 46,
                                   fontFamily: 'Ubuntu',
                                   fontWeight: FontWeight.w400,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/screens/qr_scanner.dart';
 
 class NodesScreen extends StatefulWidget {
@@ -132,7 +133,7 @@ class AddCircleButton extends StatelessWidget {
         shape: BoxShape.circle,
         color: Color(0xFF3F3F63),
       ),
-      child: const Icon(Icons.add, color: Colors.white, size: 14),
+      child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
     );
   }
 }
@@ -163,7 +164,7 @@ class FloorRoomButton extends StatelessWidget {
                 height: 6,
                 decoration: const BoxDecoration(
                   shape: BoxShape.circle,
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                 ),
               ),
           ],
@@ -219,7 +220,7 @@ class _NodeButtonState extends State<NodeButton> {
         child: Center(
           child: Text(
             widget.label,
-            style: const TextStyle(color: Colors.white, fontSize: 24),
+            style: const TextStyle(color: AppColor.whiteColor, fontSize: 24),
           ),
         ),
       ),
@@ -252,11 +253,11 @@ class ScanNodeButton extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.qr_code_scanner, color: Colors.white, size: 24),
+              Icon(Icons.qr_code_scanner, color: AppColor.whiteColor, size: 24),
               SizedBox(height: 4),
               Text(
                 'Scan a new node',
-                style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w700),
+                style: TextStyle(color: AppColor.whiteColor, fontSize: 18, fontWeight: FontWeight.w700),
               ),
             ],
           ),

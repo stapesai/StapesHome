@@ -55,7 +55,7 @@ class SignupForm extends StatelessWidget {
                                       child: Text(
                                         'Sign Up',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColor.whiteColor,
                                           fontSize: 44,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w700,
@@ -69,7 +69,7 @@ class SignupForm extends StatelessWidget {
                                       child: Text(
                                         'Please enter your personal details..',
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColor.whiteColor,
                                           fontSize: 20,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w400,

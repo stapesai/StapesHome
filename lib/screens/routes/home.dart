@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 class HomeScreen extends StatelessWidget {
   final String sessionId;
@@ -23,7 +24,7 @@ class HomeScreen extends StatelessWidget {
               const Text(
                 'Good morning,\nMarvin',
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColor.whiteColor,
                   fontSize: 32,
                   fontWeight: FontWeight.bold,
                 ),

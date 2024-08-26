@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart';
 
@@ -35,7 +36,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
-                    color: Colors.white,
+                    color: AppColor.whiteColor,
                   ),
                 ),
                 SizedBox(width: 8),
