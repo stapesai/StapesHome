@@ -1,22 +1,14 @@
-// Dart and Flutter imports
 import 'package:flutter/material.dart';
-
-// Third-party package imports
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-
-// Local imports
-
 import 'package:jarvis/utils/sessions_model.dart';
-
 import 'package:jarvis/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   // Initialize Hive
-  final appDocumentDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
+  final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
   // Register Hive adapters

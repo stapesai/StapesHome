@@ -23,7 +23,6 @@ class CustomButton extends StatelessWidget {
       // add icon if it is not null
       child: ElevatedButton(
         onPressed: onPressed,
-        
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
@@ -57,8 +56,7 @@ class LogoutButton extends StatelessWidget {
         width: 45, // Diameter of the circle
         height: 45,
         decoration: BoxDecoration(
-          color: Colors
-              .transparent, // Outer circle color (you can adjust the opacity)
+          color: Colors.transparent, // Outer circle color (you can adjust the opacity)
           shape: BoxShape.circle,
           border: Border.all(
             color: Color(0xFFE2FC2B), // Green color for the border

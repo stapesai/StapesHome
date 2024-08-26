@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class NTextField extends StatefulWidget {
   final String hintText;
 

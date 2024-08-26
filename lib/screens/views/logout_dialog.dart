@@ -7,25 +7,25 @@ import "package:jarvis/widgets/button.dart";
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});
 
- Future<void> _logout(BuildContext context) async {
-  final HiveService hiveService = HiveService();
-  
-  // Clear the SessionBox
-  await hiveService.clearBox("SessionBox");
+  Future<void> _logout(BuildContext context) async {
+    final HiveService hiveService = HiveService();
 
-  // Optionally, close all boxes to ensure clean state
-  await hiveService.closeAllBoxes();
+    // Clear the SessionBox
+    await hiveService.clearBox("SessionBox");
 
-  if (context.mounted) {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(
-        builder: (context) => LoginScreen(),
-      ),
-      (Route<dynamic> route) => false,
-    );
+    // Optionally, close all boxes to ensure clean state
+    await hiveService.closeAllBoxes();
+
+    if (context.mounted) {
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(
+          builder: (context) => LoginScreen(),
+        ),
+        (Route<dynamic> route) => false,
+      );
+    }
   }
-}
 
   @override
   Widget build(BuildContext context) {

@@ -10,18 +10,16 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
+      clipBehavior: Clip.antiAlias,
+      decoration: ShapeDecoration(
+        gradient: AppColor.backgroundColorgradient,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30),
         ),
+      ),
       child: Scaffold(
-        
-         backgroundColor: Colors.transparent,
+        backgroundColor: Colors.transparent,
         body: SafeArea(
-          
           child: SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16.0),
@@ -30,8 +28,7 @@ class ProfileScreen extends StatelessWidget {
                 children: [
                   const CircleAvatar(
                     radius: 50,
-                    backgroundImage: AssetImage(
-                        'assets/icons/demo.png'), // Replace with actual image asset
+                    backgroundImage: AssetImage('assets/icons/demo.png'), // Replace with actual image asset
                   ),
                   const SizedBox(height: 16),
                   const Text(
@@ -55,8 +52,7 @@ class ProfileScreen extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const EditProfileScreen()),
+                        MaterialPageRoute(builder: (context) => const EditProfileScreen()),
                       );
                     },
                     style: ElevatedButton.styleFrom(
@@ -64,8 +60,7 @@ class ProfileScreen extends StatelessWidget {
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
                           side: const BorderSide(color: Colors.orange, width: 2)),
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                      padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
                     ),
                     child: const Text(
                       'Edit',
@@ -89,8 +84,7 @@ class ProfileScreen extends StatelessWidget {
                     onTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                            builder: (context) => const SessionsScreen()),
+                        MaterialPageRoute(builder: (context) => const SessionsScreen()),
                       );
                     },
                   ),
@@ -175,16 +169,11 @@ class ProfileOption extends StatelessWidget {
                 const SizedBox(width: 16),
                 Text(
                   text,
-                  style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontFamily: 'Malgun Gothic'),
+                  style: const TextStyle(color: Colors.white, fontSize: 20, fontFamily: 'Malgun Gothic'),
                 ),
               ],
             ),
-            trailing ??
-                const Icon(Icons.arrow_forward_ios,
-                    color: Colors.white, size: 16),
+            trailing ?? const Icon(Icons.arrow_forward_ios, color: Colors.white, size: 16),
           ],
         ),
       ),

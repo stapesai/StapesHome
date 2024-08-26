@@ -80,8 +80,7 @@ class CreatePassword extends StatelessWidget {
                         children: [
                           Container(
                               width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 1),
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
@@ -132,15 +131,12 @@ class CreatePassword extends StatelessWidget {
                                     CustomButton(
                                       text: "Continue",
                                       onPressed: () {
-                                        if (passWord.text ==
-                                            confirmPassWord.text) {
+                                        if (passWord.text == confirmPassWord.text) {
                                           checkPassword(passWord.text, context);
                                         } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
+                                          ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
-                                              content: Text(
-                                                  'Passwords do not match'),
+                                              content: Text('Passwords do not match'),
                                               backgroundColor: Colors.red,
                                             ),
                                           );
@@ -234,8 +230,7 @@ class ResetPassword extends StatelessWidget {
                         children: [
                           Container(
                               width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 1),
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
@@ -286,15 +281,12 @@ class ResetPassword extends StatelessWidget {
                                     CustomButton(
                                       text: "Continue",
                                       onPressed: () {
-                                        if (passWord.text ==
-                                            confirmPassWord.text) {
+                                        if (passWord.text == confirmPassWord.text) {
                                           checkPassword(passWord.text, context);
                                         } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
+                                          ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
-                                              content: Text(
-                                                  'Passwords do not match'),
+                                              content: Text('Passwords do not match'),
                                               backgroundColor: Colors.red,
                                             ),
                                           );

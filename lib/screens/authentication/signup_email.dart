@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
@@ -23,14 +24,9 @@ class _EmailSignUpState extends State<EmailSignUp> {
     setState(() {
       _isLoading = true; // Start loading indicator
     });
-    var signup_url =
-        Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
     var response = await http.post(
-      signup_url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      AuthRoutes.requestSignup,
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'email': emailController.text,
       }),
@@ -59,8 +55,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                       ),
                     );
                   }
@@ -71,8 +66,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                          'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                      content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                     ),
                   );
                 }
@@ -86,8 +80,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
         print('Error :  ${responseBody["detail"]} ');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
           ),
         );
       }
@@ -129,16 +122,13 @@ class _EmailSignUpState extends State<EmailSignUp> {
                               children: [
                                 Container(
                                     width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1),
+                                    padding: const EdgeInsets.symmetric(horizontal: 1),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: double.infinity,

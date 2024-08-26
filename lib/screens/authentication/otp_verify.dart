@@ -25,8 +25,7 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  final List<TextEditingController> _controllers =
-      List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
   late int _remainingSeconds;
@@ -76,10 +75,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     var url = Uri.https('auth.jarvishome.in', '/auth/verify_otp');
     var response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'transaction_id': widget.transactionId,
         'code': otp,
@@ -110,10 +106,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(
-          fontSize: 20,
-          color: AppColor.whiteColor,
-          fontWeight: FontWeight.w600),
+      textStyle: TextStyle(fontSize: 20, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.00, -1.00),
@@ -134,10 +127,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
           ),
         ),
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator(color: AppColor.whiteColor,))
+            ? const Center(
+                child: CircularProgressIndicator(
+                color: AppColor.whiteColor,
+              ))
             : Scaffold(
-                backgroundColor:
-                    Colors.transparent, // Use your primary color here
+                backgroundColor: Colors.transparent, // Use your primary color here
                 body: Container(
                   child: Stack(
                     children: [

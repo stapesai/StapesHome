@@ -36,8 +36,7 @@ class _NodesScreenState extends State<NodesScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:
-       Colors.transparent, // Adjust this color to match your theme
+      backgroundColor: Colors.transparent, // Adjust this color to match your theme
 
       body: SafeArea(
         child: Padding(
@@ -63,15 +62,9 @@ class _NodesScreenState extends State<NodesScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  FloorRoomButton(
-                      label: 'Floor 1',
-                      isActive: activeFloor == 1,
-                      onTap: () => setActiveFloor(1)),
+                  FloorRoomButton(label: 'Floor 1', isActive: activeFloor == 1, onTap: () => setActiveFloor(1)),
                   const SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Floor 2',
-                      isActive: activeFloor == 2,
-                      onTap: () => setActiveFloor(2)),
+                  FloorRoomButton(label: 'Floor 2', isActive: activeFloor == 2, onTap: () => setActiveFloor(2)),
                 ],
               ),
               const SizedBox(height: 24),
@@ -88,20 +81,11 @@ class _NodesScreenState extends State<NodesScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  FloorRoomButton(
-                      label: 'Room 1',
-                      isActive: activeRoom == 1,
-                      onTap: () => setActiveRoom(1)),
+                  FloorRoomButton(label: 'Room 1', isActive: activeRoom == 1, onTap: () => setActiveRoom(1)),
                   const SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Room 2',
-                      isActive: activeRoom == 2,
-                      onTap: () => setActiveRoom(2)),
+                  FloorRoomButton(label: 'Room 2', isActive: activeRoom == 2, onTap: () => setActiveRoom(2)),
                   const SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Room 3',
-                      isActive: activeRoom == 3,
-                      onTap: () => setActiveRoom(3)),
+                  FloorRoomButton(label: 'Room 3', isActive: activeRoom == 3, onTap: () => setActiveRoom(3)),
                 ],
               ),
               const SizedBox(height: 24),
@@ -117,11 +101,12 @@ class _NodesScreenState extends State<NodesScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-               Center(
+              Center(
                 child: GestureDetector(
                   onTap: () {
-                    if(context.mounted){
-                      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const QrScannerScreen()  ));
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(builder: (context) => const QrScannerScreen()));
                     }
                   },
                   child: const ScanNodeButton(),
@@ -157,11 +142,7 @@ class FloorRoomButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const FloorRoomButton(
-      {super.key,
-      required this.label,
-      required this.isActive,
-      required this.onTap});
+  const FloorRoomButton({super.key, required this.label, required this.isActive, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -296,9 +277,7 @@ class DashedBorderPainter extends CustomPainter {
     const double dashWidth = 5;
     const double dashSpace = 5;
     final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height),
-          const Radius.circular(16)));
+      ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
     final dashPath = Path();
     final pathMetrics = path.computeMetrics();
     for (var pathMetric in pathMetrics) {
@@ -306,8 +285,7 @@ class DashedBorderPainter extends CustomPainter {
       double distance = 0.0;
       while (distance < length) {
         final double nextDistance = distance + dashWidth;
-        dashPath.addPath(
-            pathMetric.extractPath(distance, nextDistance), Offset.zero);
+        dashPath.addPath(pathMetric.extractPath(distance, nextDistance), Offset.zero);
         distance = nextDistance + dashSpace;
       }
     }

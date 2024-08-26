@@ -57,10 +57,9 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             floors = floorsData
                 .map((floor) => {
                       'id': floor['id'],
-                      'label':
-                          floor['alias'] != null && floor['alias'].isNotEmpty
-                              ? floor['alias']
-                              : 'Floor ${floor['level']}'
+                      'label': floor['alias'] != null && floor['alias'].isNotEmpty
+                          ? floor['alias']
+                          : 'Floor ${floor['level']}'
                     })
                 .toList();
           });
@@ -119,7 +118,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-           SnackBar(content: Text('Error fetching rooms : $e')),
+          SnackBar(content: Text('Error fetching rooms : $e')),
         );
       }
     }
@@ -159,15 +158,13 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           SnackBar(content: Text('Error deleting floor: $e')),
         );
       }
-
     }
   }
 
   void setActiveFloor(String floorId) {
     setState(() {
       widget.onFloorSelected(floorId);
-      widget
-          .onRoomSelected(-1); // Reset active room when a new floor is selected
+      widget.onRoomSelected(-1); // Reset active room when a new floor is selected
       rooms = [];
     });
 
@@ -260,8 +257,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             ),
             const SizedBox(width: 8),
             AddCircleButton(
-              onPressed: () =>
-                  navigateToCreateFloor(context), // Pass context here
+              onPressed: () => navigateToCreateFloor(context), // Pass context here
             ),
           ],
         ),
@@ -293,8 +289,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             ),
             const SizedBox(width: 8),
             AddCircleButton(
-              onPressed: () =>
-                  navigateToCreateFloor(context), // Pass context here
+              onPressed: () => navigateToCreateFloor(context), // Pass context here
             ),
           ],
         ),
