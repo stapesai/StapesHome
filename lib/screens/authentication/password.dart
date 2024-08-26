@@ -154,7 +154,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                               widget.passWord.text,
                                               context,
                                               SignupForm(
-                                                passWord: widget.passWord.text,
+                                                password: widget.passWord.text,
                                                 transaction_id: widget.transaction_id,
                                                 email: widget.email,
                                               ));

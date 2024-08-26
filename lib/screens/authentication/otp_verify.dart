@@ -40,39 +40,12 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     _startTimer();
   }
 
-  void _startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingSeconds > 0 && mounted) {
-        setState(() {
-          _remainingSeconds--;
-        });
-      } else {
-        _timer.cancel();
-        setState(() {
-          // Enable resend button when timer expires
-        });
-      }
-    });
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
-    _timer.cancel();
-
-    super.dispose();
-  }
-
-  Future<void> verifyOtp() async {
+  Future<void> handleverifyOtp() async {
     setState(() {
       _isLoading = true;
     });
-    String otp = _controllers.map((controller) => controller.text).join();
+  
+  String otp = _controllers.map((controller) => controller.text).join();
     var response = await http.post(
       AuthRoutes.verifyOtp,
       headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
@@ -92,6 +65,21 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     });
   }
 
+  void _startTimer() {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (_remainingSeconds > 0 && mounted) {
+        setState(() {
+          _remainingSeconds--;
+        });
+      } else {
+        _timer.cancel();
+        setState(() {
+          // Enable resend button when timer expires
+        });
+      }
+    });
+  }
+
   String _RemainingTime() {
     int minutes = _remainingSeconds ~/ 60;
     int seconds = _remainingSeconds % 60;
@@ -101,12 +89,35 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     return '$minuteString $secondString';
   }
 
+  void _onOtpComplete(String otp) {
+    String otp = _controllers.map((controller) => controller.text).join();
+    print('OTP Submitted: $otp');
+    handleverifyOtp();
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    _timer.cancel();
+
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
       textStyle: TextStyle(fontSize: 20, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
+      margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.00, -1.00),
@@ -115,84 +126,82 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         ),
       ),
     );
+
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
       border: Border.all(color: AppColor.whiteColor, width: 2),
     );
-    return Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: ShapeDecoration(
+            gradient: AppColor.backgroundColorgradient,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(30),
+            ),
           ),
-        ),
-        child: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                color: AppColor.whiteColor,
-              ))
-            : Scaffold(
-                backgroundColor: Colors.transparent, // Use your primary color here
-                body: Container(
-                  child: Stack(
-                    children: [
-                      Positioned(
-                        top: 150,
-                        left: 0,
-                        right: 0,
-                        child: Padding(
-                          padding: const EdgeInsets.all(10),
-                          child: Column(
-                            children: [
-                              SizedBox(
-                                width: 380,
-                                child: Text(
-                                  'OTP Verification',
-                                  style: TextStyle(
-                                    color: AppColor.whiteColor,
-                                    fontSize: 44,
-                                    fontFamily: 'Ubuntu',
-                                    fontWeight: FontWeight.w700,
-                                    height: 0,
-                                  ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: false,
+            body: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ))
+                : SafeArea(
+                    child: Padding(
+                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: screenSize.height * 0.08),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                'OTP Verification',
+                                style: TextStyle(
+                                  color: AppColor.whiteColor,
+                                  fontSize: 44,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              SizedBox(
-                                width: 380,
-                                child: Text(
-                                  'Enter the verification code sent to your email address.',
-                                  style: TextStyle(
-                                    color: AppColor.whiteColor,
-                                    fontSize: 20,
-                                    fontFamily: 'Ubuntu',
-                                    fontWeight: FontWeight.w400,
-                                    height: 0,
-                                  ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            SizedBox(
+                              child: Text(
+                                'Enter the verification code sent to your email address.',
+                                style: TextStyle(
+                                  color: AppColor.whiteColor,
+                                  fontSize: 20,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
-                              SizedBox(
-                                height: 40,
+                            ),
+                            SizedBox(height: screenSize.height * 0.04),
+                            SizedBox(
+                              child: Center(
+                                child: Pinput(
+                                  length: 6,
+                                  showCursor: false,
+                                  defaultPinTheme: defaultPinTheme,
+                                  focusedPinTheme: focusedPinTheme,
+                                  focusNode: _focusNodes[0],
+                                  controller: _controllers[0],
+                                  onChanged: (String value) {
+                                    if (value.length == 1) {
+                                      _focusNodes[1].requestFocus();
+                                    }
+                                  },
+                                  onCompleted: _onOtpComplete,
+                                ),
                               ),
-                              Pinput(
-                                length: 6,
-                                showCursor: false,
-                                defaultPinTheme: defaultPinTheme,
-                                focusedPinTheme: focusedPinTheme,
-                                focusNode: _focusNodes[0],
-                                controller: _controllers[0],
-                                onChanged: (String value) {
-                                  if (value.length == 1) {
-                                    _focusNodes[1].requestFocus();
-                                  }
-                                },
-                              ),
-                              SizedBox(
-                                height: 20,
-                              ),
-                              Text(
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            Center(
+                              child: Text(
                                 'Your verification code will expire in ${_RemainingTime()} ',
                                 style: const TextStyle(
                                   color: AppColor.whiteColor,
@@ -200,16 +209,27 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 ),
                                 textAlign: TextAlign.center,
                               ),
-                              SizedBox(
-                                height: 250,
+                            ),
+                            const Spacer(),
+                            AnimatedContainer(
+                              duration: const Duration(milliseconds: 300),
+                              curve: Curves.easeOut,
+                              margin: EdgeInsets.only(
+                                bottom: keyboardHeight > 0
+                                    ? keyboardHeight + screenSize.height * 0.02
+                                    : screenSize.height * 0.1,
                               ),
-                              CustomButton(text: "Next", onPressed: verifyOtp)
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
+                              child: Center(
+                                child: CustomButton(
+                                  text: "Next",
+                                  onPressed: () => handleverifyOtp(),
+                                ),
+                              ),
+                            ),
+                          ],
+                        )),
                   ),
-                )));
+          )),
+    );
   }
 }

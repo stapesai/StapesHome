@@ -127,6 +127,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final screenSize = MediaQuery.of(context).size;
+    
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
@@ -147,7 +149,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           constraints: BoxConstraints(minHeight: constraints.maxHeight),
                           child: IntrinsicHeight(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
                               child: Column(
                                 children: [
                                   SizedBox(height: constraints.maxHeight * 0.1),

@@ -10,7 +10,7 @@ import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/screens/routes/main.dart';
 
 class SignupForm extends StatefulWidget {
-  final String passWord;
+  final String password;
   final String email;
   final TextEditingController first_name = TextEditingController();
   final TextEditingController last_name = TextEditingController();
@@ -19,7 +19,7 @@ class SignupForm extends StatefulWidget {
   final String transaction_id;
   SignupForm({
     super.key,
-    required this.passWord,
+    required this.password,
     required this.transaction_id,
     required this.email,
   });
@@ -55,7 +55,7 @@ class _SignupFormState extends State<SignupForm> {
             "dob": dob,
             "gender": gender,
           },
-          "password": widget.passWord,
+          "password": widget.password,
           "transaction_id": widget.transaction_id,
         }),
       );

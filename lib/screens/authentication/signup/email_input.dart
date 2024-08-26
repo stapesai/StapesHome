@@ -60,7 +60,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                           title: 'Create Password',
                           subtitle: 'Lets create a password to secure your account.',
                           nextScreen: SignupForm(
-                            passWord: '',
+                            password: '',
                             transaction_id: '',
                             email: '',
                           ),
@@ -70,14 +70,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                       ),
                     );
                   } else {
-                    print('Error :  ${responseBody} ');
-                    if (context.mounted) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                        ),
-                      );
-                    }
+                    print('context not mounted');
                   }
                 },
                 onError: () {
