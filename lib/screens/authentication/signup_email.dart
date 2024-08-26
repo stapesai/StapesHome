@@ -163,7 +163,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                             child: Text(
                                               'Sign Up',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppColor.whiteColor,
                                                 fontSize: 44,
                                                 fontFamily: 'Ubuntu',
                                                 fontWeight: FontWeight.w700,
@@ -177,7 +177,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                             child: Text(
                                               'Enter your email to receive verification code.',
                                               style: TextStyle(
-                                                color: Colors.white,
+                                                color: AppColor.whiteColor,
                                                 fontSize: 20,
                                                 fontFamily: 'Ubuntu',
                                                 fontWeight: FontWeight.w400,

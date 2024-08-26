@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 
 class EditProfileScreen extends StatelessWidget {
@@ -38,7 +39,7 @@ class EditProfileScreen extends StatelessWidget {
                       // Handle edit profile picture
                     },
                     child: const CircleAvatar(
-                      backgroundColor: Colors.white,
+                      backgroundColor: AppColor.whiteColor,
                       radius: 20,
                       child: Icon(Icons.edit, color: Colors.black),
                     ),
@@ -52,7 +53,7 @@ class EditProfileScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppColor.whiteColor,
               ),
             ),
             const SizedBox(height: 32),

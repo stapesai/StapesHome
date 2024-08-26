@@ -111,7 +111,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                       child: Text(
                                         widget.title,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColor.whiteColor,
                                           fontSize: 44,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w700,
@@ -125,7 +125,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                       child: Text(
                                         widget.subtitle,
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: AppColor.whiteColor,
                                           fontSize: 20,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w400,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 class SessionsScreen extends StatelessWidget {
   const SessionsScreen({super.key});
@@ -23,7 +24,7 @@ class SessionsScreen extends StatelessWidget {
             Text(
               'Your Sessions',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColor.whiteColor,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),
