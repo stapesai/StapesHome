@@ -261,7 +261,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 CustomButton(
-                                  text: 'Login',
+                                  text: 'Log In',
                                   onPressed: () {
                                     handleLogin(context);
                                   },
