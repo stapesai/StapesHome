@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import '../cache/sessions_model.dart';
-import 'authentication/login.dart';
-import '../main.dart'; // Import the main.dart for MainScreen
+import 'package:jarvis/screens/routes/main.dart';
+import 'package:jarvis/utils/sessions_model.dart';
+import 'package:jarvis/screens/authentication/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,8 +28,7 @@ class SplashScreenState extends State<SplashScreen> {
       if (mounted) {
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(
-              builder: (context) => MainScreen()), // Redirect to MainScreen
+          MaterialPageRoute(builder: (context) => MainScreen()),
         );
       }
     } else {
@@ -44,6 +43,7 @@ class SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // this is the splash screen, it will show the logo of the app until it is ready to show the login screen or the main screen (home screen)
     return Container(
       color: const Color(0xFF161622),
       child: Center(

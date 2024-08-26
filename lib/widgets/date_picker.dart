@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 // import 'package:image_cropper/image_cropper.dart';
 // import 'package:image_picker/image_picker.dart';
 
@@ -27,7 +28,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
     //     androidUiSettings: const AndroidUiSettings(
     //       toolbarTitle: 'Crop Image',
     //       toolbarColor: Colors.deepOrange,
-    //       toolbarWidgetColor: Colors.white,
+    //       toolbarWidgetColor: AppColor.whiteColor,
     //       initAspectRatio: CropAspectRatioPreset.original,
     //       lockAspectRatio: true,
     //     ),
@@ -53,9 +54,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
             radius: 86.5, // Half of 173
             backgroundColor: Colors.grey[300],
             backgroundImage: _image != null ? FileImage(_image!) : null,
-            child: _image == null
-                ? const Icon(Icons.person, size: 86.5, color: Colors.white)
-                : null,
+            child: _image == null ? const Icon(Icons.person, size: 86.5, color: Colors.white) : null,
           ),
           Positioned(
             bottom: 4, // Adjust the position as needed
@@ -64,7 +63,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
               onTap: _pickImage,
               child: const CircleAvatar(
                 radius: 20,
-                backgroundColor: Colors.white, // Background color of the circle
+                backgroundColor: AppColor.whiteColor, // Background color of the circle
                 child: Icon(
                   Icons.edit,
                   color: Colors.orange,

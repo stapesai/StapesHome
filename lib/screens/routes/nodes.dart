@@ -1,52 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
+import 'package:jarvis/screens/qr_scanner.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class NodesScreen extends StatefulWidget {
+  const NodesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Device Control',
-      theme: ThemeData.dark().copyWith(
-        scaffoldBackgroundColor: const Color(0xFF1C1C2B),
-        primaryColor: Colors.orange,
-      ),
-      home: const DeviceScreen(),
-    );
-  }
+  createState() => _NodesScreenState();
 }
 
-class DeviceScreen extends StatefulWidget {
-  const DeviceScreen({super.key});
-
-  @override
-  createState() => _DeviceScreenState();
-}
-
-class _DeviceScreenState extends State<DeviceScreen> {
+class _NodesScreenState extends State<NodesScreen> {
   int activeFloor = 1;
   int activeRoom = 1;
 
   void setActiveFloor(int floor) {
-    setState(() {
-      activeFloor = floor;
-    });
+    if (mounted) {
+      setState(() {
+        activeFloor = floor;
+      });
+    }
   }
 
   void setActiveRoom(int room) {
-    setState(() {
-      activeRoom = room;
-    });
+    if (mounted) {
+      setState(() {
+        activeRoom = room;
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent, // Adjust this color to match your theme
+
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -54,7 +46,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               const Text(
-                'All Devices',
+                'Linked Nodes',
                 style: TextStyle(fontSize: 24, color: Colors.white),
               ),
               const SizedBox(height: 24),
@@ -104,30 +96,26 @@ class _DeviceScreenState extends State<DeviceScreen> {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                   children: const [
-                    DeviceButton(label: 'Bedroom Light'),
-                    DeviceButton(label: 'Bedroom Light'),
+                    // NodeButton(label: 'Node 1'),
+                    // NodeButton(label: 'Node 2'),
                   ],
                 ),
               ),
               const SizedBox(height: 16),
-              const Center(
-                child: AddDeviceButton(),
+              Center(
+                child: GestureDetector(
+                  onTap: () {
+                    if (context.mounted) {
+                      Navigator.pushReplacement(
+                          context, MaterialPageRoute(builder: (context) => const QrScannerScreen()));
+                    }
+                  },
+                  child: const ScanNodeButton(),
+                ),
               ),
             ],
           ),
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        backgroundColor: const Color(0xFF1C1C2B),
-        selectedItemColor: Colors.orange,
-        unselectedItemColor: AppColor.whiteColor,
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(icon: Icon(Icons.lightbulb_outline), label: 'Devices'),
-          BottomNavigationBarItem(icon: Icon(Icons.memory), label: 'Nodes'),
-          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
-        ],
-        currentIndex: 1,
       ),
     );
   }
@@ -186,22 +174,24 @@ class FloorRoomButton extends StatelessWidget {
   }
 }
 
-class DeviceButton extends StatefulWidget {
+class NodeButton extends StatefulWidget {
   final String label;
 
-  const DeviceButton({super.key, required this.label});
+  const NodeButton({super.key, required this.label});
 
   @override
-  createState() => _DeviceButtonState();
+  createState() => _NodeButtonState();
 }
 
-class _DeviceButtonState extends State<DeviceButton> {
+class _NodeButtonState extends State<NodeButton> {
   bool isActive = false;
 
   void toggleButton() {
-    setState(() {
-      isActive = !isActive;
-    });
+    if (mounted) {
+      setState(() {
+        isActive = !isActive;
+      });
+    }
   }
 
   @override
@@ -210,15 +200,12 @@ class _DeviceButtonState extends State<DeviceButton> {
       onTap: toggleButton,
       child: Container(
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF343450), Color(0xFF161622)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
+          color: Colors.black,
           borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.orange, width: 4),
           boxShadow: [
             BoxShadow(
-              color: isActive ? Colors.orange.shade200 : Colors.black.withOpacity(0.5),
+              color: Colors.black.withOpacity(0.5),
               blurRadius: 10,
               spreadRadius: 3,
             ),
@@ -230,51 +217,29 @@ class _DeviceButtonState extends State<DeviceButton> {
             ),
           ],
         ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 63,
-              height: 63,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: isActive
-                      ? [Colors.orange.shade700, Colors.orange.shade400]
-                      : [const Color(0xFF2A2A40), const Color(0xFF1C1C2B)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.lightbulb_outline,
-                  color: AppColor.whiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(widget.label, style: const TextStyle(color: Colors.white)),
-          ],
+        child: Center(
+          child: Text(
+            widget.label,
+            style: const TextStyle(color: AppColor.whiteColor, fontSize: 24),
+          ),
         ),
       ),
     );
   }
 }
 
-class AddDeviceButton extends StatelessWidget {
-  const AddDeviceButton({super.key});
+class ScanNodeButton extends StatelessWidget {
+  const ScanNodeButton({super.key});
 
   @override
   Widget build(BuildContext context) {
     return CustomPaint(
       painter: DashedBorderPainter(),
       child: Container(
-        width: 396,
-        height: 56,
+        width: double.infinity,
+        height: 70,
         decoration: BoxDecoration(
-          color: const Color(0xFF1C1C2B),
+          color: const Color(0xFF1D1D1D),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -288,11 +253,11 @@ class AddDeviceButton extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.add, color: Colors.orange, size: 24),
+              Icon(Icons.qr_code_scanner, color: AppColor.whiteColor, size: 24),
               SizedBox(height: 4),
               Text(
-                'Add device',
-                style: TextStyle(color: Colors.orange, fontSize: 18),
+                'Scan a new node',
+                style: TextStyle(color: AppColor.whiteColor, fontSize: 18, fontWeight: FontWeight.w700),
               ),
             ],
           ),

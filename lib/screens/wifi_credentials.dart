@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -39,7 +40,7 @@ class WifiCredentialsScreen extends StatelessWidget {
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: AppColor.whiteColor,
               ),
             ),
             const SizedBox(height: 32),
@@ -102,7 +103,7 @@ class WifiCredentialsScreen extends StatelessWidget {
                 child: const Text(
                   'Continue',
                   style: TextStyle(
-                    color: Colors.white,
+                    color: AppColor.whiteColor,
                     fontSize: 18,
                   ),
                 ),

@@ -21,22 +21,24 @@ dependencies:
   mobile_scanner: ^5.1.1
   lottie: ^3.1.2
   flutter_lints: ^4.0.0
+  pinput: ^5.0.0
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter 
+    sdk: flutter
   build_runner: ^2.4.11
   hive_generator: ^2.0.1
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/
     - assets/icons/
-    - assets/fonts/
-    - assets/lottie/
+    - assets/icons/sso/
+    - assets/icons/home/
+    - assets/icons/navbar/
+    - assets/icons/temp/
+
   fonts:
     - family: Malgun Gothic
       fonts:
         - asset: assets/fonts/malgun-gothic.ttf
-

@@ -1,8 +1,11 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:jarvis/constants/api_routes.dart';
+import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
+import 'package:jarvis/constants/colors.dart';
+import "package:jarvis/widgets/button.dart";
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
@@ -23,31 +26,30 @@ class OtpVerificationScreen extends StatefulWidget {
 }
 
 class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
-  final List<TextEditingController> _controllers =
-      List.generate(6, (index) => TextEditingController());
+  final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
 
-  late int _remainingTime;
+  late int _remainingSeconds;
   late Timer _timer;
-  bool _isResendEnabled = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
     super.initState();
-    _remainingTime = widget.time.difference(DateTime.now()).inSeconds;
+    _remainingSeconds = widget.time.difference(DateTime.now()).inSeconds;
     _startTimer();
   }
 
   void _startTimer() {
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_remainingTime > 0 && mounted) {
+      if (_remainingSeconds > 0 && mounted) {
         setState(() {
-          _remainingTime--;
+          _remainingSeconds--;
         });
       } else {
         _timer.cancel();
         setState(() {
-          _isResendEnabled = true; // Enable resend button when timer expires
+          // Enable resend button when timer expires
         });
       }
     });
@@ -67,14 +69,13 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   }
 
   Future<void> verifyOtp() async {
+    setState(() {
+      _isLoading = true;
+    });
     String otp = _controllers.map((controller) => controller.text).join();
-    var url = Uri.https('auth.jarvishome.in', '/auth/verify_otp');
     var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      AuthRoutes.verifyOtp,
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'transaction_id': widget.transactionId,
         'code': otp,
@@ -86,168 +87,129 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     } else {
       widget.onError();
     }
+    setState(() {
+      _isLoading = false;
+    });
   }
 
-  Future<void> resendOtp() async {
-    var url = Uri.https('auth.jarvishome.in', '/auth/resend_otp');
-    var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
-      body: jsonEncode({
-        'transaction_id': widget.transactionId,
-      }),
-    );
+  String _RemainingTime() {
+    int minutes = _remainingSeconds ~/ 60;
+    int seconds = _remainingSeconds % 60;
 
-    if (response.statusCode == 200) {
-      setState(() {
-        _remainingTime = widget.time.difference(DateTime.now()).inSeconds;
-        _isResendEnabled = false; // Disable resend button and restart timer
-        _startTimer();
-      });
-    } else {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(
-              'Error: ${response.statusCode} - ${response.body}',
-            ),
-          ),
-        );
-      }
-    }
+    String minuteString = minutes > 0 ? '$minutes min' : '';
+    String secondString = seconds > 0 ? '$seconds sec' : '';
+    return '$minuteString $secondString';
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF161622), // Use your primary color here
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const SizedBox(height: 40.0),
-            const Text(
-              'Enter the 6-digit verification code sent to your email.',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 24.0,
-                fontWeight: FontWeight.bold,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 40.0),
-            _buildOtpFields(context), // Pass context to _buildOtpFields
-            const SizedBox(height: 20.0),
-            Text(
-              'Your code will expire in $_remainingTime seconds',
-              style: const TextStyle(
-                color: Colors.white70,
-                fontSize: 16.0,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: verifyOtp,
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.orange, // Button color
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-                padding: const EdgeInsets.symmetric(vertical: 15.0),
-              ),
-              child: const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Verify',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 18.0,
-                    ),
-                  ),
-                  SizedBox(width: 5.0),
-                  Icon(Icons.arrow_forward, color: Colors.white),
-                ],
-              ),
-            ),
-            // Conditionally render the "Resend OTP" button
-            if (_isResendEnabled)
-              TextButton(
-                onPressed: resendOtp,
-                child: const Text(
-                  'Resend OTP',
-                  style: TextStyle(
-                    color: Colors.orange,
-                    fontSize: 16.0,
-                  ),
-                ),
-              ),
-          ],
+    final defaultPinTheme = PinTheme(
+      width: 56,
+      height: 56,
+      textStyle: TextStyle(fontSize: 20, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment(0.00, -1.00),
+          end: Alignment(0, 1),
+          colors: [Color(0xFF292B30), Color(0xFF26272C), Color(0xFF1A1B1E)],
         ),
       ),
     );
-  }
-
-  Widget _buildOtpFields(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: List.generate(6, (index) {
-        return Expanded(
-          child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5.0),
-            decoration: BoxDecoration(
-              color: const Color(0xFF161622),
-              borderRadius: BorderRadius.circular(8.0),
-              border: Border.all(color: const Color(0xFFFFA404), width: 1.0),
-            ),
-            child: Center(
-              child: TextField(
-                controller: _controllers[index],
-                focusNode: _focusNodes[index],
-                keyboardType: TextInputType.number,
-                textAlign: TextAlign.center,
-                maxLength: 1,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0, // Larger font size to cover the box
-                  fontWeight: FontWeight.bold, // Thicker text
-                ),
-                inputFormatters: [
-                  FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
-                ],
-                textInputAction: TextInputAction.next,
-                decoration: InputDecoration(
-                  counterText: '',
-                  contentPadding: EdgeInsets.zero,
-                  // Set padding to zero to center text and cursor
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(8.0),
-                    borderSide: BorderSide.none,
-                  ),
-                  filled: true,
-                  fillColor: const Color(0xFF161622),
-                ),
-                onChanged: (value) {
-                  if (value.length == 1 && index < 5) {
-                    FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
-                  }
-                },
-                onSubmitted: (value) {
-                  if (index < 5) {
-                    FocusScope.of(context).requestFocus(_focusNodes[index + 1]);
-                  }
-                },
-              ),
-            ),
-          ),
-        );
-      }),
+    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+      border: Border.all(color: AppColor.whiteColor, width: 2),
     );
+    return Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: _isLoading
+            ? const Center(
+                child: CircularProgressIndicator(
+                color: AppColor.whiteColor,
+              ))
+            : Scaffold(
+                backgroundColor: Colors.transparent, // Use your primary color here
+                body: Container(
+                  child: Stack(
+                    children: [
+                      Positioned(
+                        top: 150,
+                        left: 0,
+                        right: 0,
+                        child: Padding(
+                          padding: const EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                width: 380,
+                                child: Text(
+                                  'OTP Verification',
+                                  style: TextStyle(
+                                    color: AppColor.whiteColor,
+                                    fontSize: 44,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w700,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              SizedBox(
+                                width: 380,
+                                child: Text(
+                                  'Enter the verification code sent to your email address.',
+                                  style: TextStyle(
+                                    color: AppColor.whiteColor,
+                                    fontSize: 20,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w400,
+                                    height: 0,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(
+                                height: 40,
+                              ),
+                              Pinput(
+                                length: 6,
+                                showCursor: false,
+                                defaultPinTheme: defaultPinTheme,
+                                focusedPinTheme: focusedPinTheme,
+                                focusNode: _focusNodes[0],
+                                controller: _controllers[0],
+                                onChanged: (String value) {
+                                  if (value.length == 1) {
+                                    _focusNodes[1].requestFocus();
+                                  }
+                                },
+                              ),
+                              SizedBox(
+                                height: 20,
+                              ),
+                              Text(
+                                'Your verification code will expire in ${_RemainingTime()} ',
+                                style: const TextStyle(
+                                  color: AppColor.whiteColor,
+                                  fontSize: 16.0,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
+                              SizedBox(
+                                height: 250,
+                              ),
+                              CustomButton(text: "Next", onPressed: verifyOtp)
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                )));
   }
 }

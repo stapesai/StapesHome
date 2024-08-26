@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:jarvis/main.dart';
+import 'package:jarvis/screens/routes/main.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:jarvis/screens/additional/provisioning.dart';
+import 'package:jarvis/screens/views/provisioning.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -13,8 +13,7 @@ class QrScannerScreen extends StatefulWidget {
   createState() => _QrScannerScreenState();
 }
 
-class _QrScannerScreenState extends State<QrScannerScreen>
-    with TickerProviderStateMixin {
+class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderStateMixin {
   late MobileScannerController _controller;
   bool _flashOn = false;
   bool _isProcessing = false;
@@ -59,8 +58,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     _controller.toggleTorch();
   }
 
-  Future<bool> _connectToDevice(
-      String deviceName, String serviceUuid, String characteristicUuid) async {
+  Future<bool> _connectToDevice(String deviceName, String serviceUuid, String characteristicUuid) async {
     // Simulate a connection attempt with a delay
     await Future.delayed(Duration(seconds: 2));
     // Simulate success or failure randomly for demonstration purposes
@@ -74,12 +72,10 @@ class _QrScannerScreenState extends State<QrScannerScreen>
         _controller.stop();
       });
 
-      final Map<String, dynamic> jsonData =
-          jsonDecode(barcodes.first.rawValue!);
+      final Map<String, dynamic> jsonData = jsonDecode(barcodes.first.rawValue!);
       final String deviceName = jsonData['device_name'] ?? 'Unknown';
       final String serviceUuid = jsonData['service_uuid'] ?? 'Unknown';
-      final String characteristicUuid =
-          jsonData['characteristic_uuid'] ?? 'Unknown';
+      final String characteristicUuid = jsonData['characteristic_uuid'] ?? 'Unknown';
 
       print('Device Name: $deviceName');
       print('Service UUID: $serviceUuid');
@@ -87,8 +83,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
 
       // Set the connection future
       setState(() {
-        _connectionFuture =
-            _connectToDevice(deviceName, serviceUuid, characteristicUuid);
+        _connectionFuture = _connectToDevice(deviceName, serviceUuid, characteristicUuid);
       });
     }
   }
@@ -99,7 +94,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
       child: Text(
         text,
         style: TextStyle(
-          color: Colors.white,
+          color: AppColor.whiteColor,
           fontSize: 16,
           fontWeight: FontWeight.bold,
         ),
@@ -131,10 +126,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: 12),
-          Lottie.asset(
-              isSuccess
-                  ? 'assets/lottie/success.json'
-                  : 'assets/lottie/failure.json',
+          Lottie.asset(isSuccess ? 'assets/lottie/success.json' : 'assets/lottie/failure.json',
               width: MediaQuery.of(context).size.width / 3,
               height: MediaQuery.of(context).size.width / 3,
               repeat: true, onLoaded: (composition) {
@@ -146,8 +138,8 @@ class _QrScannerScreenState extends State<QrScannerScreen>
               _lottieController.addStatusListener(
                 (status) {
                   if (status == AnimationStatus.completed) {
-                    Navigator.of(context).pushReplacement(MaterialPageRoute(
-                        builder: (context) => ProvisioningScreen()));
+                    Navigator.of(context)
+                        .pushReplacement(MaterialPageRoute(builder: (context) => ProvisioningScreen()));
                   }
                 },
               );
@@ -156,7 +148,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
           Text(
             isSuccess ? 'Connection Successful!' : 'Connection Failed!',
             style: TextStyle(
-              color: Colors.white,
+              color: AppColor.whiteColor,
               fontSize: 20,
               fontWeight: FontWeight.bold,
             ),
@@ -171,7 +163,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: Container(
-        color: AppColor.backgroundColor,
+        // color: AppColor.backgroundColor,
         child: Column(
           children: [
             Expanded(
@@ -188,17 +180,12 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                         IconButton(
                           icon: Icon(Icons.close, color: Colors.white),
                           onPressed: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => MainScreen()));
+                            Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
                             _controller.dispose();
                           },
                         ),
                         IconButton(
-                          icon: Icon(
-                              _flashOn ? Icons.flash_off : Icons.flash_on,
-                              color: Colors.white),
+                          icon: Icon(_flashOn ? Icons.flash_off : Icons.flash_on, color: Colors.white),
                           onPressed: _toggleFlash,
                         ),
                       ],
@@ -226,7 +213,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                   height: _isPanelVisible ? 300 : 60,
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: AppColor.backgroundColor,
+                    // color: AppColor.backgroundColor,
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
@@ -245,7 +232,7 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                         width: 60,
                         height: 4,
                         decoration: BoxDecoration(
-                          color: AppColor.secondaryTextColor,
+                          color: AppColor.secondaryColor,
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
@@ -264,13 +251,10 @@ class _QrScannerScreenState extends State<QrScannerScreen>
                           child: FutureBuilder<bool>(
                             future: _connectionFuture,
                             builder: (context, snapshot) {
-                              if (snapshot.connectionState ==
-                                  ConnectionState.waiting) {
+                              if (snapshot.connectionState == ConnectionState.waiting) {
                                 return _buildInstructionsPanel();
-                              } else if (snapshot.connectionState ==
-                                  ConnectionState.done) {
-                                return _buildLottieAnimation(
-                                    snapshot.data ?? false);
+                              } else if (snapshot.connectionState == ConnectionState.done) {
+                                return _buildLottieAnimation(snapshot.data ?? false);
                               } else {
                                 return _buildInstructionsPanel();
                               }

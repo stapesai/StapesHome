@@ -1,16 +1,16 @@
 import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/cache/hive.dart'; // Import your Hive service
-import 'package:jarvis/cache/sessions_model.dart'; // Import your session model
+import 'package:jarvis/utils/hive.dart';
+import 'package:flutter/material.dart';
+import 'package:jarvis/screens/routes/main.dart';
+import "package:jarvis/widgets/button.dart";
 import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/main.dart';
-import 'package:jarvis/widgets/text_field.dart';
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'error_screens/otp_verify_error.dart';
-import 'otp_verify.dart'; // Import the OTP Verification screen
-import 'email_signup.dart'; // Import the EmailSignUp screen
-import 'reset_password.dart';
+import 'package:jarvis/constants/api_routes.dart';
+import 'package:jarvis/utils/sessions_model.dart';
+import 'package:jarvis/widgets/input_fields.dart';
+import 'package:jarvis/screens/authentication/forgot_password.dart';
+import 'package:jarvis/screens/authentication/otp_verify.dart';
+import 'package:jarvis/screens/authentication/signup/email_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -20,22 +20,18 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
   final HiveService hiveService = HiveService();
   bool _isLoading = false;
 
   Future<void> handleLogin(BuildContext context) async {
     setState(() {
-      _isLoading = true; // Start loading indicator
+      _isLoading = true;
     });
-    var url = Uri.https('auth.jarvishome.in', '/auth/login/request-login');
     var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      AuthRoutes.requestLogin,
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'email': emailController.text,
         'password': passwordController.text,
@@ -46,69 +42,72 @@ class _LoginScreenState extends State<LoginScreen> {
     if (response.statusCode == 200) {
       String transactionId = responseBody['transaction_id'];
       if (context.mounted) {
-        Navigator.pushReplacement(
+        Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => OtpVerificationScreen(
-              transactionId: transactionId,
-              time: DateTime.parse(responseBody["otp_expires_at"]),
-              onSuccess: () async {
-                var completeLoginUrl = Uri.https(
-                    'auth.jarvishome.in', '/auth/login/complete-login');
-                var completeLoginResponse = await http.post(
-                  completeLoginUrl,
-                  headers: {
-                    'Content-Type': 'application/json',
-                    'accept': 'application/json'
-                  },
-                  body: jsonEncode({
-                    'transaction_id': transactionId,
-                  }),
-                );
+            builder: (context) => _isLoading
+                ? Center(
+                    child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ))
+                : OtpVerificationScreen(
+                    transactionId: transactionId,
+                    time: DateTime.parse(responseBody["otp_expires_at"]),
+                    onSuccess: () async {
+                      setState(() {
+                        _isLoading = true;
+                      });
+                      var completeLoginResponse = await http.post(
+                        AuthRoutes.completeLogin,
+                        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+                        body: jsonEncode({
+                          'transaction_id': transactionId,
+                        }),
+                      );
 
-                if (completeLoginResponse.statusCode == 200) {
-                  var sessionResponseBody = json.decode(completeLoginResponse.body);
-                  // print("SessionId:"+sessionResponseBody['session']['session_id']);
-                  // print("Userid:"+sessionResponseBody['session']['user_id']);
-                  // print( "CREATE AT: ${DateTime.parse(sessionResponseBody['session']['created_at'])}" );
-                  // print("LaST TIME: ${DateTime.parse(sessionResponseBody['session']['last_active_at'])}");
-                  var sessionData = SessionsModel(
-                    sessionId: sessionResponseBody['session']['session_id'],
-                    userId: sessionResponseBody['session']['user_id'],
-                    createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
-                    lastActiveAt:
-                        DateTime.parse(sessionResponseBody['session']['last_active_at']),
-                  );
-                  
-                    await hiveService.addBoxes([sessionData], "SessionBox");
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const MainScreen(),
-                      ),
-                    );
-                  }
-                } else {
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text(
-                            'Error : ${completeLoginResponse.statusCode} - ${responseBody["detail"]} '),
-                      ),
-                    );
-                  }
-                }
-              },
-              onError: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OtpVerificationErrorScreen(),
+                      if (completeLoginResponse.statusCode == 200) {
+                        var sessionResponseBody = json.decode(completeLoginResponse.body);
+                        var sessionData = SessionsModel(
+                          sessionId: sessionResponseBody['session']['session_id'],
+                          userId: sessionResponseBody['session']['user_id'],
+                          createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
+                          lastActiveAt: DateTime.parse(sessionResponseBody['session']['last_active_at']),
+                        );
+
+                        await hiveService.addBoxes([sessionData], "SessionBox");
+                        if (context.mounted) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  _isLoading ? Center(child: CircularProgressIndicator()) : const MainScreen(),
+                            ),
+                          );
+                        }
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Error : ${completeLoginResponse.statusCode} - ${responseBody["detail"]} '),
+                            ),
+                          );
+                        }
+                      }
+                      setState(() {
+                        _isLoading = false;
+                      });
+                    },
+                    onError: () {
+                      print('Error :  ${responseBody["detail"]} ');
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                          ),
+                        );
+                      }
+                    },
                   ),
-                );
-              },
-            ),
           ),
         );
       }
@@ -116,242 +115,225 @@ class _LoginScreenState extends State<LoginScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
           ),
         );
       }
     }
     setState(() {
-      _isLoading = false; // Stop loading indicator
+      _isLoading = false;
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF161622), // Set your primary color here
-      body: _isLoading
-          ? const Center(
-        child: CircularProgressIndicator(), // Shows loading indicator
-      ):SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-
-              children: [
-
-              Center(
-                child: Column(
-                  children: [
-                    const Image(image: AssetImage('assets/icons/logo.png') ,height:100,width: 100,),
-
-                      const SizedBox(height: 40.0),
-                      const Text(
-                        'Welcome to J.A.R.V.I.S',
-                        style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 30.0,
-                            fontFamily: 'Malgun Gothic',
-                            fontWeight: FontWeight.w900,
-                            fontStyle: FontStyle.normal),
-                      ),
-                      const SizedBox(height: 40.0),
-                      CustomTextField(
-                        hintText: 'Email address',
-                        icon: Icons.email,
-                        controller: emailController,
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomTextField(
-                        hintText: 'Password',
-                        icon: Icons.lock,
-                        obscureText: true,
-                        controller: passwordController,
-                      ),
-                      const SizedBox(height: 20.0),
-                      CustomButton(
-                        text: 'Continue',
-                        onPressed: () => handleLogin(context),
-                      ),
-                      const SizedBox(height: 10.0),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => EmailSignUp()),
-                          );
-                        },
-                        child: const Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              "Don't have an account?",
-                              style: TextStyle(color: Colors.white),
+    return Container(
+      decoration: BoxDecoration(
+        gradient: AppColor.backgroundColorgradient,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: _isLoading
+            ? const Center(child: CircularProgressIndicator(color: AppColor.whiteColor))
+            : SafeArea(
+                child: GestureDetector(
+                  onTap: () => FocusScope.of(context).unfocus(),
+                  child: LayoutBuilder(
+                    builder: (context, constraints) {
+                      return SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
+                        child: ConstrainedBox(
+                          constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                          child: IntrinsicHeight(
+                            child: Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 20),
+                              child: Column(
+                                children: [
+                                  SizedBox(height: constraints.maxHeight * 0.1),
+                                  _buildLogo(),
+                                  SizedBox(height: constraints.maxHeight * 0.05),
+                                  _buildLoginForm(),
+                                  Spacer(),
+                                  _buildSocialLogin(),
+                                  SizedBox(height: 20),
+                                ],
+                              ),
                             ),
-                            SizedBox(width: 5.0),
-                            Text(
-                              'Sign up',
-                              style: TextStyle(color: AppColor.blueColor),
-                            ),
-                          ],
-                        ),
-                      ),
-                      const SizedBox(height: 10.0),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => ResetPassword(
-                                      email: emailController.text,
-                                    )),
-                          );
-                        },
-                        child: const Text(
-                          'Forgot password?',
-                          style: TextStyle(color: AppColor.blueColor),
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Container(
-                            height: 1,
-                            width: 100,
-                            color: Colors.white,
-                          ),
-                          const SizedBox(width: 10.0),
-                          const Text(
-                            'or',
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          const SizedBox(width: 10.0),
-                          Container(
-                            height: 1,
-                            width: 100,
-                            color: Colors.white,
-                          ),
-                        ],
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print("continue with google");
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          padding: const EdgeInsets.all(10.0),
-                          width: 364,
-                          height: 71,
-                          decoration: BoxDecoration(
-                            color: AppColor.containerColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                                color: AppColor.primaryColor, width: 2.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/google.png',
-                                height: 30,
-                                width: 30,
-                              ),
-                              const SizedBox(width: 10.0),
-                              const Text(
-                                'Continue with google',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontFamily: 'Malgun Gothic',
-                                ),
-                              ),
-                            ],
                           ),
                         ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print("continue with apple");
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          padding: const EdgeInsets.all(10.0),
-                          width: 364,
-                          height: 71,
-                          decoration: BoxDecoration(
-                            color: AppColor.containerColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                                color: AppColor.primaryColor, width: 2.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/apple.png',
-                                height: 50,
-                                width: 50,
-                              ),
-                              const SizedBox(width: 10.0),
-                              const Text(
-                                'Continue with apple',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontFamily: 'Malgun Gothic',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          print("continue with Microsoft");
-                        },
-                        child: Container(
-                          margin: const EdgeInsets.only(top: 20.0),
-                          padding: const EdgeInsets.all(10.0),
-                          width: 364,
-                          height: 71,
-                          decoration: BoxDecoration(
-                            color: AppColor.containerColor,
-                            borderRadius: BorderRadius.circular(20.0),
-                            border: Border.all(
-                                color: AppColor.primaryColor, width: 2.0),
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                'assets/icons/microsoft.png',
-                                height: 30,
-                                width: 30,
-                              ),
-                              const SizedBox(width: 10.0),
-                              const Text(
-                                'Continue with Microsoft',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20.0,
-                                  fontFamily: 'Malgun Gothic',
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ],
+                      );
+                    },
                   ),
                 ),
-              ],
+              ),
+      ),
+    );
+  }
+
+  Widget _buildLogo() {
+    return Column(
+      children: [
+        Container(
+          width: 180,
+          height: 90,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/icons/logo.png'),
+              fit: BoxFit.contain,
             ),
+          ),
+        ),
+        Text(
+          'stapes.ai',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: AppColor.whiteColor,
+            fontSize: 46,
+            fontFamily: 'Ubuntu',
+            fontWeight: FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLoginForm() {
+    return Column(
+      children: [
+        NTextField(
+          hintText: 'Email',
+          controller: emailController,
+          icon: Icons.email_rounded,
+        ),
+        SizedBox(height: 20),
+        PasswordTextField(
+          hintText: 'Password',
+          controller: passwordController,
+          icon: Icons.remove_red_eye_rounded,
+        ),
+        // SizedBox(height: 5),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ForgotPassword()),
+              );
+            },
+            child: Text(
+              'Forgot Password?',
+              style: TextStyle(
+                color: AppColor.textHyperlinkColor,
+                fontSize: 15,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+          ),
+        ),
+        SizedBox(height: 20),
+        CustomButton(
+          text: 'Log In',
+          onPressed: () => handleLogin(context),
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              'Don\'t have an account?',
+              style: TextStyle(
+                color: AppColor.whiteColor,
+                fontSize: 16,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.w400,
+              ),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EmailSignUp()),
+                );
+              },
+              child: Text(
+                'Sign Up',
+                style: TextStyle(
+                  color: AppColor.textHyperlinkColor,
+                  fontSize: 16,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialLogin() {
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 30),
+          child: Row(
+            children: [
+              Expanded(child: Divider(color: AppColor.whiteColor50, thickness: 1)),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  'or continue with',
+                  style: TextStyle(
+                    color: AppColor.whiteColor50,
+                    fontSize: 16,
+                    fontFamily: 'Ubuntu',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+              Expanded(child: Divider(color: AppColor.whiteColor50, thickness: 1)),
+            ],
+          ),
+        ),
+        SizedBox(height: 20),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildSocialButton('assets/icons/sso/google.png', () {}),
+            SizedBox(width: 20),
+            _buildSocialButton('assets/icons/sso/microsoft.png', () {}),
+            SizedBox(width: 20),
+            _buildSocialButton('assets/icons/sso/apple.png', () {}),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSocialButton(String asset, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        height: 50,
+        width: 50,
+        decoration: ShapeDecoration(
+          color: Color(0xFF34373F),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
+          shadows: [
+            BoxShadow(
+              color: Color(0x26000000),
+              blurRadius: 5.40,
+              offset: Offset(1, 3),
+              spreadRadius: 0,
+            )
+          ],
+        ),
+        child: Center(
+          child: Image(
+            image: AssetImage(asset),
+            height: 30,
           ),
         ),
       ),

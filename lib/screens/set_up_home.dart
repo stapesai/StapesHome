@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,7 +52,7 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: AppColor.whiteColor,
                     ),
                   ),
                 ],
@@ -80,8 +81,7 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
               items: [1, 2, 3, 4, 5].map((int value) {
                 return DropdownMenuItem<int>(
                   value: value,
-                  child: Text(value.toString(),
-                      style: const TextStyle(color: Colors.white)),
+                  child: Text(value.toString(), style: const TextStyle(color: Colors.white)),
                 );
               }).toList(),
               onChanged: (value) {
@@ -115,16 +115,14 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                         borderSide: const BorderSide(color: Color(0xFF333333)),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      contentPadding:
-                          const EdgeInsets.symmetric(horizontal: 12),
+                      contentPadding: const EdgeInsets.symmetric(horizontal: 12),
                     ),
                     dropdownColor: const Color(0xFF333333),
                     value: _roomsPerFloor[index],
                     items: [1, 2, 3, 4, 5].map((int value) {
                       return DropdownMenuItem<int>(
                         value: value,
-                        child: Text(value.toString(),
-                            style: const TextStyle(color: Colors.white)),
+                        child: Text(value.toString(), style: const TextStyle(color: Colors.white)),
                       );
                     }).toList(),
                     onChanged: (value) {
@@ -154,14 +152,14 @@ class _SetupHomeScreenState extends State<SetupHomeScreen> {
                     Text(
                       'Create',
                       style: TextStyle(
-                        color: Colors.white,
+                        color: AppColor.whiteColor,
                         fontSize: 18,
                       ),
                     ),
                     SizedBox(width: 8),
                     Icon(
                       Icons.arrow_right_alt,
-                      color: Colors.white,
+                      color: AppColor.whiteColor,
                     ),
                   ],
                 ),
