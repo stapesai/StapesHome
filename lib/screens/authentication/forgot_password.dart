@@ -100,80 +100,85 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     final screenSize = MediaQuery.of(context).size;
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
-    return Container(
-      decoration: ShapeDecoration(
-        gradient: AppColor.backgroundColorgradient,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(30),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
         ),
-      ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        resizeToAvoidBottomInset: false,
-        body: _isLoading
-            ? const Center(
-                child: CircularProgressIndicator(
-                  color: AppColor.whiteColor,
-                ),
-              )
-            : SafeArea(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenSize.height * 0.08),
-                      SizedBox(
-                        child: Text(
-                          'Forgot Password',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: screenSize.width * 0.1,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w700,
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ),
+                )
+              : SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(
+                          child: Text(
+                            'Forgot Password',
+                            style: TextStyle(
+                              color: AppColor.whiteColor,
+                              fontSize: screenSize.width * 0.1,
+                              // fontSize: 44,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w700,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      SizedBox(
-                        child: Text(
-                          'Enter your email to receive verification code.',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: screenSize.width * 0.045,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w400,
+                        SizedBox(height: screenSize.height * 0.02),
+                        SizedBox(
+                          child: Text(
+                            'Enter your email to receive verification code.',
+                            style: TextStyle(
+                              color: AppColor.whiteColor,
+                              fontSize: screenSize.width * 0.04,
+                              // fontSize: 20,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         ),
-                      ),
-                      SizedBox(height: screenSize.height * 0.04),
-                      SizedBox(
-                        child: NTextField(
-                          hintText: 'Enter your email',
-                          controller: emailController,
-                          icon: Icons.email_rounded,
-                        ),
-                      ),
-                      const Spacer(),
-                      AnimatedContainer(
-                        duration: const Duration(milliseconds: 0),
-                        curve: Curves.easeOut,
-                        margin: EdgeInsets.only(
-                          bottom: keyboardHeight > 0
-                              ? keyboardHeight + screenSize.height * 0.02
-                              : screenSize.height * 0.1, // Adjust this value to move the button up
-                        ),
-                        child: Center(
-                          child: CustomButton(
-                            text: "Send Code",
-                            onPressed: () => handleForgotPassword(context),
+                        SizedBox(height: screenSize.height * 0.04),
+                        SizedBox(
+                          child: NTextField(
+                            hintText: 'Enter your email',
+                            controller: emailController,
+                            icon: Icons.email_rounded,
                           ),
                         ),
-                      ),
-                    ],
+                        const Spacer(),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                          margin: EdgeInsets.only(
+                            bottom: keyboardHeight > 0
+                                ? keyboardHeight + screenSize.height * 0.02
+                                : screenSize.height * 0.1,
+                          ),
+                          child: Center(
+                            child: CustomButton(
+                              text: "Send Code",
+                              onPressed: () => handleForgotPassword(context),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
+        ),
       ),
     );
   }
