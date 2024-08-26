@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:jarvis/screens/authentication/login.dart';
 import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
@@ -51,7 +52,12 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ResetPassword(),
+                      builder: (context) => PasswordScreen(
+                        title: 'Reset Password',
+                        subtitle:
+                            'Enter your email to receive verification code.',
+                        nextScreen: LoginScreen(),
+                      ),
                     ),
                   );
                 } else {

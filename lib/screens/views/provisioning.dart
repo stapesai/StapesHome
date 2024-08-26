@@ -50,7 +50,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
             Text(
               'Provisioning Status',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColor.whiteColor,
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
               ),

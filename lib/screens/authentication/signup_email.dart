@@ -6,6 +6,8 @@ import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/screens/authentication/password.dart';
 import 'package:jarvis/screens/authentication/otp_verify.dart';
+import 'package:jarvis/screens/authentication/signup_form.dart';
+
 
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});
@@ -23,10 +25,9 @@ class _EmailSignUpState extends State<EmailSignUp> {
     setState(() {
       _isLoading = true; // Start loading indicator
     });
-    var signup_url =
-        Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
-    var response = await http.post(
-      signup_url,
+    var check_email_url = Uri.https('auth.jarvishome.in', '/check/email');
+    var check_email_response = await http.post(
+      check_email_url,
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'
@@ -35,27 +36,59 @@ class _EmailSignUpState extends State<EmailSignUp> {
         'email': emailController.text,
       }),
     );
-    var responseBody = json.decode(response.body);
+    var check_email_responseBody = json.decode(check_email_response.body);
 
-    if (response.statusCode == 200) {
-      String transactionId = responseBody['transaction_id'];
-      if (context.mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpVerificationScreen(
-              transactionId: transactionId,
-              time: DateTime.parse(responseBody["otp_expires_at"]),
-              onSuccess: () async {
-                if (context.mounted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => CreatePassword(),
-                    ),
-                  );
-                } else {
-                  print('Error :  ${responseBody} ');
+    if (check_email_response.statusCode == 200) {
+      var signup_url =
+          Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
+      var response = await http.post(
+        signup_url,
+        headers: {
+          'Content-Type': 'application/json',
+          'accept': 'application/json'
+        },
+        body: jsonEncode({
+          'email': emailController.text,
+        }),
+      );
+      var responseBody = json.decode(response.body);
+
+      if (response.statusCode == 200) {
+        String transactionId = responseBody['transaction_id'];
+        if (context.mounted) {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) => OtpVerificationScreen(
+                transactionId: transactionId,
+                time: DateTime.parse(responseBody["otp_expires_at"]),
+                onSuccess: () async {
+                  if (context.mounted) {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => PasswordScreen(
+                          title: 'Create Password',
+                          subtitle:
+                              'Lets create a password to secure your account.',
+                          nextScreen: SignupForm(),
+                        ),
+                      ),
+                    );
+                  } else {
+                    print('Error :  ${responseBody} ');
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                              'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                        ),
+                      );
+                    }
+                  }
+                },
+                onError: () {
+                  print('Error :  ${responseBody["detail"]} ');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
@@ -64,34 +97,32 @@ class _EmailSignUpState extends State<EmailSignUp> {
                       ),
                     );
                   }
-                }
-              },
-              onError: () {
-                print('Error :  ${responseBody["detail"]} ');
-                if (context.mounted) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(
-                          'Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                    ),
-                  );
-                }
-              },
+                },
+              ),
             ),
-          ),
-        );
+          );
+        }
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                  'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+            ),
+          );
+        }
       }
     } else {
       if (context.mounted) {
-        print('Error :  ${responseBody["detail"]} ');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text(
-                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                'Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
           ),
         );
       }
     }
+
     setState(() {
       _isLoading = false; // Stop loading indicator
     });
