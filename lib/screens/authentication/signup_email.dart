@@ -23,9 +23,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
     setState(() {
       _isLoading = true;
     });
-    var check_email_url = Uri.https('auth.jarvishome.in', '/check/email', {
-      'email': email,
-    });
+    
     var check_email_response = await http.post(
       AuthRoutes.checkEmail,
       headers: {
