@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:jarvis/constants/colors.dart';
 
 class NTextField extends StatefulWidget {
   final String hintText;
-
   final TextEditingController? controller;
   final IconData? icon;
+  final FocusNode? focusNode;
 
   const NTextField({
     super.key,
     required this.hintText,
     this.controller,
     this.icon,
+    this.focusNode,
   });
 
   @override
@@ -23,6 +25,7 @@ class _CustomTextFieldState extends State<NTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      focusNode: widget.focusNode,
       decoration: InputDecoration(
         suffixIcon: Icon(
           widget.icon,
@@ -57,12 +60,14 @@ class PasswordTextField extends StatefulWidget {
   final bool obscureText = true;
   final TextEditingController? controller;
   final IconData? icon;
+  final FocusNode? focusNode;
 
   PasswordTextField({
     super.key,
     required this.hintText,
     this.controller,
     this.icon,
+    this.focusNode,
   });
 
   @override
@@ -74,18 +79,16 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
+      focusNode: widget.focusNode,
       obscureText: widget.obscureText,
       inputFormatters: [
-        // FilteringTextInputFormatter.allow(RegExp(
-        //     r'^(?=.*[A-Z])(?=.*\d)(?=.*[!@#\$%\^&\*])[A-Za-z\d!@#\$%\^&\*]{8,}$')),
+        FilteringTextInputFormatter.deny(RegExp(r"\s")),
       ],
       decoration: InputDecoration(
         suffixIcon: Icon(
           widget.icon,
           color: AppColor.whiteColor50,
         ),
-        // filled: true,
-        // fillColor: const Color(0xFF161622),
         labelText: widget.hintText,
         labelStyle: TextStyle(color: AppColor.whiteColor50),
         enabledBorder: OutlineInputBorder(
