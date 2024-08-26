@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/cache/hive.dart';
+import 'package:jarvis/utils/hive.dart';
 import 'package:flutter/material.dart';
 import 'package:jarvis/screens/main.dart';
 import "package:jarvis/widgets/button.dart";
 import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/cache/sessions_model.dart';
+import 'package:jarvis/utils/sessions_model.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/screens/authentication/forgot_password.dart';
 import 'package:jarvis/screens/authentication/otp_verify.dart';

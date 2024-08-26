@@ -1,24 +1,32 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:jarvis/widgets/button.dart'; 
+import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/screens/authentication/password.dart';
-import 'package:jarvis/screens/authentication/otp_verify.dart'; 
+import 'package:jarvis/screens/authentication/otp_verify.dart';
 
-class EmailSignUp extends StatelessWidget {
+class EmailSignUp extends StatefulWidget {
+  const EmailSignUp({super.key});
+
+  @override
+  createState() => _EmailSignUpState();
+}
+
+class _EmailSignUpState extends State<EmailSignUp> {
   final TextEditingController emailController = TextEditingController();
 
-  EmailSignUp({super.key});
+  bool _isLoading = false;
 
   Future<void> handleSignup(BuildContext context) async {
-    // setState(() {
-    //   _isLoading = true; // Start loading indicator
-    // });
-    var url = Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
+    setState(() {
+      _isLoading = true; // Start loading indicator
+    });
+    var signup_url =
+        Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
     var response = await http.post(
-      url,
+      signup_url,
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'
@@ -84,6 +92,9 @@ class EmailSignUp extends StatelessWidget {
         );
       }
     }
+    setState(() {
+      _isLoading = false; // Stop loading indicator
+    });
   }
 
   @override
@@ -98,76 +109,83 @@ class EmailSignUp extends StatelessWidget {
         ),
         child: Scaffold(
             backgroundColor: Colors.transparent,
-            body: Container(
-                child: Stack(
-              children: [
-                Positioned(
-                    left: 10,
-                    top: 90,
-                    right: 0,
-                    child: Container(
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                              width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 1),
-                              child: Padding(
-                                padding: const EdgeInsets.all(10),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    SizedBox(
-                                      width: double.infinity,
-                                      child: Text(
-                                        'Sign Up',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 44,
-                                          fontFamily: 'Ubuntu',
-                                          fontWeight: FontWeight.w700,
-                                          height: 0,
-                                        ),
+            body: _isLoading
+                ? const Center(
+                    child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ))
+                : Container(
+                    child: Stack(
+                    children: [
+                      Positioned(
+                          left: 10,
+                          top: 90,
+                          right: 0,
+                          child: Container(
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 1),
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(10),
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SizedBox(
+                                            width: double.infinity,
+                                            child: Text(
+                                              'Sign Up',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 44,
+                                                fontFamily: 'Ubuntu',
+                                                fontWeight: FontWeight.w700,
+                                                height: 0,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 10),
+                                          SizedBox(
+                                            width: 380,
+                                            child: Text(
+                                              'Enter your email to receive verification code.',
+                                              style: TextStyle(
+                                                color: Colors.white,
+                                                fontSize: 20,
+                                                fontFamily: 'Ubuntu',
+                                                fontWeight: FontWeight.w400,
+                                                height: 0,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 40),
+                                          NTextField(
+                                            hintText: 'Enter your email',
+                                            controller: emailController,
+                                            icon: Icons.email_rounded,
+                                          ),
+                                          SizedBox(height: 330),
+                                          CustomButton(
+                                              text: "Send Code",
+                                              onPressed: () {
+                                                handleSignup(context);
+                                              }),
+                                        ],
                                       ),
-                                    ),
-                                    SizedBox(height: 10),
-                                    SizedBox(
-                                      width: 380,
-                                      child: Text(
-                                        'Enter your email to receive verification code.',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          fontFamily: 'Ubuntu',
-                                          fontWeight: FontWeight.w400,
-                                          height: 0,
-                                        ),
-                                      ),
-                                    ),
-                                    SizedBox(height: 40),
-                                    NTextField(
-                                      hintText: 'Enter your email',
-                                      controller: emailController,
-                                      icon: Icons.email_rounded,
-                                    ),
-                                    SizedBox(height: 330),
-                                    CustomButton(
-                                        text: "Send Code",
-                                        onPressed: () {
-                                          handleSignup(context);
-                                        }),
-                                  ],
-                                ),
-                              )),
-                        ],
-                      ),
-                    ))
-              ],
-            ))));
+                                    )),
+                              ],
+                            ),
+                          ))
+                    ],
+                  ))));
   }
 }

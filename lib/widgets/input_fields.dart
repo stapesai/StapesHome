@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 
 class NTextField extends StatefulWidget {
   final String hintText;
@@ -54,7 +54,7 @@ class _CustomTextFieldState extends State<NTextField> {
 
 class PasswordTextField extends StatefulWidget {
   final String hintText;
-  bool obscureText = true;
+  final bool obscureText = true;
   final TextEditingController? controller;
   final IconData? icon;
 
@@ -63,7 +63,6 @@ class PasswordTextField extends StatefulWidget {
     required this.hintText,
     this.controller,
     this.icon,
-    this.obscureText = true,
   });
 
   @override

@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:jarvis/screens/main.dart'; // Import the main.dart for MainScreen
-import 'package:jarvis/cache/sessions_model.dart';
+import 'package:jarvis/utils/sessions_model.dart';
 import 'package:jarvis/screens/authentication/login.dart'; // Import the LoginScreen
 
 class SplashScreen extends StatefulWidget {

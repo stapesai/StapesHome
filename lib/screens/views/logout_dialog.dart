@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/cache/hive.dart';
+import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/screens/authentication/login.dart';
 import 'package:jarvis/constants/colors.dart';
 import "package:jarvis/widgets/button.dart";

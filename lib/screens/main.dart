@@ -1,12 +1,12 @@
 // Dart and Flutter imports
 import 'package:flutter/material.dart';
 // Local imports
-import 'package:jarvis/cache/hive.dart';
+import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/navigation/devices.dart';
-import 'package:jarvis/screens/navigation/home.dart';
-import 'package:jarvis/screens/navigation/nodes.dart';
-import 'package:jarvis/screens/navigation/profile.dart';
+import 'package:jarvis/screens/routes/devices.dart';
+import 'package:jarvis/screens/routes/home.dart';
+import 'package:jarvis/screens/routes/nodes.dart';
+import 'package:jarvis/screens/routes/profile.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

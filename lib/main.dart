@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart' as path_provider;
 
 // Local imports
 
-import 'package:jarvis/cache/sessions_model.dart';
+import 'package:jarvis/utils/sessions_model.dart';
 
 import 'package:jarvis/screens/splash_screen.dart';
 

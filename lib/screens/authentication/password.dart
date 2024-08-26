@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/screens/authentication/signup_form.dart';
@@ -159,10 +158,7 @@ class CreatePassword extends StatelessWidget {
   }
 }
 
-
-
 // Reset Password
-
 
 class ResetPassword extends StatelessWidget {
   final TextEditingController passWord = TextEditingController();
