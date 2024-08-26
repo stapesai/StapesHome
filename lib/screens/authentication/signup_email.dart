@@ -8,7 +8,6 @@ import 'package:jarvis/screens/authentication/password.dart';
 import 'package:jarvis/screens/authentication/otp_verify.dart';
 import 'package:jarvis/screens/authentication/signup_form.dart';
 
-
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});
 
@@ -18,23 +17,17 @@ class EmailSignUp extends StatefulWidget {
 
 class _EmailSignUpState extends State<EmailSignUp> {
   final TextEditingController emailController = TextEditingController();
-
   bool _isLoading = false;
-
-  Future<void> handleSignup(BuildContext context) async {
+  Future<void> handleSignup(BuildContext context, String email) async {
     setState(() {
-      _isLoading = true; // Start loading indicator
+      _isLoading = true;
     });
-    var check_email_url = Uri.https('auth.jarvishome.in', '/check/email');
+    var check_email_url = Uri.https('auth.jarvishome.in', '/check/email', {
+      'email': email,
+    });
     var check_email_response = await http.post(
       check_email_url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
-      body: jsonEncode({
-        'email': emailController.text,
-      }),
+      headers: {'accept': 'application/json'},
     );
     var check_email_responseBody = json.decode(check_email_response.body);
 
@@ -208,7 +201,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                           CustomButton(
                                               text: "Send Code",
                                               onPressed: () {
-                                                handleSignup(context);
+                                                handleSignup(context,
+                                                    emailController.text);
                                               }),
                                         ],
                                       ),
