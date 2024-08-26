@@ -87,16 +87,9 @@ class _MainScreenState extends State<MainScreen> {
           resizeToAvoidBottomInset: false,
           body: _screens[_selectedIndex],
           bottomNavigationBar: Container(
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.transparent,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.3),
-                  spreadRadius: 0,
-                  blurRadius: 10,
-                  offset: const Offset(0, -3),
-                ),
-              ],
+              // Removed the blur effect
             ),
             child: Ink(
               child: BottomNavigationBar(
@@ -129,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
                 ],
                 currentIndex: _selectedIndex,
                 selectedItemColor: Colors.amber[800],
-                backgroundColor: Colors.transparent, 
+                backgroundColor: Colors.transparent,
                 unselectedItemColor: AppColor.whiteColor,
                 onTap: _onItemTapped,
               ),
@@ -147,7 +140,13 @@ class _MainScreenState extends State<MainScreen> {
     return BottomNavigationBarItem(
       icon: Column(
         children: [
-          AnimatedBar(isActive: isActive),
+          // line above the selected icon
+          // if (isActive)
+          //   SvgPicture.asset(
+          //     'assets/icons/navbar/line.svg',
+          //     height: 4,
+          //     width: 10,
+          //   ),
           SvgPicture.asset(
             isActive ? activeIcon : inactiveIcon,
             height: 43,
