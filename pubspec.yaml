@@ -25,16 +25,20 @@ dependencies:
 
 dev_dependencies:
   flutter_test:
-    sdk: flutter 
+    sdk: flutter
   build_runner: ^2.4.11
   hive_generator: ^2.0.1
 
 flutter:
   uses-material-design: true
   assets:
-    - assets/
+    - assets/icons/
+    - assets/icons/sso/
+    - assets/icons/home/
+    - assets/icons/navbar/
+    - assets/icons/temp/
+
   fonts:
     - family: Malgun Gothic
       fonts:
         - asset: assets/fonts/malgun-gothic.ttf
-

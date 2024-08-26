@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/colors.dart';
 
 class NTextField extends StatefulWidget {
   final String hintText;
@@ -25,23 +26,23 @@ class _CustomTextFieldState extends State<NTextField> {
       decoration: InputDecoration(
         suffixIcon: Icon(
           widget.icon,
-          color: Color.fromARGB(132, 254, 252, 251),
+          color: AppColor.whiteColor50,
         ),
-        filled: true,
-        fillColor: const Color(0xFF161622),
+        // filled: true,
+        // fillColor: const Color(0xFF161622),
         labelText: widget.hintText,
-        labelStyle: const TextStyle(color: Color.fromARGB(132, 254, 252, 251)),
+        labelStyle: TextStyle(color: AppColor.whiteColor50),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Color.fromARGB(132, 254, 252, 251),
+          borderSide: BorderSide(
+            color: AppColor.whiteColor50,
             width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Color.fromARGB(132, 254, 252, 251),
+          borderSide: BorderSide(
+            color: AppColor.whiteColor50,
             width: 2.0,
           ),
         ),
@@ -81,23 +82,23 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       decoration: InputDecoration(
         suffixIcon: Icon(
           widget.icon,
-          color: Color.fromARGB(132, 254, 252, 251),
+          color: AppColor.whiteColor50,
         ),
-        filled: true,
-        fillColor: const Color(0xFF161622),
+        // filled: true,
+        // fillColor: const Color(0xFF161622),
         labelText: widget.hintText,
-        labelStyle: const TextStyle(color: Color.fromARGB(132, 254, 252, 251)),
+        labelStyle: TextStyle(color: AppColor.whiteColor50),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Color.fromARGB(132, 254, 252, 251),
+          borderSide: BorderSide(
+            color: AppColor.whiteColor50,
             width: 2.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15.0),
-          borderSide: const BorderSide(
-            color: Color.fromARGB(132, 254, 252, 251),
+          borderSide: BorderSide(
+            color: AppColor.whiteColor50,
             width: 2.0,
           ),
         ),

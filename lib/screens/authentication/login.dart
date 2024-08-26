@@ -226,7 +226,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         child: Text(
                                           'Forgot Password?',
                                           style: TextStyle(
-                                            color: Color(0xFF0084FF),
+                                            color: AppColor.textHyperlinkColor,
                                             fontSize: 15,
                                             fontFamily: 'Ubuntu',
                                             fontWeight: FontWeight.w400,
@@ -250,7 +250,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Text(
                                       'Don\'t have an account?',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: AppColor.whiteColor,
                                         fontSize: 16,
                                         fontFamily: 'Ubuntu',
                                         fontWeight: FontWeight.w400,
@@ -269,7 +269,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       child: Text(
                                         'Sign Up',
                                         style: TextStyle(
-                                          color: AppColor.blueColor,
+                                          color: AppColor.textHyperlinkColor,
                                           fontSize: 16,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w400,
@@ -286,16 +286,16 @@ class _LoginScreenState extends State<LoginScreen> {
                                     children: [
                                       Expanded(
                                         child: Divider(
-                                          color: AppColor.DividerColor,
+                                          color: AppColor.whiteColor50,
                                           thickness: 1,
                                         ),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.symmetric(horizontal: 20),
                                         child: Text(
-                                          'OR',
+                                          'or continue with',
                                           style: TextStyle(
-                                            color: AppColor.DividerColor,
+                                            color: AppColor.whiteColor50,
                                             fontSize: 16,
                                             fontFamily: 'Ubuntu',
                                             fontWeight: FontWeight.w400,
@@ -304,7 +304,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       Expanded(
                                         child: Divider(
-                                          color: AppColor.DividerColor,
+                                          color: AppColor.whiteColor50,
                                           thickness: 1,
                                         ),
                                       ),
@@ -339,7 +339,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         child: const Center(
                                           child: Image(
-                                            image: AssetImage('assets/icons/google.png'),
+                                            image: AssetImage('assets/icons/sso/google.png'),
                                             height: 30,
                                           ),
                                         ),
@@ -370,7 +370,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         child: const Center(
                                           child: Image(
-                                            image: AssetImage('assets/icons/microsoft.png'),
+                                            image: AssetImage('assets/icons/sso/microsoft.png'),
                                             height: 30,
                                           ),
                                         ),
@@ -401,7 +401,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         child: const Center(
                                           child: Image(
-                                            image: AssetImage('assets/icons/apple.png'),
+                                            image: AssetImage('assets/icons/sso/apple.png'),
                                             height: 30,
                                           ),
                                         ),
