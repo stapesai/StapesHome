@@ -7,7 +7,7 @@ import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/screens/authentication/password.dart';
 import 'package:jarvis/screens/authentication/otp_verify.dart';
-import 'package:jarvis/screens/authentication/signup_form.dart';
+import 'package:jarvis/screens/authentication/signup/details_form.dart';
 
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});
@@ -19,7 +19,7 @@ class EmailSignUp extends StatefulWidget {
 class _EmailSignUpState extends State<EmailSignUp> {
   final TextEditingController emailController = TextEditingController();
   bool _isLoading = false;
-  Future<void> requestSignup(BuildContext context, String email) async {
+  Future<void> handlerequestSignup(BuildContext context, String email) async {
     setState(() {
       _isLoading = true;
     });
@@ -52,7 +52,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 time: DateTime.parse(responseBody["otp_expires_at"]),
                 onSuccess: () async {
                   if (context.mounted) {
-                    print('inside context'+transactionId);
+                    print('inside context' + transactionId);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -120,7 +120,12 @@ class _EmailSignUpState extends State<EmailSignUp> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
           gradient: AppColor.backgroundColorgradient,
@@ -129,81 +134,77 @@ class _EmailSignUpState extends State<EmailSignUp> {
           ),
         ),
         child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: _isLoading
-                ? const Center(
-                    child: CircularProgressIndicator(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
                     color: AppColor.whiteColor,
-                  ))
-                : Container(
-                    child: Stack(
-                    children: [
-                      Positioned(
-                          left: 10,
-                          top: 90,
-                          right: 0,
-                          child: Container(
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                    width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(horizontal: 1),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(10),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment: MainAxisAlignment.start,
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          SizedBox(
-                                            width: double.infinity,
-                                            child: Text(
-                                              'Sign Up',
-                                              style: TextStyle(
-                                                color: AppColor.whiteColor,
-                                                fontSize: 44,
-                                                fontFamily: 'Ubuntu',
-                                                fontWeight: FontWeight.w700,
-                                                height: 0,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(height: 10),
-                                          SizedBox(
-                                            width: 380,
-                                            child: Text(
-                                              'Enter your email to receive verification code.',
-                                              style: TextStyle(
-                                                color: AppColor.whiteColor,
-                                                fontSize: 20,
-                                                fontFamily: 'Ubuntu',
-                                                fontWeight: FontWeight.w400,
-                                                height: 0,
-                                              ),
-                                            ),
-                                          ),
-                                          SizedBox(height: 40),
-                                          NTextField(
-                                            hintText: 'Enter your email',
-                                            controller: emailController,
-                                            icon: Icons.email_rounded,
-                                          ),
-                                          SizedBox(height: 330),
-                                          CustomButton(
-                                              text: "Send Code",
-                                              onPressed: () {
-                                                requestSignup(context, emailController.text);
-                                              }),
-                                        ],
-                                      ),
-                                    )),
-                              ],
+                  ),
+                )
+              : SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(
+                          width: double.infinity,
+                          child: Text(
+                            'Sign Up',
+                            style: TextStyle(
+                              color: AppColor.whiteColor,
+                              // fontSize: screenSize.width * 0.1,
+                              fontSize: 44,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w700,
                             ),
-                          ))
-                    ],
-                  ))));
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        SizedBox(
+                          child: Text(
+                            'Enter your email to receive verification code.',
+                            style: TextStyle(
+                              color: AppColor.whiteColor,
+                              // fontSize: screenSize.width * 0.04,
+                              fontSize: 20,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        SizedBox(
+                          child: NTextField(
+                            hintText: 'Enter your email',
+                            controller: emailController,
+                            icon: Icons.email_rounded,
+                          ),
+                        ),
+                        const Spacer(),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                          margin: EdgeInsets.only(
+                            bottom: keyboardHeight > 0
+                                ? keyboardHeight + screenSize.height * 0.02
+                                : screenSize.height * 0.1,
+                          ),
+                          child: Center(
+                            child: CustomButton(
+                              text: "Send Code",
+                              onPressed: () => handlerequestSignup(context, emailController.text),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+        ),
+      ),
+    );
   }
 }

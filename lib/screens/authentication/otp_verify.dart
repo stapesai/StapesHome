@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/constants/colors.dart';
@@ -72,9 +73,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       _isLoading = true;
     });
     String otp = _controllers.map((controller) => controller.text).join();
-    var url = Uri.https('auth.jarvishome.in', '/auth/verify_otp');
     var response = await http.post(
-      url,
+      AuthRoutes.verifyOtp,
       headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'transaction_id': widget.transactionId,

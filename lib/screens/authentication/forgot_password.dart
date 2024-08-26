@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/screens/authentication/login.dart';
 import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
@@ -24,9 +25,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     setState(() {
       _isLoading = true; // Start loading indicator
     });
-    var url = Uri.https('auth.jarvishome.in', '/auth/reset-password/request-reset');
     var response = await http.post(
-      url,
+      AuthRoutes.requestResetPassword,
       headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'email': emailController.text,
@@ -132,8 +132,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             'Forgot Password',
                             style: TextStyle(
                               color: AppColor.whiteColor,
-                              fontSize: screenSize.width * 0.1,
-                              // fontSize: 44,
+                              // fontSize: screenSize.width * 0.1,
+                              fontSize: 44,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w700,
                             ),
@@ -145,8 +145,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             'Enter your email to receive verification code.',
                             style: TextStyle(
                               color: AppColor.whiteColor,
-                              fontSize: screenSize.width * 0.04,
-                              // fontSize: 20,
+                              // fontSize: screenSize.width * 0.04,
+                              fontSize: 20,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w400,
                             ),
