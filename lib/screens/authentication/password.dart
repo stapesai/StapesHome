@@ -96,8 +96,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                           children: [
                             Container(
                               width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 1),
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
@@ -153,11 +152,9 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                           checkPassword(widget.passWord.text,
                                               context, widget.nextScreen);
                                         } else {
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(
+                                          ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(
-                                              content: Text(
-                                                  'Passwords do not match'),
+                                              content: Text('Passwords do not match'),
                                               backgroundColor: Colors.red,
                                             ),
                                           );

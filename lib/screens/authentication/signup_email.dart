@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/widgets/button.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
@@ -153,16 +154,13 @@ class _EmailSignUpState extends State<EmailSignUp> {
                               children: [
                                 Container(
                                     width: double.infinity,
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 1),
+                                    padding: const EdgeInsets.symmetric(horizontal: 1),
                                     child: Padding(
                                       padding: const EdgeInsets.all(10),
                                       child: Column(
                                         mainAxisSize: MainAxisSize.min,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment: MainAxisAlignment.start,
+                                        crossAxisAlignment: CrossAxisAlignment.start,
                                         children: [
                                           SizedBox(
                                             width: double.infinity,

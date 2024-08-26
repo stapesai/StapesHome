@@ -33,9 +33,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
             radius: 86.5, // Half of 173
             backgroundColor: Colors.grey[300],
             backgroundImage: _image != null ? FileImage(_image!) : null,
-            child: _image == null
-                ? const Icon(Icons.person, size: 86.5, color: Colors.white)
-                : null,
+            child: _image == null ? const Icon(Icons.person, size: 86.5, color: Colors.white) : null,
           ),
           Positioned(
             bottom: 20, // Adjust the position as needed
@@ -44,8 +42,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
               onTap: _pickImage,
               child: const CircleAvatar(
                 radius: 11,
-                backgroundColor:
-                    Color(0xFFBABABA), // Background color of the circle
+                backgroundColor: Color(0xFFBABABA), // Background color of the circle
                 child: Icon(
                   Icons.edit,
                   color: Colors.black,

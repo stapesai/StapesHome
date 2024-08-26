@@ -70,15 +70,9 @@ class _DeviceScreenState extends State<DeviceScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  FloorRoomButton(
-                      label: 'Floor 1',
-                      isActive: activeFloor == 1,
-                      onTap: () => setActiveFloor(1)),
+                  FloorRoomButton(label: 'Floor 1', isActive: activeFloor == 1, onTap: () => setActiveFloor(1)),
                   const SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Floor 2',
-                      isActive: activeFloor == 2,
-                      onTap: () => setActiveFloor(2)),
+                  FloorRoomButton(label: 'Floor 2', isActive: activeFloor == 2, onTap: () => setActiveFloor(2)),
                 ],
               ),
               const SizedBox(height: 24),
@@ -95,20 +89,11 @@ class _DeviceScreenState extends State<DeviceScreen> {
               const SizedBox(height: 8),
               Row(
                 children: [
-                  FloorRoomButton(
-                      label: 'Room 1',
-                      isActive: activeRoom == 1,
-                      onTap: () => setActiveRoom(1)),
+                  FloorRoomButton(label: 'Room 1', isActive: activeRoom == 1, onTap: () => setActiveRoom(1)),
                   const SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Room 2',
-                      isActive: activeRoom == 2,
-                      onTap: () => setActiveRoom(2)),
+                  FloorRoomButton(label: 'Room 2', isActive: activeRoom == 2, onTap: () => setActiveRoom(2)),
                   const SizedBox(width: 10),
-                  FloorRoomButton(
-                      label: 'Room 3',
-                      isActive: activeRoom == 3,
-                      onTap: () => setActiveRoom(3)),
+                  FloorRoomButton(label: 'Room 3', isActive: activeRoom == 3, onTap: () => setActiveRoom(3)),
                 ],
               ),
               const SizedBox(height: 24),
@@ -137,8 +122,7 @@ class _DeviceScreenState extends State<DeviceScreen> {
         unselectedItemColor: Colors.white,
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Home'),
-          BottomNavigationBarItem(
-              icon: Icon(Icons.lightbulb_outline), label: 'Devices'),
+          BottomNavigationBarItem(icon: Icon(Icons.lightbulb_outline), label: 'Devices'),
           BottomNavigationBarItem(icon: Icon(Icons.memory), label: 'Nodes'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
@@ -170,11 +154,7 @@ class FloorRoomButton extends StatelessWidget {
   final bool isActive;
   final VoidCallback onTap;
 
-  const FloorRoomButton(
-      {super.key,
-      required this.label,
-      required this.isActive,
-      required this.onTap});
+  const FloorRoomButton({super.key, required this.label, required this.isActive, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -237,9 +217,7 @@ class _DeviceButtonState extends State<DeviceButton> {
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: isActive
-                  ? Colors.orange.shade200
-                  : Colors.black.withOpacity(0.5),
+              color: isActive ? Colors.orange.shade200 : Colors.black.withOpacity(0.5),
               blurRadius: 10,
               spreadRadius: 3,
             ),
@@ -334,9 +312,7 @@ class DashedBorderPainter extends CustomPainter {
     const double dashWidth = 5;
     const double dashSpace = 5;
     final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(
-          Rect.fromLTWH(0, 0, size.width, size.height),
-          const Radius.circular(16)));
+      ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
     final dashPath = Path();
     final pathMetrics = path.computeMetrics();
     for (var pathMetric in pathMetrics) {
@@ -344,8 +320,7 @@ class DashedBorderPainter extends CustomPainter {
       double distance = 0.0;
       while (distance < length) {
         final double nextDistance = distance + dashWidth;
-        dashPath.addPath(
-            pathMetric.extractPath(distance, nextDistance), Offset.zero);
+        dashPath.addPath(pathMetric.extractPath(distance, nextDistance), Offset.zero);
         distance = nextDistance + dashSpace;
       }
     }

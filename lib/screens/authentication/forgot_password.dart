@@ -24,14 +24,10 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     setState(() {
       _isLoading = true; // Start loading indicator
     });
-    var url =
-        Uri.https('auth.jarvishome.in', '/auth/reset-password/request-reset');
+    var url = Uri.https('auth.jarvishome.in', '/auth/reset-password/request-reset');
     var response = await http.post(
       url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'email': emailController.text,
       }),
@@ -65,8 +61,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                       ),
                     );
                   }
@@ -77,8 +72,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                 if (context.mounted) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text(
-                          'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                      content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                     ),
                   );
                 }
@@ -92,8 +86,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         print('Error :  ${responseBody["detail"]} ');
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
           ),
         );
       }
@@ -135,16 +128,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                             children: [
                               Container(
                                   width: double.infinity,
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 1),
+                                  padding: const EdgeInsets.symmetric(horizontal: 1),
                                   child: Padding(
                                     padding: const EdgeInsets.all(10),
                                     child: Column(
                                       mainAxisSize: MainAxisSize.min,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
+                                      mainAxisAlignment: MainAxisAlignment.start,
+                                      crossAxisAlignment: CrossAxisAlignment.start,
                                       children: [
                                         SizedBox(
                                           width: double.infinity,

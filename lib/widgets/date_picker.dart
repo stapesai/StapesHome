@@ -53,9 +53,7 @@ class _CircularImagePickerState extends State<CircularImagePicker> {
             radius: 86.5, // Half of 173
             backgroundColor: Colors.grey[300],
             backgroundImage: _image != null ? FileImage(_image!) : null,
-            child: _image == null
-                ? const Icon(Icons.person, size: 86.5, color: Colors.white)
-                : null,
+            child: _image == null ? const Icon(Icons.person, size: 86.5, color: Colors.white) : null,
           ),
           Positioned(
             bottom: 4, // Adjust the position as needed

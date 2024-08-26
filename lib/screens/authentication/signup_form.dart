@@ -42,8 +42,7 @@ class SignupForm extends StatelessWidget {
                         children: [
                           Container(
                               width: double.infinity,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 1),
+                              padding: const EdgeInsets.symmetric(horizontal: 1),
                               child: Padding(
                                 padding: const EdgeInsets.all(10),
                                 child: Column(
@@ -78,11 +77,7 @@ class SignupForm extends StatelessWidget {
                                         ),
                                       ),
                                     ),
-                                    SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.1 /
-                                                2),
+                                    SizedBox(height: MediaQuery.of(context).size.height * 0.1 / 2),
                                     NTextField(
                                       hintText: 'First Name',
                                       controller: first_name,
@@ -102,10 +97,7 @@ class SignupForm extends StatelessWidget {
                                       hintText: 'Gender',
                                       controller: gender,
                                     ),
-                                    SizedBox(
-                                        height:
-                                            MediaQuery.of(context).size.height *
-                                                0.1),
+                                    SizedBox(height: MediaQuery.of(context).size.height * 0.1),
                                     CustomButton(
                                         text: "Done",
                                         onPressed: () {

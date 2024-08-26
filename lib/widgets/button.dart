@@ -23,7 +23,6 @@ class CustomButton extends StatelessWidget {
       // add icon if it is not null
       child: ElevatedButton(
         onPressed: onPressed,
-        
         style: ElevatedButton.styleFrom(
           backgroundColor: backgroundColor,
           padding: const EdgeInsets.symmetric(horizontal: 40.0, vertical: 15.0),
@@ -36,42 +35,7 @@ class CustomButton extends StatelessWidget {
           style: const TextStyle(
             fontSize: 18.0,
             fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LogoutButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const LogoutButton({super.key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      child: Container(
-        width: 45, // Diameter of the circle
-        height: 45,
-        decoration: BoxDecoration(
-          color: Colors
-              .transparent, // Outer circle color (you can adjust the opacity)
-          shape: BoxShape.circle,
-          border: Border.all(
-            color: Color(0xFFE2FC2B), // Green color for the border
-            width: 3, // Border width
-          ),
-        ),
-        child: Center(
-          child: Icon(
-            Icons.arrow_back_ios_new,
-            size: 25,
-
-            // Icon inside the button
-            color: Color(0xFFE2FC2B), // Icon color (green)
+            color: AppColor.whiteColor,
           ),
         ),
       ),

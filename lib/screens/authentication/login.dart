@@ -2,9 +2,10 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/utils/hive.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/screens/main.dart';
+import 'package:jarvis/screens/routes/main.dart';
 import "package:jarvis/widgets/button.dart";
 import 'package:jarvis/constants/colors.dart';
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/utils/sessions_model.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/screens/authentication/forgot_password.dart';
@@ -28,13 +29,9 @@ class _LoginScreenState extends State<LoginScreen> {
     setState(() {
       _isLoading = true;
     });
-    var url = Uri.https('auth.jarvishome.in', '/auth/login/request-login');
     var response = await http.post(
-      url,
-      headers: {
-        'Content-Type': 'application/json',
-        'accept': 'application/json'
-      },
+      AuthRoutes.requestLogin,
+      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
       body: jsonEncode({
         'email': emailController.text,
         'password': passwordController.text,
@@ -59,30 +56,21 @@ class _LoginScreenState extends State<LoginScreen> {
                       setState(() {
                         _isLoading = true;
                       });
-                      var completeLoginUrl = Uri.https(
-                          'auth.jarvishome.in', '/auth/login/complete-login');
                       var completeLoginResponse = await http.post(
-                        completeLoginUrl,
-                        headers: {
-                          'Content-Type': 'application/json',
-                          'accept': 'application/json'
-                        },
+                        AuthRoutes.completeLogin,
+                        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
                         body: jsonEncode({
                           'transaction_id': transactionId,
                         }),
                       );
 
                       if (completeLoginResponse.statusCode == 200) {
-                        var sessionResponseBody =
-                            json.decode(completeLoginResponse.body);
+                        var sessionResponseBody = json.decode(completeLoginResponse.body);
                         var sessionData = SessionsModel(
-                          sessionId: sessionResponseBody['session']
-                              ['session_id'],
+                          sessionId: sessionResponseBody['session']['session_id'],
                           userId: sessionResponseBody['session']['user_id'],
-                          createdAt: DateTime.parse(
-                              sessionResponseBody['session']['created_at']),
-                          lastActiveAt: DateTime.parse(
-                              sessionResponseBody['session']['last_active_at']),
+                          createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
+                          lastActiveAt: DateTime.parse(sessionResponseBody['session']['last_active_at']),
                         );
 
                         await hiveService.addBoxes([sessionData], "SessionBox");
@@ -90,9 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                           Navigator.pushReplacement(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => _isLoading
-                                  ? Center(child: CircularProgressIndicator())
-                                  : const MainScreen(),
+                              builder: (context) =>
+                                  _isLoading ? Center(child: CircularProgressIndicator()) : const MainScreen(),
                             ),
                           );
                         }
@@ -100,8 +87,7 @@ class _LoginScreenState extends State<LoginScreen> {
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(
-                                  'Error : ${completeLoginResponse.statusCode} - ${responseBody["detail"]} '),
+                              content: Text('Error : ${completeLoginResponse.statusCode} - ${responseBody["detail"]} '),
                             ),
                           );
                         }
@@ -115,8 +101,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       if (context.mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: Text(
-                                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                           ),
                         );
                       }
@@ -129,8 +114,7 @@ class _LoginScreenState extends State<LoginScreen> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
           ),
         );
       }
@@ -177,8 +161,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                 height: 150,
                                 decoration: BoxDecoration(
                                   image: DecorationImage(
-                                    image: NetworkImage(
-                                        "https://via.placeholder.com/267x150"),
+                                    image: NetworkImage("https://via.placeholder.com/267x150"),
                                     fit: BoxFit.fill,
                                   ),
                                 ),
@@ -223,13 +206,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                 const SizedBox(height: 4),
                                 Container(
                                   width: double.infinity,
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 5, vertical: 10),
+                                  padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
                                   child: Column(
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
                                       TextButton(
                                         onPressed: () {
@@ -238,9 +219,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) => _isLoading
-                                                    ? Center(
-                                                        child:
-                                                            CircularProgressIndicator())
+                                                    ? Center(child: CircularProgressIndicator())
                                                     : ForgotPassword(),
                                               ),
                                             );
@@ -249,7 +228,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         child: Text(
                                           'Forgot Password?',
                                           style: TextStyle(
-                                            color: Color(0xFF0084FF),
+                                            color: AppColor.textHyperlinkColor,
                                             fontSize: 15,
                                             fontFamily: 'Ubuntu',
                                             fontWeight: FontWeight.w400,
@@ -273,7 +252,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     Text(
                                       'Don\'t have an account?',
                                       style: TextStyle(
-                                        color: Colors.white,
+                                        color: AppColor.whiteColor,
                                         fontSize: 16,
                                         fontFamily: 'Ubuntu',
                                         fontWeight: FontWeight.w400,
@@ -284,18 +263,15 @@ class _LoginScreenState extends State<LoginScreen> {
                                         Navigator.push(
                                           context,
                                           MaterialPageRoute(
-                                            builder: (context) => _isLoading
-                                                ? Center(
-                                                    child:
-                                                        CircularProgressIndicator())
-                                                : EmailSignUp(),
+                                            builder: (context) =>
+                                                _isLoading ? Center(child: CircularProgressIndicator()) : EmailSignUp(),
                                           ),
                                         );
                                       },
                                       child: Text(
                                         'Sign Up',
                                         style: TextStyle(
-                                          color: AppColor.blueColor,
+                                          color: AppColor.textHyperlinkColor,
                                           fontSize: 16,
                                           fontFamily: 'Ubuntu',
                                           fontWeight: FontWeight.w400,
@@ -305,26 +281,23 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ],
                                 ),
                                 Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 30),
+                                  padding: const EdgeInsets.symmetric(horizontal: 30),
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     children: [
                                       Expanded(
                                         child: Divider(
-                                          color: AppColor.DividerColor,
+                                          color: AppColor.whiteColor50,
                                           thickness: 1,
                                         ),
                                       ),
                                       Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 20),
+                                        padding: const EdgeInsets.symmetric(horizontal: 20),
                                         child: Text(
-                                          'OR',
+                                          'or continue with',
                                           style: TextStyle(
-                                            color: AppColor.DividerColor,
+                                            color: AppColor.whiteColor50,
                                             fontSize: 16,
                                             fontFamily: 'Ubuntu',
                                             fontWeight: FontWeight.w400,
@@ -333,7 +306,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ),
                                       Expanded(
                                         child: Divider(
-                                          color: AppColor.DividerColor,
+                                          color: AppColor.whiteColor50,
                                           thickness: 1,
                                         ),
                                       ),
@@ -355,8 +328,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         decoration: ShapeDecoration(
                                           color: Color(0xFF34373F),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
+                                            borderRadius: BorderRadius.circular(25),
                                           ),
                                           shadows: [
                                             BoxShadow(
@@ -369,8 +341,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         child: const Center(
                                           child: Image(
-                                            image: AssetImage(
-                                                'assets/icons/google.png'),
+                                            image: AssetImage('assets/icons/sso/google.png'),
                                             height: 30,
                                           ),
                                         ),
@@ -388,8 +359,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         decoration: ShapeDecoration(
                                           color: Color(0xFF34373F),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
+                                            borderRadius: BorderRadius.circular(25),
                                           ),
                                           shadows: [
                                             BoxShadow(
@@ -402,8 +372,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         child: const Center(
                                           child: Image(
-                                            image: AssetImage(
-                                                'assets/icons/microsoft.png'),
+                                            image: AssetImage('assets/icons/sso/microsoft.png'),
                                             height: 30,
                                           ),
                                         ),
@@ -421,8 +390,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         decoration: ShapeDecoration(
                                           color: Color(0xFF34373F),
                                           shape: RoundedRectangleBorder(
-                                            borderRadius:
-                                                BorderRadius.circular(25),
+                                            borderRadius: BorderRadius.circular(25),
                                           ),
                                           shadows: [
                                             BoxShadow(
@@ -435,8 +403,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                         ),
                                         child: const Center(
                                           child: Image(
-                                            image: AssetImage(
-                                                'assets/icons/apple.png'),
+                                            image: AssetImage('assets/icons/sso/apple.png'),
                                             height: 30,
                                           ),
                                         ),

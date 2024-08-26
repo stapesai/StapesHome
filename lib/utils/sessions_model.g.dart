@@ -44,7 +44,5 @@ class SessionsModelAdapter extends TypeAdapter<SessionsModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SessionsModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      other is SessionsModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }

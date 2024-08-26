@@ -1,6 +1,4 @@
-// Dart and Flutter imports
 import 'package:flutter/material.dart';
-// Local imports
 import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/screens/routes/devices.dart';
@@ -16,7 +14,7 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // (home page)
   final HiveService hiveService = HiveService();
   String sessionId = '';
   String userId = '';
