@@ -26,9 +26,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
     setState(() {
       _isLoading = true; // Start loading indicator
     });
-    var check_email_url = Uri.https('auth.jarvishome.in', '/check/email');
     var check_email_response = await http.post(
-      check_email_url,
+      AuthRoutes.checkEmail,
       headers: {
         'Content-Type': 'application/json',
         'accept': 'application/json'
@@ -40,10 +39,8 @@ class _EmailSignUpState extends State<EmailSignUp> {
     var check_email_responseBody = json.decode(check_email_response.body);
 
     if (check_email_response.statusCode == 200) {
-      var signup_url =
-          Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
       var response = await http.post(
-        signup_url,
+        AuthRoutes.requestSignup,
         headers: {
           'Content-Type': 'application/json',
           'accept': 'application/json'
