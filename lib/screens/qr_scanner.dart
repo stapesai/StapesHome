@@ -6,6 +6,65 @@ import 'package:jarvis/constants/colors.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:jarvis/screens/views/provisioning.dart';
 
+class MiniBar extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const MiniBar({Key? key, required this.onTap}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Stack(
+        children: [
+          Container(
+            height: 50,
+            width: double.infinity,
+            decoration: ShapeDecoration(
+              color: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(25),
+              ),
+            ),
+            child: Center(
+                child: Container(
+              height: 5,
+              width: 100,
+              margin: EdgeInsets.only(top: 10),
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: BorderRadius.circular(2.5),
+              ),
+            )),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class BottomSheetContent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      padding: EdgeInsets.all(16),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          MiniBar(onTap: () => Navigator.of(context).pop()),
+          SizedBox(height: 16),
+          Text('Instructions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+          SizedBox(height: 16),
+          Text('1. Scan the QR code on the device.'),
+          Text('2. Enter Wi-Fi credentials.'),
+          Text('3. Enter device name and correct node number.'),
+        ],
+      ),
+    );
+  }
+}
+
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
 
@@ -17,36 +76,19 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
   late MobileScannerController _controller;
   bool _flashOn = false;
   bool _isProcessing = false;
-  bool _isPanelVisible = true;
-  late AnimationController _panelController;
-  late Animation<double> _fadeAnimation;
   late AnimationController _lottieController;
-
   Future<bool>? _connectionFuture;
 
   @override
   void initState() {
     super.initState();
     _controller = MobileScannerController();
-    _panelController = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 300),
-    );
-
-    _fadeAnimation = CurvedAnimation(
-      parent: _panelController,
-      curve: Curves.easeInOut,
-    );
     _lottieController = AnimationController(vsync: this);
-
-    // Start the animation controller
-    _panelController.forward();
   }
 
   @override
   void dispose() {
     _controller.dispose();
-    _panelController.dispose();
     _lottieController.dispose();
     super.dispose();
   }
@@ -88,187 +130,47 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
     }
   }
 
-  Widget _buildInstruction(String text) {
-    return Padding(
-      padding: EdgeInsets.only(bottom: 8),
-      child: Text(
-        text,
-        style: TextStyle(
-          color: AppColor.whiteColor,
-          fontSize: 16,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInstructionsPanel() {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 12),
-          _buildInstruction('1. Scan the QR code on the device.'),
-          _buildInstruction('2. Enter Wi-Fi credentials.'),
-          _buildInstruction('3. Enter entity name and correct node number.'),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildLottieAnimation(bool isSuccess) {
-    return Padding(
-      padding: EdgeInsets.all(16),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 12),
-          Lottie.asset(isSuccess ? 'assets/lottie/success.json' : 'assets/lottie/failure.json',
-              width: MediaQuery.of(context).size.width / 3,
-              height: MediaQuery.of(context).size.width / 3,
-              repeat: true, onLoaded: (composition) {
-            _lottieController
-              ..duration = composition.duration
-              ..forward();
-
-            if (isSuccess) {
-              _lottieController.addStatusListener(
-                (status) {
-                  if (status == AnimationStatus.completed) {
-                    Navigator.of(context)
-                        .pushReplacement(MaterialPageRoute(builder: (context) => ProvisioningScreen()));
-                  }
-                },
-              );
-            }
-          }),
-          Text(
-            isSuccess ? 'Connection Successful!' : 'Connection Failed!',
-            style: TextStyle(
-              color: AppColor.whiteColor,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
+  // Function to open the bottom sheet
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (BuildContext context) {
+        return BottomSheetContent();
+      },
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      body: Container(
-        // color: AppColor.backgroundColor,
-        child: Column(
-          children: [
-            Expanded(
-              child: Stack(
-                children: [
-                  MobileScanner(
-                    controller: _controller,
-                    onDetect: (barcode) => _handleQRCode(barcode.barcodes),
-                  ),
-                  SafeArea(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.close, color: Colors.white),
-                          onPressed: () {
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => MainScreen()));
-                            _controller.dispose();
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(_flashOn ? Icons.flash_off : Icons.flash_on, color: Colors.white),
-                          onPressed: _toggleFlash,
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  if (_isPanelVisible) {
-                    _panelController.reverse();
-                  } else {
-                    _panelController.forward();
-                  }
-                  _isPanelVisible = !_isPanelVisible;
-                });
-              },
-              child: AnimatedSize(
-                duration: Duration(milliseconds: 300),
-                curve: Curves.easeInOut,
-                child: Container(
-                  width: MediaQuery.of(context).size.width,
-                  height: _isPanelVisible ? 300 : 60,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    // color: AppColor.backgroundColor,
-                    borderRadius: BorderRadius.circular(20),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        spreadRadius: 2,
-                        blurRadius: 5,
-                        offset: const Offset(0, -3),
-                      ),
-                    ],
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 60,
-                        height: 4,
-                        decoration: BoxDecoration(
-                          color: AppColor.secondaryColor,
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      SizedBox(height: 8),
-                      Text(
-                        'Instructions',
-                        style: TextStyle(
-                          color: AppColor.iconBarColor,
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      if (_isPanelVisible)
-                        FadeTransition(
-                          opacity: _fadeAnimation,
-                          child: FutureBuilder<bool>(
-                            future: _connectionFuture,
-                            builder: (context, snapshot) {
-                              if (snapshot.connectionState == ConnectionState.waiting) {
-                                return _buildInstructionsPanel();
-                              } else if (snapshot.connectionState == ConnectionState.done) {
-                                return _buildLottieAnimation(snapshot.data ?? false);
-                              } else {
-                                return _buildInstructionsPanel();
-                              }
-                            },
-                          ),
-                        ),
-                    ],
+    return Stack(
+      children: [
+        Container(
+          clipBehavior: Clip.antiAlias,
+          decoration: BoxDecoration(
+            gradient: AppColor.backgroundColorgradient,
+          ),
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            body: Stack(
+              children: [
+                // The QR Scanner
+                MobileScanner(controller: _controller, onDetect: (barcode) => _handleQRCode(barcode.barcodes)),
+
+                // Positioned mini-bar at the bottom
+                Positioned(
+                  bottom: 40,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: MiniBar(onTap: () => _showBottomSheet(context)),
                   ),
                 ),
-              ),
+              ],
             ),
-          ],
+          ),
         ),
-      ),
+      ],
     );
   }
 }

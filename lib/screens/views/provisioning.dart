@@ -19,6 +19,7 @@ class ProvisioningStep {
 }
 
 class ProvisioningScreenState extends State<ProvisioningScreen> {
+  
   List<ProvisioningStep> steps = [
     ProvisioningStep(title: 'Pairing bluetooth', isCurrent: true),
     ProvisioningStep(title: 'Sending Wi-Fi credentials'),
@@ -41,40 +42,46 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // backgroundColor: AppColor.backgroundColor,
-      body: SafeArea(
-        child: Column(
-          children: [
-            SizedBox(height: 50),
-            Text(
-              'Provisioning Status',
-              style: TextStyle(
-                color: AppColor.whiteColor,
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+    return Container(
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        gradient: AppColor.backgroundColorgradient,
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        body: SafeArea(
+          child: Column(
+            children: [
+              SizedBox(height: 50),
+              Text(
+                'Provisioning Status',
+                style: TextStyle(
+                  color: AppColor.whiteColor,
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: 30),
-            Stack(
-              alignment: Alignment.center,
-              children: [
-                Image.asset(
-                  'assets/icons/vector.png',
-                  width: 200,
-                  height: 200,
-                ),
-                Lottie.asset(
-                  'assets/lottie/cube.json',
-                  width: 100,
-                  height: 100,
-                  fit: BoxFit.contain,
-                ),
-              ],
-            ),
-            SizedBox(height: 30),
-            ...steps.map((step) => _buildStepIndicator(step)),
-          ],
+              SizedBox(height: 30),
+              Stack(
+                alignment: Alignment.center,
+                children: [
+                  Image.asset(
+                    'assets/icons/vector.png',
+                    width: 200,
+                    height: 200,
+                  ),
+                  Lottie.asset(
+                    'assets/lottie/cube.json',
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.contain,
+                  ),
+                ],
+              ),
+              SizedBox(height: 30),
+              ...steps.map((step) => _buildStepIndicator(step)),
+            ],
+          ),
         ),
       ),
     );

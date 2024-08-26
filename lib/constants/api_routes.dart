@@ -34,3 +34,8 @@ class AuthRoutes {
     return Uri.https(baseUrl, '/check/password', {'password': password});
   }
 }
+
+
+class ApiRoutes{
+  static const String baseUrl = 'backend.jarvishome.in';
+}
