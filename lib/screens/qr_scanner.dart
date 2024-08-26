@@ -1,10 +1,7 @@
 import 'dart:convert';
-import 'package:jarvis/screens/routes/main.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:jarvis/screens/views/provisioning.dart';
 
 class MiniBar extends StatelessWidget {
   final VoidCallback onTap;
