@@ -19,36 +19,30 @@ class EmailSignUp extends StatefulWidget {
 class _EmailSignUpState extends State<EmailSignUp> {
   final TextEditingController emailController = TextEditingController();
   bool _isLoading = false;
-  Future<void> handleSignup(BuildContext context, String email) async {
+  Future<void> requestSignup(BuildContext context, String email) async {
     setState(() {
       _isLoading = true;
     });
-    var check_email_url = Uri.https('auth.jarvishome.in', '/check/email', {
-      'email': email,
-    });
+
     var check_email_response = await http.post(
-      check_email_url,
+      AuthRoutes.checkEmail(email),
       headers: {'accept': 'application/json'},
     );
     var check_email_responseBody = json.decode(check_email_response.body);
 
     if (check_email_response.statusCode == 200) {
-      var signup_url =
-          Uri.https('auth.jarvishome.in', '/auth/signup/request-signup');
       var response = await http.post(
-        signup_url,
-        headers: {
-          'Content-Type': 'application/json',
-          'accept': 'application/json'
-        },
+        AuthRoutes.requestSignup,
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: jsonEncode({
-          'email': emailController.text,
+          'email': email,
         }),
       );
       var responseBody = json.decode(response.body);
 
       if (response.statusCode == 200) {
         String transactionId = responseBody['transaction_id'];
+        print('test trans_id' + transactionId);
         if (context.mounted) {
           Navigator.pushReplacement(
             context,
@@ -58,14 +52,20 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 time: DateTime.parse(responseBody["otp_expires_at"]),
                 onSuccess: () async {
                   if (context.mounted) {
+                    print('inside context'+transactionId);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
                         builder: (context) => PasswordScreen(
                           title: 'Create Password',
-                          subtitle:
-                              'Lets create a password to secure your account.',
-                          nextScreen: SignupForm(),
+                          subtitle: 'Lets create a password to secure your account.',
+                          nextScreen: SignupForm(
+                            passWord: '',
+                            transaction_id: '',
+                            email: '',
+                          ),
+                          email: email,
+                          transaction_id: transactionId,
                         ),
                       ),
                     );
@@ -74,8 +74,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                     if (context.mounted) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
-                          content: Text(
-                              'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                          content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                         ),
                       );
                     }
@@ -86,8 +85,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(
-                        content: Text(
-                            'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
                       ),
                     );
                   }
@@ -100,8 +98,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(
-                  'Error : ${response.statusCode} - ${responseBody["detail"]} '),
+              content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
             ),
           );
         }
@@ -110,8 +107,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-                'Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
+            content: Text('Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
           ),
         );
       }
@@ -199,8 +195,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                                           CustomButton(
                                               text: "Send Code",
                                               onPressed: () {
-                                                handleSignup(context,
-                                                    emailController.text);
+                                                requestSignup(context, emailController.text);
                                               }),
                                         ],
                                       ),

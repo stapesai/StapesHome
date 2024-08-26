@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jarvis/screens/authentication/signup_form.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
 import 'package:jarvis/constants/colors.dart';
@@ -9,6 +10,8 @@ class PasswordScreen extends StatefulWidget {
   final String title;
   final String subtitle;
   final Widget nextScreen;
+  final String email;
+  final String transaction_id;
   final TextEditingController passWord = TextEditingController();
   final TextEditingController confirmPassWord = TextEditingController();
 
@@ -16,6 +19,8 @@ class PasswordScreen extends StatefulWidget {
     super.key,
     required this.title,
     required this.subtitle,
+    required this.email,
+    required this.transaction_id,
     required this.nextScreen,
   });
 
@@ -25,8 +30,7 @@ class PasswordScreen extends StatefulWidget {
 
 class _PasswordScreenState extends State<PasswordScreen> {
   bool _isLoading = false;
-  Future<void> checkPassword(
-      String password, BuildContext context, Widget nextScreen) async {
+  Future<void> checkPassword(String password, BuildContext context, Widget nextScreen) async {
     setState(() {
       _isLoading = true;
     });
@@ -76,9 +80,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
         ),
       ),
       child: _isLoading
-          ? Center(child: CircularProgressIndicator(
-            color: AppColor.whiteColor
-          ))
+          ? Center(child: CircularProgressIndicator(color: AppColor.whiteColor))
           : Scaffold(
               backgroundColor: Colors.transparent,
               body: Container(
@@ -147,10 +149,15 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                     CustomButton(
                                       text: "Continue",
                                       onPressed: () {
-                                        if (widget.passWord.text ==
-                                            widget.confirmPassWord.text) {
-                                          checkPassword(widget.passWord.text,
-                                              context, widget.nextScreen);
+                                        if (widget.passWord.text == widget.confirmPassWord.text) {
+                                          checkPassword(
+                                              widget.passWord.text,
+                                              context,
+                                              SignupForm(
+                                                passWord: widget.passWord.text,
+                                                transaction_id: widget.transaction_id,
+                                                email: widget.email,
+                                              ));
                                         } else {
                                           ScaffoldMessenger.of(context).showSnackBar(
                                             SnackBar(

@@ -53,6 +53,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         subtitle:
                             'Enter your email to receive verification code.',
                         nextScreen: LoginScreen(),
+                        email: '',
+                        transaction_id: '',
                       ),
                     ),
                   );
