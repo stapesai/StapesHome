@@ -10,10 +10,9 @@ import 'package:StapesHome/screens/views/common/create_room_page.dart';
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;
   final Function(String) onFloorSelected;
-  final Function(int) onRoomSelected;
+  final Function(String) onRoomSelected;
   final String sessionId;
   final String userId;
-  final String activeFloorId;
 
   const FloorRoomSelector({
     Key? key,
@@ -22,7 +21,6 @@ class FloorRoomSelector extends StatefulWidget {
     required this.onRoomSelected,
     required this.sessionId,
     required this.userId,
-    required this.activeFloorId,
   }) : super(key: key);
 
   @override
@@ -30,7 +28,8 @@ class FloorRoomSelector extends StatefulWidget {
 }
 
 class _FloorRoomSelectorState extends State<FloorRoomSelector> {
-  int activeRoomIndex = -1;
+  String activeFloorId = '';
+  String activeRoomId = '';
   List<Floor> floors = [];
   List<Room> rooms = [];
   bool isLoading = true;
@@ -131,22 +130,25 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
   // Set the active floor and fetch its rooms
   void setActiveFloor(String floorId) {
     widget.onFloorSelected(floorId);
-    widget.onRoomSelected(-1); // Reset active room when a new floor is selected
+    setState(() {
+      activeFloorId = floorId;
+    });
+    widget.onRoomSelected('');
     rooms = [];
     _fetchRooms(floorId);
   }
 
-  // Set the active room
-  void setActiveRoom(int roomIndex) {
+  // Set the active room by ID
+  void setActiveRoom(String roomId) {
     setState(() {
-      activeRoomIndex = roomIndex;
+      activeRoomId = roomId;
     });
-    widget.onRoomSelected(roomIndex);
+    widget.onRoomSelected(roomId);
   }
 
   // Navigate to create room page
   void navigateToCreateRoom(BuildContext context) {
-    if (widget.activeFloorId.isEmpty) {
+    if (activeFloorId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please select a floor first')),
       );
@@ -158,10 +160,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
         builder: (context) => CreateRoomPage(
           sessionId: widget.sessionId,
           userId: widget.userId,
-          floorId: widget.activeFloorId,
+          floorId: activeFloorId,
         ),
       ),
-    ).then((_) => _fetchRooms(widget.activeFloorId));
+    ).then((_) => _fetchRooms(activeFloorId));
   }
 
   // Navigate to create floor page
@@ -209,7 +211,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           style: const TextStyle(
             fontSize: 22,
             fontWeight: FontWeight.w700,
-            color: Colors.white,
+            color: AppColor.whiteColor,
             fontFamily: 'Ubuntu',
           ),
         ),
@@ -234,7 +236,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             padding: const EdgeInsets.only(right: 15),
             child: FloorRoomNameButton(
               label: floor.alias,
-              isActive: widget.activeFloorId == floor.id,
+              isActive: activeFloorId == floor.id,
               onTap: () => setActiveFloor(floor.id),
             ),
           );
@@ -253,15 +255,13 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
       child: Row(
-        children: rooms.asMap().entries.map((entry) {
-          int idx = entry.key;
-          Room room = entry.value;
+        children: rooms.map((room) {
           return Padding(
             padding: const EdgeInsets.only(right: 15),
             child: FloorRoomNameButton(
               label: room.name,
-              isActive: activeRoomIndex == idx,
-              onTap: () => setActiveRoom(idx),
+              isActive: activeRoomId == room.id,
+              onTap: () => setActiveRoom(room.id),
             ),
           );
         }).toList(),
@@ -286,7 +286,7 @@ class PlusButton extends StatelessWidget {
           shape: BoxShape.circle,
           color: Color(0xFF3E3E62),
         ),
-        child: const Icon(Icons.add, color: Colors.white, size: 14),
+        child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
       ),
     );
   }
@@ -313,7 +313,7 @@ class FloorRoomNameButton extends StatelessWidget {
           Text(
             label,
             style: TextStyle(
-              color: isActive ? Colors.white : Colors.white.withOpacity(0.5),
+              color: isActive ? AppColor.whiteColor : AppColor.whiteColor50,
               fontSize: 16,
               fontFamily: 'Ubuntu',
               fontWeight: FontWeight.w700,
@@ -325,7 +325,7 @@ class FloorRoomNameButton extends StatelessWidget {
               height: 6,
               decoration: const BoxDecoration(
                 shape: BoxShape.circle,
-                color: Colors.white,
+                color: AppColor.whiteColor,
               ),
             ),
         ],

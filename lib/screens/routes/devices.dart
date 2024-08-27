@@ -20,7 +20,7 @@ class DevicesScreen extends StatefulWidget {
 
 class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveClientMixin {
   String activeFloorId = '';
-  int activeRoomIndex = -1;
+  String activeRoomId = '';
 
   @override
   bool get wantKeepAlive => true;
@@ -33,10 +33,10 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
     }
   }
 
-  void handleRoomSelected(int roomIndex) {
+  void handleRoomSelected(String roomId) {
     if (mounted) {
       setState(() {
-        activeRoomIndex = roomIndex;
+        activeRoomId = roomId;
       });
     }
   }
@@ -85,7 +85,6 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
                     onRoomSelected: handleRoomSelected,
                     sessionId: widget.sessionId,
                     userId: widget.userId,
-                    activeFloorId: activeFloorId,
                   ),
                 ],
               ),

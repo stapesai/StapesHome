@@ -20,7 +20,7 @@ class NodesScreen extends StatefulWidget {
 
 class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClientMixin {
   String activeFloorId = '';
-  int activeRoomIndex = -1;
+  String activeRoomId = '';
 
   @override
   bool get wantKeepAlive => true;
@@ -33,10 +33,10 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
     }
   }
 
-  void handleRoomSelected(int roomIndex) {
+  void handleRoomSelected(String roomId) {
     if (mounted) {
       setState(() {
-        activeRoomIndex = roomIndex;
+        activeRoomId = roomId;
       });
     }
   }
@@ -85,7 +85,6 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
                     onRoomSelected: handleRoomSelected,
                     sessionId: widget.sessionId,
                     userId: widget.userId,
-                    activeFloorId: activeFloorId,
                   ),
                 ],
               ),
