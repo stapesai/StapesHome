@@ -37,6 +37,8 @@ flutter:
     - assets/icons/
     - assets/icons/sso/
     - assets/icons/home/
+    - assets/icons/nodes/
+    - assets/icons/devices/
     - assets/icons/navbar/
     - assets/icons/temp/
 

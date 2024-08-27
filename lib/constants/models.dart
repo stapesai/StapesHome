@@ -17,20 +17,38 @@ class Room {
   Room({required this.id, required this.floorId, required this.name, required this.type});
 }
 
-// class Device {
-//   final String id;
-//   final String name;
-//   final IconData icon;
-//   final bool isActive;
-//   final bool hasSlider;
-//   final double sliderValue;
+class Node {
+  final String roomId;
+  final String name;
+  final String hardwareChip;
+  final double hardwareVersion;
+  final String hardwareMacAddress;
+  final String firmwareVersion;
+  final String id;
 
-//   Device({
-//     required this.id,
-//     required this.name,
-//     required this.icon,
-//     this.isActive = false,
-//     this.hasSlider = false,
-//     this.sliderValue = 0.0,
-//   });
-// }
+  Node({
+    required this.roomId,
+    required this.name,
+    required this.hardwareChip,
+    required this.hardwareVersion,
+    required this.hardwareMacAddress,
+    required this.firmwareVersion,
+    required this.id,
+  });
+}
+
+class Device {
+  final String nodeId;
+  final String name;
+  final String type;
+  final int channelId;
+  final String id;
+
+  Device({
+    required this.nodeId,
+    required this.name,
+    required this.type,
+    required this.channelId,
+    required this.id,
+  });
+}
