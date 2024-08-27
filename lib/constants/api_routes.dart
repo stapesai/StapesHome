@@ -35,7 +35,6 @@ class AuthRoutes {
   }
 }
 
-
 class BackendRoutes {
   static const String baseUrl = 'backend.jarvishome.in';
 
@@ -60,7 +59,8 @@ class BackendRoutes {
   // Entity routes
   static final Uri createEntity = Uri.https(baseUrl, '/entities');
   static final Uri getAllEntities = Uri.https(baseUrl, '/entities/all');
-  static Uri getEntitiesByNodeId(String nodeId) => Uri.https(baseUrl, '/entities/$nodeId');
+  static Uri getEntitiesByNodeId(String nodeId) => Uri.https(baseUrl, '/entities/by_node_id/$nodeId');
+  static Uri getEntitiesByRoomId(String roomId) => Uri.https(baseUrl, '/entities/by_room_id/$roomId');
   static Uri updateEntity(String entityId) => Uri.https(baseUrl, '/entities/$entityId');
   static Uri deleteEntity(String entityId) => Uri.https(baseUrl, '/entities/$entityId');
 

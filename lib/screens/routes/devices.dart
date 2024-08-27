@@ -1,10 +1,12 @@
 import 'dart:convert';
-
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/models.dart';
+import 'package:StapesHome/screens/views/devices/add_new_device.dart';
+import 'package:StapesHome/widgets/iot/fan.dart';
+import 'package:StapesHome/widgets/iot/light.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
@@ -48,10 +50,11 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
       setState(() {
         activeRoomId = roomId;
       });
+      _fetchDevices(roomId);
     }
   }
 
-  Future<void> _fetch_devices(String roomId) async {
+  Future<void> _fetchDevices(String roomId) async {
     setState(() {
       isLoading = true;
       errorMessage = null;
@@ -70,12 +73,12 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
       if (response.statusCode == 200) {
         final List<dynamic> devicesData = json.decode(response.body);
         devices = devicesData
-            .map((devices) => Device(
-                  id: devices['id'],
-                  name: devices['name'],
-                  type: devices['type'], // 'fan' or 'light'
-                  nodeId: devices['node_id'],
-                  channelId: devices['channel_id'],
+            .map((device) => Device(
+                  id: device['id'],
+                  name: device['name'],
+                  type: device['type'],
+                  nodeId: device['node_id'],
+                  channelId: device['channel_id'],
                 ))
             .toList();
       } else {
@@ -94,8 +97,9 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
 
   Future<void> _refreshData() async {
     await _floorRoomSelectorKey.currentState?.refreshData();
-    await Future.delayed(Duration(seconds: 1));
-    setState(() {});
+    if (activeRoomId.isNotEmpty) {
+      await _fetchDevices(activeRoomId);
+    }
   }
 
   @override
@@ -151,6 +155,24 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
                         userId: widget.userId,
                       ),
                       SizedBox(height: screenSize.height * 0.02),
+                      if (isLoading)
+                        Center(child: CircularProgressIndicator())
+                      else if (errorMessage != null)
+                        Text(errorMessage!, style: TextStyle(color: Colors.red))
+                      else
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: devices.map<Widget>((device) {
+                            if (device.type == 'light') {
+                              return LightComponent(device: device);
+                            } else if (device.type == 'fan') {
+                              return FanComponent(device: device);
+                            }
+                            return Container();
+                          }).toList(),
+                        ),
+                      SizedBox(height: screenSize.height * 0.02),
                       AddDeviceButton(),
                     ],
                   ),
@@ -174,7 +196,7 @@ class AddDeviceButton extends StatelessWidget {
       height: 90,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Implement scan functionality
+          Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDevice()));
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Color.fromARGB(1, 29, 29, 29),
@@ -189,7 +211,7 @@ class AddDeviceButton extends StatelessWidget {
             SvgPicture.asset('assets/icons/devices/plus.svg', width: 30, height: 30),
             SizedBox(width: 8),
             Text(
-              'Scan a new node',
+              'Add a new device',
               style: TextStyle(
                 color: Colors.white.withOpacity(0.75),
                 fontSize: 15.71,
