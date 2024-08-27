@@ -1,8 +1,8 @@
-import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/input_fields.dart';
-import 'package:StapesHome/widgets/button.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/widgets/button.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:flutter/material.dart';
 
 class AddNewDevice extends StatefulWidget {
   const AddNewDevice({super.key});
@@ -31,7 +31,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 1,
-            color: Colors.white.withOpacity(0.5),
+            color: AppColor.whiteColor50,
           ),
           borderRadius: BorderRadius.circular(15),
         ),
@@ -40,7 +40,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(
-            color: Colors.white.withOpacity(0.5),
+            color: AppColor.whiteColor50,
             fontSize: 16,
             fontFamily: 'Ubuntu',
             fontWeight: FontWeight.w700,
@@ -52,13 +52,13 @@ class _AddNewDeviceState extends State<AddNewDevice> {
         items: items.map((String item) {
           return DropdownMenuItem<String>(
             value: item,
-            child: Text(item, style: TextStyle(color: Colors.white)),
+            child: Text(item, style: TextStyle(color: AppColor.whiteColor)),
           );
         }).toList(),
         onChanged: onChanged,
         dropdownColor: Color(0xFF353841),
-        style: TextStyle(color: Colors.white),
-        icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+        style: TextStyle(color: AppColor.whiteColor),
+        icon: Icon(Icons.arrow_drop_down, color: AppColor.whiteColor),
       ),
     );
   }
@@ -87,81 +87,86 @@ class _AddNewDeviceState extends State<AddNewDevice> {
           body: SafeArea(
             child: Padding(
               padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
-              child: CustomScrollView(
-                physics: AlwaysScrollableScrollPhysics(
-                  parent: BouncingScrollPhysics(),
-                ),
-                slivers: [
-                  SliverFillRemaining(
-                    hasScrollBody: false,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: screenSize.height * 0.08),
-                        Text(
-                          'Add a new device',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: AppFontSizes.pageHeading,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w700,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: screenSize.height * 0.08),
+                  Text(
+                    'Add a new device',
+                    style: TextStyle(
+                      color: AppColor.whiteColor,
+                      fontSize: AppFontSizes.pageHeading,
+                      fontFamily: 'Ubuntu',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.02),
+                  Text(
+                    'Enter the details for adding a new device.',
+                    style: TextStyle(
+                      color: AppColor.whiteColor,
+                      fontSize: AppFontSizes.pageSubHeading,
+                      fontFamily: 'Ubuntu',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.04),
+                  Expanded(
+                    child: SingleChildScrollView(
+                      physics: AlwaysScrollableScrollPhysics(),
+                      child: Column(
+                        children: [
+                          _buildDropdown('Floor', _floors, _selectedFloor, (newValue) {
+                            setState(() {
+                              _selectedFloor = newValue;
+                            });
+                          }),
+                          SizedBox(height: screenSize.height * 0.02),
+                          _buildDropdown('Room', _rooms, _selectedRoom, (newValue) {
+                            setState(() {
+                              _selectedRoom = newValue;
+                            });
+                          }),
+                          SizedBox(height: screenSize.height * 0.02),
+                          _buildDropdown('Node', _nodes, _selectedNode, (newValue) {
+                            setState(() {
+                              _selectedNode = newValue;
+                            });
+                          }),
+                          SizedBox(height: screenSize.height * 0.02),
+                          NTextField(
+                            hintText: 'Device Name',
+                            controller: deviceNameController,
                           ),
-                        ),
-                        SizedBox(height: screenSize.height * 0.02),
-                        Text(
-                          'Enter the details for adding a new device.',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: AppFontSizes.pageSubHeading,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w400,
+                          SizedBox(height: screenSize.height * 0.02),
+                          _buildDropdown('Device Type', _deviceTypes, _selectedDeviceType, (newValue) {
+                            setState(() {
+                              _selectedDeviceType = newValue;
+                            });
+                          }),
+                          SizedBox(height: screenSize.height * 0.02),
+                          NTextField(
+                            hintText: 'Channel Id',
+                            controller: channelIdController,
                           ),
-                        ),
-                        SizedBox(height: screenSize.height * 0.04),
-                        _buildDropdown('Floor', _floors, _selectedFloor, (newValue) {
-                          setState(() {
-                            _selectedFloor = newValue;
-                          });
-                        }),
-                        SizedBox(height: screenSize.height * 0.02),
-                        _buildDropdown('Room', _rooms, _selectedRoom, (newValue) {
-                          setState(() {
-                            _selectedRoom = newValue;
-                          });
-                        }),
-                        SizedBox(height: screenSize.height * 0.02),
-                        _buildDropdown('Node', _nodes, _selectedNode, (newValue) {
-                          setState(() {
-                            _selectedNode = newValue;
-                          });
-                        }),
-                        SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
-                          hintText: 'Device Name',
-                          controller: deviceNameController,
-                        ),
-                        SizedBox(height: screenSize.height * 0.02),
-                        _buildDropdown('Device Type', _deviceTypes, _selectedDeviceType, (newValue) {
-                          setState(() {
-                            _selectedDeviceType = newValue;
-                          });
-                        }),
-                        SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
-                          hintText: 'Channel Id',
-                          controller: channelIdController,
-                        ),
-                        Spacer(),
-                        Center(
-                          child: CustomButton(
-                            text: "Create",
-                            onPressed: () {
-                              // Handle create button press
-                            },
-                          ),
-                        ),
-                        SizedBox(height: screenSize.height * 0.04),
-                      ],
+                          SizedBox(height: screenSize.height * 0.06),
+                        ],
+                      ),
+                    ),
+                  ),
+                  AnimatedContainer(
+                    duration: Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    margin: EdgeInsets.only(
+                      bottom: keyboardHeight > 0 ? keyboardHeight : screenSize.height * 0.02,
+                    ),
+                    child: Center(
+                      child: CustomButton(
+                        text: "Create",
+                        onPressed: () {
+                          // Handle create button press
+                        },
+                      ),
                     ),
                   ),
                 ],

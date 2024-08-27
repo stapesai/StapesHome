@@ -1,4 +1,4 @@
-package com.example.jarvis
+package com.stapesai.home
 
 import io.flutter.embedding.android.FlutterActivity
 
