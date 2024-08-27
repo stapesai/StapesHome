@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
@@ -43,14 +44,9 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
   }
 
   Future<void> _refreshData() async {
-    // Refresh the FloorRoomSelector
     await _floorRoomSelectorKey.currentState?.refreshData();
-    
-    // Add any additional refresh logic here
-    await Future.delayed(Duration(seconds: 1)); // Simulating additional network request
-    setState(() {
-      // Update your state with the new data if needed
-    });
+    await Future.delayed(Duration(seconds: 1));
+    setState(() {});
   }
 
   @override
@@ -79,7 +75,6 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
               child: SingleChildScrollView(
                 physics: AlwaysScrollableScrollPhysics(),
                 child: Container(
-                  // height: screenSize.height - MediaQuery.of(context).padding.top,
                   padding: AppPadding.pagePadding(context),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -106,12 +101,54 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
                         sessionId: widget.sessionId,
                         userId: widget.userId,
                       ),
+                      SizedBox(height: screenSize.height * 0.02),
+                      AddDeviceButton(),
                     ],
                   ),
                 ),
               ),
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class AddDeviceButton extends StatelessWidget {
+  const AddDeviceButton({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 90,
+      child: ElevatedButton(
+        onPressed: () {
+          // TODO: Implement scan functionality
+        },
+        style: ElevatedButton.styleFrom(
+          backgroundColor: Color.fromARGB(1, 29, 29, 29),
+          shape: RoundedRectangleBorder(
+            side: BorderSide(width: 0.98, color: Color(0xFFFF9F1C)),
+            borderRadius: BorderRadius.circular(29.45),
+          ),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SvgPicture.asset('assets/icons/devices/plus.svg', width: 30, height: 30),
+            SizedBox(width: 8),
+            Text(
+              'Scan a new node',
+              style: TextStyle(
+                color: Colors.white.withOpacity(0.75),
+                fontSize: 15.71,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+          ],
         ),
       ),
     );
