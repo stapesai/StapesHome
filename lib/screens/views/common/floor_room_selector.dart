@@ -24,10 +24,10 @@ class FloorRoomSelector extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  createState() => _FloorRoomSelectorState();
+  FloorRoomSelectorState  createState() => FloorRoomSelectorState();
 }
 
-class _FloorRoomSelectorState extends State<FloorRoomSelector> {
+class FloorRoomSelectorState extends State<FloorRoomSelector> {
   String activeFloorId = '';
   String activeRoomId = '';
   List<Floor> floors = [];
@@ -39,6 +39,10 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
   void initState() {
     super.initState();
     _fetchFloors();
+  }
+
+  Future<void> refreshData() async {
+    await _fetchFloors();
   }
 
   // Fetch floors from the API

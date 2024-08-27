@@ -24,6 +24,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   @override
   bool get wantKeepAlive => true;
 
+  Future<void> _refreshData() async {
+    // Implement the refresh logic here
+    // For example, you might want to fetch updated data from an API
+    await Future.delayed(Duration(seconds: 2)); // Simulating a network request
+    setState(() {
+      // Update your state with the new data
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -42,65 +51,75 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: Padding(
-              padding: AppPadding.pagePadding(context),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenSize.height * 0.05),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Good morning,',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: AppFontSizes.bodyText,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        Text(
-                          'Devasheesh',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: AppFontSizes.pageHeading,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: screenSize.height * 0.03),
-                  Row(
+          body: RefreshIndicator(
+            onRefresh: _refreshData,
+            color: AppColor.whiteColor,
+            backgroundColor: Colors.transparent,
+            child: SafeArea(
+              child: SingleChildScrollView(
+                physics: BouncingScrollPhysics(),
+                child: Container(
+                  height: screenSize.height - MediaQuery.of(context).padding.top,
+                  padding: AppPadding.pagePadding(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      _buildQuickAccessButton('Favourites', isFavouritesSelected, 'heart-active.svg', 'heart.svg'),
-                      SizedBox(width: 24),
-                      _buildQuickAccessButton('Active', !isFavouritesSelected, 'lightning-active.svg', 'lightning.svg'),
+                      SizedBox(height: screenSize.height * 0.05),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Good morning,',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.bodyText,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'Devasheesh',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.pageHeading,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: screenSize.height * 0.03),
+                      Row(
+                        children: [
+                          _buildQuickAccessButton('Favourites', isFavouritesSelected, 'heart-active.svg', 'heart.svg'),
+                          SizedBox(width: 24),
+                          _buildQuickAccessButton(
+                              'Active', !isFavouritesSelected, 'lightning-active.svg', 'lightning.svg'),
+                        ],
+                      ),
+                      SizedBox(height: screenSize.height * 0.05),
+                      Expanded(
+                        child: Center(
+                          child: Text(
+                            isFavouritesSelected
+                                ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
+                                : "No currently active devices",
+                            style: TextStyle(
+                              color: AppColor.whiteColor.withOpacity(0.8),
+                              fontSize: AppFontSizes.bodyText,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                      ),
                     ],
                   ),
-                  SizedBox(height: screenSize.height * 0.05),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        isFavouritesSelected
-                            ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
-                            : "No currently active devices",
-                        style: TextStyle(
-                          color: AppColor.whiteColor.withOpacity(0.8),
-                          fontSize: AppFontSizes.bodyText,
-                          fontFamily: 'Ubuntu',
-                          fontWeight: FontWeight.w400,
-                        ),
-                        textAlign: TextAlign.center,
-                      ),
-                    ),
-                  ),
-                ],
+                ),
               ),
             ),
           ),
@@ -122,7 +141,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
           SvgPicture.asset(
             isActive ? 'assets/icons/home/$activeIcon' : 'assets/icons/home/$inactiveIcon',
             width: 20,
-            color: AppColor.whiteColor,
           ),
           SizedBox(width: 8),
           Text(

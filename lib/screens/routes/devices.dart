@@ -21,6 +21,7 @@ class DevicesScreen extends StatefulWidget {
 class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveClientMixin {
   String activeFloorId = '';
   String activeRoomId = '';
+  final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
 
   @override
   bool get wantKeepAlive => true;
@@ -41,6 +42,17 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
     }
   }
 
+  Future<void> _refreshData() async {
+    // Refresh the FloorRoomSelector
+    await _floorRoomSelectorKey.currentState?.refreshData();
+    
+    // Add any additional refresh logic here
+    await Future.delayed(Duration(seconds: 1)); // Simulating additional network request
+    setState(() {
+      // Update your state with the new data if needed
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -59,34 +71,44 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          body: SafeArea(
-            child: Padding(
-              padding: AppPadding.pagePadding(context),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenSize.height * 0.05),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'All Devices',
-                      style: TextStyle(
-                        color: AppColor.whiteColor,
-                        fontSize: AppFontSizes.pageHeading,
-                        fontFamily: 'Ubuntu',
-                        fontWeight: FontWeight.w700,
+          body: RefreshIndicator(
+            onRefresh: _refreshData,
+            color: AppColor.whiteColor,
+            backgroundColor: Colors.transparent,
+            child: SafeArea(
+              child: SingleChildScrollView(
+                physics: AlwaysScrollableScrollPhysics(),
+                child: Container(
+                  // height: screenSize.height - MediaQuery.of(context).padding.top,
+                  padding: AppPadding.pagePadding(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: screenSize.height * 0.05),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'All Devices',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontSize: AppFontSizes.pageHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
                       ),
-                    ),
+                      SizedBox(height: screenSize.height * 0.02),
+                      FloorRoomSelector(
+                        key: _floorRoomSelectorKey,
+                        context: context,
+                        onFloorSelected: handleFloorSelected,
+                        onRoomSelected: handleRoomSelected,
+                        sessionId: widget.sessionId,
+                        userId: widget.userId,
+                      ),
+                    ],
                   ),
-                  SizedBox(height: screenSize.height * 0.02),
-                  FloorRoomSelector(
-                    context: context,
-                    onFloorSelected: handleFloorSelected,
-                    onRoomSelected: handleRoomSelected,
-                    sessionId: widget.sessionId,
-                    userId: widget.userId,
-                  ),
-                ],
+                ),
               ),
             ),
           ),
