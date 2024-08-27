@@ -1,20 +1,33 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/input_fields.dart'; // Import the CustomTextField widget
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
+import 'package:jarvis/constants/api_routes.dart';
+import 'package:jarvis/widgets/input_fields.dart';
+import 'package:jarvis/widgets/button.dart';
+import 'package:jarvis/constants/colors.dart';
+import 'package:jarvis/constants/font_sizes.dart';
 
-class CreateFloorPage extends StatelessWidget {
-  final TextEditingController aliasController = TextEditingController();
-  final TextEditingController levelController = TextEditingController();
+class CreateFloorPage extends StatefulWidget {
   final String sessionId;
   final String userId;
 
-  CreateFloorPage({super.key, required this.sessionId, required this.userId});
+  const CreateFloorPage({super.key, required this.sessionId, required this.userId});
+
+  @override
+  _CreateFloorPageState createState() => _CreateFloorPageState();
+}
+
+class _CreateFloorPageState extends State<CreateFloorPage> {
+  final TextEditingController aliasController = TextEditingController();
+  final TextEditingController levelController = TextEditingController();
+
+  bool _isLoading = false;
 
   Future<void> _createFloor(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Start loading indicator
+    });
+
     final String alias = aliasController.text;
     final int? level = int.tryParse(levelController.text);
 
@@ -22,16 +35,18 @@ class CreateFloorPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please provide valid floor details')),
       );
+      setState(() {
+        _isLoading = false; // Stop loading indicator
+      });
       return;
     }
 
-    final url = Uri.https('backend.jarvishome.in', '/floors');
     final response = await http.post(
-      url,
+      BackendRoutes.createFloor,
       headers: {
         'accept': 'application/json',
-        'X-User-Id': userId,
-        'X-Session-Id': sessionId,
+        'X-User-Id': widget.userId,
+        'X-Session-Id': widget.sessionId,
         'Content-Type': 'application/json',
       },
       body: json.encode({
@@ -54,57 +69,95 @@ class CreateFloorPage extends StatelessWidget {
         );
       }
     }
+
+    setState(() {
+      _isLoading = false; // Stop loading indicator
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1C1C2B),
-      appBar: AppBar(
-        title: const Text('Create a new floor'),
-        backgroundColor: const Color(0xFF1C1C2B),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            NTextField(
-              hintText: 'Eg: Parent’s Floor',
-              controller: aliasController,
-            ),
-            const SizedBox(height: 16),
-            TextField(
-              controller: levelController,
-              keyboardType: TextInputType.number,
-              inputFormatters: [FilteringTextInputFormatter.digitsOnly],
-              decoration: InputDecoration(
-                filled: true,
-                fillColor: const Color(0xFF1C1C2B),
-                labelText: 'Floor level',
-                labelStyle: const TextStyle(color: Color(0xFFFF9F1C)),
-                enabledBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFF9F1C),
-                    width: 2.0,
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: ShapeDecoration(
+          gradient: const LinearGradient(
+            begin: Alignment(0.00, -1.00),
+            end: Alignment(0, 1),
+            colors: [Color(0xFF353841), Color(0xFF141414)],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ),
+                )
+              : SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: screenSize.height * 0.08),
+                        Text(
+                          'Create a new floor',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontSize: AppFontSizes.pageHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        Text(
+                          'Enter the details for creating a new floor.',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontSize: AppFontSizes.pageSubHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        NTextField(
+                          hintText: 'Floor Name',
+                          controller: aliasController,
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        NTextField(
+                          hintText: 'Floor Level',
+                          controller: levelController,
+                        ),
+                        const Spacer(),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                          margin: EdgeInsets.only(
+                            bottom: keyboardHeight > 0
+                                ? keyboardHeight + screenSize.height * 0.02
+                                : screenSize.height * 0.1,
+                          ),
+                          child: Center(
+                            child: CustomButton(
+                              text: 'Create',
+                              onPressed: () => _createFloor(context),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-                focusedBorder: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(15.0),
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFF9F1C),
-                    width: 2.0,
-                  ),
-                ),
-              ),
-              style: const TextStyle(color: Colors.white),
-            ),
-            const SizedBox(height: 24),
-            CustomButton(
-              text: 'Create',
-              onPressed: () => _createFloor(context),
-            ),
-          ],
         ),
       ),
     );
