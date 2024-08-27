@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
@@ -159,7 +160,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   ))
                 : SafeArea(
                     child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                        padding: AppPadding.pagePadding(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [

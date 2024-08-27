@@ -1,5 +1,6 @@
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/widgets/button.dart';
 import 'package:StapesHome/widgets/input_fields.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +32,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
         shape: RoundedRectangleBorder(
           side: BorderSide(
             width: 1,
-            color: AppColor.whiteColor50,
+            color: AppColor.whiteColor50, // Border color
           ),
           borderRadius: BorderRadius.circular(15),
         ),
@@ -56,9 +57,9 @@ class _AddNewDeviceState extends State<AddNewDevice> {
           );
         }).toList(),
         onChanged: onChanged,
-        dropdownColor: Color(0xFF353841),
-        style: TextStyle(color: AppColor.whiteColor),
-        icon: Icon(Icons.arrow_drop_down, color: AppColor.whiteColor),
+        dropdownColor: Color(0xFF353841), // Dropdown menu background color
+        style: TextStyle(color: AppColor.whiteColor), // Text color inside dropdown
+        icon: Icon(Icons.arrow_drop_down, color: AppColor.whiteColor), // Dropdown icon
       ),
     );
   }
@@ -72,11 +73,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
         decoration: ShapeDecoration(
-          gradient: LinearGradient(
-            begin: Alignment(0.00, -1.00),
-            end: Alignment(0, 1),
-            colors: [Color(0xFF353841), Color(0xFF141414)],
-          ),
+          gradient: AppColor.backgroundColorgradient,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -86,7 +83,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
           resizeToAvoidBottomInset: false,
           body: SafeArea(
             child: Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+              padding: AppPadding.pagePadding(context),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -113,7 +110,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                   SizedBox(height: screenSize.height * 0.04),
                   Expanded(
                     child: SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
+                      physics: BouncingScrollPhysics(),
                       child: Column(
                         children: [
                           _buildDropdown('Floor', _floors, _selectedFloor, (newValue) {

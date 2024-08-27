@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/utils/hive.dart';
 import 'package:flutter/material.dart';
@@ -139,7 +140,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           constraints: BoxConstraints(minHeight: constraints.maxHeight),
                           child: IntrinsicHeight(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                              padding: AppPadding.pagePadding(context),
                               child: Column(
                                 children: [
                                   SizedBox(height: constraints.maxHeight * 0.1),

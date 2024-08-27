@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
@@ -108,7 +109,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                   child: Stack(
                     children: [
                       Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                        padding: AppPadding.pagePadding(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
