@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/views/nodes/qr_scanner.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/screens/views/nodes/qr_scanner.dart';
 
 class NodesScreen extends StatefulWidget {
   const NodesScreen({super.key});

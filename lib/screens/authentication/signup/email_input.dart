@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/constants/font_sizes.dart';
-import 'package:jarvis/widgets/button.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/screens/authentication/common/password.dart';
-import 'package:jarvis/screens/authentication/common/otp_verify.dart';
-import 'package:jarvis/screens/authentication/signup/details_form.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/widgets/button.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/screens/authentication/common/password.dart';
+import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
+import 'package:StapesHome/screens/authentication/signup/details_form.dart';
 
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});

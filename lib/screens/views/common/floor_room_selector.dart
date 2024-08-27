@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/views/common/create_floor_page.dart';
-import 'package:jarvis/screens/views/common/create_room_page.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/screens/views/common/create_floor_page.dart';
+import 'package:StapesHome/screens/views/common/create_room_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;

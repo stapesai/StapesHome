@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/constants/font_sizes.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/widgets/button.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/widgets/button.dart';
 
 class CreateRoomPage extends StatefulWidget {
   final String sessionId;

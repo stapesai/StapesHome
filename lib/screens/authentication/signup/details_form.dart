@@ -1,14 +1,14 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/font_sizes.dart';
-import 'package:jarvis/utils/hive.dart';
-import 'package:jarvis/utils/sessions_model.dart';
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/screens/routes/main.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/utils/hive.dart';
+import 'package:StapesHome/utils/sessions_model.dart';
+import 'package:StapesHome/widgets/button.dart'; // Import the CustomButton widget
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/screens/routes/main.dart';
 
 class SignupForm extends StatefulWidget {
   final String password;

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart'; // Add this import
-import 'package:jarvis/utils/hive.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/routes/devices.dart';
-import 'package:jarvis/screens/routes/home.dart';
-import 'package:jarvis/screens/routes/nodes.dart';
-import 'package:jarvis/screens/routes/profile.dart';
+import 'package:StapesHome/utils/hive.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/screens/routes/devices.dart';
+import 'package:StapesHome/screens/routes/home.dart';
+import 'package:StapesHome/screens/routes/nodes.dart';
+import 'package:StapesHome/screens/routes/profile.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

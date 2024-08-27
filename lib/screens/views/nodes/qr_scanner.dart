@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/colors.dart';
+import 'package:StapesHome/constants/colors.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 
 class MiniBar extends StatelessWidget {

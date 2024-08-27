@@ -1,12 +1,12 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/constants/font_sizes.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/constants/colors.dart';
-import "package:jarvis/widgets/button.dart";
+import 'package:StapesHome/constants/colors.dart';
+import "package:StapesHome/widgets/button.dart";
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
@@ -123,7 +123,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
+      textStyle:
+          TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
       margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
       decoration: BoxDecoration(
         gradient: LinearGradient(

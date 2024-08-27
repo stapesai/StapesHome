@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jarvis/constants/colors.dart';
+import 'package:StapesHome/constants/colors.dart';
 
 class NTextField extends StatefulWidget {
   final String hintText;

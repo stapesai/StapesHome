@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/utils/hive.dart';
-import 'package:jarvis/screens/authentication/login.dart';
-import 'package:jarvis/constants/colors.dart';
-import "package:jarvis/widgets/button.dart";
+import 'package:StapesHome/utils/hive.dart';
+import 'package:StapesHome/screens/authentication/login.dart';
+import 'package:StapesHome/constants/colors.dart';
+import "package:StapesHome/widgets/button.dart";
 
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});

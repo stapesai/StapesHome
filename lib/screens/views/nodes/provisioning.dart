@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/colors.dart';
+import 'package:StapesHome/constants/colors.dart';
 
 class ProvisioningScreen extends StatefulWidget {
   const ProvisioningScreen({super.key});
@@ -19,7 +19,6 @@ class ProvisioningStep {
 }
 
 class ProvisioningScreenState extends State<ProvisioningScreen> {
-  
   List<ProvisioningStep> steps = [
     ProvisioningStep(title: 'Pairing bluetooth', isCurrent: true),
     ProvisioningStep(title: 'Sending Wi-Fi credentials'),

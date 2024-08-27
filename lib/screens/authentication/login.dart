@@ -1,16 +1,16 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/utils/hive.dart';
+import 'package:StapesHome/utils/hive.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/screens/routes/main.dart';
-import "package:jarvis/widgets/button.dart";
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/utils/sessions_model.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/screens/authentication/forgot_password.dart';
-import 'package:jarvis/screens/authentication/common/otp_verify.dart';
-import 'package:jarvis/screens/authentication/signup/email_input.dart';
+import 'package:StapesHome/screens/routes/main.dart';
+import "package:StapesHome/widgets/button.dart";
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/utils/sessions_model.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/screens/authentication/forgot_password.dart';
+import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
+import 'package:StapesHome/screens/authentication/signup/email_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
