@@ -1,4 +1,9 @@
+import 'dart:convert';
+
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/models.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
@@ -22,6 +27,9 @@ class DevicesScreen extends StatefulWidget {
 class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveClientMixin {
   String activeFloorId = '';
   String activeRoomId = '';
+  List<Device> devices = [];
+  bool isLoading = true;
+  String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
 
   @override
@@ -39,6 +47,47 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
     if (mounted) {
       setState(() {
         activeRoomId = roomId;
+      });
+    }
+  }
+
+  Future<void> _fetch_devices(String roomId) async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.get(
+        BackendRoutes.getEntitiesByRoomId(roomId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> devicesData = json.decode(response.body);
+        devices = devicesData
+            .map((devices) => Device(
+                  id: devices['id'],
+                  name: devices['name'],
+                  type: devices['type'], // 'fan' or 'light'
+                  nodeId: devices['node_id'],
+                  channelId: devices['channel_id'],
+                ))
+            .toList();
+      } else {
+        throw Exception('Failed to load devices: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching devices: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
       });
     }
   }
