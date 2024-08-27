@@ -1,4 +1,4 @@
 class AppFontSizes {
-  static const double pageHeading = 44;
-  static const double pageSubHeading = 20;
+  static const double pageHeading = 40;
+  static const double pageSubHeading = 18;
 }

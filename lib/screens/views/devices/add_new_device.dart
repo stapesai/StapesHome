@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/widgets/input_fields.dart';
 import 'package:jarvis/widgets/button.dart';
+import 'package:jarvis/constants/font_sizes.dart';
 
 class AddNewDevice extends StatefulWidget {
   const AddNewDevice({super.key});
@@ -11,172 +12,162 @@ class AddNewDevice extends StatefulWidget {
 }
 
 class _AddNewDeviceState extends State<AddNewDevice> {
-  String? _selectedType;
   String? _selectedFloor;
   String? _selectedRoom;
+  String? _selectedNode;
+  String? _selectedDeviceType;
 
-  final List<String> _types = ['Type 1', 'Type 2', 'Type 3'];
+  final TextEditingController deviceNameController = TextEditingController();
+  final TextEditingController channelIdController = TextEditingController();
+
   final List<String> _floors = ['Floor 1', 'Floor 2', 'Floor 3'];
   final List<String> _rooms = ['Room 1', 'Room 2', 'Room 3'];
+  final List<String> _nodes = ['Node 1', 'Node 2', 'Node 3'];
+  final List<String> _deviceTypes = ['Type 1', 'Type 2', 'Type 3'];
+
+  Widget _buildDropdown(String hint, List<String> items, String? value, Function(String?) onChanged) {
+    return Container(
+      decoration: ShapeDecoration(
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            width: 1,
+            color: Colors.white.withOpacity(0.5),
+          ),
+          borderRadius: BorderRadius.circular(15),
+        ),
+      ),
+      child: DropdownButtonFormField<String>(
+        decoration: InputDecoration(
+          hintText: hint,
+          hintStyle: TextStyle(
+            color: Colors.white.withOpacity(0.5),
+            fontSize: 16,
+            fontFamily: 'Ubuntu',
+            fontWeight: FontWeight.w700,
+          ),
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        ),
+        value: value,
+        items: items.map((String item) {
+          return DropdownMenuItem<String>(
+            value: item,
+            child: Text(item, style: TextStyle(color: Colors.white)),
+          );
+        }).toList(),
+        onChanged: onChanged,
+        dropdownColor: Color(0xFF353841),
+        style: TextStyle(color: Colors.white),
+        icon: Icon(Icons.arrow_drop_down, color: Colors.white),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.black,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            const Column(
-              children: [
-                Text(
-                  'Add new device',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: AppColor.whiteColor,
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: ShapeDecoration(
+          gradient: LinearGradient(
+            begin: Alignment(0.00, -1.00),
+            end: Alignment(0, 1),
+            colors: [Color(0xFF353841), Color(0xFF141414)],
+          ),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+              child: CustomScrollView(
+                physics: AlwaysScrollableScrollPhysics(
+                  parent: BouncingScrollPhysics(),
+                ),
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: screenSize.height * 0.08),
+                        Text(
+                          'Add a new device',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontSize: AppFontSizes.pageHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        Text(
+                          'Enter the details for adding a new device.',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontSize: AppFontSizes.pageSubHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        _buildDropdown('Floor', _floors, _selectedFloor, (newValue) {
+                          setState(() {
+                            _selectedFloor = newValue;
+                          });
+                        }),
+                        SizedBox(height: screenSize.height * 0.02),
+                        _buildDropdown('Room', _rooms, _selectedRoom, (newValue) {
+                          setState(() {
+                            _selectedRoom = newValue;
+                          });
+                        }),
+                        SizedBox(height: screenSize.height * 0.02),
+                        _buildDropdown('Node', _nodes, _selectedNode, (newValue) {
+                          setState(() {
+                            _selectedNode = newValue;
+                          });
+                        }),
+                        SizedBox(height: screenSize.height * 0.02),
+                        NTextField(
+                          hintText: 'Device Name',
+                          controller: deviceNameController,
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        _buildDropdown('Device Type', _deviceTypes, _selectedDeviceType, (newValue) {
+                          setState(() {
+                            _selectedDeviceType = newValue;
+                          });
+                        }),
+                        SizedBox(height: screenSize.height * 0.02),
+                        NTextField(
+                          hintText: 'Channel Id',
+                          controller: channelIdController,
+                        ),
+                        Spacer(),
+                        Center(
+                          child: CustomButton(
+                            text: "Create",
+                            onPressed: () {
+                              // Handle create button press
+                            },
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                      ],
+                    ),
                   ),
-                ),
-                SizedBox(width: 8),
-                Icon(
-                  Icons.arrow_right_alt,
-                  size: 40,
-                  color: Color(0xFFFFA500),
-                ),
-              ],
-            ),
-            const SizedBox(height: 32),
-            const NTextField(
-              hintText: 'Name',
-            ),
-            const SizedBox(height: 16),
-            const NTextField(
-              hintText: 'Channel Id',
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Type',
-                labelStyle: const TextStyle(
-                  color: Color(0xFFFFA500),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFFA500),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFFA500),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              value: _selectedType,
-              items: _types.map((String type) {
-                return DropdownMenuItem<String>(
-                  value: type,
-                  child: Text(type),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedType = newValue;
-                });
-              },
-              style: const TextStyle(color: Colors.white),
-              dropdownColor: Colors.black,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Floor',
-                labelStyle: const TextStyle(
-                  color: Color(0xFFFFA500),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFFA500),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFFA500),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              value: _selectedFloor,
-              items: _floors.map((String floor) {
-                return DropdownMenuItem<String>(
-                  value: floor,
-                  child: Text(floor),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedFloor = newValue;
-                });
-              },
-              style: const TextStyle(color: Colors.white),
-              dropdownColor: Colors.black,
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
-              decoration: InputDecoration(
-                labelText: 'Room',
-                labelStyle: const TextStyle(
-                  color: Color(0xFFFFA500),
-                ),
-                enabledBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFFA500),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                focusedBorder: OutlineInputBorder(
-                  borderSide: const BorderSide(
-                    color: Color(0xFFFFA500),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-              ),
-              value: _selectedRoom,
-              items: _rooms.map((String room) {
-                return DropdownMenuItem<String>(
-                  value: room,
-                  child: Text(room),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  _selectedRoom = newValue;
-                });
-              },
-              style: const TextStyle(color: Colors.white),
-              dropdownColor: Colors.black,
-            ),
-            const SizedBox(height: 32),
-            CustomButton(
-              text: 'Create',
-              onPressed: () {
-                // Handle button press
-              },
-            ),
-            const SizedBox(height: 16),
-            const Center(
-              child: Text(
-                'Need Help?',
-                style: TextStyle(
-                  color: Colors.blue,
-                ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
