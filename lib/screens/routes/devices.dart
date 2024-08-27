@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/utils/hive.dart';
-import 'package:jarvis/screens/views/add_device.dart';
+import 'package:jarvis/screens/views/add_new_device.dart';
 import 'package:jarvis/screens/views/floor_room_selector.dart';
 
 class DeviceScreen extends StatefulWidget {
