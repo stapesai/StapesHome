@@ -25,7 +25,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(splashFactory: NoSplash.splashFactory),
+      theme: ThemeData(
+        splashColor: Colors.transparent, // Disable splash effect globally
+        highlightColor: Colors.transparent, // Disable highlight effect globally
+      ),
     );
   }
 }
