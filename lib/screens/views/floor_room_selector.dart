@@ -2,23 +2,24 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/views/create_floor_page.dart'; // Import CreateFloorPage
-import 'package:jarvis/screens/views/create_room_page.dart'; // Import CreateRoomPage
+import 'package:jarvis/screens/views/create_floor_page.dart';
+import 'package:jarvis/screens/views/create_room_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
+  final BuildContext context;
   final Function(String) onFloorSelected;
   final Function(int) onRoomSelected;
-  final VoidCallback onAddFloor;
   final String sessionId;
   final String userId;
   final String activeFloorId;
 
   const FloorRoomSelector({
-    super.key, // Added Key? key parameter
+    super.key,
+    required this.context,
     required this.onFloorSelected,
     required this.onRoomSelected,
-    required this.onAddFloor,
     required this.sessionId,
     required this.userId,
     required this.activeFloorId,
@@ -41,9 +42,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 
   Future<void> _fetchFloors() async {
     try {
-      final url = Uri.https('backend.jarvishome.in', '/floors');
       final response = await http.get(
-        url,
+        BackendRoutes.getFloors,
         headers: {
           'accept': 'application/json',
           'X-User-Id': widget.userId,
@@ -82,7 +82,6 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       }
     } catch (e) {
       // Handle network errors or other exceptions
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error fetching floors: $e')),
@@ -93,9 +92,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 
   Future<void> _fetchRooms(String floorId) async {
     try {
-      final url = Uri.https('backend.jarvishome.in', '/rooms/$floorId');
       final response = await http.get(
-        url,
+        BackendRoutes.getRoomsByFloorId(floorId),
         headers: {
           'accept': 'application/json',
           'X-User-Id': widget.userId,
@@ -127,9 +125,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
 
   Future<void> _deleteFloor(String floorId) async {
     try {
-      final url = Uri.https('backend.jarvishome.in', '/floors/$floorId');
       final response = await http.delete(
-        url,
+        BackendRoutes.deleteFloor(floorId),
         headers: {
           'accept': '*/*',
           'X-User-Id': widget.userId,
@@ -153,7 +150,6 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       }
     } catch (e) {
       // Handle network errors or other exceptions
-
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Error deleting floor: $e')),
@@ -258,7 +254,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             ),
             const SizedBox(width: 8),
             AddCircleButton(
-              onPressed: () => navigateToCreateFloor(context), // Pass context here
+              onPressed: () => navigateToCreateFloor(context),
             ),
           ],
         ),
@@ -290,7 +286,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
             ),
             const SizedBox(width: 8),
             AddCircleButton(
-              onPressed: () => navigateToCreateFloor(context), // Pass context here
+              onPressed: () => navigateToCreateFloor(context),
             ),
           ],
         ),

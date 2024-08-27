@@ -47,20 +47,20 @@ class BackendRoutes {
 
   // Room routes
   static final Uri createRoom = Uri.https(baseUrl, '/rooms');
-  static Uri getRooms(String floorId) => Uri.https(baseUrl, '/rooms/$floorId');
+  static Uri getRoomsByFloorId(String floorId) => Uri.https(baseUrl, '/rooms/$floorId');
   static Uri updateRoom(String roomId) => Uri.https(baseUrl, '/rooms/$roomId');
   static Uri deleteRoom(String roomId) => Uri.https(baseUrl, '/rooms/$roomId');
 
   // Node routes
   static final Uri createNode = Uri.https(baseUrl, '/nodes');
-  static Uri getNodes(String roomId) => Uri.https(baseUrl, '/nodes/$roomId');
+  static Uri getNodesByRoomId(String roomId) => Uri.https(baseUrl, '/nodes/$roomId');
   static Uri updateNode(String nodeId) => Uri.https(baseUrl, '/nodes/$nodeId');
   static Uri deleteNode(String nodeId) => Uri.https(baseUrl, '/nodes/$nodeId');
 
   // Entity routes
   static final Uri createEntity = Uri.https(baseUrl, '/entities');
   static final Uri getAllEntities = Uri.https(baseUrl, '/entities/all');
-  static Uri getEntities(String nodeId) => Uri.https(baseUrl, '/entities/$nodeId');
+  static Uri getEntitiesByNodeId(String nodeId) => Uri.https(baseUrl, '/entities/$nodeId');
   static Uri updateEntity(String entityId) => Uri.https(baseUrl, '/entities/$entityId');
   static Uri deleteEntity(String entityId) => Uri.https(baseUrl, '/entities/$entityId');
 

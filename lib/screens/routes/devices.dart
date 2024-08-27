@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:jarvis/constants/colors.dart';
 import 'package:jarvis/utils/hive.dart';
 import 'package:jarvis/screens/views/add_device.dart';
-import 'package:jarvis/screens/views/create_floor_page.dart';
-import 'package:jarvis/screens/views/create_room_page.dart';
 import 'package:jarvis/screens/views/floor_room_selector.dart';
 
 class DeviceScreen extends StatefulWidget {
@@ -42,37 +40,6 @@ class _DeviceScreenState extends State<DeviceScreen> {
     });
   }
 
-  void navigateToCreateFloor(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateFloorPage(
-          sessionId: widget.sessionId,
-          userId: widget.userId,
-        ),
-      ),
-    );
-  }
-
-  void navigateToCreateRoom(BuildContext context) {
-    if (activeFloorId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a floor first')),
-      );
-      return;
-    }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateRoomPage(
-          sessionId: widget.sessionId,
-          userId: widget.userId,
-          floorId: activeFloorId,
-        ),
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,15 +56,12 @@ class _DeviceScreenState extends State<DeviceScreen> {
               ),
               const SizedBox(height: 24),
               FloorRoomSelector(
+                context: context,
                 onFloorSelected: handleFloorSelected,
                 onRoomSelected: handleRoomSelected,
-                onAddFloor: () => navigateToCreateFloor(context),
-                // Pass callback
                 sessionId: widget.sessionId,
-                // Pass sessionId
                 userId: widget.userId,
-                // Pass userId
-                activeFloorId: activeFloorId, // Pass active floor ID
+                activeFloorId: activeFloorId,
               ),
               const SizedBox(height: 24),
               Expanded(

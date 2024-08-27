@@ -1,13 +1,13 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/widgets/input_fields.dart'; // Import the CustomTextField widget
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
+import 'package:jarvis/constants/api_routes.dart';
+import 'package:jarvis/constants/colors.dart';
+import 'package:jarvis/constants/font_sizes.dart';
+import 'package:jarvis/widgets/input_fields.dart';
+import 'package:jarvis/widgets/button.dart';
 
-class CreateRoomPage extends StatelessWidget {
-  final TextEditingController nameController = TextEditingController();
-  final TextEditingController typeController = TextEditingController();
+class CreateRoomPage extends StatefulWidget {
   final String sessionId;
   final String userId;
   final String floorId;
@@ -19,7 +19,21 @@ class CreateRoomPage extends StatelessWidget {
     required this.floorId,
   });
 
+  @override
+  createState() => _CreateRoomPageState();
+}
+
+class _CreateRoomPageState extends State<CreateRoomPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
+
+  bool _isLoading = false;
+
   Future<void> _createRoom(BuildContext context) async {
+    setState(() {
+      _isLoading = true; // Start loading indicator
+    });
+
     final String name = nameController.text;
     final String type = typeController.text;
 
@@ -27,20 +41,22 @@ class CreateRoomPage extends StatelessWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please provide valid room details')),
       );
+      setState(() {
+        _isLoading = false; // Stop loading indicator
+      });
       return;
     }
 
-    final url = Uri.https('backend.jarvishome.in', '/rooms');
     final response = await http.post(
-      url,
+      BackendRoutes.createRoom,
       headers: {
         'accept': 'application/json',
-        'X-User-Id': userId,
-        'X-Session-Id': sessionId,
+        'X-User-Id': widget.userId,
+        'X-Session-Id': widget.sessionId,
         'Content-Type': 'application/json',
       },
       body: json.encode({
-        'floor_id': floorId,
+        'floor_id': widget.floorId,
         'name': name,
         'type': type,
       }),
@@ -60,35 +76,102 @@ class CreateRoomPage extends StatelessWidget {
         );
       }
     }
+
+    setState(() {
+      _isLoading = false; // Stop loading indicator
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: const Color(0xFF1C1C2B),
-      appBar: AppBar(
-        title: const Text('Create a new room'),
-        backgroundColor: const Color(0xFF1C1C2B),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            NTextField(
-              hintText: 'Eg: Parent’s room',
-              controller: nameController,
-            ),
-            const SizedBox(height: 16),
-            NTextField(
-              hintText: 'Room type',
-              controller: typeController,
-            ),
-            const SizedBox(height: 24),
-            CustomButton(
-              text: 'Create',
-              onPressed: () => _createRoom(context),
-            ),
-          ],
+    final screenSize = MediaQuery.of(context).size;
+    final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          appBar: AppBar(
+            title: const Text('Create a new room'),
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+          ),
+          body: _isLoading
+              ? const Center(
+                  child: CircularProgressIndicator(
+                    color: AppColor.whiteColor,
+                  ),
+                )
+              : SafeArea(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(
+                          child: Text(
+                            'Create a new room',
+                            style: TextStyle(
+                              color: AppColor.whiteColor,
+                              fontSize: AppFontSizes.pageHeading,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        SizedBox(
+                          child: Text(
+                            'Enter the details for creating a new room.',
+                            style: TextStyle(
+                              color: AppColor.whiteColor,
+                              fontSize: AppFontSizes.pageSubHeading,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: screenSize.height * 0.04),
+                        NTextField(
+                          hintText: 'Room Name',
+                          controller: nameController,
+                          icon: Icons.room_rounded,
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        NTextField(
+                          hintText: 'Room type',
+                          controller: typeController,
+                          icon: Icons.category_rounded,
+                        ),
+                        const Spacer(),
+                        AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          curve: Curves.easeOut,
+                          margin: EdgeInsets.only(
+                            bottom: keyboardHeight > 0
+                                ? keyboardHeight + screenSize.height * 0.02
+                                : screenSize.height * 0.1,
+                          ),
+                          child: Center(
+                            child: CustomButton(
+                              text: "Create",
+                              onPressed: () => _createRoom(context),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
         ),
       ),
     );
