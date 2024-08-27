@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:jarvis/constants/api_routes.dart';
 import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/views/create_floor_page.dart';
-import 'package:jarvis/screens/views/create_room_page.dart';
+import 'package:jarvis/screens/views/common/create_floor_page.dart';
+import 'package:jarvis/screens/views/common/create_room_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;
