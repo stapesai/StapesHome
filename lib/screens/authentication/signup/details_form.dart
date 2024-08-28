@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:jarvis/utils/hive.dart';
-import 'package:jarvis/utils/sessions_model.dart';
-import 'package:jarvis/widgets/button.dart'; // Import the CustomButton widget
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/screens/routes/main.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/utils/hive.dart';
+import 'package:StapesHome/utils/sessions_model.dart';
+import 'package:StapesHome/widgets/button.dart'; // Import the CustomButton widget
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/screens/routes/main.dart';
 
 class SignupForm extends StatefulWidget {
   final String password;
@@ -127,18 +129,18 @@ class _SignupFormState extends State<SignupForm> {
                 )
               : SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                    padding: AppPadding.pagePadding(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(height: screenSize.height * 0.05),
                         SizedBox(
                           width: double.infinity,
                           child: Text(
                             'Sign Up',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: screenSize.width * 0.1,
+                              fontSize: AppFontSizes.pageHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w700,
                             ),
@@ -151,7 +153,7 @@ class _SignupFormState extends State<SignupForm> {
                             'Please enter your personal details.',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: screenSize.width * 0.04,
+                              fontSize: AppFontSizes.pageSubHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w400,
                             ),

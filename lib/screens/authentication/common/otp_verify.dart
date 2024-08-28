@@ -1,24 +1,24 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/api_routes.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/constants/colors.dart';
-import "package:jarvis/widgets/button.dart";
+import 'package:StapesHome/constants/colors.dart';
+import "package:StapesHome/widgets/button.dart";
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
   final VoidCallback onSuccess;
-  final VoidCallback onError;
-  final DateTime time;
+  final DateTime expiry_time;
 
   const OtpVerificationScreen({
     super.key,
     required this.transactionId,
     required this.onSuccess,
-    required this.onError,
-    required this.time,
+    required this.expiry_time,
   });
 
   @override
@@ -36,7 +36,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    _remainingSeconds = widget.time.difference(DateTime.now()).inSeconds;
+    _remainingSeconds = widget.expiry_time.difference(DateTime.now()).inSeconds;
     _startTimer();
   }
 
@@ -44,8 +44,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     setState(() {
       _isLoading = true;
     });
-  
-  String otp = _controllers.map((controller) => controller.text).join();
+
+    String otp = _controllers.map((controller) => controller.text).join();
     var response = await http.post(
       AuthRoutes.verifyOtp,
       headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
@@ -58,7 +58,15 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     if (response.statusCode == 200) {
       widget.onSuccess();
     } else {
-      widget.onError();
+      // Handle error
+      if (context.mounted) {
+        var responseBody = json.decode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
+          ),
+        );
+      }
     }
     setState(() {
       _isLoading = false;
@@ -116,7 +124,8 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
     final defaultPinTheme = PinTheme(
       width: 56,
       height: 56,
-      textStyle: TextStyle(fontSize: 20, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
+      textStyle:
+          TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
       margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
       decoration: BoxDecoration(
         gradient: LinearGradient(
@@ -151,18 +160,18 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                   ))
                 : SafeArea(
                     child: Padding(
-                        padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                        padding: AppPadding.pagePadding(context),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            SizedBox(height: screenSize.height * 0.08),
+                            SizedBox(height: screenSize.height * 0.05),
                             SizedBox(
                               width: double.infinity,
                               child: Text(
                                 'OTP Verification',
                                 style: TextStyle(
                                   color: AppColor.whiteColor,
-                                  fontSize: 44,
+                                  fontSize: AppFontSizes.pageHeading,
                                   fontFamily: 'Ubuntu',
                                   fontWeight: FontWeight.w700,
                                 ),
@@ -174,7 +183,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
                                 'Enter the verification code sent to your email address.',
                                 style: TextStyle(
                                   color: AppColor.whiteColor,
-                                  fontSize: 20,
+                                  fontSize: AppFontSizes.pageSubHeading,
                                   fontFamily: 'Ubuntu',
                                   fontWeight: FontWeight.w400,
                                 ),

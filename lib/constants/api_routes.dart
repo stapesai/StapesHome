@@ -34,3 +34,41 @@ class AuthRoutes {
     return Uri.https(baseUrl, '/check/password', {'password': password});
   }
 }
+
+class BackendRoutes {
+  static const String baseUrl = 'backend.jarvishome.in';
+
+  // Floor routes
+  static final Uri createFloor = Uri.https(baseUrl, '/floors');
+  static final Uri getFloors = Uri.https(baseUrl, '/floors');
+  static Uri updateFloor(String floorId) => Uri.https(baseUrl, '/floors/$floorId');
+  static Uri deleteFloor(String floorId) => Uri.https(baseUrl, '/floors/$floorId');
+
+  // Room routes
+  static final Uri createRoom = Uri.https(baseUrl, '/rooms');
+  static Uri getRoomsByFloorId(String floorId) => Uri.https(baseUrl, '/rooms/$floorId');
+  static Uri updateRoom(String roomId) => Uri.https(baseUrl, '/rooms/$roomId');
+  static Uri deleteRoom(String roomId) => Uri.https(baseUrl, '/rooms/$roomId');
+
+  // Node routes
+  static final Uri createNode = Uri.https(baseUrl, '/nodes');
+  static Uri getNodesByRoomId(String roomId) => Uri.https(baseUrl, '/nodes/$roomId');
+  static Uri updateNode(String nodeId) => Uri.https(baseUrl, '/nodes/$nodeId');
+  static Uri deleteNode(String nodeId) => Uri.https(baseUrl, '/nodes/$nodeId');
+
+  // Entity routes
+  static final Uri createEntity = Uri.https(baseUrl, '/entities');
+  static final Uri getAllEntities = Uri.https(baseUrl, '/entities/all');
+  static Uri getEntitiesByNodeId(String nodeId) => Uri.https(baseUrl, '/entities/by_node_id/$nodeId');
+  static Uri getEntitiesByRoomId(String roomId) => Uri.https(baseUrl, '/entities/by_room_id/$roomId');
+  static Uri updateEntity(String entityId) => Uri.https(baseUrl, '/entities/$entityId');
+  static Uri deleteEntity(String entityId) => Uri.https(baseUrl, '/entities/$entityId');
+
+  // MQTT routes
+  static final Uri mqttInfo = Uri.https(baseUrl, '/mqtt/info');
+
+  // Favorite Device routes
+  static final Uri addFavoriteDevice = Uri.https(baseUrl, '/favdev');
+  static final Uri getFavoriteDevices = Uri.https(baseUrl, '/favdev');
+  static Uri removeFavoriteDevice(String favoriteDeviceId) => Uri.https(baseUrl, '/favdev/$favoriteDeviceId');
+}

@@ -1,84 +1,172 @@
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/colors.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/constants/padding.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   final String sessionId;
   final String userId;
 
   const HomeScreen({
-    super.key,
+    Key? key,
     required this.sessionId,
     required this.userId,
-  });
+  }) : super(key: key);
+
+  @override
+  createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+  bool isFavouritesSelected = true;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  Future<void> _refreshData() async {
+    await Future.delayed(Duration(seconds: 2));
+    setState(() {
+      // Update your state with the new data
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent, // Adjust this color to match your theme
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Good morning,\nMarvin',
-                style: TextStyle(
-                  color: AppColor.whiteColor,
-                  fontSize: 32,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 20),
-              const Row(
+    super.build(context);
+    final screenSize = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: SafeArea(
+            child: Padding(
+              padding: AppPadding.pagePadding(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    '❤️ Favourites',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                  SizedBox(width: 20),
-                  Text(
-                    '⚡ Active',
-                    style: TextStyle(color: Colors.white70),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                  // Header section (greeting and quick access buttons)
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Text(
-                      //   "Session ID: $sessionId",
-                      //   style: const TextStyle(
-                      //       color: Colors.white70, fontSize: 18),
-                      // ),
-                      // const SizedBox(height: 10),
-                      // Text(
-                      //   "User ID: $userId",
-                      //   style: const TextStyle(
-                      //       color: Colors.white70, fontSize: 14),
-                      //   textAlign: TextAlign.center,
-                      // ),
-                      // const SizedBox(height: 20),
-                      const Text(
-                        "Nothing to show here.",
-                        style: TextStyle(color: Colors.white70, fontSize: 18),
+                      SizedBox(height: screenSize.height * 0.05),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Good morning,',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.bodyText,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              'Devasheesh',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.pageHeading,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                      const SizedBox(height: 10),
-                      const Text(
-                        "Go to Devices or Nodes page and add a device to favorites list.",
-                        style: TextStyle(color: Colors.white70, fontSize: 14),
-                        textAlign: TextAlign.center,
+                      SizedBox(height: screenSize.height * 0.03),
+                      Row(
+                        children: [
+                          _buildQuickAccessButton('Favourites', isFavouritesSelected, 'heart-active.svg', 'heart.svg'),
+                          SizedBox(width: 24),
+                          _buildQuickAccessButton(
+                              'Active', !isFavouritesSelected, 'lightning-active.svg', 'lightning.svg'),
+                        ],
                       ),
                     ],
                   ),
-                ),
+
+                  // Main content section
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RefreshIndicator(
+                          onRefresh: _refreshData,
+                          color: AppColor.whiteColor,
+                          backgroundColor: Colors.transparent,
+                          child: SingleChildScrollView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            child: Center(
+                              child: SizedBox(
+                                child: Center(
+                                  child: Text(
+                                    isFavouritesSelected
+                                        ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
+                                        : "No currently active devices",
+                                    style: TextStyle(
+                                      color: AppColor.whiteColor.withOpacity(0.8),
+                                      fontSize: AppFontSizes.bodyText,
+                                      fontFamily: 'Ubuntu',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildQuickAccessButton(String label, bool isActive, String activeIcon, String inactiveIcon) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          isFavouritesSelected = (label == 'Favourites');
+        });
+      },
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SvgPicture.asset(
+            isActive ? 'assets/icons/home/$activeIcon' : 'assets/icons/home/$inactiveIcon',
+            width: 20,
+          ),
+          SizedBox(width: 8),
+          Text(
+            label,
+            style: TextStyle(
+              color: isActive ? AppColor.whiteColor : AppColor.whiteColor.withOpacity(0.5),
+              fontSize: AppFontSizes.bodyText,
+              fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }

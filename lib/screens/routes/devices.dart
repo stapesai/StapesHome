@@ -1,280 +1,209 @@
+import 'dart:convert';
+import 'package:StapesHome/screens/views/devices/add_new_device.dart';
+import 'package:StapesHome/widgets/iot/fan.dart';
+import 'package:StapesHome/widgets/iot/light.dart';
+import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/utils/hive.dart';
-import 'package:jarvis/screens/views/add_device.dart';
-import 'package:jarvis/screens/views/create_floor_page.dart'; // Import CreateFloorPage
-import 'package:jarvis/screens/views/create_room_page.dart';
-import 'package:jarvis/screens/views/floor_room_selector.dart'; // Import the new component
+import 'package:http/http.dart' as http;
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/models.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/constants/padding.dart';
+import 'package:StapesHome/screens/views/common/floor_room_selector.dart';
 
-class DeviceScreen extends StatefulWidget {
+class DevicesScreen extends StatefulWidget {
   final String sessionId;
   final String userId;
 
-  const DeviceScreen({
-    super.key,
+  const DevicesScreen({
+    Key? key,
     required this.sessionId,
     required this.userId,
-  });
+  }) : super(key: key);
 
   @override
-  createState() => _DeviceScreenState();
+  createState() => _DevicesScreenState();
 }
 
-class _DeviceScreenState extends State<DeviceScreen> {
+class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveClientMixin {
   String activeFloorId = '';
-  int activeRoomIndex = -1;
-  final HiveService hiveService = HiveService();
+  String activeRoomId = '';
+  List<Device> devices = [];
+  bool isLoading = true;
+  String? errorMessage;
+  final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
 
   @override
-  void initState() {
-    super.initState();
-  }
+  bool get wantKeepAlive => true;
 
   void handleFloorSelected(String floorId) {
-    setState(() {
-      activeFloorId = floorId;
-    });
-  }
-
-  void handleRoomSelected(int roomIndex) {
-    setState(() {
-      activeRoomIndex = roomIndex;
-    });
-  }
-
-  void navigateToCreateFloor(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateFloorPage(
-          sessionId: widget.sessionId,
-          userId: widget.userId,
-        ),
-      ),
-    );
-  }
-
-  void navigateToCreateRoom(BuildContext context) {
-    if (activeFloorId.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please select a floor first')),
-      );
-      return;
+    if (mounted) {
+      setState(() {
+        activeFloorId = floorId;
+      });
     }
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateRoomPage(
-          sessionId: widget.sessionId,
-          userId: widget.userId,
-          floorId: activeFloorId,
-        ),
-      ),
-    );
+  }
+
+  void handleRoomSelected(String roomId) {
+    if (mounted) {
+      setState(() {
+        activeRoomId = roomId;
+      });
+      if (activeRoomId.isNotEmpty) {
+        _fetchDevices(roomId);
+      } else {
+        setState(() {
+          devices = [];
+        });
+      }
+    }
+  }
+
+  Future<void> _fetchDevices(String roomId) async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.get(
+        BackendRoutes.getEntitiesByRoomId(roomId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> devicesData = json.decode(response.body);
+        devices = devicesData
+            .map((device) => Device(
+                  id: device['id'],
+                  name: device['name'],
+                  type: device['type'],
+                  nodeId: device['node_id'],
+                  channelId: device['channel_id'],
+                ))
+            .toList();
+      } else {
+        throw Exception('Failed to load devices: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching devices: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _refreshData() async {
+    // Refresh floors and rooms while maintaining the previous selection
+    await _floorRoomSelectorKey.currentState?.refreshData();
+    if (activeRoomId.isNotEmpty) {
+      await _fetchDevices(activeRoomId);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent, // Adjust this color to match your theme
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'All Devices',
-                style: TextStyle(fontSize: 24, color: Colors.white),
-              ),
-              const SizedBox(height: 24),
-              FloorRoomSelector(
-                onFloorSelected: handleFloorSelected,
-                onRoomSelected: handleRoomSelected,
-                onAddFloor: () => navigateToCreateFloor(context),
-                // Pass callback
-                sessionId: widget.sessionId,
-                // Pass sessionId
-                userId: widget.userId,
-                // Pass userId
-                activeFloorId: activeFloorId, // Pass active floor ID
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  children: const [
-                    DeviceButton(label: 'Bedroom Light'),
-                    DeviceButton(label: 'Bedroom Light'),
+    super.build(context);
+    final screenSize = MediaQuery.of(context).size;
+
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: RefreshIndicator(
+            onRefresh: _refreshData,
+            color: AppColor.whiteColor,
+            backgroundColor: Colors.transparent,
+            child: SafeArea(
+              child: Padding(
+                padding: AppPadding.pagePadding(context),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: screenSize.height * 0.05),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  'All Devices',
+                                  style: TextStyle(
+                                    color: AppColor.whiteColor,
+                                    fontSize: AppFontSizes.pageHeading,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: screenSize.height * 0.02),
+                              FloorRoomSelector(
+                                key: _floorRoomSelectorKey,
+                                context: context,
+                                onFloorSelected: handleFloorSelected,
+                                onRoomSelected: handleRoomSelected,
+                                sessionId: widget.sessionId,
+                                userId: widget.userId,
+                              ),
+                              SizedBox(height: screenSize.height * 0.02),
+                              if (isLoading)
+                                Center(child: CircularProgressIndicator())
+                              else if (errorMessage != null)
+                                Text(errorMessage!, style: TextStyle(color: Colors.red))
+                              else
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: devices.map<Widget>((device) {
+                                    if (device.type == 'light') {
+                                      return LightComponent(device: device);
+                                    } else if (device.type == 'fan') {
+                                      return FanComponent(device: device);
+                                    }
+                                    return Container();
+                                  }).toList(),
+                                ),
+                              SizedBox(height: screenSize.height * 0.1),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    ScanNodeorAddDeviceButton(
+                      text: 'Add a new device',
+                      onPressed: () {
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDevice()));
+                      },
+                      icon: 'assets/icons/devices/plus.svg',
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              const Center(
-                child: AddDeviceButton(),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DeviceButton extends StatefulWidget {
-  final String label;
-
-  const DeviceButton({super.key, required this.label});
-
-  @override
-  createState() => _DeviceButtonState();
-}
-
-class _DeviceButtonState extends State<DeviceButton> {
-  bool isActive = false;
-
-  void toggleButton() {
-    setState(() {
-      isActive = !isActive;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: toggleButton,
-      child: Container(
-        decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            colors: [Color(0xFF343450), Color(0xFF161622)],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-          ),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: isActive ? Colors.orange.shade200 : Colors.black.withOpacity(0.5),
-              blurRadius: 10,
-              spreadRadius: 3,
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(0, 6),
-              blurRadius: 10,
-              spreadRadius: -3,
-            ),
-          ],
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Container(
-              width: 63,
-              height: 63,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(
-                  colors: isActive
-                      ? [Colors.orange.shade700, Colors.orange.shade400]
-                      : [const Color(0xFF2A2A40), const Color(0xFF1C1C2B)],
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                ),
-              ),
-              child: const Center(
-                child: Icon(
-                  Icons.lightbulb_outline,
-                  color: AppColor.whiteColor,
-                  size: 30,
-                ),
-              ),
-            ),
-            const SizedBox(height: 8),
-            Text(widget.label, style: const TextStyle(color: Colors.white)),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class AddDeviceButton extends StatelessWidget {
-  const AddDeviceButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const AddNewDevice()),
-        );
-      },
-      child: CustomPaint(
-        painter: DashedBorderPainter(),
-        child: Container(
-          width: 396,
-          height: 70,
-          decoration: BoxDecoration(
-            color: const Color(0xFF1C1C2B),
-            borderRadius: BorderRadius.circular(16),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.5),
-                offset: const Offset(4, 4),
-                blurRadius: 10,
-              ),
-            ],
-          ),
-          child: const Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(Icons.add, color: Colors.orange, size: 24),
-                SizedBox(height: 4),
-                Text(
-                  'Add device',
-                  style: TextStyle(color: Colors.orange, fontSize: 18),
-                ),
-              ],
             ),
           ),
         ),
       ),
     );
-  }
-}
-
-class DashedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.orange
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-
-    const double dashWidth = 5;
-    const double dashSpace = 5;
-    final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
-    final dashPath = Path();
-    final pathMetrics = path.computeMetrics();
-    for (var pathMetric in pathMetrics) {
-      final double length = pathMetric.length;
-      double distance = 0.0;
-      while (distance < length) {
-        final double nextDistance = distance + dashWidth;
-        dashPath.addPath(pathMetric.extractPath(distance, nextDistance), Offset.zero);
-        distance = nextDistance + dashSpace;
-      }
-    }
-    canvas.drawPath(dashPath, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }

@@ -1,13 +1,15 @@
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/widgets/button.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/screens/authentication/password.dart';
-import 'package:jarvis/screens/authentication/otp_verify.dart';
-import 'package:jarvis/screens/authentication/signup/details_form.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/widgets/button.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/screens/authentication/common/password.dart';
+import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
+import 'package:StapesHome/screens/authentication/signup/details_form.dart';
 
 class EmailSignUp extends StatefulWidget {
   const EmailSignUp({super.key});
@@ -42,17 +44,15 @@ class _EmailSignUpState extends State<EmailSignUp> {
 
       if (response.statusCode == 200) {
         String transactionId = responseBody['transaction_id'];
-        print('test trans_id' + transactionId);
         if (context.mounted) {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
               builder: (context) => OtpVerificationScreen(
                 transactionId: transactionId,
-                time: DateTime.parse(responseBody["otp_expires_at"]),
+                expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
                 onSuccess: () async {
                   if (context.mounted) {
-                    print('inside context' + transactionId);
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
@@ -71,16 +71,6 @@ class _EmailSignUpState extends State<EmailSignUp> {
                     );
                   } else {
                     print('context not mounted');
-                  }
-                },
-                onError: () {
-                  print('Error :  ${responseBody["detail"]} ');
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                      ),
-                    );
                   }
                 },
               ),
@@ -137,11 +127,11 @@ class _EmailSignUpState extends State<EmailSignUp> {
                 )
               : SafeArea(
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                    padding: AppPadding.pagePadding(context),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenSize.height * 0.08),
+                        SizedBox(height: screenSize.height * 0.05),
                         SizedBox(
                           width: double.infinity,
                           child: Text(
@@ -149,7 +139,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                             style: TextStyle(
                               color: AppColor.whiteColor,
                               // fontSize: screenSize.width * 0.1,
-                              fontSize: 44,
+                              fontSize: AppFontSizes.pageHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w700,
                             ),
@@ -161,8 +151,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                             'Enter your email to receive verification code.',
                             style: TextStyle(
                               color: AppColor.whiteColor,
-                              // fontSize: screenSize.width * 0.04,
-                              fontSize: 20,
+                              fontSize: AppFontSizes.pageSubHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w400,
                             ),

@@ -1,300 +1,189 @@
+import 'dart:convert';
+import 'package:StapesHome/widgets/iot/node.dart';
+import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/screens/qr_scanner.dart';
+import 'package:http/http.dart' as http;
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/constants/models.dart';
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/constants/padding.dart';
+import 'package:StapesHome/screens/views/common/floor_room_selector.dart';
 
 class NodesScreen extends StatefulWidget {
-  const NodesScreen({super.key});
+  final String sessionId;
+  final String userId;
+
+  const NodesScreen({
+    Key? key,
+    required this.sessionId,
+    required this.userId,
+  }) : super(key: key);
 
   @override
   createState() => _NodesScreenState();
 }
 
-class _NodesScreenState extends State<NodesScreen> {
-  int activeFloor = 1;
-  int activeRoom = 1;
-
-  void setActiveFloor(int floor) {
-    if (mounted) {
-      setState(() {
-        activeFloor = floor;
-      });
-    }
-  }
-
-  void setActiveRoom(int room) {
-    if (mounted) {
-      setState(() {
-        activeRoom = room;
-      });
-    }
-  }
+class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClientMixin {
+  String activeFloorId = '';
+  String activeRoomId = '';
+  List<Node> nodes = [];
+  bool isLoading = true;
+  String? errorMessage;
+  final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
 
   @override
-  void dispose() {
-    super.dispose();
+  bool get wantKeepAlive => true;
+
+  void handleFloorSelected(String floorId) {
+    if (mounted) {
+      setState(() {
+        activeFloorId = floorId;
+      });
+    }
+  }
+
+  void handleRoomSelected(String roomId) {
+    if (mounted) {
+      setState(() {
+        activeRoomId = roomId;
+      });
+      if (activeRoomId.isNotEmpty) {
+        _fetchNodes(roomId);
+      } else {
+        setState(() {
+          nodes = [];
+        });
+      }
+    }
+  }
+
+  Future<void> _fetchNodes(String roomId) async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.get(
+        BackendRoutes.getNodesByRoomId(roomId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> nodesData = json.decode(response.body);
+        nodes = nodesData
+            .map((node) => Node(
+                  id: node['id'],
+                  roomId: node['room_id'],
+                  name: node['name'],
+                  hardwareChip: node['hardware_chip'],
+                  hardwareVersion: node['hardware_version'],
+                  hardwareMacAddress: node['hardware_mac_address'],
+                  firmwareVersion: node['firmware_version'],
+                ))
+            .toList();
+      } else {
+        throw Exception('Failed to load nodes: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching nodes: $e';
+      });
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _refreshData() async {
+    await _floorRoomSelectorKey.currentState?.refreshData();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.transparent, // Adjust this color to match your theme
+    super.build(context);
+    final screenSize = MediaQuery.of(context).size;
 
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                'Linked Nodes',
-                style: TextStyle(fontSize: 24, color: Colors.white),
-              ),
-              const SizedBox(height: 24),
-              const Row(
-                children: [
-                  Text(
-                    'Floors',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                  SizedBox(width: 8),
-                  AddCircleButton(),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  FloorRoomButton(label: 'Floor 1', isActive: activeFloor == 1, onTap: () => setActiveFloor(1)),
-                  const SizedBox(width: 10),
-                  FloorRoomButton(label: 'Floor 2', isActive: activeFloor == 2, onTap: () => setActiveFloor(2)),
-                ],
-              ),
-              const SizedBox(height: 24),
-              const Row(
-                children: [
-                  Text(
-                    'Rooms',
-                    style: TextStyle(fontSize: 18, color: Colors.white),
-                  ),
-                  SizedBox(width: 8),
-                  AddCircleButton(),
-                ],
-              ),
-              const SizedBox(height: 8),
-              Row(
-                children: [
-                  FloorRoomButton(label: 'Room 1', isActive: activeRoom == 1, onTap: () => setActiveRoom(1)),
-                  const SizedBox(width: 10),
-                  FloorRoomButton(label: 'Room 2', isActive: activeRoom == 2, onTap: () => setActiveRoom(2)),
-                  const SizedBox(width: 10),
-                  FloorRoomButton(label: 'Room 3', isActive: activeRoom == 3, onTap: () => setActiveRoom(3)),
-                ],
-              ),
-              const SizedBox(height: 24),
-              Expanded(
-                child: GridView.count(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 16,
-                  mainAxisSpacing: 16,
-                  children: const [
-                    // NodeButton(label: 'Node 1'),
-                    // NodeButton(label: 'Node 2'),
+    return GestureDetector(
+      onTap: () => FocusScope.of(context).unfocus(),
+      child: Container(
+        clipBehavior: Clip.antiAlias,
+        decoration: ShapeDecoration(
+          gradient: AppColor.backgroundColorgradient,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          resizeToAvoidBottomInset: false,
+          body: RefreshIndicator(
+            onRefresh: _refreshData,
+            color: AppColor.whiteColor,
+            backgroundColor: Colors.transparent,
+            child: SafeArea(
+              child: Padding(
+                padding: AppPadding.pagePadding(context),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: screenSize.height * 0.05),
+                            Text(
+                              'Linked Nodes',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.pageHeading,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            FloorRoomSelector(
+                              key: _floorRoomSelectorKey,
+                              context: context,
+                              onFloorSelected: handleFloorSelected,
+                              onRoomSelected: handleRoomSelected,
+                              sessionId: widget.sessionId,
+                              userId: widget.userId,
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            if (isLoading)
+                              Center(child: CircularProgressIndicator())
+                            else if (errorMessage != null)
+                              Text(errorMessage!, style: TextStyle(color: Colors.red))
+                            else
+                              Column(
+                                children: nodes.map((node) => NodeComponent(node: node)).toList(),
+                              ),
+                            SizedBox(height: screenSize.height * 0.1),
+                          ],
+                        ),
+                      ),
+                    ),
+                    ScanNodeorAddDeviceButton(
+                      text: 'Scan a new node',
+                      onPressed: () {},
+                      icon: 'assets/icons/nodes/qr.svg',
+                    ),
+                    const SizedBox(height: 20),
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
-              Center(
-                child: GestureDetector(
-                  onTap: () {
-                    if (context.mounted) {
-                      Navigator.pushReplacement(
-                          context, MaterialPageRoute(builder: (context) => const QrScannerScreen()));
-                    }
-                  },
-                  child: const ScanNodeButton(),
-                ),
-              ),
-            ],
+            ),
           ),
         ),
       ),
     );
-  }
-}
-
-class AddCircleButton extends StatelessWidget {
-  const AddCircleButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 18,
-      height: 18,
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: Color(0xFF3F3F63),
-      ),
-      child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
-    );
-  }
-}
-
-class FloorRoomButton extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-
-  const FloorRoomButton({super.key, required this.label, required this.isActive, required this.onTap});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: GestureDetector(
-        onTap: onTap,
-        child: Column(
-          children: [
-            Text(
-              label,
-              style: TextStyle(
-                color: isActive ? Colors.white : Colors.grey,
-              ),
-            ),
-            if (isActive)
-              Container(
-                width: 6,
-                height: 6,
-                decoration: const BoxDecoration(
-                  shape: BoxShape.circle,
-                  color: AppColor.whiteColor,
-                ),
-              ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NodeButton extends StatefulWidget {
-  final String label;
-
-  const NodeButton({super.key, required this.label});
-
-  @override
-  createState() => _NodeButtonState();
-}
-
-class _NodeButtonState extends State<NodeButton> {
-  bool isActive = false;
-
-  void toggleButton() {
-    if (mounted) {
-      setState(() {
-        isActive = !isActive;
-      });
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: toggleButton,
-      child: Container(
-        decoration: BoxDecoration(
-          color: Colors.black,
-          borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: Colors.orange, width: 4),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              blurRadius: 10,
-              spreadRadius: 3,
-            ),
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              offset: const Offset(0, 6),
-              blurRadius: 10,
-              spreadRadius: -3,
-            ),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            widget.label,
-            style: const TextStyle(color: AppColor.whiteColor, fontSize: 24),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class ScanNodeButton extends StatelessWidget {
-  const ScanNodeButton({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return CustomPaint(
-      painter: DashedBorderPainter(),
-      child: Container(
-        width: double.infinity,
-        height: 70,
-        decoration: BoxDecoration(
-          color: const Color(0xFF1D1D1D),
-          borderRadius: BorderRadius.circular(16),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.5),
-              offset: const Offset(4, 4),
-              blurRadius: 10,
-            ),
-          ],
-        ),
-        child: const Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(Icons.qr_code_scanner, color: AppColor.whiteColor, size: 24),
-              SizedBox(height: 4),
-              Text(
-                'Scan a new node',
-                style: TextStyle(color: AppColor.whiteColor, fontSize: 18, fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class DashedBorderPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final Paint paint = Paint()
-      ..color = Colors.orange
-      ..strokeWidth = 2
-      ..style = PaintingStyle.stroke;
-
-    const double dashWidth = 5;
-    const double dashSpace = 5;
-    final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(Rect.fromLTWH(0, 0, size.width, size.height), const Radius.circular(16)));
-    final dashPath = Path();
-    final pathMetrics = path.computeMetrics();
-    for (var pathMetric in pathMetrics) {
-      final double length = pathMetric.length;
-      double distance = 0.0;
-      while (distance < length) {
-        final double nextDistance = distance + dashWidth;
-        dashPath.addPath(pathMetric.extractPath(distance, nextDistance), Offset.zero);
-        distance = nextDistance + dashSpace;
-      }
-    }
-    canvas.drawPath(dashPath, paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
   }
 }

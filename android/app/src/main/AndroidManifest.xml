@@ -20,7 +20,7 @@ https://developer.android.com/about/versions/12/features/bluetooth-permissions -
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
     <application
-        android:label="jarvis"
+        android:label="StapesHome"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:jarvis/screens/routes/main.dart';
-import 'package:jarvis/utils/sessions_model.dart';
-import 'package:jarvis/screens/authentication/login.dart';
+import 'package:StapesHome/screens/routes/main.dart';
+import 'package:StapesHome/utils/sessions_model.dart';
+import 'package:StapesHome/screens/authentication/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:jarvis/utils/sessions_model.dart';
-import 'package:jarvis/screens/splash_screen.dart';
+import 'package:StapesHome/utils/sessions_model.dart';
+import 'package:StapesHome/screens/splash_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -25,7 +25,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: const SplashScreen(),
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(splashFactory: NoSplash.splashFactory),
+      theme: ThemeData(
+        splashColor: Colors.transparent, // Disable splash effect globally
+        highlightColor: Colors.transparent, // Disable highlight effect globally
+      ),
     );
   }
 }

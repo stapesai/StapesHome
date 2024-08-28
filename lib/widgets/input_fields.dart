@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:jarvis/constants/colors.dart';
+import 'package:StapesHome/constants/colors.dart';
 
 class NTextField extends StatefulWidget {
   final String hintText;
@@ -57,37 +57,47 @@ class _CustomTextFieldState extends State<NTextField> {
 
 class PasswordTextField extends StatefulWidget {
   final String hintText;
-  final bool obscureText = true;
   final TextEditingController? controller;
   final IconData? icon;
   final FocusNode? focusNode;
 
-  PasswordTextField({
-    super.key,
+  const PasswordTextField({
+    Key? key,
     required this.hintText,
     this.controller,
     this.icon,
     this.focusNode,
-  });
+  }) : super(key: key);
 
   @override
   createState() => _PasswordTextFieldState();
 }
 
 class _PasswordTextFieldState extends State<PasswordTextField> {
+  bool _obscureText = true;
+
+  void _togglePasswordVisibility() {
+    setState(() {
+      _obscureText = !_obscureText;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: widget.controller,
       focusNode: widget.focusNode,
-      obscureText: widget.obscureText,
+      obscureText: _obscureText,
       inputFormatters: [
         FilteringTextInputFormatter.deny(RegExp(r"\s")),
       ],
       decoration: InputDecoration(
-        suffixIcon: Icon(
-          widget.icon,
-          color: AppColor.whiteColor50,
+        suffixIcon: IconButton(
+          icon: Icon(
+            _obscureText ? Icons.visibility_off : Icons.visibility,
+            color: AppColor.whiteColor50,
+          ),
+          onPressed: _togglePasswordVisibility,
         ),
         labelText: widget.hintText,
         labelStyle: TextStyle(color: AppColor.whiteColor50),

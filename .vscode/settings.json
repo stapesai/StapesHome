@@ -11,5 +11,21 @@
         "editor.rulers": [
             120
         ]
-    }
+    },
+    "files.exclude": {
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/CVS": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true,
+        ".dart_tool/": true,
+        ".idea/": true,
+        ".vscode/": true,
+        "build/": true,
+        ".metadata": true,
+        ".flutter-plugins": true,
+        ".flutter-plugins-dependencies": true,
+        "pubspec.lock": true,
+    },
 }

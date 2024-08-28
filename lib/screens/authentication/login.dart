@@ -1,16 +1,17 @@
 import 'dart:convert';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:http/http.dart' as http;
-import 'package:jarvis/utils/hive.dart';
+import 'package:StapesHome/utils/hive.dart';
 import 'package:flutter/material.dart';
-import 'package:jarvis/screens/routes/main.dart';
-import "package:jarvis/widgets/button.dart";
-import 'package:jarvis/constants/colors.dart';
-import 'package:jarvis/constants/api_routes.dart';
-import 'package:jarvis/utils/sessions_model.dart';
-import 'package:jarvis/widgets/input_fields.dart';
-import 'package:jarvis/screens/authentication/forgot_password.dart';
-import 'package:jarvis/screens/authentication/otp_verify.dart';
-import 'package:jarvis/screens/authentication/signup/email_input.dart';
+import 'package:StapesHome/screens/routes/main.dart';
+import "package:StapesHome/widgets/button.dart";
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/utils/sessions_model.dart';
+import 'package:StapesHome/widgets/input_fields.dart';
+import 'package:StapesHome/screens/authentication/forgot_password.dart';
+import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
+import 'package:StapesHome/screens/authentication/signup/email_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -52,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ))
                 : OtpVerificationScreen(
                     transactionId: transactionId,
-                    time: DateTime.parse(responseBody["otp_expires_at"]),
+                    expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
                     onSuccess: () async {
                       setState(() {
                         _isLoading = true;
@@ -97,16 +98,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         _isLoading = false;
                       });
                     },
-                    onError: () {
-                      print('Error :  ${responseBody["detail"]} ');
-                      if (context.mounted) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                          ),
-                        );
-                      }
-                    },
                   ),
           ),
         );
@@ -127,9 +118,8 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenSize = MediaQuery.of(context).size;
-    
     return Container(
+      clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
         gradient: AppColor.backgroundColorgradient,
       ),
@@ -148,7 +138,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           constraints: BoxConstraints(minHeight: constraints.maxHeight),
                           child: IntrinsicHeight(
                             child: Padding(
-                              padding: EdgeInsets.symmetric(horizontal: screenSize.width * 0.05),
+                              padding: AppPadding.pagePadding(context),
                               child: Column(
                                 children: [
                                   SizedBox(height: constraints.maxHeight * 0.1),

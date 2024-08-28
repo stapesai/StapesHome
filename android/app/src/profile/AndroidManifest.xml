@@ -1,5 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
+    <!-- The INTERNET permission is required for development. Specifically,
+         the Flutter tool needs it to communicate with the running application
+         to allow setting breakpoints, to provide hot reload, etc.
+    -->
     <uses-permission android:name="android.permission.INTERNET"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <!-- Tell Google Play Store that your app uses Bluetooth LE
@@ -20,53 +23,3 @@ https://developer.android.com/about/versions/12/features/bluetooth-permissions -
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
 </manifest>
-
-
-
-<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <uses-permission android:name="android.permission.INTERNET"/>
-
-</manifest> -->
-
-
-<!-- <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.yourapp">
-
-<!-    &lt;!&ndash; Add INTERNET permission if not already present &ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.INTERNET"/>-->
-
-<!--    &lt;!&ndash; Add CAMERA permission &ndash;&gt;-->
-<!--    <uses-permission android:name="android.permission.CAMERA"/>-->
-
-<!--    <application-->
-<!--        android:name="io.flutter.app.FlutterApplication"-->
-<!--        android:label="Your App Name"-->
-<!--        android:icon="@mipmap/ic_launcher">-->
-
-<!--        &lt;!&ndash; Add this meta-data tag if it's not already present &ndash;&gt;-->
-<!--        <meta-data-->
-<!--            android:name="flutterEmbedding"-->
-<!--            android:value="2" />-->
-
-<!--        &lt;!&ndash; Add this activity if it's not already present &ndash;&gt;-->
-<!--        <activity-->
-<!--            android:name=".MainActivity"-->
-<!--            android:launchMode="singleTop"-->
-<!--            android:theme="@style/LaunchTheme"-->
-<!--            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"-->
-<!--            android:hardwareAccelerated="true"-->
-<!--            android:windowSoftInputMode="adjustResize">-->
-
-<!--            &lt;!&ndash; Add this intent-filter if it's not already present &ndash;&gt;-->
-<!--            <intent-filter>-->
-<!--                <action android:name="android.intent.action.MAIN"/>-->
-<!--                <category android:name="android.intent.category.LAUNCHER"/>-->
-<!--            </intent-filter>-->
-<!--        </activity>-->
-
-<!--        &lt;!&ndash; Add any other activities, services, or receivers here if needed &ndash;&gt;-->
-
-<!--    </application>-->
-
-<!--</manifest> &ndash;&gt;-->

@@ -1,89 +1,83 @@
 import 'dart:convert';
 import 'package:StapesHome/constants/padding.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:StapesHome/screens/authentication/login.dart';
-import 'package:StapesHome/widgets/button.dart';
 import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/widgets/input_fields.dart';
-import 'package:StapesHome/screens/authentication/common/password.dart';
-import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
+import 'package:StapesHome/widgets/button.dart';
 
-class ForgotPassword extends StatefulWidget {
-  const ForgotPassword({super.key});
+class CreateRoomPage extends StatefulWidget {
+  final String sessionId;
+  final String userId;
+  final String floorId;
+
+  CreateRoomPage({
+    super.key,
+    required this.sessionId,
+    required this.userId,
+    required this.floorId,
+  });
 
   @override
-  createState() => _ForgotPasswordState();
+  createState() => _CreateRoomPageState();
 }
 
-class _ForgotPasswordState extends State<ForgotPassword> {
-  final TextEditingController emailController = TextEditingController();
+class _CreateRoomPageState extends State<CreateRoomPage> {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController typeController = TextEditingController();
 
   bool _isLoading = false;
 
-  Future<void> handleForgotPassword(BuildContext context) async {
+  Future<void> _createRoom(BuildContext context) async {
     setState(() {
       _isLoading = true; // Start loading indicator
     });
-    var response = await http.post(
-      AuthRoutes.requestResetPassword,
-      headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
-      body: jsonEncode({
-        'email': emailController.text,
+
+    final String name = nameController.text;
+    final String type = typeController.text;
+
+    if (name.isEmpty || type.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please provide valid room details')),
+      );
+      setState(() {
+        _isLoading = false; // Stop loading indicator
+      });
+      return;
+    }
+
+    final response = await http.post(
+      BackendRoutes.createRoom,
+      headers: {
+        'accept': 'application/json',
+        'X-User-Id': widget.userId,
+        'X-Session-Id': widget.sessionId,
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'floor_id': widget.floorId,
+        'name': name,
+        'type': type,
       }),
     );
-    var responseBody = json.decode(response.body);
 
-    if (response.statusCode == 200) {
-      String transactionId = responseBody['transaction_id'];
+    if (response.statusCode == 200 || response.statusCode == 201) {
       if (context.mounted) {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OtpVerificationScreen(
-              transactionId: transactionId,
-              expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
-              onSuccess: () async {
-                if (context.mounted) {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => PasswordScreen(
-                        title: 'Reset Password',
-                        subtitle: 'Enter your email to receive verification code.',
-                        nextScreen: LoginScreen(),
-                        email: '',
-                        transaction_id: '',
-                      ),
-                    ),
-                  );
-                } else {
-                  print('Error :  ${responseBody} ');
-                  if (context.mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-                      ),
-                    );
-                  }
-                }
-              },
-            ),
-          ),
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Room created successfully')),
         );
+        Navigator.pop(context, true);
       }
     } else {
       if (context.mounted) {
-        print('Error :  ${responseBody["detail"]} ');
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-          ),
+          const SnackBar(content: Text('Failed to create room')),
         );
       }
     }
+
     setState(() {
       _isLoading = false; // Stop loading indicator
     });
@@ -121,10 +115,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         SizedBox(height: screenSize.height * 0.05),
                         SizedBox(
                           child: Text(
-                            'Forgot Password',
+                            'Create a new room',
                             style: TextStyle(
                               color: AppColor.whiteColor,
-                              // fontSize: screenSize.width * 0.1,
                               fontSize: AppFontSizes.pageHeading,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w700,
@@ -134,7 +127,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         SizedBox(height: screenSize.height * 0.02),
                         SizedBox(
                           child: Text(
-                            'Enter your email to receive verification code.',
+                            'Enter the details for creating a new room.',
                             style: TextStyle(
                               color: AppColor.whiteColor,
                               fontSize: AppFontSizes.pageSubHeading,
@@ -144,12 +137,14 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                         ),
                         SizedBox(height: screenSize.height * 0.04),
-                        SizedBox(
-                          child: NTextField(
-                            hintText: 'Enter your email',
-                            controller: emailController,
-                            icon: Icons.email_rounded,
-                          ),
+                        NTextField(
+                          hintText: 'Room Name',
+                          controller: nameController,
+                        ),
+                        SizedBox(height: screenSize.height * 0.02),
+                        NTextField(
+                          hintText: 'Room type',
+                          controller: typeController,
                         ),
                         const Spacer(),
                         AnimatedContainer(
@@ -162,8 +157,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                           ),
                           child: Center(
                             child: CustomButton(
-                              text: "Send Code",
-                              onPressed: () => handleForgotPassword(context),
+                              text: "Create",
+                              onPressed: () => _createRoom(context),
                             ),
                           ),
                         ),
