@@ -69,13 +69,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
       if (response.statusCode == 200) {
         final List<dynamic> floorsData = json.decode(response.body);
-        floors = floorsData
-            .map((floor) => Floor(
-                  id: floor['id'],
-                  level: floor['level'],
-                  alias: floor['alias'],
-                ))
-            .toList();
+        floors = floorsData.map((floors) => Floor.fromJson(floors)).toList();
 
         // Fetch rooms for the initially active floor
         if (floors.isNotEmpty) {
@@ -117,14 +111,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
       if (response.statusCode == 200) {
         final List<dynamic> roomsData = json.decode(response.body);
-        rooms = roomsData
-            .map((room) => Room(
-                  id: room['id'],
-                  floorId: room['floor_id'],
-                  name: room['name'],
-                  type: room['type'],
-                ))
-            .toList();
+        rooms = roomsData.map((rooms) => Room.fromJson(rooms)).toList();
 
         // Fetch devices for the initially active room
         if (rooms.isNotEmpty) {

@@ -78,15 +78,7 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
 
       if (response.statusCode == 200) {
         final List<dynamic> devicesData = json.decode(response.body);
-        devices = devicesData
-            .map((device) => Device(
-                  id: device['id'],
-                  name: device['name'],
-                  type: device['type'],
-                  nodeId: device['node_id'],
-                  channelId: device['channel_id'],
-                ))
-            .toList();
+        devices = devicesData.map((device) => Device.fromJson(device)).toList();
       } else {
         throw Exception('Failed to load devices: ${response.statusCode}');
       }
@@ -192,7 +184,10 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
                     ScanNodeorAddDeviceButton(
                       text: 'Add a new device',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDevice()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDevicePage(
+                          sessionId: widget.sessionId,
+                          userId: widget.userId,
+                        ))).then((_) => _refreshData());
                       },
                       icon: 'assets/icons/devices/plus.svg',
                     ),

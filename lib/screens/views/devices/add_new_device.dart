@@ -1,67 +1,148 @@
+import 'dart:convert';
+import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
+import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/widgets/button.dart';
 import 'package:StapesHome/widgets/input_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
-class AddNewDevice extends StatefulWidget {
-  const AddNewDevice({super.key});
+class AddNewDevicePage extends StatefulWidget {
+  final String userId;
+  final String sessionId;
+
+  const AddNewDevicePage({
+    Key? key,
+    required this.userId,
+    required this.sessionId,
+  }) : super(key: key);
 
   @override
   createState() => _AddNewDeviceState();
 }
 
-class _AddNewDeviceState extends State<AddNewDevice> {
-  String? _selectedFloor;
-  String? _selectedRoom;
-  String? _selectedNode;
+class _AddNewDeviceState extends State<AddNewDevicePage> {
+  String? _selectedFloorId;
+  String? _selectedRoomId;
+  String? _selectedNodeId;
   String? _selectedDeviceType;
 
   final TextEditingController deviceNameController = TextEditingController();
   final TextEditingController channelIdController = TextEditingController();
 
-  final List<String> _floors = ['Floor 1', 'Floor 2', 'Floor 3'];
-  final List<String> _rooms = ['Room 1', 'Room 2', 'Room 3'];
-  final List<String> _nodes = ['Node 1', 'Node 2', 'Node 3'];
+  List<Floor> floors = [];
+  List<Room> rooms = [];
+  List<Node> nodes = [];
   final List<String> _deviceTypes = ['Type 1', 'Type 2', 'Type 3'];
 
-  Widget _buildDropdown(String hint, List<String> items, String? value, Function(String?) onChanged) {
-    return Container(
-      decoration: ShapeDecoration(
-        shape: RoundedRectangleBorder(
-          side: BorderSide(
-            width: 1,
-            color: AppColor.whiteColor50, // Border color
-          ),
-          borderRadius: BorderRadius.circular(15),
-        ),
-      ),
-      child: DropdownButtonFormField<String>(
-        decoration: InputDecoration(
-          hintText: hint,
-          hintStyle: TextStyle(
-            color: AppColor.whiteColor50,
-            fontSize: 16,
-            fontFamily: 'Ubuntu',
-            fontWeight: FontWeight.w700,
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-        ),
-        value: value,
-        items: items.map((String item) {
-          return DropdownMenuItem<String>(
-            value: item,
-            child: Text(item, style: TextStyle(color: AppColor.whiteColor)),
-          );
-        }).toList(),
-        onChanged: onChanged,
-        dropdownColor: Color(0xFF353841), // Dropdown menu background color
-        style: TextStyle(color: AppColor.whiteColor), // Text color inside dropdown
-        icon: Icon(Icons.arrow_drop_down, color: AppColor.whiteColor), // Dropdown icon
-      ),
-    );
+  bool isLoading = false;
+  String? errorMessage;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchFloors();
+  }
+
+  Future<void> _fetchFloors() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.get(
+        BackendRoutes.getFloors,
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> floorsData = json.decode(response.body);
+        setState(() {
+          floors = floorsData.map((floor) => Floor.fromJson(floor)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load floors: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching floors: $e';
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchRooms(String floorId) async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.get(
+        BackendRoutes.getRoomsByFloorId(floorId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> roomsData = json.decode(response.body);
+        setState(() {
+          rooms = roomsData.map((room) => Room.fromJson(room)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load rooms: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching rooms: $e';
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _fetchNodes(String roomId) async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.get(
+        BackendRoutes.getNodesByRoomId(roomId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final List<dynamic> nodesData = json.decode(response.body);
+        setState(() {
+          nodes = nodesData.map((node) => Node.fromJson(node)).toList();
+          isLoading = false;
+        });
+      } else {
+        throw Exception('Failed to load nodes: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error fetching nodes: $e';
+        isLoading = false;
+      });
+    }
   }
 
   @override
@@ -113,34 +194,86 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
-                          _buildDropdown('Floor', _floors, _selectedFloor, (newValue) {
-                            setState(() {
-                              _selectedFloor = newValue;
-                            });
-                          }),
+                          NDropdown<String>(
+                            hintText: 'Floor',
+                            value: _selectedFloorId,
+                            items: floors.map((floor) {
+                              return DropdownMenuItem<String>(
+                                value: floor.id,
+                                child: Text(floor.alias),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedFloorId = newValue;
+                                _selectedRoomId = null;
+                                _selectedNodeId = null;
+                                rooms.clear();
+                                nodes.clear();
+                              });
+                              if (newValue != null) {
+                                _fetchRooms(newValue);
+                              }
+                            },
+                          ),
                           SizedBox(height: screenSize.height * 0.02),
-                          _buildDropdown('Room', _rooms, _selectedRoom, (newValue) {
-                            setState(() {
-                              _selectedRoom = newValue;
-                            });
-                          }),
+                          NDropdown<String>(
+                            hintText: 'Room',
+                            value: _selectedRoomId,
+                            items: rooms.map((room) {
+                              return DropdownMenuItem<String>(
+                                value: room.id,
+                                child: Text(room.name),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedRoomId = newValue;
+                                _selectedNodeId = null;
+                                nodes.clear();
+                              });
+                              if (newValue != null) {
+                                _fetchNodes(newValue);
+                              }
+                            },
+                          ),
                           SizedBox(height: screenSize.height * 0.02),
-                          _buildDropdown('Node', _nodes, _selectedNode, (newValue) {
-                            setState(() {
-                              _selectedNode = newValue;
-                            });
-                          }),
+                          NDropdown<String>(
+                            hintText: 'Node',
+                            value: _selectedNodeId,
+                            items: nodes.map((node) {
+                              return DropdownMenuItem<String>(
+                                value: node.id,
+                                child: Text(node.name),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedNodeId = newValue;
+                              });
+                            },
+                          ),
                           SizedBox(height: screenSize.height * 0.02),
                           NTextField(
                             hintText: 'Device Name',
                             controller: deviceNameController,
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          _buildDropdown('Device Type', _deviceTypes, _selectedDeviceType, (newValue) {
-                            setState(() {
-                              _selectedDeviceType = newValue;
-                            });
-                          }),
+                          NDropdown<String>(
+                            hintText: 'Device Type',
+                            value: _selectedDeviceType,
+                            items: _deviceTypes.map((String type) {
+                              return DropdownMenuItem<String>(
+                                value: type,
+                                child: Text(type),
+                              );
+                            }).toList(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                _selectedDeviceType = newValue;
+                              });
+                            },
+                          ),
                           SizedBox(height: screenSize.height * 0.02),
                           NTextField(
                             hintText: 'Channel Id',
@@ -151,18 +284,31 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                       ),
                     ),
                   ),
+                  if (errorMessage != null)
+                    Text(
+                      errorMessage!,
+                      style: TextStyle(color: Colors.red),
+                    ),
                   AnimatedContainer(
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeOut,
                     margin: EdgeInsets.only(
-                      bottom: keyboardHeight > 0 ? keyboardHeight : screenSize.height * 0.02,
+                      bottom: keyboardHeight > 0
+                                ? keyboardHeight + screenSize.height * 0.02
+                                : screenSize.height * 0.1,
                     ),
                     child: Center(
                       child: CustomButton(
                         text: "Create",
                         onPressed: () {
-                          // Handle create button press
+                          
                         },
+                        // onPressed: isLoading
+                        //     ? null
+                        //     : () {
+                        //         // Handle create button press
+                        //         // You can add the logic to create a new device here
+                        //       },
                       ),
                     ),
                   ),

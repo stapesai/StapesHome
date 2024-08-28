@@ -12,7 +12,8 @@ class CreateFloorPage extends StatefulWidget {
   final String sessionId;
   final String userId;
 
-  const CreateFloorPage({super.key, required this.sessionId, required this.userId});
+  const CreateFloorPage(
+      {super.key, required this.sessionId, required this.userId});
 
   @override
   _CreateFloorPageState createState() => _CreateFloorPageState();

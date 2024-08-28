@@ -76,17 +76,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
       if (response.statusCode == 200) {
         final List<dynamic> nodesData = json.decode(response.body);
-        nodes = nodesData
-            .map((node) => Node(
-                  id: node['id'],
-                  roomId: node['room_id'],
-                  name: node['name'],
-                  hardwareChip: node['hardware_chip'],
-                  hardwareVersion: node['hardware_version'],
-                  hardwareMacAddress: node['hardware_mac_address'],
-                  firmwareVersion: node['firmware_version'],
-                ))
-            .toList();
+        nodes = nodesData.map<Node>((node) => Node.fromJson(node)).toList();
       } else {
         throw Exception('Failed to load nodes: ${response.statusCode}');
       }
