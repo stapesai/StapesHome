@@ -25,9 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
 
   Future<void> _refreshData() async {
-    // Implement the refresh logic here
-    // For example, you might want to fetch updated data from an API
-    await Future.delayed(Duration(seconds: 2)); // Simulating a network request
+    await Future.delayed(Duration(seconds: 2));
     setState(() {
       // Update your state with the new data
     });
@@ -51,17 +49,13 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          body: RefreshIndicator(
-            onRefresh: _refreshData,
-            color: AppColor.whiteColor,
-            backgroundColor: Colors.transparent,
-            child: SafeArea(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Container(
-                  height: screenSize.height - MediaQuery.of(context).padding.top,
-                  padding: AppPadding.pagePadding(context),
-                  child: Column(
+          body: SafeArea(
+            child: Padding(
+              padding: AppPadding.pagePadding(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: screenSize.height * 0.05),
@@ -101,7 +95,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         ],
                       ),
                       SizedBox(height: screenSize.height * 0.05),
-                      Expanded(
+                    ],
+                  ),
+                  Expanded(
+                    child: RefreshIndicator(
+                      onRefresh: _refreshData,
+                      color: AppColor.whiteColor,
+                      backgroundColor: Colors.transparent,
+                      child: SingleChildScrollView(
+                        physics: BouncingScrollPhysics(),
                         child: Center(
                           child: Text(
                             isFavouritesSelected
@@ -117,9 +119,9 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                           ),
                         ),
                       ),
-                    ],
+                    ),
                   ),
-                ),
+                ],
               ),
             ),
           ),

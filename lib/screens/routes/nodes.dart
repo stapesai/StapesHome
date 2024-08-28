@@ -48,7 +48,13 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
       setState(() {
         activeRoomId = roomId;
       });
-      _fetchNodes(roomId);
+      if (activeRoomId.isNotEmpty) {
+        _fetchNodes(roomId);
+      } else {
+        setState(() {
+          nodes = [];
+        });
+      }
     }
   }
 
@@ -97,9 +103,6 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
   Future<void> _refreshData() async {
     await _floorRoomSelectorKey.currentState?.refreshData();
-    if (activeRoomId.isNotEmpty) {
-      await _fetchNodes(activeRoomId);
-    }
   }
 
   @override
