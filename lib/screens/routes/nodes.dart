@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'package:StapesHome/widgets/iot/node.dart';
+import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
@@ -171,54 +171,17 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
                         ),
                       ),
                     ),
-                    ScanNodeButton(),
+                    ScanNodeorAddDeviceButton(
+                      text: 'Scan a new node',
+                      onPressed: () {},
+                      icon: 'assets/icons/nodes/qr.svg',
+                    ),
                     const SizedBox(height: 20),
                   ],
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ScanNodeButton extends StatelessWidget {
-  const ScanNodeButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 90,
-      child: ElevatedButton(
-        onPressed: () {
-          // TODO: Implement scan functionality
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(1, 29, 29, 29),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 0.98, color: Color(0xFFFF9F1C)),
-            borderRadius: BorderRadius.circular(29.45),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image.asset('assets/icons/nodes/qr.svg', width: 24, height: 24),
-            SvgPicture.asset('assets/icons/nodes/qr.svg', width: 30, height: 30),
-            SizedBox(width: 8),
-            Text(
-              'Scan a new node',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.75),
-                fontSize: 15.71,
-                fontFamily: 'Ubuntu',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
         ),
       ),
     );
