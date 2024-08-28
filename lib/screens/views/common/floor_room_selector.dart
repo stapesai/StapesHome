@@ -82,7 +82,8 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
           setState(() {
             isFloorsLoading = false;
           });
-          setActiveFloor(floors.first.id);
+          // setActiveFloor(floors.first.id);
+          setActiveFloor(activeFloorId);
         }
       } else {
         setState(() {
@@ -130,7 +131,8 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
           setState(() {
             isRoomsLoading = false;
           });
-          setActiveRoom(rooms.first.id);
+          // setActiveRoom(rooms.first.id);
+          setActiveRoom(activeRoomId);
         }
       } else {
         setState(() {
