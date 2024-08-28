@@ -2,7 +2,7 @@ import 'package:hive/hive.dart';
 import 'sessions_model.dart';
 
 class HiveService {
-  Map<String, Box> _openBoxes = {};
+  final Map<String, Box> _openBoxes = {};
 
   Future<Box<T>> _openBox<T>(String boxName) async {
     if (_openBoxes.containsKey(boxName)) {

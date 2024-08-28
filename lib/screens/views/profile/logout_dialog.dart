@@ -39,7 +39,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x3F000000),
               blurRadius: 7.50,

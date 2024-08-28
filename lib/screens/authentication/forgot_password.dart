@@ -60,7 +60,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                   );
                 } else {
-                  print('Error :  ${responseBody} ');
+                  print('Error :  $responseBody ');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

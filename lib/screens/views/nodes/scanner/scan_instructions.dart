@@ -24,7 +24,7 @@ class _BottomsheetState extends State<Bottomsheet> {
           expand: true,
           minChildSize: 0.1,
           snap: true,
-          snapSizes: [
+          snapSizes: const [
             0.1,
             0.3,
           ],

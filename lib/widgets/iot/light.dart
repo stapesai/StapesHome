@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/colors.dart';
 
 class LightComponent extends StatefulWidget {
   final Device device;
 
-  const LightComponent({Key? key, required this.device}) : super(key: key);
+  const LightComponent({super.key, required this.device});
 
   @override
   _LightComponentState createState() => _LightComponentState();

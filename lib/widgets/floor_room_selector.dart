@@ -15,13 +15,13 @@ class FloorRoomSelector extends StatefulWidget {
   final String userId;
 
   const FloorRoomSelector({
-    Key? key,
+    super.key,
     required this.context,
     required this.onFloorSelected,
     required this.onRoomSelected,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   FloorRoomSelectorState createState() => FloorRoomSelectorState();
@@ -286,7 +286,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 class PlusButton extends StatelessWidget {
   final VoidCallback onPressed;
 
-  const PlusButton({Key? key, required this.onPressed}) : super(key: key);
+  const PlusButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -311,11 +311,11 @@ class FloorRoomNameButton extends StatelessWidget {
   final VoidCallback onTap;
 
   const FloorRoomNameButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.isActive,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

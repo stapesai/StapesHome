@@ -8,15 +8,15 @@ class ScanNodeorAddDeviceButton extends StatelessWidget {
   final String icon;
 
   const ScanNodeorAddDeviceButton({
-    Key? key,
+    super.key,
     required this.text,
     required this.onPressed,
     required this.icon,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       width: double.infinity,
       height: 90,
       child: DottedBorder(
@@ -24,7 +24,7 @@ class ScanNodeorAddDeviceButton extends StatelessWidget {
         radius: Radius.circular(30),
         color: Color(0xFFFF9F1C),
         strokeWidth: 1,
-        dashPattern: [10, 10],
+        dashPattern: const [10, 10],
         child: Container(
           // decoration: BoxDecoration(
             // color: Color.fromARGB(1, 29, 29, 29),
@@ -38,7 +38,7 @@ class ScanNodeorAddDeviceButton extends StatelessWidget {
             //   )
             // ],
           // ),
-          child: Container(
+          child: SizedBox(
             width: double.infinity,
             child: ElevatedButton(
               style: ElevatedButton.styleFrom(

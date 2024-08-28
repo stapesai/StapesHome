@@ -16,10 +16,10 @@ class NodesScreen extends StatefulWidget {
   final String userId;
 
   const NodesScreen({
-    Key? key,
+    super.key,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _NodesScreenState();

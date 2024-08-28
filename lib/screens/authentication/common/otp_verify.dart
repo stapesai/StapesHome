@@ -131,7 +131,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
         gradient: LinearGradient(
           begin: Alignment(0.00, -1.00),
           end: Alignment(0, 1),
-          colors: [Color(0xFF292B30), Color(0xFF26272C), Color(0xFF1A1B1E)],
+          colors: const [Color(0xFF292B30), Color(0xFF26272C), Color(0xFF1A1B1E)],
         ),
       ),
     );

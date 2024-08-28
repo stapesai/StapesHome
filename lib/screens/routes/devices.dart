@@ -11,16 +11,15 @@ import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/widgets/floor_room_selector.dart';
-
-class DevicesScreen extends StatefulWidget {
+ class DevicesScreen extends StatefulWidget {
   final String sessionId;
   final String userId;
 
   const DevicesScreen({
-    Key? key,
+    super.key,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _DevicesScreenState();

@@ -26,13 +26,13 @@ class _EmailSignUpState extends State<EmailSignUp> {
       _isLoading = true;
     });
 
-    var check_email_response = await http.post(
+    var checkEmailResponse = await http.post(
       AuthRoutes.checkEmail(email),
       headers: {'accept': 'application/json'},
     );
-    var check_email_responseBody = json.decode(check_email_response.body);
+    var checkEmailResponsebody = json.decode(checkEmailResponse.body);
 
-    if (check_email_response.statusCode == 200) {
+    if (checkEmailResponse.statusCode == 200) {
       var response = await http.post(
         AuthRoutes.requestSignup,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
@@ -90,7 +90,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
+            content: Text('Error : ${checkEmailResponse.statusCode} - ${checkEmailResponsebody["detail"]} '),
           ),
         );
       }

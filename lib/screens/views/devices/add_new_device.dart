@@ -14,10 +14,10 @@ class AddNewDevicePage extends StatefulWidget {
   final String sessionId;
 
   const AddNewDevicePage({
-    Key? key,
+    super.key,
     required this.userId,
     required this.sessionId,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _AddNewDeviceState();

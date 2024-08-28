@@ -35,25 +35,25 @@ class _SignupFormState extends State<SignupForm> {
   final HiveService hiveService = HiveService();
 
   Future<void> handleConfirmSignup(
-      BuildContext context, String email, String first_name, String last_name, String dob, String gender) async {
+      BuildContext context, String email, String firstName, String lastName, String dob, String gender) async {
     setState(() {
       _isLoading = true;
     });
-    var check_email_response = await http.post(
+    var checkEmailResponse = await http.post(
       AuthRoutes.checkEmail(email),
       headers: {'accept': 'application/json'},
     );
-    var check_email_responseBody = json.decode(check_email_response.body);
+    var checkEmailResponsebody = json.decode(checkEmailResponse.body);
 
-    if (check_email_response.statusCode == 200) {
+    if (checkEmailResponse.statusCode == 200) {
       var response = await http.post(
         AuthRoutes.completeSignup,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: jsonEncode({
           "user": {
             "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
+            "first_name": firstName,
+            "last_name": lastName,
             "dob": dob,
             "gender": gender,
           },
@@ -92,7 +92,7 @@ class _SignupFormState extends State<SignupForm> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
+            content: Text('Error : ${checkEmailResponse.statusCode} - ${checkEmailResponsebody["detail"]} '),
           ),
         );
       }

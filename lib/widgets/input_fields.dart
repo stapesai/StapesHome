@@ -62,12 +62,12 @@ class PasswordTextField extends StatefulWidget {
   final FocusNode? focusNode;
 
   const PasswordTextField({
-    Key? key,
+    super.key,
     required this.hintText,
     this.controller,
     this.icon,
     this.focusNode,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _PasswordTextFieldState();
@@ -128,12 +128,12 @@ class NDropdown<T> extends StatelessWidget {
   final void Function(T?) onChanged;
 
   const NDropdown({
-    Key? key,
+    super.key,
     required this.hintText,
     required this.value,
     required this.items,
     required this.onChanged,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -5,7 +5,7 @@ import 'package:StapesHome/constants/models.dart';
 class NodeComponent extends StatelessWidget {
   final Node node;
 
-  const NodeComponent({Key? key, required this.node}) : super(key: key);
+  const NodeComponent({super.key, required this.node});
 
   @override
   Widget build(BuildContext context) {

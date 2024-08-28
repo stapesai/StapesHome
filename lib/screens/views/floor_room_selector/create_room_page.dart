@@ -13,7 +13,7 @@ class CreateRoomPage extends StatefulWidget {
   final String userId;
   final String floorId;
 
-  CreateRoomPage({
+  const CreateRoomPage({
     super.key,
     required this.sessionId,
     required this.userId,

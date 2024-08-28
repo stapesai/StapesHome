@@ -313,7 +313,7 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: ShapeDecoration(
           color: Color(0xFF34373F),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x26000000),
               blurRadius: 5.40,
