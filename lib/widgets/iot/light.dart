@@ -3,7 +3,7 @@ import 'package:StapesHome/constants/models.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/colors.dart'; // Import if you have defined colors there
+import 'package:StapesHome/constants/colors.dart';
 
 class LightComponent extends StatefulWidget {
   final Device device;

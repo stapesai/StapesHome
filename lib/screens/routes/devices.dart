@@ -50,7 +50,13 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
       setState(() {
         activeRoomId = roomId;
       });
-      _fetchDevices(roomId);
+      if (activeRoomId.isNotEmpty) {
+        _fetchDevices(roomId);
+      } else {
+        setState(() {
+          devices = [];
+        });
+      }
     }
   }
 
@@ -97,9 +103,6 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
 
   Future<void> _refreshData() async {
     await _floorRoomSelectorKey.currentState?.refreshData();
-    if (activeRoomId.isNotEmpty) {
-      await _fetchDevices(activeRoomId);
-    }
   }
 
   @override
