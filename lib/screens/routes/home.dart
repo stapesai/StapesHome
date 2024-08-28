@@ -100,32 +100,37 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
 
                   // Main content section
                   Expanded(
-                    child: RefreshIndicator(
-                      onRefresh: _refreshData,
-                      color: AppColor.whiteColor,
-                      backgroundColor: Colors.transparent,
-                      child: SingleChildScrollView(
-                        physics: AlwaysScrollableScrollPhysics(),
-                        child: Center(
-                          child: SizedBox(
-                            height: screenSize.height * 0.5,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RefreshIndicator(
+                          onRefresh: _refreshData,
+                          color: AppColor.whiteColor,
+                          backgroundColor: Colors.transparent,
+                          child: SingleChildScrollView(
+                            physics: AlwaysScrollableScrollPhysics(),
                             child: Center(
-                              child: Text(
-                                isFavouritesSelected
-                                    ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
-                                    : "No currently active devices",
-                                style: TextStyle(
-                                  color: AppColor.whiteColor.withOpacity(0.8),
-                                  fontSize: AppFontSizes.bodyText,
-                                  fontFamily: 'Ubuntu',
-                                  fontWeight: FontWeight.w400,
+                              child: SizedBox(
+                                child: Center(
+                                  child: Text(
+                                    isFavouritesSelected
+                                        ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
+                                        : "No currently active devices",
+                                    style: TextStyle(
+                                      color: AppColor.whiteColor.withOpacity(0.8),
+                                      fontSize: AppFontSizes.bodyText,
+                                      fontFamily: 'Ubuntu',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                textAlign: TextAlign.center,
                               ),
                             ),
                           ),
                         ),
-                      ),
+                      ],
                     ),
                   ),
                 ],

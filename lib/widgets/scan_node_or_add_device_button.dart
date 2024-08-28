@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:dotted_border/dotted_border.dart';
 
 class ScanNodeorAddDeviceButton extends StatelessWidget {
   final String text;
@@ -18,30 +19,54 @@ class ScanNodeorAddDeviceButton extends StatelessWidget {
     return Container(
       width: double.infinity,
       height: 90,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(1, 29, 29, 29),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 0.98, color: Color(0xFFFF9F1C)),
-            borderRadius: BorderRadius.circular(29.45),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset(icon, width: 30, height: 30),
-            SizedBox(width: 8),
-            Text(
-              text,
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.75),
-                fontSize: 15.71,
-                fontFamily: 'Ubuntu',
-                fontWeight: FontWeight.w700,
+      child: DottedBorder(
+        borderType: BorderType.RRect,
+        radius: Radius.circular(30),
+        color: Color(0xFFFF9F1C),
+        strokeWidth: 1,
+        dashPattern: [10, 10],
+        child: Container(
+          // decoration: BoxDecoration(
+            // color: Color.fromARGB(1, 29, 29, 29),
+            // borderRadius: BorderRadius.circular(30),
+            // boxShadow: [
+            //   BoxShadow(
+            //     color: Color.fromARGB(62, 255, 0, 0),
+            //     blurRadius: 3.80,
+            //     offset: Offset(4, 9),
+            //     spreadRadius: 0,
+            //   )
+            // ],
+          // ),
+          child: Container(
+            width: double.infinity,
+            child: ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Color.fromARGB(1, 29, 29, 29),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(30),
+                ),
+              ),
+              onPressed: onPressed,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  SvgPicture.asset(icon, width: 30, height: 30),
+                  SizedBox(width: 8),
+                  Text(
+                    text,
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.75),
+                      fontSize: 16,
+                      fontFamily: 'Ubuntu',
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );
