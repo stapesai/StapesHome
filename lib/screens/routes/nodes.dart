@@ -8,7 +8,7 @@ import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/screens/views/common/floor_room_selector.dart';
+import 'package:StapesHome/widgets/floor_room_selector.dart';
 
 class NodesScreen extends StatefulWidget {
   final String sessionId;

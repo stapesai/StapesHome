@@ -5,6 +5,7 @@ class AppColor {
   static const Color whiteColor = Colors.white;
   static Color whiteColor50 = Colors.white.withOpacity(0.5);
   static const Color textHyperlinkColor = Color(0xFF0085FF);
+  static const Color backgroundColorDark = Color(0xFF161622);
   // static const Color primaryColor = Color(0xFF353841);
   // static const Color primaryColorLight = Color(0XFF898989);
   // static const Color secondaryColor = Color(0xFF141414);

@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/models.dart';
-import 'package:StapesHome/screens/views/common/create_floor_page.dart';
-import 'package:StapesHome/screens/views/common/create_room_page.dart';
+import 'package:StapesHome/screens/views/floor_room_selector/create_floor_page.dart';
+import 'package:StapesHome/screens/views/floor_room_selector/create_room_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;
