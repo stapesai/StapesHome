@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -184,7 +185,10 @@ class ScanNodeButton extends StatelessWidget {
       height: 90,
       child: ElevatedButton(
         onPressed: () {
-          // TODO: Implement scan functionality
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => QrScannerScreen()),
+          );
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: Color.fromARGB(1, 29, 29, 29),

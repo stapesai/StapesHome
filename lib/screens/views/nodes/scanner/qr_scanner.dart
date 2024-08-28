@@ -1,66 +1,9 @@
 import 'dart:convert';
+import 'package:StapesHome/screens/views/nodes/scanner/scanner_overlay.dart';
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-
-class MiniBar extends StatelessWidget {
-  final VoidCallback onTap;
-
-  const MiniBar({Key? key, required this.onTap}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Stack(
-        children: [
-          Container(
-            height: 50,
-            width: double.infinity,
-            decoration: ShapeDecoration(
-              color: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(25),
-              ),
-            ),
-            child: Center(
-                child: Container(
-              height: 5,
-              width: 100,
-              margin: EdgeInsets.only(top: 10),
-              decoration: BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.circular(2.5),
-              ),
-            )),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class BottomSheetContent extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      padding: EdgeInsets.all(16),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          MiniBar(onTap: () => Navigator.of(context).pop()),
-          SizedBox(height: 16),
-          Text('Instructions', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-          SizedBox(height: 16),
-          Text('1. Scan the QR code on the device.'),
-          Text('2. Enter Wi-Fi credentials.'),
-          Text('3. Enter device name and correct node number.'),
-        ],
-      ),
-    );
-  }
-}
+import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
 
 class QrScannerScreen extends StatefulWidget {
   const QrScannerScreen({super.key});
@@ -69,7 +12,7 @@ class QrScannerScreen extends StatefulWidget {
   createState() => _QrScannerScreenState();
 }
 
-class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderStateMixin {
+class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver, TickerProviderStateMixin {
   late MobileScannerController _controller;
   bool _flashOn = false;
   bool _isProcessing = false;
@@ -79,6 +22,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
   @override
   void initState() {
     super.initState();
+     WidgetsBinding.instance.addObserver(this);
     _controller = MobileScannerController();
     _lottieController = AnimationController(vsync: this);
   }
@@ -86,8 +30,18 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
   @override
   void dispose() {
     _controller.dispose();
+     WidgetsBinding.instance.removeObserver(this);
     _lottieController.dispose();
     super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _controller.start();
+    } else if (state == AppLifecycleState.paused) {
+      _controller.stop();
+    }
   }
 
   void _toggleFlash() {
@@ -117,25 +71,15 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
       final String characteristicUuid = jsonData['characteristic_uuid'] ?? 'Unknown';
 
       print('Device Name: $deviceName');
-      print('Service UUID: $serviceUuid');
+      print('Service UUID: $serviceUuid'); 
       print('Characteristic UUID: $characteristicUuid');
 
       // Set the connection future
       setState(() {
+        _isProcessing = false;
         _connectionFuture = _connectToDevice(deviceName, serviceUuid, characteristicUuid);
       });
     }
-  }
-
-  // Function to open the bottom sheet
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      builder: (BuildContext context) {
-        return BottomSheetContent();
-      },
-    );
   }
 
   @override
@@ -144,25 +88,16 @@ class _QrScannerScreenState extends State<QrScannerScreen> with TickerProviderSt
       children: [
         Container(
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(
-            gradient: AppColor.backgroundColorgradient,
-          ),
+          decoration: BoxDecoration(color: AppColor.instruction_panel_color),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(
               children: [
                 // The QR Scanner
                 MobileScanner(controller: _controller, onDetect: (barcode) => _handleQRCode(barcode.barcodes)),
-
+                QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
                 // Positioned mini-bar at the bottom
-                Positioned(
-                  bottom: 40,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: MiniBar(onTap: () => _showBottomSheet(context)),
-                  ),
-                ),
+                Bottomsheet(child: SizedBox(height: 100)),
               ],
             ),
           ),

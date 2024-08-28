@@ -1,3 +1,4 @@
+import 'package:StapesHome/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 class Bottomsheet extends StatefulWidget {
@@ -18,21 +19,22 @@ class _BottomsheetState extends State<Bottomsheet> {
     return LayoutBuilder(builder: (buider, contraints) {
       return DraggableScrollableSheet(
           key: sheet,
-          initialChildSize: 0.5,
-          maxChildSize: 0.7,
+          initialChildSize: 0.1,
+          maxChildSize: 0.3,
           expand: true,
-          minChildSize: 0.5,
+          minChildSize: 0.1,
           snap: true,
           snapSizes: [
-            50/contraints.maxHeight,
-            0.5,
+            0.1,
+            0.3,
           ],
           builder: (BuildContext buider, ScrollController scrollController) {
             return DecoratedBox(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
-                boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.1), blurRadius: 12, spreadRadius: 5)],
+              decoration: ShapeDecoration(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.only(topLeft: Radius.circular(20), topRight: Radius.circular(20)),
+                ),
+                gradient: AppColor.backgroundColorgradient,
               ),
               child: CustomScrollView(
                 controller: scrollController,
