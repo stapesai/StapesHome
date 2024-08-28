@@ -44,7 +44,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           MaterialPageRoute(
             builder: (context) => OtpVerificationScreen(
               transactionId: transactionId,
-              expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
+              expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
               onSuccess: () async {
                 if (context.mounted) {
                   Navigator.pushReplacement(

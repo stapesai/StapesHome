@@ -53,7 +53,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ))
                 : OtpVerificationScreen(
                     transactionId: transactionId,
-                    expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
+                    expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
                     onSuccess: () async {
                       setState(() {
                         _isLoading = true;

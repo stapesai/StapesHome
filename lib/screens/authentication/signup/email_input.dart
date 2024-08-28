@@ -50,7 +50,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
             MaterialPageRoute(
               builder: (context) => OtpVerificationScreen(
                 transactionId: transactionId,
-                expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
+                expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
                 onSuccess: () async {
                   if (context.mounted) {
                     Navigator.pushReplacement(

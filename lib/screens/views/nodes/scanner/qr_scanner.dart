@@ -88,7 +88,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
       children: [
         Container(
           clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: AppColor.instruction_panel_color),
+          decoration: BoxDecoration(color: AppColor.instructionPanelColor),
           child: Scaffold(
             backgroundColor: Colors.transparent,
             body: Stack(

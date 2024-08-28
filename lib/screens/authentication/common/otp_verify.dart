@@ -12,13 +12,13 @@ import "package:StapesHome/widgets/button.dart";
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;
   final VoidCallback onSuccess;
-  final DateTime expiry_time;
+  final DateTime expiryTime;
 
   const OtpVerificationScreen({
     super.key,
     required this.transactionId,
     required this.onSuccess,
-    required this.expiry_time,
+    required this.expiryTime,
   });
 
   @override
@@ -36,7 +36,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
   @override
   void initState() {
     super.initState();
-    _remainingSeconds = widget.expiry_time.difference(DateTime.now()).inSeconds;
+    _remainingSeconds = widget.expiryTime.difference(DateTime.now()).inSeconds;
     _startTimer();
   }
 
