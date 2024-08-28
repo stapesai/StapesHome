@@ -4,8 +4,8 @@ import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/models.dart';
-import 'package:StapesHome/screens/views/common/create_floor_page.dart';
-import 'package:StapesHome/screens/views/common/create_room_page.dart';
+import 'package:StapesHome/screens/views/floor_room_selector/create_floor_page.dart';
+import 'package:StapesHome/screens/views/floor_room_selector/create_room_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;
@@ -24,7 +24,7 @@ class FloorRoomSelector extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  FloorRoomSelectorState  createState() => FloorRoomSelectorState();
+  FloorRoomSelectorState createState() => FloorRoomSelectorState();
 }
 
 class FloorRoomSelectorState extends State<FloorRoomSelector> {
@@ -32,12 +32,15 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
   String activeRoomId = '';
   List<Floor> floors = [];
   List<Room> rooms = [];
-  bool isLoading = true;
-  String? errorMessage;
+  bool isFloorsLoading = true;
+  bool isRoomsLoading = true;
+  String? errorMessageFloors;
+  String? errorMessageRooms;
 
   @override
   void initState() {
     super.initState();
+    // fetch floors on init
     _fetchFloors();
   }
 
@@ -48,8 +51,10 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
   // Fetch floors from the API
   Future<void> _fetchFloors() async {
     setState(() {
-      isLoading = true;
-      errorMessage = null;
+      // set loading states
+      isFloorsLoading = true;
+      isRoomsLoading = true;
+      errorMessageFloors = null;
     });
 
     try {
@@ -64,37 +69,34 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
       if (response.statusCode == 200) {
         final List<dynamic> floorsData = json.decode(response.body);
-        floors = floorsData
-            .map((floor) => Floor(
-                  id: floor['id'],
-                  level: floor['level'],
-                  alias: floor['alias'],
-                ))
-            .toList();
+        floors = floorsData.map((floors) => Floor.fromJson(floors)).toList();
 
         // Fetch rooms for the initially active floor
         if (floors.isNotEmpty) {
+          setState(() {
+            isFloorsLoading = false;
+          });
           setActiveFloor(floors.first.id);
+          // setActiveFloor(activeFloorId);
         }
       } else {
+        setState(() {
+          isFloorsLoading = false;
+        });
         throw Exception('Failed to load floors: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
-        errorMessage = 'Error fetching floors: $e';
+        errorMessageFloors = 'Error fetching floors: $e';
       });
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    } finally {}
   }
 
   // Fetch rooms for a specific floor
   Future<void> _fetchRooms(String floorId) async {
     setState(() {
-      isLoading = true;
-      errorMessage = null;
+      isRoomsLoading = true;
+      errorMessageRooms = null;
     });
 
     try {
@@ -109,45 +111,69 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
       if (response.statusCode == 200) {
         final List<dynamic> roomsData = json.decode(response.body);
-        rooms = roomsData
-            .map((room) => Room(
-                  id: room['id'],
-                  floorId: room['floor_id'],
-                  name: room['name'],
-                  type: room['type'],
-                ))
-            .toList();
+        rooms = roomsData.map((rooms) => Room.fromJson(rooms)).toList();
+
+        // Fetch devices for the initially active room
+        if (rooms.isNotEmpty) {
+          setState(() {
+            isRoomsLoading = false;
+          });
+          setActiveRoom(rooms.first.id);
+          // setActiveRoom(activeRoomId);
+        }
       } else {
+        setState(() {
+          isRoomsLoading = false;
+        });
         throw Exception('Failed to load rooms: ${response.statusCode}');
       }
     } catch (e) {
       setState(() {
-        errorMessage = 'Error fetching rooms: $e';
+        errorMessageRooms = 'Error fetching rooms: $e';
       });
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    } finally {}
   }
 
   // Set the active floor and fetch its rooms
   void setActiveFloor(String floorId) {
+    // callback to parent widget
     widget.onFloorSelected(floorId);
+    widget.onRoomSelected('');
+
+    // set the active floor
     setState(() {
       activeFloorId = floorId;
     });
-    widget.onRoomSelected('');
     rooms = [];
     _fetchRooms(floorId);
   }
 
   // Set the active room by ID
   void setActiveRoom(String roomId) {
+    // callback to parent widget
+    widget.onRoomSelected(roomId);
+
+    // set the active room
     setState(() {
       activeRoomId = roomId;
     });
-    widget.onRoomSelected(roomId);
+  }
+
+  // Navigate to create floor page
+  void navigateToCreateFloor(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => CreateFloorPage(
+          sessionId: widget.sessionId,
+          userId: widget.userId,
+        ),
+      ),
+    ).then((result) {
+      if (result == true) {
+        _fetchFloors();
+      }
+    });
   }
 
   // Navigate to create room page
@@ -168,23 +194,6 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
         ),
       ),
     ).then((_) => _fetchRooms(activeFloorId));
-  }
-
-  // Navigate to create floor page
-  void navigateToCreateFloor(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateFloorPage(
-          sessionId: widget.sessionId,
-          userId: widget.userId,
-        ),
-      ),
-    ).then((result) {
-      if (result == true) {
-        _fetchFloors();
-      }
-    });
   }
 
   @override
@@ -226,11 +235,11 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
   }
 
   Widget _buildFloorList(double maxWidth) {
-    if (isLoading) {
+    if (isFloorsLoading) {
       return const CircularProgressIndicator();
     }
-    if (errorMessage != null) {
-      return Text(errorMessage!, style: const TextStyle(color: Colors.red));
+    if (errorMessageFloors != null) {
+      return Text(errorMessageFloors!, style: const TextStyle(color: Colors.red));
     }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -250,11 +259,11 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
   }
 
   Widget _buildRoomList(double maxWidth) {
-    if (isLoading) {
+    if (isRoomsLoading) {
       return const CircularProgressIndicator();
     }
-    if (errorMessage != null) {
-      return Text(errorMessage!, style: const TextStyle(color: Colors.red));
+    if (errorMessageRooms != null) {
+      return Text(errorMessageRooms!, style: const TextStyle(color: Colors.red));
     }
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,

@@ -5,6 +5,7 @@ class AppColor {
   static const Color whiteColor = Colors.white;
   static Color whiteColor50 = Colors.white.withOpacity(0.5);
   static const Color textHyperlinkColor = Color(0xFF0085FF);
+  static const Color backgroundColorDark = Color(0xFF161622);
   static const instruction_panel_color = Color(0xFF181819);
   static const Color primaryColor = Color(0xFFFF9F1C);
   static const Color primaryColorLight = Color(0XFF898989);

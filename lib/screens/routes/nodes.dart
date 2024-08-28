@@ -1,15 +1,15 @@
 import 'dart:convert';
 import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
+import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/screens/views/common/floor_room_selector.dart';
+import 'package:StapesHome/widgets/floor_room_selector.dart';
 
 class NodesScreen extends StatefulWidget {
   final String sessionId;
@@ -49,7 +49,13 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
       setState(() {
         activeRoomId = roomId;
       });
-      _fetchNodes(roomId);
+      if (activeRoomId.isNotEmpty) {
+        _fetchNodes(roomId);
+      } else {
+        setState(() {
+          nodes = [];
+        });
+      }
     }
   }
 
@@ -71,17 +77,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
       if (response.statusCode == 200) {
         final List<dynamic> nodesData = json.decode(response.body);
-        nodes = nodesData
-            .map((node) => Node(
-                  id: node['id'],
-                  roomId: node['room_id'],
-                  name: node['name'],
-                  hardwareChip: node['hardware_chip'],
-                  hardwareVersion: node['hardware_version'],
-                  hardwareMacAddress: node['hardware_mac_address'],
-                  firmwareVersion: node['firmware_version'],
-                ))
-            .toList();
+        nodes = nodesData.map<Node>((node) => Node.fromJson(node)).toList();
       } else {
         throw Exception('Failed to load nodes: ${response.statusCode}');
       }
@@ -98,9 +94,6 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
   Future<void> _refreshData() async {
     await _floorRoomSelectorKey.currentState?.refreshData();
-    if (activeRoomId.isNotEmpty) {
-      await _fetchNodes(activeRoomId);
-    }
   }
 
   @override
@@ -126,93 +119,65 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
             color: AppColor.whiteColor,
             backgroundColor: Colors.transparent,
             child: SafeArea(
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  padding: AppPadding.pagePadding(context),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenSize.height * 0.05),
-                      Text(
-                        'Linked Nodes',
-                        style: TextStyle(
-                          color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageHeading,
-                          fontFamily: 'Ubuntu',
-                          fontWeight: FontWeight.w700,
+              child: Padding(
+                padding: AppPadding.pagePadding(context),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: screenSize.height * 0.05),
+                            Text(
+                              'Linked Nodes',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.pageHeading,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            FloorRoomSelector(
+                              key: _floorRoomSelectorKey,
+                              context: context,
+                              onFloorSelected: handleFloorSelected,
+                              onRoomSelected: handleRoomSelected,
+                              sessionId: widget.sessionId,
+                              userId: widget.userId,
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            if (isLoading)
+                              Center(child: CircularProgressIndicator())
+                            else if (errorMessage != null)
+                              Text(errorMessage!, style: TextStyle(color: Colors.red))
+                            else
+                              Column(
+                                children: nodes.map((node) => NodeComponent(node: node)).toList(),
+                              ),
+                            SizedBox(height: screenSize.height * 0.1),
+                          ],
                         ),
                       ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      FloorRoomSelector(
-                        key: _floorRoomSelectorKey,
-                        context: context,
-                        onFloorSelected: handleFloorSelected,
-                        onRoomSelected: handleRoomSelected,
-                        sessionId: widget.sessionId,
-                        userId: widget.userId,
-                      ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      if (isLoading)
-                        Center(child: CircularProgressIndicator())
-                      else if (errorMessage != null)
-                        Text(errorMessage!, style: TextStyle(color: Colors.red))
-                      else
-                        Column(
-                          children: nodes.map((node) => NodeComponent(node: node)).toList(),
-                        ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      ScanNodeButton(),
-                    ],
-                  ),
+                    ),
+                    ScanNodeorAddDeviceButton(
+                      text: 'Scan a new node',
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => QrScannerScreen()),
+                        );
+                      },
+                      icon: 'assets/icons/nodes/qr.svg',
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),
           ),
-        ),
-      ),
-    );
-  }
-}
-
-class ScanNodeButton extends StatelessWidget {
-  const ScanNodeButton({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      height: 90,
-      child: ElevatedButton(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => QrScannerScreen()),
-          );
-        },
-        style: ElevatedButton.styleFrom(
-          backgroundColor: Color.fromARGB(1, 29, 29, 29),
-          shape: RoundedRectangleBorder(
-            side: BorderSide(width: 0.98, color: Color(0xFFFF9F1C)),
-            borderRadius: BorderRadius.circular(29.45),
-          ),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Image.asset('assets/icons/nodes/qr.svg', width: 24, height: 24),
-            SvgPicture.asset('assets/icons/nodes/qr.svg', width: 30, height: 30),
-            SizedBox(width: 8),
-            Text(
-              'Scan a new node',
-              style: TextStyle(
-                color: Colors.white.withOpacity(0.75),
-                fontSize: 15.71,
-                fontFamily: 'Ubuntu',
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-          ],
         ),
       ),
     );

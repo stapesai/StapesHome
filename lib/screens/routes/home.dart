@@ -25,9 +25,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   bool get wantKeepAlive => true;
 
   Future<void> _refreshData() async {
-    // Implement the refresh logic here
-    // For example, you might want to fetch updated data from an API
-    await Future.delayed(Duration(seconds: 2)); // Simulating a network request
+    await Future.delayed(Duration(seconds: 2));
     setState(() {
       // Update your state with the new data
     });
@@ -51,17 +49,14 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          body: RefreshIndicator(
-            onRefresh: _refreshData,
-            color: AppColor.whiteColor,
-            backgroundColor: Colors.transparent,
-            child: SafeArea(
-              child: SingleChildScrollView(
-                physics: BouncingScrollPhysics(),
-                child: Container(
-                  height: screenSize.height - MediaQuery.of(context).padding.top,
-                  padding: AppPadding.pagePadding(context),
-                  child: Column(
+          body: SafeArea(
+            child: Padding(
+              padding: AppPadding.pagePadding(context),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  // Header section (greeting and quick access buttons)
+                  Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(height: screenSize.height * 0.05),
@@ -100,26 +95,45 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               'Active', !isFavouritesSelected, 'lightning-active.svg', 'lightning.svg'),
                         ],
                       ),
-                      SizedBox(height: screenSize.height * 0.05),
-                      Expanded(
-                        child: Center(
-                          child: Text(
-                            isFavouritesSelected
-                                ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
-                                : "No currently active devices",
-                            style: TextStyle(
-                              color: AppColor.whiteColor.withOpacity(0.8),
-                              fontSize: AppFontSizes.bodyText,
-                              fontFamily: 'Ubuntu',
-                              fontWeight: FontWeight.w400,
-                            ),
-                            textAlign: TextAlign.center,
-                          ),
-                        ),
-                      ),
                     ],
                   ),
-                ),
+
+                  // Main content section
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        RefreshIndicator(
+                          onRefresh: _refreshData,
+                          color: AppColor.whiteColor,
+                          backgroundColor: Colors.transparent,
+                          child: SingleChildScrollView(
+                            physics: AlwaysScrollableScrollPhysics(),
+                            child: Center(
+                              child: SizedBox(
+                                child: Center(
+                                  child: Text(
+                                    isFavouritesSelected
+                                        ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
+                                        : "No currently active devices",
+                                    style: TextStyle(
+                                      color: AppColor.whiteColor.withOpacity(0.8),
+                                      fontSize: AppFontSizes.bodyText,
+                                      fontFamily: 'Ubuntu',
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

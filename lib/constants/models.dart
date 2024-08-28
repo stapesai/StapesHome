@@ -6,6 +6,14 @@ class Floor {
   final String alias;
 
   Floor({required this.id, required this.level, required this.alias});
+
+  factory Floor.fromJson(Map<String, dynamic> json) {
+    return Floor(
+      id: json['id'],
+      level: json['level'],
+      alias: json['alias'],
+    );
+  }
 }
 
 class Room {
@@ -15,6 +23,15 @@ class Room {
   final String type;
 
   Room({required this.id, required this.floorId, required this.name, required this.type});
+
+  factory Room.fromJson(Map<String, dynamic> json) {
+    return Room(
+      id: json['id'],
+      floorId: json['floor_id'],
+      name: json['name'],
+      type: json['type'],
+    );
+  }
 }
 
 class Node {
@@ -35,6 +52,18 @@ class Node {
     required this.firmwareVersion,
     required this.id,
   });
+
+  factory Node.fromJson(Map<String, dynamic> json) {
+    return Node(
+      roomId: json['room_id'],
+      name: json['name'],
+      hardwareChip: json['hardware_chip'],
+      hardwareVersion: json['hardware_version'],
+      hardwareMacAddress: json['hardware_mac_address'],
+      firmwareVersion: json['firmware_version'],
+      id: json['id'],
+    );
+  }
 }
 
 class Device {
@@ -51,4 +80,14 @@ class Device {
     required this.channelId,
     required this.id,
   });
+
+  factory Device.fromJson(Map<String, dynamic> json) {
+    return Device(
+      nodeId: json['node_id'],
+      name: json['name'],
+      type: json['type'],
+      channelId: json['channel_id'],
+      id: json['id'],
+    );
+  }
 }
