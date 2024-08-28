@@ -128,45 +128,52 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
             color: AppColor.whiteColor,
             backgroundColor: Colors.transparent,
             child: SafeArea(
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  padding: AppPadding.pagePadding(context),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenSize.height * 0.05),
-                      Text(
-                        'Linked Nodes',
-                        style: TextStyle(
-                          color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageHeading,
-                          fontFamily: 'Ubuntu',
-                          fontWeight: FontWeight.w700,
+              child: Padding(
+                padding: AppPadding.pagePadding(context),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: screenSize.height * 0.05),
+                            Text(
+                              'Linked Nodes',
+                              style: TextStyle(
+                                color: AppColor.whiteColor,
+                                fontSize: AppFontSizes.pageHeading,
+                                fontFamily: 'Ubuntu',
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            FloorRoomSelector(
+                              key: _floorRoomSelectorKey,
+                              context: context,
+                              onFloorSelected: handleFloorSelected,
+                              onRoomSelected: handleRoomSelected,
+                              sessionId: widget.sessionId,
+                              userId: widget.userId,
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            if (isLoading)
+                              Center(child: CircularProgressIndicator())
+                            else if (errorMessage != null)
+                              Text(errorMessage!, style: TextStyle(color: Colors.red))
+                            else
+                              Column(
+                                children: nodes.map((node) => NodeComponent(node: node)).toList(),
+                              ),
+                            SizedBox(height: screenSize.height * 0.1),
+                          ],
                         ),
                       ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      FloorRoomSelector(
-                        key: _floorRoomSelectorKey,
-                        context: context,
-                        onFloorSelected: handleFloorSelected,
-                        onRoomSelected: handleRoomSelected,
-                        sessionId: widget.sessionId,
-                        userId: widget.userId,
-                      ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      if (isLoading)
-                        Center(child: CircularProgressIndicator())
-                      else if (errorMessage != null)
-                        Text(errorMessage!, style: TextStyle(color: Colors.red))
-                      else
-                        Column(
-                          children: nodes.map((node) => NodeComponent(node: node)).toList(),
-                        ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      ScanNodeButton(),
-                    ],
-                  ),
+                    ),
+                    ScanNodeButton(),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),

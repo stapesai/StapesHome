@@ -110,7 +110,7 @@ class _AddNewDeviceState extends State<AddNewDevice> {
                   SizedBox(height: screenSize.height * 0.04),
                   Expanded(
                     child: SingleChildScrollView(
-                      physics: BouncingScrollPhysics(),
+                      physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
                           _buildDropdown('Floor', _floors, _selectedFloor, (newValue) {

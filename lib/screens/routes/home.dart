@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Header section (greeting and quick access buttons)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -94,28 +95,34 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               'Active', !isFavouritesSelected, 'lightning-active.svg', 'lightning.svg'),
                         ],
                       ),
-                      SizedBox(height: screenSize.height * 0.05),
                     ],
                   ),
+
+                  // Main content section
                   Expanded(
                     child: RefreshIndicator(
                       onRefresh: _refreshData,
                       color: AppColor.whiteColor,
                       backgroundColor: Colors.transparent,
                       child: SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
+                        physics: AlwaysScrollableScrollPhysics(),
                         child: Center(
-                          child: Text(
-                            isFavouritesSelected
-                                ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
-                                : "No currently active devices",
-                            style: TextStyle(
-                              color: AppColor.whiteColor.withOpacity(0.8),
-                              fontSize: AppFontSizes.bodyText,
-                              fontFamily: 'Ubuntu',
-                              fontWeight: FontWeight.w400,
+                          child: SizedBox(
+                            height: screenSize.height * 0.5,
+                            child: Center(
+                              child: Text(
+                                isFavouritesSelected
+                                    ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
+                                    : "No currently active devices",
+                                style: TextStyle(
+                                  color: AppColor.whiteColor.withOpacity(0.8),
+                                  fontSize: AppFontSizes.bodyText,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.w400,
+                                ),
+                                textAlign: TextAlign.center,
+                              ),
                             ),
-                            textAlign: TextAlign.center,
                           ),
                         ),
                       ),

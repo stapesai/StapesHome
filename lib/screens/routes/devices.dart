@@ -102,7 +102,11 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
   }
 
   Future<void> _refreshData() async {
+    // Refresh floors and rooms while maintaining the previous selection
     await _floorRoomSelectorKey.currentState?.refreshData();
+    if (activeRoomId.isNotEmpty) {
+      await _fetchDevices(activeRoomId);
+    }
   }
 
   @override
@@ -128,57 +132,66 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
             color: AppColor.whiteColor,
             backgroundColor: Colors.transparent,
             child: SafeArea(
-              child: SingleChildScrollView(
-                physics: AlwaysScrollableScrollPhysics(),
-                child: Container(
-                  padding: AppPadding.pagePadding(context),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(height: screenSize.height * 0.05),
-                      SizedBox(
-                        width: double.infinity,
-                        child: Text(
-                          'All Devices',
-                          style: TextStyle(
-                            color: AppColor.whiteColor,
-                            fontSize: AppFontSizes.pageHeading,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w700,
+              child: Padding(
+                padding: AppPadding.pagePadding(context),
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: AlwaysScrollableScrollPhysics(),
+                        child: Container(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: screenSize.height * 0.05),
+                              SizedBox(
+                                width: double.infinity,
+                                child: Text(
+                                  'All Devices',
+                                  style: TextStyle(
+                                    color: AppColor.whiteColor,
+                                    fontSize: AppFontSizes.pageHeading,
+                                    fontFamily: 'Ubuntu',
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: screenSize.height * 0.02),
+                              FloorRoomSelector(
+                                key: _floorRoomSelectorKey,
+                                context: context,
+                                onFloorSelected: handleFloorSelected,
+                                onRoomSelected: handleRoomSelected,
+                                sessionId: widget.sessionId,
+                                userId: widget.userId,
+                              ),
+                              SizedBox(height: screenSize.height * 0.02),
+                              if (isLoading)
+                                Center(child: CircularProgressIndicator())
+                              else if (errorMessage != null)
+                                Text(errorMessage!, style: TextStyle(color: Colors.red))
+                              else
+                                Wrap(
+                                  spacing: 10,
+                                  runSpacing: 10,
+                                  children: devices.map<Widget>((device) {
+                                    if (device.type == 'light') {
+                                      return LightComponent(device: device);
+                                    } else if (device.type == 'fan') {
+                                      return FanComponent(device: device);
+                                    }
+                                    return Container();
+                                  }).toList(),
+                                ),
+                              SizedBox(height: screenSize.height * 0.1),
+                            ],
                           ),
                         ),
                       ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      FloorRoomSelector(
-                        key: _floorRoomSelectorKey,
-                        context: context,
-                        onFloorSelected: handleFloorSelected,
-                        onRoomSelected: handleRoomSelected,
-                        sessionId: widget.sessionId,
-                        userId: widget.userId,
-                      ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      if (isLoading)
-                        Center(child: CircularProgressIndicator())
-                      else if (errorMessage != null)
-                        Text(errorMessage!, style: TextStyle(color: Colors.red))
-                      else
-                        Wrap(
-                          spacing: 10,
-                          runSpacing: 10,
-                          children: devices.map<Widget>((device) {
-                            if (device.type == 'light') {
-                              return LightComponent(device: device);
-                            } else if (device.type == 'fan') {
-                              return FanComponent(device: device);
-                            }
-                            return Container();
-                          }).toList(),
-                        ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      AddDeviceButton(),
-                    ],
-                  ),
+                    ),
+                    AddDeviceButton(),
+                    const SizedBox(height: 20),
+                  ],
                 ),
               ),
             ),
