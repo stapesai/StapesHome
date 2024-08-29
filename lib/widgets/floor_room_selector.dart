@@ -251,6 +251,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: floor.alias,
               isActive: activeFloorId == floor.id,
               onTap: () => setActiveFloor(floor.id),
+              onLongPress: () => print('Long press on floor'),
             ),
           );
         }).toList(),
@@ -275,6 +276,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: room.name,
               isActive: activeRoomId == room.id,
               onTap: () => setActiveRoom(room.id),
+              onLongPress: () => print('Long press on room'),
             ),
           );
         }).toList(),
@@ -285,7 +287,6 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
 class PlusButton extends StatelessWidget {
   final VoidCallback onPressed;
-
   const PlusButton({super.key, required this.onPressed});
 
   @override
@@ -309,18 +310,21 @@ class FloorRoomNameButton extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const FloorRoomNameButton({
     super.key,
     required this.label,
     required this.isActive,
     required this.onTap,
+    required this.onLongPress,
   });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Column(
         children: [
           Text(
