@@ -6,7 +6,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({super.key});
+  const QrScannerScreen({Key? key}) : super(key: key);
 
   @override
   createState() => _QrScannerScreenState();
@@ -22,7 +22,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-     WidgetsBinding.instance.addObserver(this);
+    WidgetsBinding.instance.addObserver(this);
     _controller = MobileScannerController();
     _lottieController = AnimationController(vsync: this);
   }
@@ -30,7 +30,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   @override
   void dispose() {
     _controller.dispose();
-     WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(this);
     _lottieController.dispose();
     super.dispose();
   }
@@ -55,7 +55,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
     // Simulate a connection attempt with a delay
     await Future.delayed(Duration(seconds: 2));
     // Simulate success or failure randomly for demonstration purposes
-    return Future.value(true); // or false
+    return Future.value(true);
   }
 
   void _handleQRCode(List<Barcode> barcodes) {
@@ -71,7 +71,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
       final String characteristicUuid = jsonData['characteristic_uuid'] ?? 'Unknown';
 
       print('Device Name: $deviceName');
-      print('Service UUID: $serviceUuid'); 
+      print('Service UUID: $serviceUuid');
       print('Characteristic UUID: $characteristicUuid');
 
       // Set the connection future
@@ -84,25 +84,32 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: BoxDecoration(color: AppColor.instructionPanelColor),
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: Stack(
-              children: [
-                // The QR Scanner
-                MobileScanner(controller: _controller, onDetect: (barcode) => _handleQRCode(barcode.barcodes)),
-                QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
-                // Positioned mini-bar at the bottom
-                Bottomsheet(child: SizedBox(height: 100)),
-              ],
+    return Scaffold(
+      body: Stack(
+        children: [
+          MobileScanner(
+            controller: _controller,
+            onDetect: (barcode) => _handleQRCode(barcode.barcodes),
+          ),
+          QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
+          Positioned(
+            top: 40,
+            right: 20,
+            child: IconButton(
+              icon: Icon(
+                _flashOn ? Icons.flash_on : Icons.flash_off,
+                color: Colors.white,
+                size: 32,
+              ),
+              onPressed: _toggleFlash,
             ),
           ),
-        ),
-      ],
+          Align(
+            alignment: Alignment.bottomCenter,
+            child: ScanInstructions(),
+          ),
+        ],
+      ),
     );
   }
 }

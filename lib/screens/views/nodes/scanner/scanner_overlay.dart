@@ -8,58 +8,57 @@ class QRScannerOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    double scanArea =
-        (MediaQuery.of(context).size.width < 400 || MediaQuery.of(context).size.height < 400) ? 250.0 : 330.0;
-    return Stack(children: [
-      ColorFiltered(
-        colorFilter: ColorFilter.mode(overlayColour, BlendMode.srcOut), // This one will create the magic
-        child: Stack(
-          children: [
-            Container(
-              decoration: const BoxDecoration(
-                  color: Colors.red,
-                  backgroundBlendMode: BlendMode.dstOut), // This one will handle background + difference out
-            ),
-            Positioned(
-              top: (MediaQuery.of(context).size.height - scanArea) / 6,
-              left: (MediaQuery.of(context).size.width - scanArea) / 2,
-              child: Container(
-                height: scanArea,
-                width: scanArea,
+    final size = MediaQuery.of(context).size;
+    final scanAreaSize = size.width * 0.7;
+    final scanAreaOffset = (size.width - scanAreaSize) / 2;
+
+    return Stack(
+      children: [
+        ColorFiltered(
+          colorFilter: ColorFilter.mode(overlayColour, BlendMode.srcOut),
+          child: Stack(
+            children: [
+              Container(
                 decoration: BoxDecoration(
                   color: Colors.red,
-                  borderRadius: BorderRadius.circular(20),
+                  backgroundBlendMode: BlendMode.dstOut,
                 ),
               ),
-            ),
-          ],
+              Align(
+                alignment: Alignment.center,
+                child: Container(
+                  height: scanAreaSize,
+                  width: scanAreaSize,
+                  decoration: BoxDecoration(
+                    color: Colors.red,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
-      Positioned(
-        top: (MediaQuery.of(context).size.height - scanArea) / 9,
-        left: (MediaQuery.of(context).size.width - scanArea) / 4,
-        child: CustomPaint(
-          foregroundPainter: BorderPainter(),
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
+        Align(
+          alignment: Alignment.center,
+          child: CustomPaint(
+            foregroundPainter: BorderPainter(),
             child: SizedBox(
-              width: scanArea + 65,
-              height: scanArea + 65,
+              width: scanAreaSize + 25,
+              height: scanAreaSize + 25,
             ),
           ),
         ),
-      ),
-    ]);
+      ],
+    );
   }
 }
 
-// Creates the white borders
 class BorderPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     const width = 4.0;
     const radius = 20.0;
-    const tRadius = 3.5 * radius;
+    const tRadius = 3 * radius;
     final rect = Rect.fromLTWH(
       width,
       width,
@@ -67,12 +66,7 @@ class BorderPainter extends CustomPainter {
       size.height - 2 * width,
     );
     final rrect = RRect.fromRectAndRadius(rect, const Radius.circular(radius));
-    const clippingRect0 = Rect.fromLTWH(
-      0,
-      0,
-      tRadius,
-      tRadius,
-    );
+    const clippingRect0 = Rect.fromLTWH(0, 0, tRadius, tRadius);
     final clippingRect1 = Rect.fromLTWH(
       size.width - tRadius,
       0,
@@ -112,35 +106,4 @@ class BorderPainter extends CustomPainter {
   bool shouldRepaint(CustomPainter oldDelegate) {
     return false;
   }
-}
-
-class BarReaderSize {
-  static double width = 100;
-  static double height = 200;
-}
-
-class OverlayWithHolePainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()..color = Colors.black54;
-    canvas.drawPath(
-        Path.combine(
-          PathOperation.difference,
-          Path()..addRect(Rect.fromLTWH(0, 0, size.width, size.height)),
-          Path()
-            ..addOval(Rect.fromCircle(center: Offset(size.width - 24, size.height - 44), radius: 40))
-            ..close(),
-        ),
-        paint);
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return false;
-  }
-}
-
-@override
-bool shouldRepaint(CustomPainter oldDelegate) {
-  return false;
 }
