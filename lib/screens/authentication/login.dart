@@ -12,6 +12,7 @@ import 'package:StapesHome/widgets/input_fields.dart';
 import 'package:StapesHome/screens/authentication/forgot_password.dart';
 import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
 import 'package:StapesHome/screens/authentication/signup/email_input.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -133,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       return SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
+                        physics: AlwaysScrollableScrollPhysics(),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(minHeight: constraints.maxHeight),
                           child: IntrinsicHeight(
@@ -166,13 +167,11 @@ class _LoginScreenState extends State<LoginScreen> {
     return Column(
       children: [
         Container(
-          width: 180,
-          height: 90,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/icons/logo.png'),
-              fit: BoxFit.contain,
-            ),
+          width: 120,
+          height: 80,
+          child: SvgPicture.asset(
+            'assets/icons/logo.svg',
+            fit: BoxFit.contain,
           ),
         ),
         Text(

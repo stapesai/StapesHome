@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'package:StapesHome/constants/colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
 import 'package:StapesHome/screens/routes/main.dart';
 import 'package:StapesHome/utils/sessions_model.dart';
@@ -45,15 +47,18 @@ class SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     // this is the splash screen, it will show the logo of the app until it is ready to show the login screen or the main screen (home screen)
     return Container(
-      color: const Color(0xFF161622),
+      clipBehavior: Clip.antiAlias,
+      decoration: BoxDecoration(
+        gradient: AppColor.backgroundColorgradient,
+      ),
       child: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Image.asset(
-              'assets/icons/logo.png',
-              width: 400.0,
-              height: 400.0,
+            SvgPicture.asset(
+              'assets/icons/logo.svg',
+              width: 120.0,
+              height: 120.0,
             ),
           ],
         ),
