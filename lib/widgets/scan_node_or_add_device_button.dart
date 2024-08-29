@@ -25,50 +25,50 @@ class ScanNodeorAddDeviceButton extends StatelessWidget {
         color: Color(0xFFFF9F1C),
         strokeWidth: 1,
         dashPattern: const [10, 10],
-        child: Container(
+        child: SizedBox(
           // decoration: BoxDecoration(
-            // color: Color.fromARGB(1, 29, 29, 29),
-            // borderRadius: BorderRadius.circular(30),
-            // boxShadow: [
-            //   BoxShadow(
-            //     color: Color.fromARGB(62, 255, 0, 0),
-            //     blurRadius: 3.80,
-            //     offset: Offset(4, 9),
-            //     spreadRadius: 0,
-            //   )
-            // ],
+          // color: Color.fromARGB(1, 29, 29, 29),
+          // borderRadius: BorderRadius.circular(30),
+          // boxShadow: [
+          //   BoxShadow(
+          //     color: Color.fromARGB(62, 255, 0, 0),
+          //     blurRadius: 3.80,
+          //     offset: Offset(4, 9),
+          //     spreadRadius: 0,
+          //   )
+          // ],
           // ),
-          child: SizedBox(
-            width: double.infinity,
-            child: ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Color.fromARGB(1, 29, 29, 29),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(30),
-                ),
+          // child: SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Color.fromARGB(1, 29, 29, 29),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(30),
               ),
-              onPressed: onPressed,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SvgPicture.asset(icon, width: 30, height: 30),
-                  SizedBox(width: 8),
-                  Text(
-                    text,
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.75),
-                      fontSize: 16,
-                      fontFamily: 'Ubuntu',
-                      fontWeight: FontWeight.w700,
-                    ),
+            ),
+            onPressed: onPressed,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                SvgPicture.asset(icon, width: 30, height: 30),
+                SizedBox(width: 8),
+                Text(
+                  text,
+                  style: TextStyle(
+                    color: Colors.white.withOpacity(0.75),
+                    fontSize: 16,
+                    fontFamily: 'Ubuntu',
+                    fontWeight: FontWeight.w700,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
       ),
+      // ),
     );
   }
 }

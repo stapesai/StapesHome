@@ -6,7 +6,7 @@ import 'package:StapesHome/screens/views/nodes/scanner/scanner_overlay.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  const QrScannerScreen({Key? key}) : super(key: key);
+  const QrScannerScreen({super.key});
 
   @override
   createState() => _QrScannerScreenState();
@@ -56,9 +56,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
 
       try {
         final Map<String, dynamic> jsonData = jsonDecode(barcodes.first.rawValue!);
-        final String deviceName = jsonData['device_name'];
-        final String serviceUuid = jsonData['service_uuid'];
-        final String characteristicUuid = jsonData['characteristic_uuid'];
+
+        final String? deviceName = jsonData.containsKey('device_name') ? jsonData['device_name'] : null;
+        final String? serviceUuid = jsonData.containsKey('service_uuid') ? jsonData['service_uuid'] : null;
+        final String? characteristicUuid =
+            jsonData.containsKey('characteristic_uuid') ? jsonData['characteristic_uuid'] : null;
 
         if (deviceName != null && serviceUuid != null && characteristicUuid != null) {
           print('Device Name: $deviceName');

@@ -13,11 +13,11 @@ class ProvisioningScreen extends StatefulWidget {
   final String characteristicUuid;
 
   const ProvisioningScreen({
-    Key? key,
+    super.key,
     required this.deviceName,
     required this.serviceUuid,
     required this.characteristicUuid,
-  }) : super(key: key);
+  });
 
   @override
   createState() => ProvisioningScreenState();
@@ -130,7 +130,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     const mqttPassword = '123';
     const userId = 'test';
     const homeId = 'test';
-    String data = 'WIFI_SSID=$wifiUsername;WIFI_PASSWORD=$wifiPassword;MQTT_BROKER=$mqttBroker;MQTT_PORT=$mqttPort;MQTT_PASSWORD=$mqttPassword;USER_ID=$userId;HOME_ID=$homeId';
+    String data =
+        'WIFI_SSID=$wifiUsername;WIFI_PASSWORD=$wifiPassword;MQTT_BROKER=$mqttBroker;MQTT_PORT=$mqttPort;MQTT_PASSWORD=$mqttPassword;USER_ID=$userId;HOME_ID=$homeId';
 
     List<int> bytes = utf8.encode(data);
 
