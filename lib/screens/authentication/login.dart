@@ -73,8 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         var sessionData = SessionsModel(
                           sessionId: sessionResponseBody['session']['session_id'],
                           userId: sessionResponseBody['session']['user_id'],
-                          createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
-                          lastActiveAt: DateTime.parse(sessionResponseBody['session']['last_active_at']),
                         );
 
                         await hiveService.addBoxes([sessionData], "SessionBox");

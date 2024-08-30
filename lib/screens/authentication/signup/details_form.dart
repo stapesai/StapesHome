@@ -67,8 +67,6 @@ class _SignupFormState extends State<SignupForm> {
         var sessionData = SessionsModel(
           sessionId: responseBody['session']['session_id'],
           userId: responseBody['session']['user_id'],
-          createdAt: DateTime.parse(responseBody['session']['created_at']),
-          lastActiveAt: DateTime.parse(responseBody['session']['last_active_at']),
         );
 
         await hiveService.addBoxes([sessionData], "SessionBox");
