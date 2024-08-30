@@ -16,6 +16,7 @@ class AppColor {
       begin: Alignment(0.00, -1.00), end: Alignment(0, 1), colors: [Color(0xFF353841), Color(0xFF141414)]);
   static const Color textFieldbgColor = Color(0xFF28282F);
   // static const Color themecolor = Color(0XFFC2F656);
+  static const Color grayColor = Color(0xFF898989);
 
   // Debug Colors
   // static const Color whiteColor = Color.fromARGB(255, 255, 0, 0);
