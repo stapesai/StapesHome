@@ -242,8 +242,9 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
       _showErrorSnackBar('Failed to send Wi-Fi credentials: ${e.toString()}');
     }
   }
+
   // Step 4: Name the node
-    Future<void> _nameNode() async {
+  Future<void> _nameNode() async {
     if (!mounted) return;
 
     setState(() {
@@ -275,7 +276,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
       await _nameNode(); // Retry naming the node
     }
   }
-  
+
   // Step 5: Check provisioning status
   Future<void> _checkProvisioningStatus() async {
     if (!mounted) return;
