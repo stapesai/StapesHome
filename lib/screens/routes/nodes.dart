@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
+import 'package:StapesHome/screens/views/nodes/wifi_credentials.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
 import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
 import 'package:flutter/material.dart';
@@ -166,9 +167,16 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
                       text: 'Scan a new node',
                       onPressed: () {
                         Navigator.push(
-                          context,
-                          MaterialPageRoute(builder: (context) => QrScannerScreen()),
-                        );
+                            context,
+                            // MaterialPageRoute(builder: (context) => QrScannerScreen(floorId: activeFloorId, roomId: activeRoomId)),
+                            MaterialPageRoute(
+                                builder: (context) => WifiCredentials(onComplete: (success, errorMessage) {
+                                      if (success) {
+                                        print('Successfully connected to WiFi network.');
+                                      } else {
+                                        print('Failed to connect to WiFi network: $errorMessage');
+                                      }
+                                    })));
                       },
                       icon: 'assets/icons/nodes/qr.svg',
                     ),

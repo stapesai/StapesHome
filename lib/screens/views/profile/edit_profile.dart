@@ -1,6 +1,6 @@
+import 'package:StapesHome/widgets/input/textfeild.dart';
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/input_fields.dart';
 
 class EditProfileScreen extends StatelessWidget {
   const EditProfileScreen({super.key});
