@@ -10,7 +10,7 @@ class QRScannerOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final scanAreaSize = size.width * 0.7;
-    final scanAreaOffset = (size.width - scanAreaSize) / 2;
+    // final scanAreaOffset = (size.width - scanAreaSize) / 2;
 
     return Stack(
       children: [

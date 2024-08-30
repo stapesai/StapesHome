@@ -22,4 +22,8 @@ https://developer.android.com/about/versions/12/features/bluetooth-permissions -
 <!-- legacy for Android 9 or lower -->
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" android:maxSdkVersion="28" />
 
+<!-- custom -->
+<uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
 </manifest>

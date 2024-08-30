@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/screens/views/nodes/wifi_credentials.dart';
+import 'package:StapesHome/screens/views/nodes/name_your_node.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:http/http.dart' as http;
+import 'package:lottie/lottie.dart';
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:StapesHome/screens/views/nodes/wifi_credentials.dart';
 
 class ProvisioningScreen extends StatefulWidget {
   final String deviceName;
@@ -16,6 +17,7 @@ class ProvisioningScreen extends StatefulWidget {
   final String characteristicUuid;
   final String floorId;
   final String roomId;
+  final String userId;
 
   const ProvisioningScreen({
     super.key,
@@ -24,6 +26,7 @@ class ProvisioningScreen extends StatefulWidget {
     required this.characteristicUuid,
     required this.floorId,
     required this.roomId,
+    required this.userId,
   });
 
   @override
@@ -43,11 +46,17 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     ProvisioningStep(title: 'Pairing Bluetooth', isCurrent: true),
     ProvisioningStep(title: 'Enter Wi-Fi Credentials'),
     ProvisioningStep(title: 'Sending Wi-Fi credentials'),
+    ProvisioningStep(title: 'Name your node'),
     ProvisioningStep(title: 'Checking provisioning status'),
   ];
 
   int currentStepIndex = 0;
   StreamSubscription? scanSubscription;
+  BluetoothDevice? connectedDevice;
+  BluetoothCharacteristic? provisioningCharacteristic;
+  String? wifiSsid;
+  String? wifiPassword;
+  String? nodeName;
 
   @override
   void initState() {
@@ -57,20 +66,31 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
 
   @override
   void dispose() {
-    scanSubscription?.cancel(); // Cancel the scan subscription
-    FlutterBluePlus.stopScan(); // Stop scanning
+    scanSubscription?.cancel();
+    FlutterBluePlus.stopScan();
+    connectedDevice?.disconnect();
     super.dispose();
   }
 
+  // Main provisioning process
   Future<void> _startProvisioning() async {
-    await _pairBluetooth();
-    await _showWifiCredentials();
+    await _pairBluetoothDevice();
     if (steps[0].isCompleted) {
-      await _checkProvisioningStatus();
+      await _getWifiCredentials();
+      if (steps[1].isCompleted) {
+        await _sendWifiCredentialsToDevice();
+        if (steps[2].isCompleted) {
+          await _nameNode();
+          if (steps[3].isCompleted) {
+            await _checkProvisioningStatus();
+          }
+        }
+      }
     }
   }
 
-  Future<void> _pairBluetooth() async {
+  // Step 1: Pair with the Bluetooth device
+  Future<void> _pairBluetoothDevice() async {
     if (!mounted) return;
 
     setState(() {
@@ -81,119 +101,119 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     try {
       await FlutterBluePlus.startScan(timeout: Duration(seconds: 10));
 
-      scanSubscription = FlutterBluePlus.scanResults.listen((List<ScanResult> scanResults) async {
-        for (ScanResult result in scanResults) {
-          print('Found device: ${result.device.platformName} (${result.device.remoteId})');
-
+      scanSubscription = FlutterBluePlus.scanResults.listen((results) async {
+        for (ScanResult result in results) {
           if (result.device.platformName == widget.deviceName) {
             await FlutterBluePlus.stopScan();
             scanSubscription?.cancel();
 
             try {
               await result.device.connect();
+              connectedDevice = result.device;
               List<BluetoothService> services = await result.device.discoverServices();
 
               for (BluetoothService service in services) {
                 if (service.uuid.toString() == widget.serviceUuid) {
                   for (BluetoothCharacteristic characteristic in service.characteristics) {
                     if (characteristic.uuid.toString() == widget.characteristicUuid) {
-                      print('Found the correct characteristic');
-                      await _sendWifiCredentials(characteristic);
+                      provisioningCharacteristic = characteristic;
+                      break;
                     }
                   }
                 }
               }
 
-              if (mounted) {
-                setState(() {
-                  steps[0].isCompleted = true;
-                  steps[0].isCurrent = false;
-                });
+              if (provisioningCharacteristic != null) {
+                if (mounted) {
+                  setState(() {
+                    steps[0].isCompleted = true;
+                    steps[0].isCurrent = false;
+                    currentStepIndex++;
+                    steps[currentStepIndex].isCurrent = true;
+                  });
+                }
+                return;
+              } else {
+                throw Exception('Provisioning characteristic not found');
               }
-              return;
             } catch (e) {
               print('Error connecting to the device: $e');
+              throw Exception('Failed to connect to the device');
             }
           }
         }
       });
 
       await Future.delayed(Duration(seconds: 10));
-      print('No device found with the name: ${widget.deviceName}');
       throw Exception('Device not found');
     } catch (e) {
       print('Error during Bluetooth pairing: $e');
+      _showErrorSnackBar('Bluetooth pairing failed: ${e.toString()}');
     }
   }
 
-  Future<void> _showWifiCredentials() async {
+// Step 2: Get Wi-Fi credentials from user
+  Future<void> _getWifiCredentials() async {
     if (!mounted) return;
 
-    setState(() {
-      currentStepIndex = 0;
-      steps[0].isCurrent = true;
-    });
-    final result = null;
-    // final result = await Navigator.push(
-    // context,
-    // MaterialPageRoute(
-    // builder: (context) => WifiCredentials(
-    //   onComplete: (bool success, String? errorMessage) {
-    //     Navigator.pop(context, {'success': success, 'errorMessage': errorMessage});
-    //   },
-    // ),
-    // ),
-    // );
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => WifiCredentials(
+          onComplete: (bool success, String? errorMessage, String? ssid, String? password) {
+            Navigator.pop(
+                context, {'success': success, 'errorMessage': errorMessage, 'ssid': ssid, 'password': password});
+          },
+        ),
+      ),
+    );
 
     if (result != null && result is Map<String, dynamic>) {
       bool success = result['success'] as bool;
       String? errorMessage = result['errorMessage'] as String?;
+      wifiSsid = result['ssid'] as String?;
+      wifiPassword = result['password'] as String?;
 
-      if (success) {
+      if (success && wifiSsid != null && wifiPassword != null) {
         setState(() {
-          steps[0].isCompleted = true;
-          steps[0].isCurrent = false;
+          steps[1].isCompleted = true;
+          steps[1].isCurrent = false;
           currentStepIndex++;
           steps[currentStepIndex].isCurrent = true;
         });
       } else {
-        // Handle the error
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('WiFi connection failed: $errorMessage')),
-          );
-        }
-        // Optionally, you can allow the user to retry
-        await _showWifiCredentials();
+        _showErrorSnackBar('Wi-Fi connection failed: $errorMessage');
+        await _getWifiCredentials(); // Retry getting Wi-Fi credentials
       }
     }
   }
 
-  Future<void> _sendWifiCredentials(BluetoothCharacteristic characteristic) async {
-    if (!mounted) return;
+  // Step 3: Send Wi-Fi credentials to the device
+  Future<void> _sendWifiCredentialsToDevice() async {
+    if (!mounted || provisioningCharacteristic == null) return;
 
     setState(() {
       currentStepIndex = 2;
-      steps[1].isCurrent = true;
+      steps[2].isCurrent = true;
     });
 
-    const wifiUsername = 'SwastikWiFi';
-    const wifiPassword = 'jarvis@wifi';
-    const mqttBroker = '192.168.0.252';
-    const mqttPort = '1883';
-    const mqttPassword = '123';
-    const userId = 'test';
-    const homeId = 'test';
-    String data =
-        'WIFI_SSID=$wifiUsername;WIFI_PASSWORD=$wifiPassword;MQTT_BROKER=$mqttBroker;MQTT_PORT=$mqttPort;MQTT_PASSWORD=$mqttPassword;USER_ID=$userId;HOME_ID=$homeId';
-
-    List<int> bytes = utf8.encode(data);
-
     try {
-      await characteristic.write(bytes, withoutResponse: true);
+      // Get MQTT broker details
+      final mqttDetails = await _getMqttBrokerDetails();
+
+      // Prepare data to send to the device
+      String data = 'WIFI_SSID=$wifiSsid;WIFI_PASSWORD=$wifiPassword;'
+          'MQTT_BROKER=${mqttDetails['broker']};MQTT_PORT=${mqttDetails['port']};'
+          'MQTT_PASSWORD=${mqttDetails['password']};USER_ID=${widget.userId};HOME_ID=${mqttDetails['homeId']}';
+
+      List<int> bytes = utf8.encode(data);
+
+      // Send data to the device
+      await provisioningCharacteristic!.write(bytes, withoutResponse: true);
       print('Data sent to the device: $data');
 
-      List<int> response = await characteristic.read();
+      // Read response from the device
+      List<int> response = await provisioningCharacteristic!.read();
       String hardwareInfo = utf8.decode(response);
       print('Received hardware info: $hardwareInfo');
 
@@ -206,62 +226,133 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
         }
       });
 
-      var hardwareChip = hardwareData['HARDWARE_CHIP'];
-      var hardwareVersion = hardwareData['HARDWARE_VERSION'];
-      var firmwareVersion = hardwareData['FIRMWARE_VERSION'];
-      var macAddress = characteristic.device.remoteId;
-
-      print('Hardware chip: $hardwareChip');
-      print('Hardware version: $hardwareVersion');
-      print('Firmware version: $firmwareVersion');
-      print('MAC address: $macAddress');
-
-      // try {
-      //   final response = await http.post(
-      //     BackendRoutes.createNode,
-      //     body: {
-      //       'room_id': widget.roomId,
-      //       'name': '',
-      //       'hardware_chip': hardwareChip,
-      //       'hardware_version': hardwareVersion,
-      //       'hardware_mac_address': macAddress,
-      //       'firmware_version': firmwareVersion,
-      //     },
-      //   );
-
-      //   if (response.statusCode == 201) {
-      //     print('Node created successfully');
-      //   } else {
-      //     throw Exception('Failed to create node' + response.body);
-      //   }
-      // }
+      // Create node in the backend
+      await _createNodeInBackend(hardwareData);
 
       if (mounted) {
         setState(() {
-          steps[1].isCompleted = true;
-          steps[1].isCurrent = false;
+          steps[2].isCompleted = true;
+          steps[2].isCurrent = false;
+          currentStepIndex++;
+          steps[currentStepIndex].isCurrent = true;
         });
       }
     } catch (e) {
       print('Error sending Wi-Fi credentials: $e');
+      _showErrorSnackBar('Failed to send Wi-Fi credentials: ${e.toString()}');
     }
   }
+  // Step 4: Name the node
+    Future<void> _nameNode() async {
+    if (!mounted) return;
 
+    setState(() {
+      currentStepIndex = 3;
+      steps[3].isCurrent = true;
+    });
+
+    final result = await Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => NodeNamingScreen(
+          onNameSubmitted: (name) {
+            Navigator.pop(context, name);
+          },
+        ),
+      ),
+    );
+
+    if (result != null && result is String) {
+      nodeName = result;
+      setState(() {
+        steps[3].isCompleted = true;
+        steps[3].isCurrent = false;
+        currentStepIndex++;
+        steps[currentStepIndex].isCurrent = true;
+      });
+    } else {
+      _showErrorSnackBar('Please provide a name for your node');
+      await _nameNode(); // Retry naming the node
+    }
+  }
+  
+  // Step 5: Check provisioning status
   Future<void> _checkProvisioningStatus() async {
     if (!mounted) return;
 
     setState(() {
-      currentStepIndex = 2;
-      steps[2].isCurrent = true;
+      currentStepIndex = 3;
+      steps[3].isCurrent = true;
     });
 
+    // TODO: Implement actual provisioning status check
     await Future.delayed(Duration(seconds: 3));
 
     if (mounted) {
       setState(() {
-        steps[2].isCompleted = true;
-        steps[2].isCurrent = false;
+        steps[3].isCompleted = true;
+        steps[3].isCurrent = false;
       });
+      // TODO: Navigate to success screen or handle completion
+    }
+  }
+
+  // Helper method to get MQTT broker details
+  Future<Map<String, String>> _getMqttBrokerDetails() async {
+    try {
+      final response = await http.get(
+        BackendRoutes.mqttInfo,
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, String> data = json.decode(response.body);
+        print('MQTT Broker details: $data');
+        return data;
+      } else {
+        throw Exception('Failed to get MQTT broker details: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error getting MQTT broker details: $e');
+      rethrow;
+    }
+  }
+
+  // Helper method to create node in the backend
+  Future<void> _createNodeInBackend(Map<String, String> hardwareData) async {
+    try {
+      final response = await http.post(
+        BackendRoutes.createNode,
+        body: {
+          'room_id': widget.roomId,
+          'name': nodeName,
+          'hardware_chip': hardwareData['HARDWARE_CHIP'],
+          'hardware_version': hardwareData['HARDWARE_VERSION'],
+          'hardware_mac_address': connectedDevice?.remoteId.toString(),
+          'firmware_version': hardwareData['FIRMWARE_VERSION'],
+        },
+      );
+
+      if (response.statusCode == 201) {
+        print('Node created successfully');
+      } else {
+        throw Exception('Failed to create node: ${response.body}');
+      }
+    } catch (e) {
+      print('Error creating node in backend: $e');
+      rethrow;
+    }
+  }
+
+  // Helper method to show error snackbar
+  void _showErrorSnackBar(String message) {
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message)),
+      );
     }
   }
 
