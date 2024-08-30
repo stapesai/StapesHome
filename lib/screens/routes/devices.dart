@@ -11,7 +11,8 @@ import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/widgets/floor_room_selector.dart';
- class DevicesScreen extends StatefulWidget {
+
+class DevicesScreen extends StatefulWidget {
   final String sessionId;
   final String userId;
 
@@ -130,63 +131,64 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
                     Expanded(
                       child: SingleChildScrollView(
                         physics: AlwaysScrollableScrollPhysics(),
-                        child: Container(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: screenSize.height * 0.05),
-                              SizedBox(
-                                width: double.infinity,
-                                child: Text(
-                                  'All Devices',
-                                  style: TextStyle(
-                                    color: AppColor.whiteColor,
-                                    fontSize: AppFontSizes.pageHeading,
-                                    fontFamily: 'Ubuntu',
-                                    fontWeight: FontWeight.w700,
-                                  ),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            SizedBox(height: screenSize.height * 0.05),
+                            SizedBox(
+                              width: double.infinity,
+                              child: Text(
+                                'All Devices',
+                                style: TextStyle(
+                                  color: AppColor.whiteColor,
+                                  fontSize: AppFontSizes.pageHeading,
+                                  fontFamily: 'Ubuntu',
+                                  fontWeight: FontWeight.w700,
                                 ),
                               ),
-                              SizedBox(height: screenSize.height * 0.02),
-                              FloorRoomSelector(
-                                key: _floorRoomSelectorKey,
-                                context: context,
-                                onFloorSelected: handleFloorSelected,
-                                onRoomSelected: handleRoomSelected,
-                                sessionId: widget.sessionId,
-                                userId: widget.userId,
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            FloorRoomSelector(
+                              key: _floorRoomSelectorKey,
+                              context: context,
+                              onFloorSelected: handleFloorSelected,
+                              onRoomSelected: handleRoomSelected,
+                              sessionId: widget.sessionId,
+                              userId: widget.userId,
+                            ),
+                            SizedBox(height: screenSize.height * 0.02),
+                            if (isLoading)
+                              Center(child: CircularProgressIndicator())
+                            else if (errorMessage != null)
+                              Text(errorMessage!, style: TextStyle(color: Colors.red))
+                            else
+                              Wrap(
+                                spacing: 10,
+                                runSpacing: 10,
+                                children: devices.map<Widget>((device) {
+                                  if (device.type == 'light') {
+                                    return LightComponent(device: device);
+                                  } else if (device.type == 'fan') {
+                                    return FanComponent(device: device);
+                                  }
+                                  return Container();
+                                }).toList(),
                               ),
-                              SizedBox(height: screenSize.height * 0.02),
-                              if (isLoading)
-                                Center(child: CircularProgressIndicator())
-                              else if (errorMessage != null)
-                                Text(errorMessage!, style: TextStyle(color: Colors.red))
-                              else
-                                Wrap(
-                                  spacing: 10,
-                                  runSpacing: 10,
-                                  children: devices.map<Widget>((device) {
-                                    if (device.type == 'light') {
-                                      return LightComponent(device: device);
-                                    } else if (device.type == 'fan') {
-                                      return FanComponent(device: device);
-                                    }
-                                    return Container();
-                                  }).toList(),
-                                ),
-                              SizedBox(height: screenSize.height * 0.1),
-                            ],
-                          ),
+                            SizedBox(height: screenSize.height * 0.1),
+                          ],
                         ),
                       ),
                     ),
                     ScanNodeorAddDeviceButton(
                       text: 'Add a new device',
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context) => AddNewDevicePage(
-                          sessionId: widget.sessionId,
-                          userId: widget.userId,
-                        ))).then((_) => _refreshData());
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => AddNewDevicePage(
+                                      sessionId: widget.sessionId,
+                                      userId: widget.userId,
+                                    ))).then((_) => _refreshData());
                       },
                       icon: 'assets/icons/devices/plus.svg',
                     ),
