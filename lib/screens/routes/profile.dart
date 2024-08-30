@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/colors.dart'; // Ensure the correct import path
-import 'package:StapesHome/screens/views/profile/edit_profile.dart'; // Ensure the correct import path
+import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/screens/views/profile/edit_profile.dart';
 import 'package:StapesHome/screens/views/profile/logout_dialog.dart';
 import 'package:StapesHome/screens/views/profile/sessions_screen.dart';
 
@@ -67,16 +67,6 @@ class ProfileScreen extends StatelessWidget {
                       style: TextStyle(color: Colors.white),
                     ),
                   ),
-                  const SizedBox(height: 32),
-                  ProfileOption(
-                    icon: Icons.dark_mode_outlined,
-                    text: 'Dark mode',
-                    trailing: Switch(
-                      value: true,
-                      onChanged: (value) {},
-                      activeColor: Colors.orange,
-                    ),
-                  ),
                   const SizedBox(height: 16),
                   ProfileOption(
                     icon: Icons.computer,
@@ -92,22 +82,6 @@ class ProfileScreen extends StatelessWidget {
                   ProfileOption(
                     icon: Icons.logout,
                     text: 'Logout',
-                    onTap: () {
-                      _showLogoutDialog(context);
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  ProfileOption(
-                    icon: Icons.location_history,
-                    text: 'About Us',
-                    onTap: () {
-                      _showLogoutDialog(context);
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  ProfileOption(
-                    icon: Icons.help,
-                    text: 'Get Help',
                     onTap: () {
                       _showLogoutDialog(context);
                     },

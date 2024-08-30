@@ -21,6 +21,11 @@ dependencies:
   lottie: ^3.1.2
   flutter_lints: ^4.0.0
   pinput: ^5.0.0
+  connectivity_plus: ^6.0.5
+  wifi_iot: ^0.3.19+1
+  wifi_scan: ^0.4.1+1
+  network_info_plus: ^6.0.1
+  permission_handler: ^11.3.1
 
   flutter_svg: any
 dev_dependencies:
@@ -50,6 +55,10 @@ flutter_icons:
   remove_alpha_ios: true
   adaptive_icon_background: "#161616"
   adaptive_icon_foreground: "assets/icons/logo.png"
+  # Optionally specify the icon size for Android (in dp) - defaults are usually sufficient
+  android_icon_size: 48
+  # For iOS, you might consider adjusting the icon size for different devices (defaults are usually sufficient)
+  ios_icon_size: 40
 
 flutter_lints:
   include: package:flutter_lints/recommended.yaml

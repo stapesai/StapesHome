@@ -1,7 +1,10 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/screens/views/nodes/wifi_credentials.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
+import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
@@ -11,12 +14,16 @@ class ProvisioningScreen extends StatefulWidget {
   final String deviceName;
   final String serviceUuid;
   final String characteristicUuid;
+  final String floorId;
+  final String roomId;
 
   const ProvisioningScreen({
     super.key,
     required this.deviceName,
     required this.serviceUuid,
     required this.characteristicUuid,
+    required this.floorId,
+    required this.roomId,
   });
 
   @override
@@ -34,6 +41,7 @@ class ProvisioningStep {
 class ProvisioningScreenState extends State<ProvisioningScreen> {
   List<ProvisioningStep> steps = [
     ProvisioningStep(title: 'Pairing Bluetooth', isCurrent: true),
+    ProvisioningStep(title: 'Enter Wi-Fi Credentials'),
     ProvisioningStep(title: 'Sending Wi-Fi credentials'),
     ProvisioningStep(title: 'Checking provisioning status'),
   ];
@@ -56,11 +64,14 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
 
   Future<void> _startProvisioning() async {
     await _pairBluetooth();
-    await _checkProvisioningStatus();
+    await _showWifiCredentials();
+    if (steps[0].isCompleted) {
+      await _checkProvisioningStatus();
+    }
   }
 
   Future<void> _pairBluetooth() async {
-    if (!mounted) return; // Check if the widget is mounted
+    if (!mounted) return;
 
     setState(() {
       currentStepIndex = 0;
@@ -87,7 +98,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
                   for (BluetoothCharacteristic characteristic in service.characteristics) {
                     if (characteristic.uuid.toString() == widget.characteristicUuid) {
                       print('Found the correct characteristic');
-                      await _sendWifiCredentials(characteristic); // Await to ensure sequence
+                      await _sendWifiCredentials(characteristic);
                     }
                   }
                 }
@@ -115,11 +126,54 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     }
   }
 
-  Future<void> _sendWifiCredentials(BluetoothCharacteristic characteristic) async {
-    if (!mounted) return; // Check if the widget is mounted
+  Future<void> _showWifiCredentials() async {
+    if (!mounted) return;
 
     setState(() {
-      currentStepIndex = 1;
+      currentStepIndex = 0;
+      steps[0].isCurrent = true;
+    });
+    final result = null;
+    // final result = await Navigator.push(
+    // context,
+    // MaterialPageRoute(
+    // builder: (context) => WifiCredentials(
+    //   onComplete: (bool success, String? errorMessage) {
+    //     Navigator.pop(context, {'success': success, 'errorMessage': errorMessage});
+    //   },
+    // ),
+    // ),
+    // );
+
+    if (result != null && result is Map<String, dynamic>) {
+      bool success = result['success'] as bool;
+      String? errorMessage = result['errorMessage'] as String?;
+
+      if (success) {
+        setState(() {
+          steps[0].isCompleted = true;
+          steps[0].isCurrent = false;
+          currentStepIndex++;
+          steps[currentStepIndex].isCurrent = true;
+        });
+      } else {
+        // Handle the error
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('WiFi connection failed: $errorMessage')),
+          );
+        }
+        // Optionally, you can allow the user to retry
+        await _showWifiCredentials();
+      }
+    }
+  }
+
+  Future<void> _sendWifiCredentials(BluetoothCharacteristic characteristic) async {
+    if (!mounted) return;
+
+    setState(() {
+      currentStepIndex = 2;
       steps[1].isCurrent = true;
     });
 
@@ -136,8 +190,51 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     List<int> bytes = utf8.encode(data);
 
     try {
-      await characteristic.write(bytes, withoutResponse: false);
+      await characteristic.write(bytes, withoutResponse: true);
       print('Data sent to the device: $data');
+
+      List<int> response = await characteristic.read();
+      String hardwareInfo = utf8.decode(response);
+      print('Received hardware info: $hardwareInfo');
+
+      // Parse hardware info
+      Map<String, String> hardwareData = {};
+      hardwareInfo.split(';').forEach((item) {
+        List<String> keyValue = item.split('=');
+        if (keyValue.length == 2) {
+          hardwareData[keyValue[0]] = keyValue[1];
+        }
+      });
+
+      var hardwareChip = hardwareData['HARDWARE_CHIP'];
+      var hardwareVersion = hardwareData['HARDWARE_VERSION'];
+      var firmwareVersion = hardwareData['FIRMWARE_VERSION'];
+      var macAddress = characteristic.device.remoteId;
+
+      print('Hardware chip: $hardwareChip');
+      print('Hardware version: $hardwareVersion');
+      print('Firmware version: $firmwareVersion');
+      print('MAC address: $macAddress');
+
+      // try {
+      //   final response = await http.post(
+      //     BackendRoutes.createNode,
+      //     body: {
+      //       'room_id': widget.roomId,
+      //       'name': '',
+      //       'hardware_chip': hardwareChip,
+      //       'hardware_version': hardwareVersion,
+      //       'hardware_mac_address': macAddress,
+      //       'firmware_version': firmwareVersion,
+      //     },
+      //   );
+
+      //   if (response.statusCode == 201) {
+      //     print('Node created successfully');
+      //   } else {
+      //     throw Exception('Failed to create node' + response.body);
+      //   }
+      // }
 
       if (mounted) {
         setState(() {
@@ -151,7 +248,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
   }
 
   Future<void> _checkProvisioningStatus() async {
-    if (!mounted) return; // Check if the widget is mounted
+    if (!mounted) return;
 
     setState(() {
       currentStepIndex = 2;
