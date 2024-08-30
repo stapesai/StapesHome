@@ -25,7 +25,7 @@ class SessionsModelAdapter extends TypeAdapter<SessionsModel> {
   @override
   void write(BinaryWriter writer, SessionsModel obj) {
     writer
-      ..writeByte(4)
+      ..writeByte(2)
       ..writeByte(0)
       ..write(obj.sessionId)
       ..writeByte(1)

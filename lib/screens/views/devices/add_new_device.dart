@@ -73,10 +73,13 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
         throw Exception('Failed to load floors: ${response.statusCode}');
       }
     } catch (e) {
-      setState(() {
-        errorMessage = 'Error fetching floors: $e';
-        isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          errorMessage = 'Error fetching floors: $e';
+          isLoading = false;
+        });
+      }
+      
     }
   }
 
