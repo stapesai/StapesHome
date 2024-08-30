@@ -36,7 +36,7 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
   List<Floor> floors = [];
   List<Room> rooms = [];
   List<Node> nodes = [];
-  final List<String> _deviceTypes = ['Type 1', 'Type 2', 'Type 3'];
+  final List<String> _deviceTypes = ['Light'];
 
   bool isLoading = false;
   String? errorMessage;

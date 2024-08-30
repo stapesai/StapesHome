@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:StapesHome/widgets/popup.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
@@ -196,6 +197,90 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     ).then((_) => _fetchRooms(activeFloorId));
   }
 
+  // Delete floor using API
+  Future<void> _deleteFloor(String floorId) async {
+    try {
+      final response = await http.delete(
+        BackendRoutes.deleteFloor(floorId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 204) {
+        setState(() {
+          floors.removeWhere((floor) => floor.id == floorId);
+          if (activeFloorId == floorId) {
+            activeFloorId = '';
+            rooms = [];
+            activeRoomId = '';
+          }
+        });
+        if (floors.isNotEmpty) {
+          setActiveFloor(floors.first.id);
+        }
+      } else {
+        throw Exception('Failed to delete floor: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle error (e.g., show an error message to the user)
+      print('Error deleting floor: $e');
+    }
+  }
+
+  // Delete room using API
+  Future<void> _deleteRoom(String roomId) async {
+    try {
+      final response = await http.delete(
+        BackendRoutes.deleteRoom(roomId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 204) {
+        setState(() {
+          rooms.removeWhere((room) => room.id == roomId);
+          if (activeRoomId == roomId) {
+            activeRoomId = '';
+          }
+        });
+        if (rooms.isNotEmpty) {
+          setActiveRoom(rooms.first.id);
+        }
+      } else {
+        throw Exception('Failed to delete room: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle error (e.g., show an error message to the user)
+      print('Error deleting room: $e');
+    }
+  }
+
+  // Show delete confirmation dialog
+  void _showDeleteConfirmationDialog(BuildContext context, String itemType, String itemId, String itemName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteConfirmationDialog(
+          itemType: itemType,
+          itemName: itemName,
+          onDelete: () {
+            if (itemType == 'Floor') {
+              _deleteFloor(itemId);
+            } else if (itemType == 'Room') {
+              _deleteRoom(itemId);
+            }
+          },
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -251,7 +336,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: floor.alias,
               isActive: activeFloorId == floor.id,
               onTap: () => setActiveFloor(floor.id),
-              onLongPress: () => print('Long press on floor'),
+              onLongPress: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
             ),
           );
         }).toList(),
@@ -276,7 +361,7 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: room.name,
               isActive: activeRoomId == room.id,
               onTap: () => setActiveRoom(room.id),
-              onLongPress: () => print('Long press on room'),
+              onLongPress: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
             ),
           );
         }).toList(),
