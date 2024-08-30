@@ -71,9 +71,7 @@ class _NodeNamingScreenState extends State<NodeNamingScreen> {
                     duration: const Duration(milliseconds: 300),
                     curve: Curves.easeOut,
                     margin: EdgeInsets.only(
-                      bottom: keyboardHeight > 0
-                          ? keyboardHeight + screenSize.height * 0.02
-                          : screenSize.height * 0.1,
+                      bottom: keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
                     ),
                     child: Center(
                       child: CustomButton(
