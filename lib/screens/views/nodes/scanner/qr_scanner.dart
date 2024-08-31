@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:StapesHome/screens/views/nodes/provisioning.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:StapesHome/screens/views/nodes/provisioning.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scanner_overlay.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
 
@@ -18,15 +19,15 @@ class QrScannerScreen extends StatefulWidget {
     required this.userId,
     required this.sessionId,
   });
-
   @override
   createState() => _QrScannerScreenState();
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
   late MobileScannerController _controller;
-  bool _flashOn = false;
+  bool _torchOn = false;
   bool _isProcessing = false;
+  
 
   @override
   void initState() {
@@ -51,11 +52,22 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
     }
   }
 
-  void _toggleFlash() {
+  void _toggleTorch() {
     setState(() {
-      _flashOn = !_flashOn;
+      _torchOn = !_torchOn;
     });
-    _controller.toggleTorch();
+    try {
+      _controller.toggleTorch();
+    } catch (e) {
+      if(mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   void _handleQRCode(List<Barcode> barcodes) {
@@ -64,7 +76,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
         _isProcessing = true;
         _controller.stop();
       });
-
       try {
         final Map<String, dynamic> jsonData = jsonDecode(barcodes.first.rawValue!);
 
@@ -102,7 +113,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
       } catch (e) {
         print('Error parsing QR code: $e');
       }
-
       setState(() {
         _isProcessing = false;
       });
@@ -120,20 +130,28 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
           ),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
           Positioned(
-            top: 40,
+            top: 45,
             right: 20,
-            child: IconButton(
-              icon: Icon(
-                _flashOn ? Icons.flash_on : Icons.flash_off,
-                color: Colors.white,
-                size: 32,
+            child: GestureDetector(
+              onTap: _toggleTorch,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _torchOn ? Colors.white : Colors.transparent,
+                ),
+                child: Icon(
+                  _torchOn ? Icons.flashlight_on : Icons.flashlight_off,
+                  color: _torchOn ? Colors.black : Colors.white,
+                  size: 24,
+                ),
               ),
-              onPressed: _toggleFlash,
             ),
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: ScanInstructions(),
+            child: SimpleInstructionPanel(),
           ),
         ],
       ),

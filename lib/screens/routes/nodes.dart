@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
-import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
+import 'package:StapesHome/widgets/scan_add_btn.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
@@ -9,7 +9,7 @@ import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/widgets/floor_room_selector.dart';
+import 'package:StapesHome/widgets/room_sel.dart';
 
 class NodesScreen extends StatefulWidget {
   final String sessionId;
