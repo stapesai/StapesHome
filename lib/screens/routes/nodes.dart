@@ -171,7 +171,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
                           context,
                           MaterialPageRoute(
                               builder: (context) =>
-                                  QrScannerScreen(floorId: activeFloorId, roomId: activeRoomId, userId: widget.userId)),
+                                  QrScannerScreen(floorId: activeFloorId, roomId: activeRoomId, userId: widget.userId, sessionId: widget.sessionId)),
                         );
                       },
                       icon: 'assets/icons/nodes/qr.svg',

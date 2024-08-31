@@ -46,9 +46,9 @@ class _CreateFloorPageState extends State<CreateFloorPage> {
       BackendRoutes.createFloor,
       headers: {
         'accept': 'application/json',
+        'Content-Type': 'application/json',
         'X-User-Id': widget.userId,
         'X-Session-Id': widget.sessionId,
-        'Content-Type': 'application/json',
       },
       body: json.encode({
         'alias': alias,

@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/padding.dart';
@@ -8,7 +7,7 @@ import 'package:StapesHome/widgets/button.dart';
 import 'package:StapesHome/widgets/input/dropdown.dart';
 import 'package:StapesHome/widgets/input/password.dart';
 import 'package:wifi_scan/wifi_scan.dart';
-import 'package:wifi_iot/wifi_iot.dart';
+// import 'package:wifi_iot/wifi_iot.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class WifiCredentials extends StatefulWidget {
@@ -27,7 +26,7 @@ class _WifiCredentialsState extends State<WifiCredentials> {
   String? _errorMessage;
   List<WiFiAccessPoint> _networks = [];
   WiFiAccessPoint? _selectedNetwork;
-  String? _originalSsid;
+  // String? _originalSsid;
   Timer? _connectionCheckTimer;
 
   @override
@@ -110,20 +109,22 @@ class _WifiCredentialsState extends State<WifiCredentials> {
 
     try {
       // Save the original network SSID
-      _originalSsid = await WiFiForIoTPlugin.getSSID();
+      // _originalSsid = await WiFiForIoTPlugin.getSSID();
 
       // Try connecting to the new Wi-Fi network
-      bool connected = await WiFiForIoTPlugin.connect(
-        _selectedNetwork!.ssid,
-        password: wifiPasswordController.text,
-        security: _selectedNetwork!.capabilities.contains("WPA") ? NetworkSecurity.WPA : NetworkSecurity.NONE,
-      );
+      // bool connected = await WiFiForIoTPlugin.connect(
+      //   _selectedNetwork!.ssid,
+      //   password: wifiPasswordController.text,
+      //   security: _selectedNetwork!.capabilities.contains("WPA") ? NetworkSecurity.WPA : NetworkSecurity.NONE,
+      // );
 
-      if (connected) {
-        _startConnectionCheck();
-      } else {
-        throw Exception('Failed to connect to Wi-Fi');
-      }
+      widget.onComplete(true, null, _selectedNetwork!.ssid, wifiPasswordController.text);
+
+      // if (connected) {
+      //   _startConnectionCheck();
+      // } else {
+      //   throw Exception('Failed to connect to Wi-Fi');
+      // }
     } catch (e) {
       setState(() {
         _isConnecting = false;
@@ -133,37 +134,37 @@ class _WifiCredentialsState extends State<WifiCredentials> {
     }
   }
 
-  void _startConnectionCheck() {
-    _connectionCheckTimer = Timer.periodic(const Duration(seconds: 8), (timer) async {
-      bool isConnected = await WiFiForIoTPlugin.isConnected();
+  // void _startConnectionCheck() {
+  //   _connectionCheckTimer = Timer.periodic(const Duration(seconds: 8), (timer) async {
+  //     bool isConnected = await WiFiForIoTPlugin.isConnected();
 
-      if (!isConnected) {
-        _revertToOriginalWifi();
-      } else {
-        _connectionCheckTimer?.cancel();
-        widget.onComplete(true, null, _selectedNetwork!.ssid, wifiPasswordController.text);
-      }
-    });
-  }
+  //     if (!isConnected) {
+  //       _revertToOriginalWifi();
+  //     } else {
+  //       _connectionCheckTimer?.cancel();
+  //       widget.onComplete(true, null, _selectedNetwork!.ssid, wifiPasswordController.text);
+  //     }
+  //   });
+  // }
 
-  Future<void> _revertToOriginalWifi() async {
-    if (_originalSsid != null) {
-      try {
-        await WiFiForIoTPlugin.connect(_originalSsid!, security: NetworkSecurity.NONE);
-        setState(() {
-          _isConnecting = false;
-          _connectionCheckTimer?.cancel();
-          _errorMessage = 'Failed to maintain connection to the new network. Reverted to the original network.';
-        });
-        widget.onComplete(false, _errorMessage, null, null);
-      } catch (e) {
-        setState(() {
-          _errorMessage = 'Failed to revert to the original Wi-Fi network: ${e.toString()}';
-        });
-        widget.onComplete(false, _errorMessage, null, null);
-      }
-    }
-  }
+  // Future<void> _revertToOriginalWifi() async {
+  //   if (_originalSsid != null) {
+  //     try {
+  //       await WiFiForIoTPlugin.connect(_originalSsid!, security: NetworkSecurity.NONE);
+  //       setState(() {
+  //         _isConnecting = false;
+  //         _connectionCheckTimer?.cancel();
+  //         _errorMessage = 'Failed to maintain connection to the new network. Reverted to the original network.';
+  //       });
+  //       widget.onComplete(false, _errorMessage, null, null);
+  //     } catch (e) {
+  //       setState(() {
+  //         _errorMessage = 'Failed to revert to the original Wi-Fi network: ${e.toString()}';
+  //       });
+  //       widget.onComplete(false, _errorMessage, null, null);
+  //     }
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {

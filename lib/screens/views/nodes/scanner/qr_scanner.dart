@@ -9,21 +9,22 @@ class QrScannerScreen extends StatefulWidget {
   final String floorId;
   final String roomId;
   final String userId;
+  final String sessionId;
 
   const QrScannerScreen({
     super.key,
     required this.floorId,
     required this.roomId,
     required this.userId,
+    required this.sessionId,
   });
-
   @override
   createState() => _QrScannerScreenState();
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
   late MobileScannerController _controller;
-  bool _flashOn = false;
+  bool _torchOn = false;
   bool _isProcessing = false;
   
 
@@ -50,9 +51,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
     }
   }
 
-  void _toggleFlash() {
+  void _toggleTorch() {
     setState(() {
-      _flashOn = !_flashOn;
+      _torchOn = !_torchOn;
     });
     try {
       _controller.toggleTorch();
@@ -74,29 +75,34 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
         _isProcessing = true;
         _controller.stop();
       });
-
       try {
         final Map<String, dynamic> jsonData = jsonDecode(barcodes.first.rawValue!);
 
         final String? deviceName = jsonData.containsKey('device_name') ? jsonData['device_name'] : null;
         final String? serviceUuid = jsonData.containsKey('service_uuid') ? jsonData['service_uuid'] : null;
-        final String? characteristicUuid =
-            jsonData.containsKey('characteristic_uuid') ? jsonData['characteristic_uuid'] : null;
+        final String? configCharacteristicUuid =
+            jsonData.containsKey('config_characteristic_uuid') ? jsonData['config_characteristic_uuid'] : null;
+        final String? versionCharacteristicUuid =
+            jsonData.containsKey('version_characteristic_uuid') ? jsonData['version_characteristic_uuid'] : null;
 
-        if (deviceName != null && serviceUuid != null && characteristicUuid != null) {
+        if (deviceName != null && serviceUuid != null && configCharacteristicUuid != null && versionCharacteristicUuid != null) {
           print('Device Name: $deviceName');
           print('Service UUID: $serviceUuid');
-          print('Characteristic UUID: $characteristicUuid');
+          print('Config Characteristic UUID: $configCharacteristicUuid');
+          print('Version Characteristic UUID: $versionCharacteristicUuid');
+
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => ProvisioningScreen(
                 deviceName: deviceName,
                 serviceUuid: serviceUuid,
-                characteristicUuid: characteristicUuid,
+                configCharacteristicUuid: configCharacteristicUuid,
+                versionCharacteristicUuid: versionCharacteristicUuid,
+                floorId: widget.floorId,
                 roomId: widget.roomId,
                 userId: widget.userId,
-                floorId: widget.floorId,
+                sessionId: widget.sessionId,
               ),
             ),
           );
@@ -106,7 +112,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
       } catch (e) {
         print('Error parsing QR code: $e');
       }
-
       setState(() {
         _isProcessing = false;
       });
@@ -124,15 +129,23 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
           ),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
           Positioned(
-            top: 40,
+            top: 45,
             right: 20,
-            child: IconButton(
-              icon: Icon(
-                _flashOn ? Icons.flash_on : Icons.flash_off,
-                color: Colors.white,
-                size: 32,
+            child: GestureDetector(
+              onTap: _toggleTorch,
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _torchOn ? Colors.white : Colors.transparent,
+                ),
+                child: Icon(
+                  _torchOn ? Icons.flashlight_on : Icons.flashlight_off,
+                  color: _torchOn ? Colors.black : Colors.white,
+                  size: 24,
+                ),
               ),
-              onPressed: _toggleFlash,
             ),
           ),
           Align(
