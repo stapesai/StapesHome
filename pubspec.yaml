@@ -28,6 +28,7 @@ dependencies:
   permission_handler: ^11.3.1
 
   flutter_svg: any
+  camera: ^0.11.0+2
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,7 +1,8 @@
 import 'dart:convert';
-import 'package:StapesHome/screens/views/nodes/provisioning.dart';
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:StapesHome/screens/views/nodes/provisioning.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scanner_overlay.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
 
@@ -23,6 +24,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   late MobileScannerController _controller;
   bool _torchOn = false;
   bool _isProcessing = false;
+  
 
   @override
   void initState() {
@@ -51,7 +53,18 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
     setState(() {
       _torchOn = !_torchOn;
     });
-    _controller.toggleTorch();
+    try {
+      _controller.toggleTorch();
+    } catch (e) {
+      if(mounted){
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
   }
 
   void _handleQRCode(List<Barcode> barcodes) {
@@ -126,7 +139,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: ScanInstructions(),
+            child: SimpleInstructionPanel(),
           ),
         ],
       ),

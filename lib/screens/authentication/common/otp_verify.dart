@@ -126,7 +126,7 @@ class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
       height: 56,
       textStyle:
           TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
-      margin: EdgeInsets.symmetric(horizontal: screenSize.width * 0.02),
+      margin: EdgeInsets.symmetric(horizontal: screenSize.width > 640 ? 8 : 2),
       decoration: BoxDecoration(
         gradient: LinearGradient(
           begin: Alignment(0.00, -1.00),
