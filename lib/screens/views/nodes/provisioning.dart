@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'package:StapesHome/screens/views/nodes/name_your_node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
@@ -10,27 +9,32 @@ import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/screens/views/nodes/wifi_credentials.dart';
+import 'package:StapesHome/screens/views/nodes/name_your_node.dart';
 
 class ProvisioningScreen extends StatefulWidget {
   final String deviceName;
   final String serviceUuid;
-  final String characteristicUuid;
+  final String configCharacteristicUuid;
+  final String versionCharacteristicUuid;
   final String floorId;
   final String roomId;
   final String userId;
+  final String sessionId;
 
   const ProvisioningScreen({
     super.key,
     required this.deviceName,
     required this.serviceUuid,
-    required this.characteristicUuid,
+    required this.configCharacteristicUuid,
+    required this.versionCharacteristicUuid,
     required this.floorId,
     required this.roomId,
     required this.userId,
+    required this.sessionId,
   });
 
   @override
-  createState() => ProvisioningScreenState();
+  ProvisioningScreenState createState() => ProvisioningScreenState();
 }
 
 class ProvisioningStep {
@@ -38,22 +42,27 @@ class ProvisioningStep {
   bool isCompleted;
   bool isCurrent;
 
-  ProvisioningStep({required this.title, this.isCompleted = false, this.isCurrent = false});
+  ProvisioningStep({
+    required this.title,
+    this.isCompleted = false,
+    this.isCurrent = false,
+  });
 }
 
 class ProvisioningScreenState extends State<ProvisioningScreen> {
   List<ProvisioningStep> steps = [
     ProvisioningStep(title: 'Pairing Bluetooth', isCurrent: true),
     ProvisioningStep(title: 'Enter Wi-Fi Credentials'),
-    ProvisioningStep(title: 'Sending Wi-Fi credentials'),
     ProvisioningStep(title: 'Name your node'),
-    ProvisioningStep(title: 'Checking provisioning status'),
+    ProvisioningStep(title: 'Sending Wi-Fi credentials'),
   ];
 
   int currentStepIndex = 0;
-  StreamSubscription? scanSubscription;
+  StreamSubscription<List<ScanResult>>? scanSubscription;
   BluetoothDevice? connectedDevice;
-  BluetoothCharacteristic? provisioningCharacteristic;
+  String? connectedDeviceMac;
+  BluetoothCharacteristic? configCharacteristic;
+  BluetoothCharacteristic? versionCharacteristic;
   String? wifiSsid;
   String? wifiPassword;
   String? nodeName;
@@ -78,12 +87,12 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     if (steps[0].isCompleted) {
       await _getWifiCredentials();
       if (steps[1].isCompleted) {
-        await _sendWifiCredentialsToDevice();
+        await _nameNode();
         if (steps[2].isCompleted) {
-          await _nameNode();
-          if (steps[3].isCompleted) {
-            await _checkProvisioningStatus();
-          }
+          await _sendWifiCredentialsToDevice();
+          // if (steps[3].isCompleted) {
+          //   await _checkProvisioningStatus();
+          // }
         }
       }
     }
@@ -110,20 +119,22 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
             try {
               await result.device.connect();
               connectedDevice = result.device;
+              connectedDeviceMac = result.device.remoteId.toString();
               List<BluetoothService> services = await result.device.discoverServices();
 
               for (BluetoothService service in services) {
                 if (service.uuid.toString() == widget.serviceUuid) {
                   for (BluetoothCharacteristic characteristic in service.characteristics) {
-                    if (characteristic.uuid.toString() == widget.characteristicUuid) {
-                      provisioningCharacteristic = characteristic;
-                      break;
+                    if (characteristic.uuid.toString() == widget.configCharacteristicUuid) {
+                      configCharacteristic = characteristic;
+                    } else if (characteristic.uuid.toString() == widget.versionCharacteristicUuid) {
+                      versionCharacteristic = characteristic;
                     }
                   }
                 }
               }
 
-              if (provisioningCharacteristic != null) {
+              if (configCharacteristic != null && versionCharacteristic != null) {
                 if (mounted) {
                   setState(() {
                     steps[0].isCompleted = true;
@@ -134,7 +145,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
                 }
                 return;
               } else {
-                throw Exception('Provisioning characteristic not found');
+                throw Exception('Required characteristics not found');
               }
             } catch (e) {
               print('Error connecting to the device: $e');
@@ -152,7 +163,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     }
   }
 
-// Step 2: Get Wi-Fi credentials from user
+  // Step 2: Get Wi-Fi credentials from user
   Future<void> _getWifiCredentials() async {
     if (!mounted) return;
 
@@ -190,49 +201,51 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
 
   // Step 3: Send Wi-Fi credentials to the device
   Future<void> _sendWifiCredentialsToDevice() async {
-    if (!mounted || provisioningCharacteristic == null) return;
+    if (!mounted || configCharacteristic == null || versionCharacteristic == null) return;
 
     setState(() {
-      currentStepIndex = 2;
-      steps[2].isCurrent = true;
+      currentStepIndex = 3;
+      steps[3].isCurrent = true;
     });
 
     try {
-      // Get MQTT broker details
+      List<int> response = await versionCharacteristic!.read();
+      String hardwareInfo = utf8.decode(response);
+      print('Received hardware info: $hardwareInfo');
+
+      if (hardwareInfo.isEmpty || !hardwareInfo.contains('=')) {
+        throw Exception('Invalid or empty hardware info received');
+      }
+
+      Map<String, String> hardwareData = Map.fromEntries(
+        hardwareInfo.split(';').map((item) {
+          List<String> keyValue = item.split('=');
+          return MapEntry(keyValue[0], keyValue[1]);
+        }),
+      );
+
       final mqttDetails = await _getMqttBrokerDetails();
 
-      // Prepare data to send to the device
-      String data = 'WIFI_SSID=$wifiSsid;WIFI_PASSWORD=$wifiPassword;'
-          'MQTT_BROKER=${mqttDetails['broker']};MQTT_PORT=${mqttDetails['port']};'
-          'MQTT_PASSWORD=${mqttDetails['password']};USER_ID=${widget.userId};HOME_ID=${mqttDetails['homeId']}';
+      String data = 'WIFI_SSID=$wifiSsid;'
+          'WIFI_PASSWORD=$wifiPassword;'
+          'MQTT_BROKER=${mqttDetails['host']};'
+          'MQTT_PORT=${mqttDetails['port']};'
+          'MQTT_USERNAME=test;'
+          'MQTT_PASSWORD=test;'
+          'USER_ID=${widget.userId}';
 
       List<int> bytes = utf8.encode(data);
 
       // Send data to the device
-      await provisioningCharacteristic!.write(bytes, withoutResponse: true);
+      await configCharacteristic!.write(bytes, withoutResponse: true);
       print('Data sent to the device: $data');
 
-      // Read response from the device
-      List<int> response = await provisioningCharacteristic!.read();
-      String hardwareInfo = utf8.decode(response);
-      print('Received hardware info: $hardwareInfo');
-
-      // Parse hardware info
-      Map<String, String> hardwareData = {};
-      hardwareInfo.split(';').forEach((item) {
-        List<String> keyValue = item.split('=');
-        if (keyValue.length == 2) {
-          hardwareData[keyValue[0]] = keyValue[1];
-        }
-      });
-
-      // Create node in the backend
       await _createNodeInBackend(hardwareData);
 
       if (mounted) {
         setState(() {
-          steps[2].isCompleted = true;
-          steps[2].isCurrent = false;
+          steps[3].isCompleted = true;
+          steps[3].isCurrent = false;
           currentStepIndex++;
           steps[currentStepIndex].isCurrent = true;
         });
@@ -248,8 +261,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     if (!mounted) return;
 
     setState(() {
-      currentStepIndex = 3;
-      steps[3].isCurrent = true;
+      currentStepIndex++;
+      steps[2].isCurrent = true;
     });
 
     final result = await Navigator.push(
@@ -266,37 +279,34 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     if (result != null && result is String) {
       nodeName = result;
       setState(() {
-        steps[3].isCompleted = true;
-        steps[3].isCurrent = false;
-        currentStepIndex++;
-        steps[currentStepIndex].isCurrent = true;
+        steps[2].isCompleted = true;
+        steps[2].isCurrent = false;
       });
     } else {
       _showErrorSnackBar('Please provide a name for your node');
       await _nameNode(); // Retry naming the node
     }
   }
-
   // Step 5: Check provisioning status
-  Future<void> _checkProvisioningStatus() async {
-    if (!mounted) return;
+  // Future<void> _checkProvisioningStatus() async {
+  //   if (!mounted) return;
 
-    setState(() {
-      currentStepIndex = 3;
-      steps[3].isCurrent = true;
-    });
+  //   setState(() {
+  //     currentStepIndex = 3;
+  //     steps[3].isCurrent = true;
+  //   });
 
-    // TODO: Implement actual provisioning status check
-    await Future.delayed(Duration(seconds: 3));
+  //   // TODO: Implement actual provisioning status check
+  //   await Future.delayed(Duration(seconds: 3));
 
-    if (mounted) {
-      setState(() {
-        steps[3].isCompleted = true;
-        steps[3].isCurrent = false;
-      });
-      // TODO: Navigate to success screen or handle completion
-    }
-  }
+  //   if (mounted) {
+  //     setState(() {
+  //       steps[3].isCompleted = true;
+  //       steps[3].isCurrent = false;
+  //     });
+  //     // TODO: Navigate to success screen or handle completion
+  //   }
+  // }
 
   // Helper method to get MQTT broker details
   Future<Map<String, String>> _getMqttBrokerDetails() async {
@@ -306,13 +316,13 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
         headers: {
           'accept': 'application/json',
           'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
         },
       );
 
       if (response.statusCode == 200) {
-        final Map<String, String> data = json.decode(response.body);
-        print('MQTT Broker details: $data');
-        return data;
+        final Map<String, dynamic> data = json.decode(response.body);
+        return data.map((key, value) => MapEntry(key, value.toString()));
       } else {
         throw Exception('Failed to get MQTT broker details: ${response.statusCode}');
       }
@@ -327,14 +337,20 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
     try {
       final response = await http.post(
         BackendRoutes.createNode,
-        body: {
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+        body: json.encode({
           'room_id': widget.roomId,
           'name': nodeName,
           'hardware_chip': hardwareData['HARDWARE_CHIP'],
           'hardware_version': hardwareData['HARDWARE_VERSION'],
-          'hardware_mac_address': connectedDevice?.remoteId.toString(),
+          'hardware_mac_address': connectedDeviceMac,
           'firmware_version': hardwareData['FIRMWARE_VERSION'],
-        },
+        }),
       );
 
       if (response.statusCode == 201) {

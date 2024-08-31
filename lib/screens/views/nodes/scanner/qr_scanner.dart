@@ -9,12 +9,14 @@ class QrScannerScreen extends StatefulWidget {
   final String floorId;
   final String roomId;
   final String userId;
+  final String sessionId;
 
   const QrScannerScreen({
     super.key,
     required this.floorId,
     required this.roomId,
     required this.userId,
+    required this.sessionId,
   });
 
   @override
@@ -68,23 +70,29 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
 
         final String? deviceName = jsonData.containsKey('device_name') ? jsonData['device_name'] : null;
         final String? serviceUuid = jsonData.containsKey('service_uuid') ? jsonData['service_uuid'] : null;
-        final String? characteristicUuid =
-            jsonData.containsKey('characteristic_uuid') ? jsonData['characteristic_uuid'] : null;
+        final String? configCharacteristicUuid =
+            jsonData.containsKey('config_characteristic_uuid') ? jsonData['config_characteristic_uuid'] : null;
+        final String? versionCharacteristicUuid =
+            jsonData.containsKey('version_characteristic_uuid') ? jsonData['version_characteristic_uuid'] : null;
 
-        if (deviceName != null && serviceUuid != null && characteristicUuid != null) {
+        if (deviceName != null && serviceUuid != null && configCharacteristicUuid != null && versionCharacteristicUuid != null) {
           print('Device Name: $deviceName');
           print('Service UUID: $serviceUuid');
-          print('Characteristic UUID: $characteristicUuid');
+          print('Config Characteristic UUID: $configCharacteristicUuid');
+          print('Version Characteristic UUID: $versionCharacteristicUuid');
+
 
           Navigator.of(context).pushReplacement(
             MaterialPageRoute(
               builder: (context) => ProvisioningScreen(
                 deviceName: deviceName,
                 serviceUuid: serviceUuid,
-                characteristicUuid: characteristicUuid,
+                configCharacteristicUuid: configCharacteristicUuid,
+                versionCharacteristicUuid: versionCharacteristicUuid,
+                floorId: widget.floorId,
                 roomId: widget.roomId,
                 userId: widget.userId,
-                floorId: widget.floorId,
+                sessionId: widget.sessionId,
               ),
             ),
           );
