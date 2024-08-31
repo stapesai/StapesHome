@@ -49,16 +49,13 @@ flutter:
   # fonts:
 
 flutter_icons:
-  image_path: "assets/icons/logo.png"
+  image_path: "assets/logo.png"
   android: true
   ios: true
   remove_alpha_ios: true
-  adaptive_icon_background: "#161616"
-  adaptive_icon_foreground: "assets/icons/logo.png"
-  # Optionally specify the icon size for Android (in dp) - defaults are usually sufficient
-  android_icon_size: 48
-  # For iOS, you might consider adjusting the icon size for different devices (defaults are usually sufficient)
-  ios_icon_size: 40
+  # adaptive_icon_background: "#161616"
+  # adaptive_icon_foreground: "assets/logo.png"
+  # adaptive_icon_padding: true
 
 flutter_lints:
   include: package:flutter_lints/recommended.yaml
