@@ -8,7 +8,7 @@ class LightComponent extends StatefulWidget {
   const LightComponent({super.key, required this.device});
 
   @override
-  _LightComponentState createState() => _LightComponentState();
+  createState() => _LightComponentState();
 }
 
 class _LightComponentState extends State<LightComponent> {

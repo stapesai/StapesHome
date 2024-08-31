@@ -1,7 +1,7 @@
 import 'dart:convert';
-import 'package:StapesHome/widgets/popup.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+import 'package:StapesHome/widgets/popup.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/models.dart';
@@ -321,7 +321,17 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
   Widget _buildFloorList(double maxWidth) {
     if (isFloorsLoading) {
-      return const CircularProgressIndicator();
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: FloorRoomNameButtonSkeleton(width: 80, height: 30),
+              ),
+            ),
+          ));
     }
     if (errorMessageFloors != null) {
       return Text(errorMessageFloors!, style: const TextStyle(color: Colors.red));
@@ -346,8 +356,19 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
   Widget _buildRoomList(double maxWidth) {
     if (isRoomsLoading) {
-      return const CircularProgressIndicator();
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: FloorRoomNameButtonSkeleton(width: 80, height: 30),
+              ),
+            ),
+          ));
     }
+
     if (errorMessageRooms != null) {
       return Text(errorMessageRooms!, style: const TextStyle(color: Colors.red));
     }
@@ -432,6 +453,75 @@ class FloorRoomNameButton extends StatelessWidget {
             ),
         ],
       ),
+    );
+  }
+}
+
+class FloorRoomNameButtonSkeleton extends StatefulWidget {
+  final double width;
+  final double height;
+
+  const FloorRoomNameButtonSkeleton({
+    super.key,
+    this.width = 80,
+    this.height = 30,
+  });
+
+  @override
+  createState() => _FloorRoomNameButtonSkeletonState();
+}
+
+class _FloorRoomNameButtonSkeletonState extends State<FloorRoomNameButtonSkeleton> with SingleTickerProviderStateMixin {
+  late AnimationController _controller;
+  late Animation<Color?> _colorAnimation;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    )..repeat(reverse: true);
+
+    _colorAnimation = ColorTween(
+      begin: Colors.grey.withOpacity(0.3),
+      end: Colors.grey.withOpacity(0.5),
+    ).animate(_controller);
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _colorAnimation,
+      builder: (context, child) {
+        return Column(
+          children: [
+            Container(
+              width: widget.width,
+              height: widget.height,
+              decoration: BoxDecoration(
+                color: _colorAnimation.value,
+                borderRadius: BorderRadius.circular(4),
+              ),
+            ),
+            SizedBox(height: 4),
+            Container(
+              width: 6,
+              height: 6,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: _colorAnimation.value,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

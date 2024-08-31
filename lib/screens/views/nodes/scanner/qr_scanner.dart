@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:StapesHome/screens/views/nodes/provisioning.dart';
