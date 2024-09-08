@@ -6,14 +6,12 @@ import 'package:StapesHome/screens/views/nodes/scanner/scanner_overlay.dart';
 import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
 
 class QrScannerScreen extends StatefulWidget {
-  final String floorId;
   final String roomId;
   final String userId;
   final String sessionId;
 
   const QrScannerScreen({
     super.key,
-    required this.floorId,
     required this.roomId,
     required this.userId,
     required this.sessionId,
@@ -99,7 +97,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
                 serviceUuid: serviceUuid,
                 configCharacteristicUuid: configCharacteristicUuid,
                 versionCharacteristicUuid: versionCharacteristicUuid,
-                floorId: widget.floorId,
                 roomId: widget.roomId,
                 userId: widget.userId,
                 sessionId: widget.sessionId,

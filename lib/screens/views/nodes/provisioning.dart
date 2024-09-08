@@ -16,7 +16,6 @@ class ProvisioningScreen extends StatefulWidget {
   final String serviceUuid;
   final String configCharacteristicUuid;
   final String versionCharacteristicUuid;
-  final String floorId;
   final String roomId;
   final String userId;
   final String sessionId;
@@ -27,7 +26,6 @@ class ProvisioningScreen extends StatefulWidget {
     required this.serviceUuid,
     required this.configCharacteristicUuid,
     required this.versionCharacteristicUuid,
-    required this.floorId,
     required this.roomId,
     required this.userId,
     required this.sessionId,
