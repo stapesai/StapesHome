@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
-import 'package:StapesHome/widgets/scan_add_btn.dart';
+import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
 import 'package:StapesHome/widgets/skeletons/node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
