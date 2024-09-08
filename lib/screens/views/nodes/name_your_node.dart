@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:StapesHome/widgets/input/textfeild.dart';
+import 'package:StapesHome/widgets/input/textfield.dart';
 import 'package:StapesHome/widgets/button.dart';
 
 class NodeNamingScreen extends StatefulWidget {
