@@ -29,6 +29,7 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
   String? _selectedRoomId;
   String? _selectedNodeId;
   String? _selectedDeviceType;
+  int? _selectedChannelId;
 
   final TextEditingController deviceNameController = TextEditingController();
   final TextEditingController channelIdController = TextEditingController();
@@ -36,7 +37,8 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
   List<Floor> floors = [];
   List<Room> rooms = [];
   List<Node> nodes = [];
-  final List<String> _deviceTypes = ['Light'];
+  final List<String> _deviceTypes = ['light', 'fan'];
+  final List<int> _channelIds = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
 
   bool isLoading = false;
   String? errorMessage;
@@ -79,7 +81,6 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
           isLoading = false;
         });
       }
-      
     }
   }
 
@@ -144,6 +145,43 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
     } catch (e) {
       setState(() {
         errorMessage = 'Error fetching nodes: $e';
+        isLoading = false;
+      });
+    }
+  }
+
+  Future<void> _createDevice() async {
+    setState(() {
+      isLoading = true;
+      errorMessage = null;
+    });
+
+    try {
+      final response = await http.post(
+        BackendRoutes.createEntity,
+        headers: {
+          'accept': 'application/json',
+          'content-type': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+        body: json.encode({
+          'node_id': _selectedNodeId,
+          'name': deviceNameController.text,
+          'type': _selectedDeviceType,
+          'channel_id': _selectedChannelId,
+        }),
+      );
+
+      if (response.statusCode == 201) {
+        // Device created successfully
+        // You can add the logic to navigate to the devices page here
+      } else {
+        throw Exception('Failed to create device: ${response.statusCode}');
+      }
+    } catch (e) {
+      setState(() {
+        errorMessage = 'Error creating device: $e';
         isLoading = false;
       });
     }
@@ -279,9 +317,20 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                             },
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          NTextField(
+                          NDropdown(
                             hintText: 'Channel Id',
-                            controller: channelIdController,
+                            value: _selectedChannelId,
+                            items: _channelIds.map((int channelId) {
+                              return DropdownMenuItem<int>(
+                                value: channelId,
+                                child: Text(channelId.toString()),
+                              );
+                            }).toList(),
+                            onChanged: (int? newValue) {
+                              setState(() {
+                                _selectedChannelId = newValue;
+                              });
+                            },
                           ),
                           SizedBox(height: screenSize.height * 0.06),
                         ],
@@ -297,22 +346,12 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                     duration: Duration(milliseconds: 300),
                     curve: Curves.easeOut,
                     margin: EdgeInsets.only(
-                      bottom: keyboardHeight > 0
-                                ? keyboardHeight + screenSize.height * 0.02
-                                : screenSize.height * 0.1,
+                      bottom: keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
                     ),
                     child: Center(
                       child: CustomButton(
                         text: "Create",
-                        onPressed: () {
-                          
-                        },
-                        // onPressed: isLoading
-                        //     ? null
-                        //     : () {
-                        //         // Handle create button press
-                        //         // You can add the logic to create a new device here
-                        //       },
+                        onPressed: _createDevice,
                       ),
                     ),
                   ),

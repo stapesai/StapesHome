@@ -228,8 +228,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
           'WIFI_PASSWORD=$wifiPassword;'
           'MQTT_BROKER=${mqttDetails['host']};'
           'MQTT_PORT=${mqttDetails['port']};'
-          'MQTT_USERNAME=test;'
-          'MQTT_PASSWORD=test;'
+          'MQTT_USERNAME=${connectedDeviceMac?.replaceAll(':', '_')};'
+          'MQTT_PASSWORD=${connectedDeviceMac?.replaceAll(':', '_')};'
           'USER_ID=${widget.userId}';
 
       List<int> bytes = utf8.encode(data);
@@ -244,8 +244,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
         setState(() {
           steps[3].isCompleted = true;
           steps[3].isCurrent = false;
-          currentStepIndex++;
-          steps[currentStepIndex].isCurrent = true;
+          // currentStepIndex++;
+          // steps[currentStepIndex].isCurrent = true;
         });
       }
     } catch (e) {

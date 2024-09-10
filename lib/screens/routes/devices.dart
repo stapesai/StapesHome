@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:StapesHome/widgets/skeletons/devices.dart';
+import 'package:StapesHome/widgets/skeletons/device.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
