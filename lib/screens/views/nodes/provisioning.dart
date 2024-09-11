@@ -58,7 +58,6 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
   int currentStepIndex = 0;
   StreamSubscription<List<ScanResult>>? scanSubscription;
   BluetoothDevice? connectedDevice;
-  String? connectedDeviceMac;
   BluetoothCharacteristic? configCharacteristic;
   BluetoothCharacteristic? versionCharacteristic;
   String? wifiSsid;
@@ -117,7 +116,6 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
             try {
               await result.device.connect();
               connectedDevice = result.device;
-              connectedDeviceMac = result.device.remoteId.toString();
               List<BluetoothService> services = await result.device.discoverServices();
 
               for (BluetoothService service in services) {
@@ -228,8 +226,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
           'WIFI_PASSWORD=$wifiPassword;'
           'MQTT_BROKER=${mqttDetails['host']};'
           'MQTT_PORT=${mqttDetails['port']};'
-          'MQTT_USERNAME=${connectedDeviceMac?.replaceAll(':', '_')};'
-          'MQTT_PASSWORD=${connectedDeviceMac?.replaceAll(':', '_')};'
+          'MQTT_USERNAME=${hardwareData['HARDWARE_MAC_ADDRESS']};'
+          'MQTT_PASSWORD=${hardwareData['HARDWARE_MAC_ADDRESS']};'
           'USER_ID=${widget.userId}';
 
       List<int> bytes = utf8.encode(data);
@@ -346,7 +344,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
           'name': nodeName,
           'hardware_chip': hardwareData['HARDWARE_CHIP'],
           'hardware_version': hardwareData['HARDWARE_VERSION'],
-          'hardware_mac_address': connectedDeviceMac,
+          'hardware_mac_address': hardwareData['HARDWARE_MAC_ADDRESS'],
           'firmware_version': hardwareData['FIRMWARE_VERSION'],
         }),
       );
