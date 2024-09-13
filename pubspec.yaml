@@ -9,6 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  # image_picker: ^1.1.2
   flutter_blue_plus: ^1.32.12
   dotted_border: ^2.1.0
   http: ^1.2.1
