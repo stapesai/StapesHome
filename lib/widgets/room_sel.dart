@@ -2,13 +2,13 @@ import 'dart:convert';
 import 'package:StapesHome/widgets/skeletons/floor_room_name.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:StapesHome/widgets/popup.dart';
+// import 'package:StapesHome/widgets/popup.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/screens/views/floor_room_selector/create_floor_page.dart';
 import 'package:StapesHome/screens/views/floor_room_selector/create_room_page.dart';
-
+import 'package:StapesHome/widgets/bottom_sheet.dart'; 
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;
   final Function(String) onFloorSelected;
@@ -263,161 +263,28 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
   }
 
   void _showOptionsSheet(BuildContext context, String itemType, String itemId, String itemName) {
-    showModalBottomSheet(
+    List<BottomSheetOption> options = [
+      // BottomSheetOption(
+      //   text: 'Rename',
+      //   icon: Icons.edit,
+      //   color: Colors.blue,
+      //   onTap: () => _showRenameDialog(context, itemType, itemId, itemName),
+      // ),
+      BottomSheetOption(
+        text: 'Delete',
+        icon: Icons.delete,
+        color: Colors.red,
+        onTap: () => _showDeleteConfirmationDialog(context, itemType, itemId, itemName),
+      ),
+    ];
+
+    showOptionsBottomSheet(
       context: context,
-      isScrollControlled: true,
-      backgroundColor: Colors.transparent,
-      builder: (BuildContext context) {
-        return GestureDetector(
-          onTap: () {
-            Navigator.pop(context); // This will close the bottom sheet when tapping outside
-          },
-          behavior: HitTestBehavior.opaque, // Ensure it detects taps outside the bottom sheet
-          child: DraggableScrollableSheet(
-            initialChildSize: 0.3, // Use a percentage of the screen height
-            minChildSize: 0.2, // Minimum size is 20% of the screen height
-            maxChildSize: 0.5, // Maximum size is 50% of the screen height
-            builder: (BuildContext context, ScrollController scrollController) {
-              final screenHeight = MediaQuery.of(context).size.height;
-              final fontSize = screenHeight * 0.025; // 2.5% of the screen height
-              return Container(
-                decoration: BoxDecoration(
-                  color: AppColor.instructionPanelColor,
-                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(height: screenHeight * 0.015), // 1.5% of the screen height
-                    Center(
-                      child: Container(
-                        width: screenHeight * 0.05, // 5% of the screen height
-                        height: screenHeight * 0.00625, // 0.625% of the screen height
-                        decoration: BoxDecoration(
-                          color: Colors.grey,
-                          borderRadius: BorderRadius.circular(screenHeight * 0.003125), // 0.3125% of the screen height
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: screenHeight * 0.025), // 2.5% of the screen height
-                    Text(
-                      'Options for $itemName',
-                      style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.white),
-                      textAlign: TextAlign.center,
-                    ),
-                    SizedBox(height: screenHeight * 0.025), // 2.5% of the screen height
-                    // ListTile(
-                    //   leading: Icon(Icons.edit, color: const Color.fromARGB(255, 159, 189, 223), size: fontSize * 1.5), // 1.5x the font size
-                    //   title: Text('Rename', style: TextStyle(fontSize: fontSize, color: const Color.fromARGB(255, 159, 189, 223))),
-                    //   onTap: () {
-                    //     Navigator.pop(context);
-                    //     _showRenameDialog(context, itemType, itemId, itemName);
-                    //   },
-                    // ),
-                    ListTile(
-                      leading: Icon(Icons.delete, color: Colors.red, size: fontSize * 1.5), // 1.5x the font size
-                      title: Text('Delete', style: TextStyle(fontSize: fontSize, color: Colors.red)),
-                      onTap: () {
-                        Navigator.pop(context);
-                        _showDeleteConfirmationDialog(context, itemType, itemId, itemName);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            },
-          ),
-        );
-      },
+      itemName: itemName,
+      options: options,
     );
   }
 
-// void _showDeleteBottomSheet(BuildContext context, String itemType, String itemId, String itemName) {
-//   showModalBottomSheet(
-//     context: context,
-//     backgroundColor: Colors.transparent,
-//     builder: (BuildContext context) {
-//       final screenHeight = MediaQuery.of(context).size.height;
-//       final fontSize = screenHeight * 0.025; // 2.5% of the screen height
-//       return DraggableScrollableSheet(
-//         initialChildSize: 0.3,
-//         minChildSize: 0.2,
-//         maxChildSize: 0.5,
-//         builder: (BuildContext context, ScrollController scrollController) {
-//           return Container(
-//             decoration: BoxDecoration(
-//               color: Colors.white,
-//               borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-//             ),
-//             padding: EdgeInsets.all(screenHeight * 0.02),
-//             child: Column(
-//               mainAxisSize: MainAxisSize.min,
-//               children: [
-//                 Text(
-//                   "Are you sure you want to delete $itemName?",
-//                   style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold, color: Colors.black),
-//                   textAlign: TextAlign.center,
-//                 ),
-//                 SizedBox(height: screenHeight * 0.025), // 2.5% of the screen height
-//                 Row(
-//                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//                   children: [
-//                     TextButton(
-//                       onPressed: () {
-//                         Navigator.pop(context);
-//                       },
-//                       child: Text("Cancel", style: TextStyle(fontSize: fontSize, color: Colors.black)),
-//                     ),
-//                     TextButton(
-//                       onPressed: () {
-//                         Navigator.pop(context);
-//                         _showDeleteConfirmationDialog(context, itemType, itemId, itemName);
-//                       },
-//                       child: Text("Delete", style: TextStyle(fontSize: fontSize, color: Colors.red)),
-//                     ),
-//                   ],
-//                 ),
-//               ],
-//             ),
-//           );
-//         },
-//       );
-//     },
-//   );
-// }
-
-// void _showRenameDialog(BuildContext context, String itemType, String itemId, String itemName) {
-//   TextEditingController _controller = TextEditingController();
-//   showDialog(
-//     context: context,
-//     builder: (BuildContext context) {
-//       return AlertDialog(
-//         title: Text("Enter the new name for the $itemType"),
-//         content: TextField(
-//           controller: _controller,
-//           decoration: InputDecoration(hintText: "New name"),
-//         ),
-//         actions: [
-//           TextButton(
-//             onPressed: () {
-//               Navigator.pop(context);
-//             },
-//             child: Text("Cancel"),
-//           ),
-//           TextButton(
-//             onPressed: () {
-//               String newName = _controller.text;
-//               // Handle renaming logic here
-//               Navigator.pop(context);
-//               // Show confirmation or proceed with name change
-//             },
-//             child: Text("Change"),
-//           ),
-//         ],
-//       );
-//     },
-//   );
-// }
   // Show delete confirmation dialog
   void _showDeleteConfirmationDialog(BuildContext context, String itemType, String itemId, String itemName) {
     showDialog(
