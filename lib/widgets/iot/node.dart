@@ -57,7 +57,7 @@ class NodeComponent extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    '${_getLinkedDevicesCount(node)} devices linked',
+                    '${node.numEntities} devices linked',
                     style: TextStyle(
                       color: Colors.white.withOpacity(0.5),
                       fontSize: 9.82,
@@ -78,11 +78,5 @@ class NodeComponent extends StatelessWidget {
         ],
       ),
     );
-  }
-
-  int _getLinkedDevicesCount(Node node) {
-    // TODO: Implement logic to get the count of linked devices
-    // For now, we'll return a dummy value
-    return node.name.contains('Bedside') ? 4 : (node.name.contains('Living') ? 5 : 3);
   }
 }

@@ -38,10 +38,11 @@ class Node {
   final String roomId;
   final String name;
   final String hardwareChip;
-  final double hardwareVersion;
+  final String hardwareVersion;
   final String hardwareMacAddress;
   final String firmwareVersion;
   final String id;
+  final int numEntities;
 
   Node({
     required this.roomId,
@@ -51,6 +52,7 @@ class Node {
     required this.hardwareMacAddress,
     required this.firmwareVersion,
     required this.id,
+    required this.numEntities,
   });
 
   factory Node.fromJson(Map<String, dynamic> json) {
@@ -62,6 +64,7 @@ class Node {
       hardwareMacAddress: json['hardware_mac_address'],
       firmwareVersion: json['firmware_version'],
       id: json['id'],
+      numEntities: json['num_entities'],
     );
   }
 }

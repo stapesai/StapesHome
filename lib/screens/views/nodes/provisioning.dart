@@ -16,7 +16,6 @@ class ProvisioningScreen extends StatefulWidget {
   final String serviceUuid;
   final String configCharacteristicUuid;
   final String versionCharacteristicUuid;
-  final String floorId;
   final String roomId;
   final String userId;
   final String sessionId;
@@ -27,7 +26,6 @@ class ProvisioningScreen extends StatefulWidget {
     required this.serviceUuid,
     required this.configCharacteristicUuid,
     required this.versionCharacteristicUuid,
-    required this.floorId,
     required this.roomId,
     required this.userId,
     required this.sessionId,
@@ -60,7 +58,6 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
   int currentStepIndex = 0;
   StreamSubscription<List<ScanResult>>? scanSubscription;
   BluetoothDevice? connectedDevice;
-  String? connectedDeviceMac;
   BluetoothCharacteristic? configCharacteristic;
   BluetoothCharacteristic? versionCharacteristic;
   String? wifiSsid;
@@ -119,7 +116,6 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
             try {
               await result.device.connect();
               connectedDevice = result.device;
-              connectedDeviceMac = result.device.remoteId.toString();
               List<BluetoothService> services = await result.device.discoverServices();
 
               for (BluetoothService service in services) {
@@ -230,8 +226,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
           'WIFI_PASSWORD=$wifiPassword;'
           'MQTT_BROKER=${mqttDetails['host']};'
           'MQTT_PORT=${mqttDetails['port']};'
-          'MQTT_USERNAME=test;'
-          'MQTT_PASSWORD=test;'
+          'MQTT_USERNAME=${hardwareData['HARDWARE_MAC_ADDRESS']};'
+          'MQTT_PASSWORD=${hardwareData['HARDWARE_MAC_ADDRESS']};'
           'USER_ID=${widget.userId}';
 
       List<int> bytes = utf8.encode(data);
@@ -246,8 +242,8 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
         setState(() {
           steps[3].isCompleted = true;
           steps[3].isCurrent = false;
-          currentStepIndex++;
-          steps[currentStepIndex].isCurrent = true;
+          // currentStepIndex++;
+          // steps[currentStepIndex].isCurrent = true;
         });
       }
     } catch (e) {
@@ -348,7 +344,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
           'name': nodeName,
           'hardware_chip': hardwareData['HARDWARE_CHIP'],
           'hardware_version': hardwareData['HARDWARE_VERSION'],
-          'hardware_mac_address': connectedDeviceMac,
+          'hardware_mac_address': hardwareData['HARDWARE_MAC_ADDRESS'],
           'firmware_version': hardwareData['FIRMWARE_VERSION'],
         }),
       );

@@ -15,8 +15,9 @@ class AuthRoutes {
   static final Uri requestResetPassword = Uri.parse('${Config.protocol}://$baseUrl/auth/reset-password/request-reset');
   static final Uri completeResetPassword = Uri.parse('${Config.protocol}://$baseUrl/auth/reset-password/complete-reset');
 
-  // Verify OTP
-  static final Uri verifyOtp = Uri.parse('${Config.protocol}://$baseUrl/auth/verify_otp');
+  // OTP
+  static final Uri verifyOtp = Uri.parse('${Config.protocol}://$baseUrl/auth/otp/verify');
+  static final Uri resendOtp = Uri.parse('${Config.protocol}://$baseUrl/auth/otp/resend');
 
   // Logout
   static final Uri logoutUser = Uri.parse('${Config.protocol}://$baseUrl/auth/logout');
