@@ -10,11 +10,11 @@ class DeleteConfirmationDialog extends StatelessWidget {
 
   // TODO: make this a generic popup
   const DeleteConfirmationDialog({
-    Key? key,
+    super.key,
     required this.itemType,
     required this.itemName,
     required this.onDelete,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -1,4 +1,7 @@
+// File: lib/widgets/floor_room_sel.dart
+
 import 'dart:convert';
+import 'package:StapesHome/widgets/hold_bottom_sheet.dart';
 import 'package:StapesHome/widgets/skeletons/floor_room_name.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -262,21 +265,41 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     }
   }
 
+  void _editFloor(Floor floor) {
+    // Implement edit floor functionality
+    print('Edit floor: ${floor.alias}');
+  }
+
+  void _editRoom(Room room) {
+    // Implement edit room functionality
+    print('Edit room: ${room.name}');
+  }
+
   // Show delete confirmation dialog
   void _showDeleteConfirmationDialog(BuildContext context, String itemType, String itemId, String itemName) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return DeleteConfirmationDialog(
-          itemType: itemType,
-          itemName: itemName,
-          onDelete: () {
-            if (itemType == 'Floor') {
-              _deleteFloor(itemId);
-            } else if (itemType == 'Room') {
-              _deleteRoom(itemId);
-            }
-          },
+        return AlertDialog(
+          title: Text('Delete $itemType'),
+          content: Text('Are you sure you want to delete $itemName?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (itemType == 'Floor') {
+                  _deleteFloor(itemId);
+                } else if (itemType == 'Room') {
+                  _deleteRoom(itemId);
+                }
+              },
+            ),
+          ],
         );
       },
     );
@@ -320,6 +343,23 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     );
   }
 
+  void _showFloorOptions(Floor floor) {
+    List<HoldBottomSheet> options = [
+      HoldBottomSheet(
+        icon: Icons.edit,
+        text: 'Edit Floor',
+        onTap: () => _editFloor(floor),
+      ),
+      HoldBottomSheet(
+        icon: Icons.delete,
+        text: 'Delete Floor',
+        onTap: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
+      ),
+    ];
+
+    showCustomBottomSheet(context, options);
+  }
+
   Widget _buildFloorList(double maxWidth) {
     if (isFloorsLoading) {
       return SingleChildScrollView(
@@ -347,12 +387,30 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: floor.alias,
               isActive: activeFloorId == floor.id,
               onTap: () => setActiveFloor(floor.id),
-              onLongPress: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
+              // onLongPress: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
+              onLongPress: () => _showFloorOptions(floor),
             ),
           );
         }).toList(),
       ),
     );
+  }
+
+  void _showRoomOptions(Room room) {
+    List<HoldBottomSheet> options = [
+      HoldBottomSheet(
+        icon: Icons.edit,
+        text: 'Edit Room',
+        onTap: () => _editRoom(room),
+      ),
+      HoldBottomSheet(
+        icon: Icons.delete,
+        text: 'Delete Room',
+        onTap: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
+      ),
+    ];
+
+    showCustomBottomSheet(context, options);
   }
 
   Widget _buildRoomList(double maxWidth) {
@@ -383,7 +441,8 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: room.name,
               isActive: activeRoomId == room.id,
               onTap: () => setActiveRoom(room.id),
-              onLongPress: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
+              // onLongPress: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
+              onLongPress: () => _showRoomOptions(room),
             ),
           );
         }).toList(),
