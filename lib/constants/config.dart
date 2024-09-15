@@ -3,7 +3,7 @@
 enum Environment { development, production }
 
 class Config {
-  static const Environment environment = Environment.development;
+  static const Environment environment = Environment.production;
 
   // Base URLs for different services
   static String get authBaseUrl {
