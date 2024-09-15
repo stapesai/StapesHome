@@ -10,7 +10,7 @@ class QrScannerScreen extends StatefulWidget {
   final String userId;
   final String sessionId;
 
-  QrScannerScreen({required this.roomId, required this.userId, required this.sessionId});
+  const QrScannerScreen({super.key, required this.roomId, required this.userId, required this.sessionId});
 
   @override
   _QrScannerScreenState createState() => _QrScannerScreenState();

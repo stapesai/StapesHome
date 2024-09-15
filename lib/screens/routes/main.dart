@@ -1,3 +1,4 @@
+import 'package:StapesHome/constants/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/utils/hive.dart';
@@ -6,6 +7,8 @@ import 'package:StapesHome/screens/routes/devices.dart';
 import 'package:StapesHome/screens/routes/home.dart';
 import 'package:StapesHome/screens/routes/nodes.dart';
 import 'package:StapesHome/screens/routes/profile.dart';
+import 'package:provider/provider.dart';
+import 'package:StapesHome/services/websocket_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -45,9 +48,63 @@ class _MainScreenState extends State<MainScreen> {
         _isLoading = false;
       });
     } else {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        // Set up WebSocket message handling
+        final webSocketService = Provider.of<WebSocketService?>(context, listen: false);
+        if (webSocketService != null) {
+          webSocketService.messageStream.listen((message) {
+            _handleWebSocketMessage(message);
+          });
+        }
+      }
+    }
+  }
+
+  void _handleWebSocketMessage(Map<String, dynamic> message) {
+    switch (message['type']) {
+      case 'entity_status_update':
+        try {
+          var data = DeviceStatusUpdate.fromJson(message['data']);
+          _updateDeviceState(data);
+        } catch (e) {
+          print('Error parsing device status update: $e');
+          return;
+        }
+        break;
+
+      case 'node_status_update':
+        try {
+          var data = NodeStatusUpdate.fromJson(message['data']);
+          _updateNodeState(data);
+        } catch (e) {
+          print('Error parsing node status update: $e');
+          return;
+        }
+        break;
+
+      case 'error':
+        print('Error: ${message['detail']}');
+        break;
+      default:
+        print('Unknown message type: ${message['type']}');
+    }
+  }
+
+  void _updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
+    // Update the state of the device in the DevicesScreen
+    if (_screens[1] is DevicesScreen) {
+      (_screens[1] as DevicesScreen).updateDeviceState(deviceUpdateData);
+    }
+  }
+
+  void _updateNodeState(NodeStatusUpdate nodeUpdateData) {
+    // Update the state of the node in the NodesScreen
+    if (_screens[2] is NodesScreen) {
+      (_screens[2] as NodesScreen).updateNodeState(nodeUpdateData);
     }
   }
 

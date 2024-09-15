@@ -94,3 +94,40 @@ class Device {
     );
   }
 }
+
+class NodeStatusUpdate {
+  final String nodeId;
+  final String isOnline;
+  final DateTime lastSeen;
+
+  NodeStatusUpdate({
+    required this.nodeId,
+    required this.isOnline,
+    required this.lastSeen,
+  });
+
+  factory NodeStatusUpdate.fromJson(Map<String, dynamic> json) {
+    return NodeStatusUpdate(
+      nodeId: json['node_id'],
+      isOnline: json['is_online'],
+      lastSeen: DateTime.parse(json['last_seen']),
+    );
+  }
+}
+
+class DeviceStatusUpdate {
+  final String deviceId;
+  final String state;
+
+  DeviceStatusUpdate({
+    required this.deviceId,
+    required this.state,
+  });
+
+  factory DeviceStatusUpdate.fromJson(Map<String, dynamic> json) {
+    return DeviceStatusUpdate(
+      deviceId: json['entity_id'],
+      state: json['state'],
+    );
+  }
+}

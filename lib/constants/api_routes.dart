@@ -81,5 +81,5 @@ class BackendRoutes {
 
 class WebsocketRoutes {
   // Websocket routes
-  static Uri getWebsocketUrl(String userId) => Uri.parse(Config.webSocketUrl);
+  static Uri getWebsocketUrl() => Uri.parse(Config.webSocketUrl);
 }

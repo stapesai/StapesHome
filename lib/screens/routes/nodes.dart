@@ -24,9 +24,13 @@ class NodesScreen extends StatefulWidget {
 
   @override
   createState() => _NodesScreenState();
+
+  void updateNodeState(NodeStatusUpdate nodeUpdateData) {
+    _NodesScreenState().updateNodeState(nodeUpdateData);
+  }
 }
 
-class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClientMixin {
+class _NodesScreenState extends State<NodesScreen> {
   String activeFloorId = '';
   String activeRoomId = '';
   List<Node> nodes = [];
@@ -34,8 +38,18 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
   String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
 
-  @override
-  bool get wantKeepAlive => true;
+  // @override
+  // bool get wantKeepAlive => true;
+
+  void updateNodeState(NodeStatusUpdate nodeUpdateData) {
+    setState(() {
+      final index = nodes.indexWhere((n) => n.id == nodeUpdateData.nodeId);
+      if (index != -1) {
+        // nodes[index].status = nodeUpdateData.status;
+        print('Node with name ${nodes[index].name} updated to ${nodeUpdateData.isOnline}');
+      }
+    });
+  }
 
   void handleFloorSelected(String floorId) {
     if (mounted) {
@@ -101,7 +115,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final screenSize = MediaQuery.of(context).size;
 
     return GestureDetector(

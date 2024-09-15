@@ -25,9 +25,13 @@ class DevicesScreen extends StatefulWidget {
 
   @override
   createState() => _DevicesScreenState();
+
+  void updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
+    _DevicesScreenState().updateDeviceState(deviceUpdateData);
+  }
 }
 
-class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveClientMixin {
+class _DevicesScreenState extends State<DevicesScreen> {
   String activeFloorId = '';
   String activeRoomId = '';
   List<Device> devices = [];
@@ -35,8 +39,18 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
   String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
 
-  @override
-  bool get wantKeepAlive => true;
+  // @override
+  // bool get wantKeepAlive => true;
+
+  void updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
+    setState(() {
+      final index = devices.indexWhere((d) => d.id == deviceUpdateData.deviceId);
+      if (index != -1) {
+        // devices[index].status = deviceUpdateData.status;
+        print('Device with name ${devices[index].name} updated to ${deviceUpdateData.state}');
+      }
+    });
+  }
 
   void handleFloorSelected(String floorId) {
     if (mounted) {
@@ -104,7 +118,7 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final screenSize = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -180,7 +194,8 @@ class _DevicesScreenState extends State<DevicesScreen> with AutomaticKeepAliveCl
                                   if (device.type == 'light') {
                                     return LightComponent(device: device);
                                   } else if (device.type == 'fan') {
-                                    return FanComponent(device: device);
+                                    // return FanComponent(device: device);
+                                    throw UnimplementedError('Fan component not implemented');
                                   }
                                   return Container();
                                 }).toList(),
