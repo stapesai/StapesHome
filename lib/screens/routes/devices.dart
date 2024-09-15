@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:StapesHome/services/websocket_service.dart';
 import 'package:StapesHome/widgets/skeletons/device.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
@@ -12,6 +13,7 @@ import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/widgets/floor_room_sel.dart';
 import 'package:StapesHome/screens/views/devices/add_new_device.dart';
+import 'package:provider/provider.dart';
 
 class DevicesScreen extends StatefulWidget {
   final String sessionId;
@@ -38,9 +40,34 @@ class _DevicesScreenState extends State<DevicesScreen> {
   bool isLoading = true;
   String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
+  late WebSocketService _webSocketService;
 
   // @override
   // bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _webSocketService = Provider.of<WebSocketService>(context, listen: false);
+    _setupWebSocketListener();
+  }
+
+  void _setupWebSocketListener() {
+    _webSocketService.messageStream.listen((message) {
+      if (message['type'] == 'entity_status_update') {
+        _updateDeviceState(DeviceStatusUpdate.fromJson(message['data']));
+      }
+    });
+  }
+
+  void _updateDeviceState(DeviceStatusUpdate update) {
+    setState(() {
+      final deviceIndex = devices.indexWhere((d) => d.id == update.deviceId);
+      if (deviceIndex != -1) {
+        // devices[deviceIndex] = devices[deviceIndex].copyWith(status: update.state);
+      }
+    });
+  }
 
   void updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
     setState(() {
@@ -192,7 +219,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
                                 runSpacing: 10,
                                 children: devices.map<Widget>((device) {
                                   if (device.type == 'light') {
-                                    return LightComponent(device: device);
+                                    return LightComponent(
+                                        device: device,
+                                        onToggle: (bool state) {
+                                          _webSocketService.deviceStateUpdate(device.id, state);
+                                        });
                                   } else if (device.type == 'fan') {
                                     // return FanComponent(device: device);
                                     throw UnimplementedError('Fan component not implemented');

@@ -29,6 +29,7 @@ dependencies:
   flutter_svg: any
   camera: ^0.11.0+2
   provider: ^6.1.2
+  uuid: ^4.5.0
 
 dev_dependencies:
   flutter_test:

@@ -4,12 +4,14 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 
 class WebSocketService {
   WebSocket? _socket;
   final Uri _url;
   final String _userId;
   final String _sessionId;
+  final Uuid _uuid = Uuid();
 
   final StreamController<Map<String, dynamic>> _messageController = StreamController<Map<String, dynamic>>.broadcast();
 
@@ -63,10 +65,20 @@ class WebSocketService {
     }
   }
 
-  void sendMessage(Map<String, dynamic> message) {
+  void _sendMessage(Map<String, dynamic> message) {
     if (_socket != null && _socket!.readyState == WebSocket.open) {
       _socket!.add(json.encode(message));
     }
+  }
+
+  void deviceStateUpdate(String deviceId, bool state) {
+    final message = {
+      'id': _uuid.v4(),
+      'command': 'control_device',
+      'entity_id': deviceId,
+      'state': state,
+    };
+    _sendMessage(message);
   }
 
   void close() {

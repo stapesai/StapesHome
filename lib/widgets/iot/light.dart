@@ -4,8 +4,13 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 class LightComponent extends StatefulWidget {
   final Device device;
+  final Function(bool) onToggle;
 
-  const LightComponent({super.key, required this.device});
+  const LightComponent({
+    super.key, 
+    required this.device, 
+    required this.onToggle
+  });
 
   @override
   createState() => _LightComponentState();
@@ -24,7 +29,7 @@ class _LightComponentState extends State<LightComponent> {
     setState(() {
       isOn = !isOn;
     });
-    // Optionally add API call to toggle the light
+    widget.onToggle(isOn);
   }
 
   @override
