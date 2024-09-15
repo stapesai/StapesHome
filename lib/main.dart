@@ -13,6 +13,7 @@ void main() async {
 
   // Register Hive adapters
   Hive.registerAdapter(SessionsModelAdapter());
+  
   // debugPaintSizeEnabled = true;
   runApp(const MyApp());
 }

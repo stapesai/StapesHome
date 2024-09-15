@@ -13,7 +13,8 @@ class AuthRoutes {
 
   // Reset Password
   static final Uri requestResetPassword = Uri.parse('${Config.protocol}://$baseUrl/auth/reset-password/request-reset');
-  static final Uri completeResetPassword = Uri.parse('${Config.protocol}://$baseUrl/auth/reset-password/complete-reset');
+  static final Uri completeResetPassword =
+      Uri.parse('${Config.protocol}://$baseUrl/auth/reset-password/complete-reset');
 
   // OTP
   static final Uri verifyOtp = Uri.parse('${Config.protocol}://$baseUrl/auth/otp/verify');
@@ -61,8 +62,10 @@ class BackendRoutes {
   // Entity routes
   static final Uri createEntity = Uri.parse('${Config.protocol}://$baseUrl/entities');
   static final Uri getAllEntities = Uri.parse('${Config.protocol}://$baseUrl/entities/all');
-  static Uri getEntitiesByNodeId(String nodeId) => Uri.parse('${Config.protocol}://$baseUrl/entities/by_node_id/$nodeId');
-  static Uri getEntitiesByRoomId(String roomId) => Uri.parse('${Config.protocol}://$baseUrl/entities/by_room_id/$roomId');
+  static Uri getEntitiesByNodeId(String nodeId) =>
+      Uri.parse('${Config.protocol}://$baseUrl/entities/by_node_id/$nodeId');
+  static Uri getEntitiesByRoomId(String roomId) =>
+      Uri.parse('${Config.protocol}://$baseUrl/entities/by_room_id/$roomId');
   static Uri updateEntity(String entityId) => Uri.parse('${Config.protocol}://$baseUrl/entities/$entityId');
   static Uri deleteEntity(String entityId) => Uri.parse('${Config.protocol}://$baseUrl/entities/$entityId');
 
@@ -72,5 +75,11 @@ class BackendRoutes {
   // Favorite Device routes
   static final Uri addFavoriteDevice = Uri.parse('${Config.protocol}://$baseUrl/favdev');
   static final Uri getFavoriteDevices = Uri.parse('${Config.protocol}://$baseUrl/favdev');
-  static Uri removeFavoriteDevice(String favoriteDeviceId) => Uri.parse('${Config.protocol}://$baseUrl/favdev/$favoriteDeviceId');
+  static Uri removeFavoriteDevice(String favoriteDeviceId) =>
+      Uri.parse('${Config.protocol}://$baseUrl/favdev/$favoriteDeviceId');
+}
+
+class WebsocketRoutes {
+  // Websocket routes
+  static Uri getWebsocketUrl(String userId) => Uri.parse(Config.webSocketUrl);
 }

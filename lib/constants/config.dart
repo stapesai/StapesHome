@@ -1,4 +1,4 @@
-// config.dart
+// Path: constants/config.dart
 
 enum Environment { development, production }
 
@@ -34,6 +34,18 @@ class Config {
         return 'http';
       case Environment.production:
         return 'https';
+      default:
+        throw UnsupportedError('Environment not supported');
+    }
+  }
+
+  static String get webSocketUrl {
+    switch (environment) {
+      case Environment.development:
+        return 'ws://192.168.0.253:8003/ws'; // Dev WebSocket URL
+      case Environment.production:
+        // return 'wss://backend.jarvishome.in/ws'; // Prod WebSocket URL
+        throw UnsupportedError('WebSocket not supported in production');
       default:
         throw UnsupportedError('Environment not supported');
     }

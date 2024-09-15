@@ -265,11 +265,13 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     }
   }
 
+  // Edit floor using API
   void _editFloor(Floor floor) {
     // Implement edit floor functionality
     print('Edit floor: ${floor.alias}');
   }
 
+  // Edit room using API
   void _editRoom(Room room) {
     // Implement edit room functionality
     print('Edit room: ${room.name}');
