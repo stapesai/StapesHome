@@ -57,54 +57,40 @@ class _MainScreenState extends State<MainScreen> {
         final webSocketService = Provider.of<WebSocketService?>(context, listen: false);
         if (webSocketService != null) {
           webSocketService.messageStream.listen((message) {
-            _handleWebSocketMessage(message);
+            _handleWebSocketErrorMessage(message);
           });
         }
       }
     }
   }
 
-  void _handleWebSocketMessage(Map<String, dynamic> message) {
+  void _handleWebSocketErrorMessage(Map<String, dynamic> message) {
     switch (message['type']) {
-      case 'entity_status_update':
-        try {
-          var data = DeviceStatusUpdate.fromJson(message['data']);
-          _updateDeviceState(data);
-        } catch (e) {
-          print('Error parsing device status update: $e');
-          return;
-        }
-        break;
+      // case 'entity_status_update':
+      //   try {
+      //     var data = DeviceStatusUpdate.fromJson(message['data']);
+      //     _updateDeviceState(data);
+      //   } catch (e) {
+      //     print('Error parsing device status update: $e');
+      //     return;
+      //   }
+      //   break;
 
-      case 'node_status_update':
-        try {
-          var data = NodeStatusUpdate.fromJson(message['data']);
-          _updateNodeState(data);
-        } catch (e) {
-          print('Error parsing node status update: $e');
-          return;
-        }
-        break;
+      // case 'node_status_update':
+      //   try {
+      //     var data = NodeStatusUpdate.fromJson(message['data']);
+      //     _updateNodeState(data);
+      //   } catch (e) {
+      //     print('Error parsing node status update: $e');
+      //     return;
+      //   }
+      //   break;
 
       case 'error':
         print('Error: ${message['detail']}');
         break;
       default:
         print('Unknown message type: ${message['type']}');
-    }
-  }
-
-  void _updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
-    // Update the state of the device in the DevicesScreen
-    if (_screens[1] is DevicesScreen) {
-      (_screens[1] as DevicesScreen).updateDeviceState(deviceUpdateData);
-    }
-  }
-
-  void _updateNodeState(NodeStatusUpdate nodeUpdateData) {
-    // Update the state of the node in the NodesScreen
-    if (_screens[2] is NodesScreen) {
-      (_screens[2] as NodesScreen).updateNodeState(nodeUpdateData);
     }
   }
 

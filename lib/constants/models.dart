@@ -1,5 +1,7 @@
 // import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+
 class Floor {
   final String id;
   final int level;
@@ -75,6 +77,7 @@ class Device {
   final String type;
   final int channelId;
   final String id;
+  // bool isOn;
 
   Device({
     required this.nodeId,
@@ -82,6 +85,7 @@ class Device {
     required this.type,
     required this.channelId,
     required this.id,
+    // required this.isOn,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) {
@@ -91,33 +95,46 @@ class Device {
       type: json['type'],
       channelId: json['channel_id'],
       id: json['id'],
+      // isOn: false,
+      // isOn: json['state'] == 'on',
+    );
+  }
+
+  Device copyWith({bool? isOn}) {
+    return Device(
+      nodeId: nodeId,
+      name: name,
+      type: type,
+      channelId: channelId,
+      id: id,
+      // isOn: isOn ?? this.isOn,
     );
   }
 }
 
 class NodeStatusUpdate {
   final String nodeId;
-  final String isOnline;
-  final DateTime lastSeen;
+  final bool isOnline;
+  final DateTime? lastSeen;
 
   NodeStatusUpdate({
     required this.nodeId,
     required this.isOnline,
-    required this.lastSeen,
+    this.lastSeen,
   });
 
   factory NodeStatusUpdate.fromJson(Map<String, dynamic> json) {
     return NodeStatusUpdate(
       nodeId: json['node_id'],
       isOnline: json['is_online'],
-      lastSeen: DateTime.parse(json['last_seen']),
+      lastSeen: json['last_seen'] != null ? DateTime.parse(json['last_seen']) : null,
     );
   }
 }
 
 class DeviceStatusUpdate {
   final String deviceId;
-  final String state;
+  final bool state;
 
   DeviceStatusUpdate({
     required this.deviceId,

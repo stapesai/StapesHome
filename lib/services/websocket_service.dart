@@ -37,7 +37,7 @@ class WebSocketService {
               // TODO: Fix this decoding logic later
               final decodedMessage = json.decode(json.decode(message));
               print('Received message: $decodedMessage');
-              if (decodedMessage is Map<String, dynamic>) {
+              if (decodedMessage is Map<String, dynamic> && decodedMessage['command'] != 'control_device') {
                 _messageController.add(decodedMessage);
                 print('Message added to stream');
               } else {
@@ -53,10 +53,12 @@ class WebSocketService {
         onError: (error) {
           print('WebSocket Error: $error');
           // Implement reconnection logic here
+          // TODO: show a snackbar to the user that the connection is closed and try to reconnect
         },
         onDone: () {
           print('WebSocket connection closed');
           // Implement reconnection logic here
+          // TODO: show a snackbar to the user that the connection is closed and try to reconnect
         },
       );
     } catch (e) {
@@ -65,19 +67,20 @@ class WebSocketService {
     }
   }
 
-  void _sendMessage(Map<String, dynamic> message) {
+  void _sendMessage(String message) {
     if (_socket != null && _socket!.readyState == WebSocket.open) {
-      _socket!.add(json.encode(message));
+      print('Sending message: $message');
+      _socket!.add(message);
     }
   }
 
   void deviceStateUpdate(String deviceId, bool state) {
-    final message = {
+    final message = json.encode({
       'id': _uuid.v4(),
       'command': 'control_device',
       'entity_id': deviceId,
       'state': state,
-    };
+    });
     _sendMessage(message);
   }
 

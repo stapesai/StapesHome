@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
+import 'package:StapesHome/services/websocket_service.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
 import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
 import 'package:StapesHome/widgets/skeletons/node.dart';
@@ -11,6 +12,7 @@ import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/widgets/floor_room_sel.dart';
+import 'package:provider/provider.dart';
 
 class NodesScreen extends StatefulWidget {
   final String sessionId;
@@ -24,10 +26,6 @@ class NodesScreen extends StatefulWidget {
 
   @override
   createState() => _NodesScreenState();
-
-  void updateNodeState(NodeStatusUpdate nodeUpdateData) {
-    _NodesScreenState().updateNodeState(nodeUpdateData);
-  }
 }
 
 class _NodesScreenState extends State<NodesScreen> {
@@ -37,16 +35,29 @@ class _NodesScreenState extends State<NodesScreen> {
   bool isLoading = true;
   String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
+  late WebSocketService _webSocketService;
 
-  // @override
-  // bool get wantKeepAlive => true;
+  @override
+  void initState() {
+    super.initState();
+    _webSocketService = Provider.of<WebSocketService>(context, listen: false);
+    _setupWebSocketListener();
+  }
 
-  void updateNodeState(NodeStatusUpdate nodeUpdateData) {
+  void _setupWebSocketListener() {
+    _webSocketService.messageStream.listen((message) {
+      if (message['type'] == 'node_status_update') {
+        _updateNodeState(NodeStatusUpdate.fromJson(message['data']));
+      }
+    });
+  }
+  
+  void _updateNodeState(NodeStatusUpdate nodeUpdateData) {
     setState(() {
       final index = nodes.indexWhere((n) => n.id == nodeUpdateData.nodeId);
       if (index != -1) {
-        // nodes[index].status = nodeUpdateData.status;
         print('Node with name ${nodes[index].name} updated to ${nodeUpdateData.isOnline}');
+        // nodes[index].status = nodeUpdateData.status;
       }
     });
   }

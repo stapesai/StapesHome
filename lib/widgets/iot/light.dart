@@ -6,11 +6,7 @@ class LightComponent extends StatefulWidget {
   final Device device;
   final Function(bool) onToggle;
 
-  const LightComponent({
-    super.key, 
-    required this.device, 
-    required this.onToggle
-  });
+  const LightComponent({super.key, required this.device, required this.onToggle});
 
   @override
   createState() => _LightComponentState();
@@ -30,6 +26,12 @@ class _LightComponentState extends State<LightComponent> {
       isOn = !isOn;
     });
     widget.onToggle(isOn);
+  }
+
+  void updateState(bool newState) {
+    setState(() {
+      isOn = newState;
+    });
   }
 
   @override

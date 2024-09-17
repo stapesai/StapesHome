@@ -4,7 +4,6 @@ import 'package:StapesHome/widgets/skeletons/device.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/iot/fan.dart';
 import 'package:StapesHome/widgets/iot/light.dart';
 import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
 import 'package:StapesHome/constants/api_routes.dart';
@@ -27,10 +26,6 @@ class DevicesScreen extends StatefulWidget {
 
   @override
   createState() => _DevicesScreenState();
-
-  void updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
-    _DevicesScreenState().updateDeviceState(deviceUpdateData);
-  }
 }
 
 class _DevicesScreenState extends State<DevicesScreen> {
@@ -41,9 +36,6 @@ class _DevicesScreenState extends State<DevicesScreen> {
   String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
   late WebSocketService _webSocketService;
-
-  // @override
-  // bool get wantKeepAlive => true;
 
   @override
   void initState() {
@@ -64,17 +56,11 @@ class _DevicesScreenState extends State<DevicesScreen> {
     setState(() {
       final deviceIndex = devices.indexWhere((d) => d.id == update.deviceId);
       if (deviceIndex != -1) {
-        // devices[deviceIndex] = devices[deviceIndex].copyWith(status: update.state);
-      }
-    });
-  }
+        print('Device with name ${devices[deviceIndex].name} updated to ${update.state}');
+        // devices[deviceIndex] = devices[deviceIndex].copyWith(isOn: update.state);
 
-  void updateDeviceState(DeviceStatusUpdate deviceUpdateData) {
-    setState(() {
-      final index = devices.indexWhere((d) => d.id == deviceUpdateData.deviceId);
-      if (index != -1) {
-        // devices[index].status = deviceUpdateData.status;
-        print('Device with name ${devices[index].name} updated to ${deviceUpdateData.state}');
+        // // This is needed to update the UI
+        // devices = List.from(devices);
       }
     });
   }
