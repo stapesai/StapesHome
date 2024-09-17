@@ -10,16 +10,8 @@ class SessionsModel extends HiveObject {
   @HiveField(1)
   final String userId;
 
-  @HiveField(2)
-  final DateTime createdAt;
-
-  @HiveField(3)
-  final DateTime lastActiveAt;
-
   SessionsModel({
     required this.sessionId,
     required this.userId,
-    required this.createdAt,
-    required this.lastActiveAt,
   });
 }

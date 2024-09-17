@@ -1,3 +1,4 @@
+import 'package:StapesHome/constants/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/utils/hive.dart';
@@ -6,6 +7,8 @@ import 'package:StapesHome/screens/routes/devices.dart';
 import 'package:StapesHome/screens/routes/home.dart';
 import 'package:StapesHome/screens/routes/nodes.dart';
 import 'package:StapesHome/screens/routes/profile.dart';
+import 'package:provider/provider.dart';
+import 'package:StapesHome/services/websocket_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -45,9 +48,49 @@ class _MainScreenState extends State<MainScreen> {
         _isLoading = false;
       });
     } else {
-      setState(() {
-        _isLoading = false;
-      });
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+
+        // Set up WebSocket message handling
+        final webSocketService = Provider.of<WebSocketService?>(context, listen: false);
+        if (webSocketService != null) {
+          webSocketService.messageStream.listen((message) {
+            _handleWebSocketErrorMessage(message);
+          });
+        }
+      }
+    }
+  }
+
+  void _handleWebSocketErrorMessage(Map<String, dynamic> message) {
+    switch (message['type']) {
+      // case 'entity_status_update':
+      //   try {
+      //     var data = DeviceStatusUpdate.fromJson(message['data']);
+      //     _updateDeviceState(data);
+      //   } catch (e) {
+      //     print('Error parsing device status update: $e');
+      //     return;
+      //   }
+      //   break;
+
+      // case 'node_status_update':
+      //   try {
+      //     var data = NodeStatusUpdate.fromJson(message['data']);
+      //     _updateNodeState(data);
+      //   } catch (e) {
+      //     print('Error parsing node status update: $e');
+      //     return;
+      //   }
+      //   break;
+
+      case 'error':
+        print('Error: ${message['detail']}');
+        break;
+      default:
+        print('Unknown message type: ${message['type']}');
     }
   }
 

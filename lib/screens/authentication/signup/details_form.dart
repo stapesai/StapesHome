@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:StapesHome/constants/padding.dart';
+import 'package:StapesHome/widgets/input/textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
@@ -7,7 +8,6 @@ import 'package:StapesHome/utils/hive.dart';
 import 'package:StapesHome/utils/sessions_model.dart';
 import 'package:StapesHome/widgets/button.dart'; // Import the CustomButton widget
 import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/input_fields.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/screens/routes/main.dart';
 
@@ -35,25 +35,25 @@ class _SignupFormState extends State<SignupForm> {
   final HiveService hiveService = HiveService();
 
   Future<void> handleConfirmSignup(
-      BuildContext context, String email, String first_name, String last_name, String dob, String gender) async {
+      BuildContext context, String email, String firstName, String lastName, String dob, String gender) async {
     setState(() {
       _isLoading = true;
     });
-    var check_email_response = await http.post(
+    var checkEmailResponse = await http.post(
       AuthRoutes.checkEmail(email),
       headers: {'accept': 'application/json'},
     );
-    var check_email_responseBody = json.decode(check_email_response.body);
+    var checkEmailResponsebody = json.decode(checkEmailResponse.body);
 
-    if (check_email_response.statusCode == 200) {
+    if (checkEmailResponse.statusCode == 200) {
       var response = await http.post(
         AuthRoutes.completeSignup,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: jsonEncode({
           "user": {
             "email": email,
-            "first_name": first_name,
-            "last_name": last_name,
+            "first_name": firstName,
+            "last_name": lastName,
             "dob": dob,
             "gender": gender,
           },
@@ -67,8 +67,6 @@ class _SignupFormState extends State<SignupForm> {
         var sessionData = SessionsModel(
           sessionId: responseBody['session']['session_id'],
           userId: responseBody['session']['user_id'],
-          createdAt: DateTime.parse(responseBody['session']['created_at']),
-          lastActiveAt: DateTime.parse(responseBody['session']['last_active_at']),
         );
 
         await hiveService.addBoxes([sessionData], "SessionBox");
@@ -92,7 +90,7 @@ class _SignupFormState extends State<SignupForm> {
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error : ${check_email_response.statusCode} - ${check_email_responseBody["detail"]} '),
+            content: Text('Error : ${checkEmailResponse.statusCode} - ${checkEmailResponsebody["detail"]} '),
           ),
         );
       }

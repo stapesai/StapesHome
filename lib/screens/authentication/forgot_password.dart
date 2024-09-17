@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:StapesHome/constants/padding.dart';
+import 'package:StapesHome/widgets/input/textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/api_routes.dart';
@@ -7,7 +8,6 @@ import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/screens/authentication/login.dart';
 import 'package:StapesHome/widgets/button.dart';
 import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/input_fields.dart';
 import 'package:StapesHome/screens/authentication/common/password.dart';
 import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
 
@@ -44,7 +44,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
           MaterialPageRoute(
             builder: (context) => OtpVerificationScreen(
               transactionId: transactionId,
-              expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
+              expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
               onSuccess: () async {
                 if (context.mounted) {
                   Navigator.pushReplacement(
@@ -60,7 +60,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                     ),
                   );
                 } else {
-                  print('Error :  ${responseBody} ');
+                  print('Error :  $responseBody ');
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(

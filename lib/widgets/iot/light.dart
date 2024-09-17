@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:http/http.dart' as http;
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/colors.dart';
 
 class LightComponent extends StatefulWidget {
   final Device device;
+  final Function(bool) onToggle;
 
-  const LightComponent({Key? key, required this.device}) : super(key: key);
+  const LightComponent({super.key, required this.device, required this.onToggle});
 
   @override
-  _LightComponentState createState() => _LightComponentState();
+  createState() => _LightComponentState();
 }
 
 class _LightComponentState extends State<LightComponent> {
@@ -27,7 +25,13 @@ class _LightComponentState extends State<LightComponent> {
     setState(() {
       isOn = !isOn;
     });
-    // Optionally add API call to toggle the light
+    widget.onToggle(isOn);
+  }
+
+  void updateState(bool newState) {
+    setState(() {
+      isOn = newState;
+    });
   }
 
   @override

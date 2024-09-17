@@ -1,6 +1,11 @@
+// File: lib/widgets/floor_room_sel.dart
+
 import 'dart:convert';
-import 'package:flutter/material.dart';
+import 'package:StapesHome/widgets/hold_bottom_sheet.dart';
+import 'package:StapesHome/widgets/skeletons/floor_room_name.dart';
 import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
+// import 'package:StapesHome/widgets/popup.dart';
 import 'package:StapesHome/constants/api_routes.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/models.dart';
@@ -15,13 +20,13 @@ class FloorRoomSelector extends StatefulWidget {
   final String userId;
 
   const FloorRoomSelector({
-    Key? key,
+    super.key,
     required this.context,
     required this.onFloorSelected,
     required this.onRoomSelected,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   FloorRoomSelectorState createState() => FloorRoomSelectorState();
@@ -196,6 +201,112 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     ).then((_) => _fetchRooms(activeFloorId));
   }
 
+  // Delete floor using API
+  Future<void> _deleteFloor(String floorId) async {
+    try {
+      final response = await http.delete(
+        BackendRoutes.deleteFloor(floorId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 204) {
+        setState(() {
+          floors.removeWhere((floor) => floor.id == floorId);
+          if (activeFloorId == floorId) {
+            activeFloorId = '';
+            rooms = [];
+            activeRoomId = '';
+          }
+        });
+        if (floors.isNotEmpty) {
+          setActiveFloor(floors.first.id);
+        }
+      } else {
+        throw Exception('Failed to delete floor: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle error (e.g., show an error message to the user)
+      print('Error deleting floor: $e');
+    }
+  }
+
+  // Delete room using API
+  Future<void> _deleteRoom(String roomId) async {
+    try {
+      final response = await http.delete(
+        BackendRoutes.deleteRoom(roomId),
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': widget.userId,
+          'X-Session-Id': widget.sessionId,
+        },
+      );
+
+      if (response.statusCode == 204) {
+        setState(() {
+          rooms.removeWhere((room) => room.id == roomId);
+          if (activeRoomId == roomId) {
+            activeRoomId = '';
+          }
+        });
+        if (rooms.isNotEmpty) {
+          setActiveRoom(rooms.first.id);
+        }
+      } else {
+        throw Exception('Failed to delete room: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle error (e.g., show an error message to the user)
+      print('Error deleting room: $e');
+    }
+  }
+
+  // Edit floor using API
+  void _editFloor(Floor floor) {
+    // Implement edit floor functionality
+    print('Edit floor: ${floor.alias}');
+  }
+
+  // Edit room using API
+  void _editRoom(Room room) {
+    // Implement edit room functionality
+    print('Edit room: ${room.name}');
+  }
+
+  // Show delete confirmation dialog
+  void _showDeleteConfirmationDialog(BuildContext context, String itemType, String itemId, String itemName) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Delete $itemType'),
+          content: Text('Are you sure you want to delete $itemName?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Delete'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                if (itemType == 'Floor') {
+                  _deleteFloor(itemId);
+                } else if (itemType == 'Room') {
+                  _deleteRoom(itemId);
+                }
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return LayoutBuilder(
@@ -234,9 +345,36 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     );
   }
 
+  void _showFloorOptions(Floor floor) {
+    List<HoldBottomSheet> options = [
+      HoldBottomSheet(
+        icon: Icons.edit,
+        text: 'Edit Floor',
+        onTap: () => _editFloor(floor),
+      ),
+      HoldBottomSheet(
+        icon: Icons.delete,
+        text: 'Delete Floor',
+        onTap: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
+      ),
+    ];
+
+    showCustomBottomSheet(context, options);
+  }
+
   Widget _buildFloorList(double maxWidth) {
     if (isFloorsLoading) {
-      return const CircularProgressIndicator();
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: FloorRoomNameButtonSkeleton(width: 80, height: 30),
+              ),
+            ),
+          ));
     }
     if (errorMessageFloors != null) {
       return Text(errorMessageFloors!, style: const TextStyle(color: Colors.red));
@@ -251,6 +389,8 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: floor.alias,
               isActive: activeFloorId == floor.id,
               onTap: () => setActiveFloor(floor.id),
+              // onLongPress: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
+              onLongPress: () => _showFloorOptions(floor),
             ),
           );
         }).toList(),
@@ -258,10 +398,38 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
     );
   }
 
+  void _showRoomOptions(Room room) {
+    List<HoldBottomSheet> options = [
+      HoldBottomSheet(
+        icon: Icons.edit,
+        text: 'Edit Room',
+        onTap: () => _editRoom(room),
+      ),
+      HoldBottomSheet(
+        icon: Icons.delete,
+        text: 'Delete Room',
+        onTap: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
+      ),
+    ];
+
+    showCustomBottomSheet(context, options);
+  }
+
   Widget _buildRoomList(double maxWidth) {
     if (isRoomsLoading) {
-      return const CircularProgressIndicator();
+      return SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: Row(
+            children: List.generate(
+              4,
+              (index) => Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: FloorRoomNameButtonSkeleton(width: 80, height: 30),
+              ),
+            ),
+          ));
     }
+
     if (errorMessageRooms != null) {
       return Text(errorMessageRooms!, style: const TextStyle(color: Colors.red));
     }
@@ -275,6 +443,8 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
               label: room.name,
               isActive: activeRoomId == room.id,
               onTap: () => setActiveRoom(room.id),
+              // onLongPress: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
+              onLongPress: () => _showRoomOptions(room),
             ),
           );
         }).toList(),
@@ -285,21 +455,26 @@ class FloorRoomSelectorState extends State<FloorRoomSelector> {
 
 class PlusButton extends StatelessWidget {
   final VoidCallback onPressed;
-
-  const PlusButton({Key? key, required this.onPressed}) : super(key: key);
+  const PlusButton({super.key, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onPressed,
+      behavior: HitTestBehavior.opaque,
       child: Container(
-        width: 20,
-        height: 20,
-        decoration: const BoxDecoration(
-          shape: BoxShape.circle,
-          color: Color(0xFF3E3E62),
+        width: 44,
+        height: 44,
+        padding: EdgeInsets.all(12),
+        child: Container(
+          width: 25,
+          height: 25,
+          decoration: const BoxDecoration(
+            shape: BoxShape.circle,
+            color: Color(0xFF3E3E62),
+          ),
+          child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
         ),
-        child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
       ),
     );
   }
@@ -309,18 +484,21 @@ class FloorRoomNameButton extends StatelessWidget {
   final String label;
   final bool isActive;
   final VoidCallback onTap;
+  final VoidCallback onLongPress;
 
   const FloorRoomNameButton({
-    Key? key,
+    super.key,
     required this.label,
     required this.isActive,
     required this.onTap,
-  }) : super(key: key);
+    required this.onLongPress,
+  });
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
+      onLongPress: onLongPress,
       child: Column(
         children: [
           Text(

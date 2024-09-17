@@ -4,6 +4,8 @@ import 'package:StapesHome/screens/authentication/login.dart';
 import 'package:StapesHome/constants/colors.dart';
 import "package:StapesHome/widgets/button.dart";
 
+// TODO: move to dialog.dart and then remove this file
+
 class LogoutConfirmationDialog extends StatelessWidget {
   const LogoutConfirmationDialog({super.key});
 
@@ -39,7 +41,7 @@ class LogoutConfirmationDialog extends StatelessWidget {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x3F000000),
               blurRadius: 7.50,

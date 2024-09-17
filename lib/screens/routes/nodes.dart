@@ -1,6 +1,9 @@
 import 'dart:convert';
+import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
+import 'package:StapesHome/services/websocket_service.dart';
 import 'package:StapesHome/widgets/iot/node.dart';
-import 'package:StapesHome/widgets/scan_node_or_add_device_button.dart';
+import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
+import 'package:StapesHome/widgets/skeletons/node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/constants/api_routes.dart';
@@ -8,32 +11,56 @@ import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/widgets/floor_room_selector.dart';
+import 'package:StapesHome/widgets/floor_room_sel.dart';
+import 'package:provider/provider.dart';
 
 class NodesScreen extends StatefulWidget {
   final String sessionId;
   final String userId;
 
   const NodesScreen({
-    Key? key,
+    super.key,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _NodesScreenState();
 }
 
-class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClientMixin {
+class _NodesScreenState extends State<NodesScreen> {
   String activeFloorId = '';
   String activeRoomId = '';
   List<Node> nodes = [];
   bool isLoading = true;
   String? errorMessage;
   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
+  late WebSocketService _webSocketService;
 
   @override
-  bool get wantKeepAlive => true;
+  void initState() {
+    super.initState();
+    _webSocketService = Provider.of<WebSocketService>(context, listen: false);
+    _setupWebSocketListener();
+  }
+
+  void _setupWebSocketListener() {
+    _webSocketService.messageStream.listen((message) {
+      if (message['type'] == 'node_status_update') {
+        _updateNodeState(NodeStatusUpdate.fromJson(message['data']));
+      }
+    });
+  }
+  
+  void _updateNodeState(NodeStatusUpdate nodeUpdateData) {
+    setState(() {
+      final index = nodes.indexWhere((n) => n.id == nodeUpdateData.nodeId);
+      if (index != -1) {
+        print('Node with name ${nodes[index].name} updated to ${nodeUpdateData.isOnline}');
+        // nodes[index].status = nodeUpdateData.status;
+      }
+    });
+  }
 
   void handleFloorSelected(String floorId) {
     if (mounted) {
@@ -53,6 +80,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
       } else {
         setState(() {
           nodes = [];
+          errorMessage = 'Active room ID is empty';
         });
       }
     }
@@ -76,6 +104,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
       if (response.statusCode == 200) {
         final List<dynamic> nodesData = json.decode(response.body);
+        print(nodesData);
         nodes = nodesData.map<Node>((node) => Node.fromJson(node)).toList();
       } else {
         throw Exception('Failed to load nodes: ${response.statusCode}');
@@ -97,7 +126,7 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
 
   @override
   Widget build(BuildContext context) {
-    super.build(context);
+    // super.build(context);
     final screenSize = MediaQuery.of(context).size;
 
     return GestureDetector(
@@ -149,7 +178,9 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
                             ),
                             SizedBox(height: screenSize.height * 0.02),
                             if (isLoading)
-                              Center(child: CircularProgressIndicator())
+                              Column(
+                                children: List.generate(3, (index) => NodeComponentSkeleton()),
+                              )
                             else if (errorMessage != null)
                               Text(errorMessage!, style: TextStyle(color: Colors.red))
                             else
@@ -163,7 +194,17 @@ class _NodesScreenState extends State<NodesScreen> with AutomaticKeepAliveClient
                     ),
                     ScanNodeorAddDeviceButton(
                       text: 'Scan a new node',
-                      onPressed: () {},
+                      onPressed: () {
+                        if (activeRoomId == '') {
+                        } else {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => QrScannerScreen(
+                                    roomId: activeRoomId, userId: widget.userId, sessionId: widget.sessionId)),
+                          );
+                        }
+                      },
                       icon: 'assets/icons/nodes/qr.svg',
                     ),
                     const SizedBox(height: 20),

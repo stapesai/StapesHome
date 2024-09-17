@@ -1,5 +1,7 @@
 // import 'package:flutter/material.dart';
 
+import 'package:flutter/material.dart';
+
 class Floor {
   final String id;
   final int level;
@@ -38,10 +40,11 @@ class Node {
   final String roomId;
   final String name;
   final String hardwareChip;
-  final double hardwareVersion;
+  final String hardwareVersion;
   final String hardwareMacAddress;
   final String firmwareVersion;
   final String id;
+  final int numEntities;
 
   Node({
     required this.roomId,
@@ -51,6 +54,7 @@ class Node {
     required this.hardwareMacAddress,
     required this.firmwareVersion,
     required this.id,
+    required this.numEntities,
   });
 
   factory Node.fromJson(Map<String, dynamic> json) {
@@ -62,6 +66,7 @@ class Node {
       hardwareMacAddress: json['hardware_mac_address'],
       firmwareVersion: json['firmware_version'],
       id: json['id'],
+      numEntities: json['num_entities'],
     );
   }
 }
@@ -72,6 +77,7 @@ class Device {
   final String type;
   final int channelId;
   final String id;
+  // bool isOn;
 
   Device({
     required this.nodeId,
@@ -79,6 +85,7 @@ class Device {
     required this.type,
     required this.channelId,
     required this.id,
+    // required this.isOn,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) {
@@ -88,6 +95,56 @@ class Device {
       type: json['type'],
       channelId: json['channel_id'],
       id: json['id'],
+      // isOn: false,
+      // isOn: json['state'] == 'on',
+    );
+  }
+
+  Device copyWith({bool? isOn}) {
+    return Device(
+      nodeId: nodeId,
+      name: name,
+      type: type,
+      channelId: channelId,
+      id: id,
+      // isOn: isOn ?? this.isOn,
+    );
+  }
+}
+
+class NodeStatusUpdate {
+  final String nodeId;
+  final bool isOnline;
+  final DateTime? lastSeen;
+
+  NodeStatusUpdate({
+    required this.nodeId,
+    required this.isOnline,
+    this.lastSeen,
+  });
+
+  factory NodeStatusUpdate.fromJson(Map<String, dynamic> json) {
+    return NodeStatusUpdate(
+      nodeId: json['node_id'],
+      isOnline: json['is_online'],
+      lastSeen: json['last_seen'] != null ? DateTime.parse(json['last_seen']) : null,
+    );
+  }
+}
+
+class DeviceStatusUpdate {
+  final String deviceId;
+  final bool state;
+
+  DeviceStatusUpdate({
+    required this.deviceId,
+    required this.state,
+  });
+
+  factory DeviceStatusUpdate.fromJson(Map<String, dynamic> json) {
+    return DeviceStatusUpdate(
+      deviceId: json['entity_id'],
+      state: json['state'],
     );
   }
 }

@@ -1,14 +1,16 @@
 import 'dart:convert';
-import 'package:StapesHome/constants/padding.dart';
+import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:StapesHome/utils/hive.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:StapesHome/screens/routes/main.dart';
-import "package:StapesHome/widgets/button.dart";
 import 'package:StapesHome/constants/colors.dart';
+import 'package:StapesHome/constants/padding.dart';
 import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/widgets/input/password.dart';
+import 'package:StapesHome/widgets/input/textfield.dart';
+import "package:StapesHome/widgets/button.dart";
 import 'package:StapesHome/utils/sessions_model.dart';
-import 'package:StapesHome/widgets/input_fields.dart';
 import 'package:StapesHome/screens/authentication/forgot_password.dart';
 import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
 import 'package:StapesHome/screens/authentication/signup/email_input.dart';
@@ -53,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ))
                 : OtpVerificationScreen(
                     transactionId: transactionId,
-                    expiry_time: DateTime.parse(responseBody["otp_expires_at"]),
+                    expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
                     onSuccess: () async {
                       setState(() {
                         _isLoading = true;
@@ -71,8 +73,6 @@ class _LoginScreenState extends State<LoginScreen> {
                         var sessionData = SessionsModel(
                           sessionId: sessionResponseBody['session']['session_id'],
                           userId: sessionResponseBody['session']['user_id'],
-                          createdAt: DateTime.parse(sessionResponseBody['session']['created_at']),
-                          lastActiveAt: DateTime.parse(sessionResponseBody['session']['last_active_at']),
                         );
 
                         await hiveService.addBoxes([sessionData], "SessionBox");
@@ -133,7 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: LayoutBuilder(
                     builder: (context, constraints) {
                       return SingleChildScrollView(
-                        physics: BouncingScrollPhysics(),
+                        physics: AlwaysScrollableScrollPhysics(),
                         child: ConstrainedBox(
                           constraints: BoxConstraints(minHeight: constraints.maxHeight),
                           child: IntrinsicHeight(
@@ -165,14 +165,12 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLogo() {
     return Column(
       children: [
-        Container(
-          width: 180,
-          height: 90,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/icons/logo.png'),
-              fit: BoxFit.contain,
-            ),
+        SizedBox(
+          width: 120,
+          height: 80,
+          child: SvgPicture.asset(
+            'assets/icons/logo.svg',
+            fit: BoxFit.contain,
           ),
         ),
         Text(
@@ -313,7 +311,7 @@ class _LoginScreenState extends State<LoginScreen> {
         decoration: ShapeDecoration(
           color: Color(0xFF34373F),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x26000000),
               blurRadius: 5.40,

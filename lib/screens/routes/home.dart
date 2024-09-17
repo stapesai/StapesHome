@@ -9,10 +9,10 @@ class HomeScreen extends StatefulWidget {
   final String userId;
 
   const HomeScreen({
-    Key? key,
+    super.key,
     required this.sessionId,
     required this.userId,
-  }) : super(key: key);
+  });
 
   @override
   createState() => _HomeScreenState();
@@ -64,7 +64,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
+                          children: const [
                             Text(
                               'Good morning,',
                               style: TextStyle(
