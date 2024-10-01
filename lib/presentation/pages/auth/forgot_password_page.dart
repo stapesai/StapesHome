@@ -32,7 +32,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(content: Text(state.message)),
           );
-        } else if (state is PasswordResetOtpSent) {
+        } else if (state is OtpSent) {
           Navigator.push(
             context,
             MaterialPageRoute(

@@ -9,20 +9,23 @@ class CustomTextField extends StatelessWidget {
   final TextEditingController? controller;
   final IconData? icon;
   final FocusNode? focusNode;
+  final bool isPassword;
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.hintText,
     this.controller,
     this.icon,
     this.focusNode,
-  }) : super(key: key);
+    this.isPassword = false,
+  });
 
   @override
   Widget build(BuildContext context) {
     return TextField(
       controller: controller,
       focusNode: focusNode,
+      obscureText: isPassword,
       decoration: InputDecoration(
         suffixIcon: Icon(
           icon,

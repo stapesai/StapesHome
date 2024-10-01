@@ -175,9 +175,8 @@ class _OtpVerificationPageState extends State<OtpVerificationPage> {
                         onPressed: state is AuthLoading
                             ? null
                             : () {
-                                BlocProvider.of<AuthBloc>(context).add(
-                                  ResendOtpEvent(email: widget.email),
-                                );
+                                // Implement resend OTP functionality
+                                // This will depend on the specific use case (login, signup, or password reset)
                               },
                         child: Text(
                           "Resend Code",

@@ -3,13 +3,13 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../../core/constants/colors.dart';
-import '../../../../core/constants/font_sizes.dart';
-import '../../../../core/constants/padding.dart';
-import '../../widgets/custom_button.dart';
-import '../../widgets/custom_text_field.dart';
-import '../../bloc/auth/auth_bloc.dart';
-import 'otp_verification_page.dart';
+import '../../../../../core/constants/colors.dart';
+import '../../../../../core/constants/font_sizes.dart';
+import '../../../../../core/constants/padding.dart';
+import '../../../widgets/custom_button.dart';
+import '../../../widgets/custom_text_field.dart';
+import '../../../bloc/auth/auth_bloc.dart';
+import '../otp_verification_page.dart';
 
 class EmailSignUpPage extends StatefulWidget {
   const EmailSignUpPage({super.key});

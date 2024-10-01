@@ -3,146 +3,123 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import '../../../domain/usecases/login.dart';
-import '../../../domain/usecases/signup.dart';
-import '../../../domain/usecases/logout.dart';
-import '../../../domain/usecases/verify_otp.dart';
+import '../../../domain/usecases/request_login.dart';
+import '../../../domain/usecases/complete_login.dart';
+import '../../../domain/usecases/request_signup.dart';
+import '../../../domain/usecases/complete_signup.dart';
 import '../../../domain/usecases/request_password_reset.dart';
+import '../../../domain/usecases/complete_password_reset.dart';
+import '../../../domain/usecases/verify_otp.dart';
+import '../../../domain/usecases/logout.dart';
 import '../../../core/usecases/usecase.dart';
 import '../../../domain/entities/user.dart';
 
-// Events
-abstract class AuthEvent extends Equatable {
-  const AuthEvent();
+part 'auth_event.dart';
+part 'auth_state.dart';
 
-  @override
-  List<Object> get props => [];
-}
-
-class LoginEvent extends AuthEvent {
-  final String email;
-  final String password;
-
-  const LoginEvent({required this.email, required this.password});
-
-  @override
-  List<Object> get props => [email, password];
-}
-
-class SignupEvent extends AuthEvent {
-  final String email;
-  final String password;
-
-  const SignupEvent({required this.email, required this.password});
-
-  @override
-  List<Object> get props => [email, password];
-}
-
-class LogoutEvent extends AuthEvent {}
-
-class VerifyOtpEvent extends AuthEvent {
-  final String transactionId;
-  final String otp;
-
-  const VerifyOtpEvent({required this.transactionId, required this.otp});
-
-  @override
-  List<Object> get props => [transactionId, otp];
-}
-
-class RequestPasswordResetEvent extends AuthEvent {
-  final String email;
-
-  const RequestPasswordResetEvent({required this.email});
-
-  @override
-  List<Object> get props => [email];
-}
-
-// States
-abstract class AuthState extends Equatable {
-  const AuthState();
-
-  @override
-  List<Object> get props => [];
-}
-
-class AuthInitial extends AuthState {}
-
-class AuthLoading extends AuthState {}
-
-class AuthAuthenticated extends AuthState {
-  final User user;
-
-  const AuthAuthenticated(this.user);
-
-  @override
-  List<Object> get props => [user];
-}
-
-class AuthUnauthenticated extends AuthState {}
-
-class AuthError extends AuthState {
-  final String message;
-
-  const AuthError(this.message);
-
-  @override
-  List<Object> get props => [message];
-}
-
-class OtpSent extends AuthState {
-  final String transactionId;
-  final DateTime expiryTime;
-
-  const OtpSent(this.transactionId, this.expiryTime);
-
-  @override
-  List<Object> get props => [transactionId, expiryTime];
-}
-
-class OtpVerified extends AuthState {}
-
-class PasswordResetRequested extends AuthState {}
-
-// BLoC
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  final Login login;
-  final Signup signup;
-  final Logout logout;
-  final VerifyOtp verifyOtp;
+  final RequestLogin requestLogin;
+  final CompleteLogin completeLogin;
+  final RequestSignup requestSignup;
+  final CompleteSignup completeSignup;
   final RequestPasswordReset requestPasswordReset;
+  final CompletePasswordReset completePasswordReset;
+  final VerifyOtp verifyOtp;
+  final Logout logout;
 
   AuthBloc({
-    required this.login,
-    required this.signup,
-    required this.logout,
-    required this.verifyOtp,
+    required this.requestLogin,
+    required this.completeLogin,
+    required this.requestSignup,
+    required this.completeSignup,
     required this.requestPasswordReset,
+    required this.completePasswordReset,
+    required this.verifyOtp,
+    required this.logout,
   }) : super(AuthInitial()) {
-    on<LoginEvent>(_onLogin);
-    on<SignupEvent>(_onSignup);
-    on<LogoutEvent>(_onLogout);
-    on<VerifyOtpEvent>(_onVerifyOtp);
+    on<RequestLoginEvent>(_onRequestLogin);
+    on<CompleteLoginEvent>(_onCompleteLogin);
+    on<RequestSignupEvent>(_onRequestSignup);
+    on<CompleteSignupEvent>(_onCompleteSignup);
     on<RequestPasswordResetEvent>(_onRequestPasswordReset);
+    on<CompletePasswordResetEvent>(_onCompletePasswordReset);
+    on<VerifyOtpEvent>(_onVerifyOtp);
+    on<LogoutEvent>(_onLogout);
   }
 
-  void _onLogin(LoginEvent event, Emitter<AuthState> emit) async {
+  void _onRequestLogin(RequestLoginEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final result = await login(LoginParams(email: event.email, password: event.password));
+    final result = await requestLogin(RequestLoginParams(email: event.email));
+    result.fold(
+      (failure) => emit(AuthError(failure.toString())),
+      (otpInfo) => emit(LoginOtpSent(otpInfo.transactionId, otpInfo.expiryTime)),
+    );
+  }
+
+  void _onCompleteLogin(CompleteLoginEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final result = await completeLogin(CompleteLoginParams(transactionId: event.transactionId));
     result.fold(
       (failure) => emit(AuthError(failure.toString())),
       (user) => emit(AuthAuthenticated(user)),
     );
   }
 
-  void _onSignup(SignupEvent event, Emitter<AuthState> emit) async {
+  void _onRequestSignup(RequestSignupEvent event, Emitter<AuthState> emit) async {
     emit(AuthLoading());
-    final result = await signup(SignupParams(email: event.email, password: event.password));
+    final result = await requestSignup(RequestSignupParams(email: event.email));
     result.fold(
       (failure) => emit(AuthError(failure.toString())),
-      (otpInfo) => emit(OtpSent(otpInfo.transactionId, otpInfo.expiryTime)),
+      (otpInfo) => emit(SignupOtpSent(otpInfo.transactionId, otpInfo.expiryTime)),
+    );
+  }
+
+  void _onCompleteSignup(CompleteSignupEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final result = await completeSignup(CompleteSignupParams(
+      transactionId: event.transactionId,
+      password: event.password,
+      firstName: event.firstName,
+      lastName: event.lastName,
+      dob: event.dob,
+      gender: event.gender,
+    ));
+    result.fold(
+      (failure) => emit(AuthError(failure.toString())),
+      (user) => emit(AuthAuthenticated(user)),
+    );
+  }
+
+  void _onRequestPasswordReset(RequestPasswordResetEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final result = await requestPasswordReset(RequestPasswordResetParams(email: event.email));
+    result.fold(
+      (failure) => emit(AuthError(failure.toString())),
+      (otpInfo) => emit(PasswordResetOtpSent(otpInfo.transactionId, otpInfo.expiryTime)),
+    );
+  }
+
+  void _onCompletePasswordReset(CompletePasswordResetEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final result = await completePasswordReset(CompletePasswordResetParams(
+      transactionId: event.transactionId,
+      newPassword: event.newPassword,
+    ));
+    result.fold(
+      (failure) => emit(AuthError(failure.toString())),
+      (_) => emit(PasswordResetComplete()),
+    );
+  }
+
+  void _onVerifyOtp(VerifyOtpEvent event, Emitter<AuthState> emit) async {
+    emit(AuthLoading());
+    final result = await verifyOtp(VerifyOtpParams(
+      transactionId: event.transactionId,
+      otp: event.otp,
+    ));
+    result.fold(
+      (failure) => emit(AuthError(failure.toString())),
+      (_) => emit(OtpVerified()),
     );
   }
 
@@ -152,24 +129,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthError(failure.toString())),
       (_) => emit(AuthUnauthenticated()),
-    );
-  }
-
-  void _onVerifyOtp(VerifyOtpEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    final result = await verifyOtp(VerifyOtpParams(transactionId: event.transactionId, otp: event.otp));
-    result.fold(
-      (failure) => emit(AuthError(failure.toString())),
-      (_) => emit(OtpVerified()),
-    );
-  }
-
-  void _onRequestPasswordReset(RequestPasswordResetEvent event, Emitter<AuthState> emit) async {
-    emit(AuthLoading());
-    final result = await requestPasswordReset(RequestPasswordResetParams(email: event.email));
-    result.fold(
-      (failure) => emit(AuthError(failure.toString())),
-      (otpInfo) => emit(OtpSent(otpInfo.transactionId, otpInfo.expiryTime)),
     );
   }
 }

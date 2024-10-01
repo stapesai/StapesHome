@@ -12,10 +12,10 @@ import '../../widgets/custom_text_field.dart';
 import '../../widgets/password_text_field.dart';
 import '../../bloc/auth/auth_bloc.dart';
 import 'forgot_password_page.dart';
-import 'email_signup_page.dart';
+import 'signup/email_signup_page.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   _LoginPageState createState() => _LoginPageState();
@@ -222,7 +222,7 @@ class _LoginPageState extends State<LoginPage> {
         decoration: ShapeDecoration(
           color: Color(0xFF34373F),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
-          shadows: [
+          shadows: const [
             BoxShadow(
               color: Color(0x26000000),
               blurRadius: 5.40,
