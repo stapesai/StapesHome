@@ -18,6 +18,9 @@ class Config {
   /// The timeout duration for network requests in seconds
   static const int networkTimeoutSeconds = 30;
 
+  /// Delay between retry attempts in milliseconds
+  static const int retryDelayMilliseconds = 1000;
+
   /// Returns whether detailed logging is enabled based on the current environment
   static bool get enableDetailedLogs {
     switch (environment) {
