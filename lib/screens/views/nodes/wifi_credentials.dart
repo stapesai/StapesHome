@@ -27,7 +27,7 @@ class _WifiCredentialsState extends State<WifiCredentials> {
   List<WiFiAccessPoint> _networks = [];
   WiFiAccessPoint? _selectedNetwork;
   // String? _originalSsid;
-  Timer? _connectionCheckTimer;
+  // Timer? _connectionCheckTimer;
 
   @override
   void initState() {
@@ -37,22 +37,25 @@ class _WifiCredentialsState extends State<WifiCredentials> {
 
   @override
   void dispose() {
-    _connectionCheckTimer?.cancel();
+    // _connectionCheckTimer?.cancel();
     wifiPasswordController.dispose();
     super.dispose();
   }
 
   Future<void> _checkPermissions() async {
-    var status = await Permission.locationWhenInUse.status;
-    if (!status.isGranted) {
-      status = await Permission.locationWhenInUse.request();
-    }
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.locationWhenInUse,
+      Permission.storage,
+      Permission.bluetooth,
+      Permission.bluetoothScan,
+      Permission.bluetoothConnect,
+    ].request();
 
-    if (status.isGranted) {
+    if (statuses[Permission.locationWhenInUse]!.isGranted && statuses[Permission.storage]!.isGranted) {
       _startWifiScan();
     } else {
       setState(() {
-        _errorMessage = 'Location permission is required to scan for Wi-Fi networks.';
+        _errorMessage = 'Required permissions are not granted.';
       });
     }
   }
@@ -64,8 +67,17 @@ class _WifiCredentialsState extends State<WifiCredentials> {
     });
 
     try {
-      await WiFiScan.instance.startScan();
-      _loadWifiList();
+      var canStartScan = await WiFiScan.instance.canStartScan();
+      if (canStartScan == CanStartScan.yes) {
+        var result = await WiFiScan.instance.startScan();
+        if (result) {
+          await _loadWifiList();
+        } else {
+          throw Exception('startScan returned false');
+        }
+      } else {
+        throw Exception('Cannot start scan: $canStartScan');
+      }
     } catch (e) {
       setState(() {
         _isScanning = false;
@@ -76,16 +88,19 @@ class _WifiCredentialsState extends State<WifiCredentials> {
 
   Future<void> _loadWifiList() async {
     try {
-      final List<WiFiAccessPoint> accessPoints = await WiFiScan.instance.getScannedResults();
+      List<WiFiAccessPoint> accessPoints = await WiFiScan.instance.getScannedResults();
+      print('Access Points: ${accessPoints.length}');
+
       setState(() {
         _networks = accessPoints
-            .where((network) =>
-                network.ssid.isNotEmpty &&
-                network.frequency >= 2400 &&
-                network.frequency <= 2500) // Filter for 2.4GHz networks
+            .where((network) => network.ssid.isNotEmpty && network.frequency >= 2400 && network.frequency <= 2500)
             .toList();
         _isScanning = false;
       });
+
+      if (_networks.isEmpty) {
+        _errorMessage = 'No 2.4GHz networks found. Try rescanning.';
+      }
     } catch (e) {
       setState(() {
         _isScanning = false;
