@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:StapesHome/constants/padding.dart';
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/core/api/api_routes.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:pinput/pinput.dart';
 import 'package:http/http.dart' as http;

@@ -6,7 +6,7 @@ import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
 import 'package:StapesHome/widgets/skeletons/node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/core/api/api_routes.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/constants/font_sizes.dart';

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/colors.dart';
 import 'package:StapesHome/widgets/iot/light.dart';
 import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
-import 'package:StapesHome/constants/api_routes.dart';
+import 'package:StapesHome/core/api/api_routes.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:StapesHome/constants/font_sizes.dart';
 import 'package:StapesHome/constants/padding.dart';

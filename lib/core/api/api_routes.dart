@@ -1,4 +1,4 @@
-import 'config.dart';
+import '../config/config.dart';
 
 class AuthRoutes {
   static final String baseUrl = Config.authBaseUrl;
