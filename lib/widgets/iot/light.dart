@@ -2,42 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:StapesHome/constants/models.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class LightComponent extends StatefulWidget {
+class LightComponent extends StatelessWidget {
   final Device device;
   final Function(bool) onToggle;
 
   const LightComponent({super.key, required this.device, required this.onToggle});
 
   @override
-  createState() => _LightComponentState();
-}
-
-class _LightComponentState extends State<LightComponent> {
-  bool isOn = false;
-
-  @override
-  void initState() {
-    super.initState();
-    // Optionally fetch the initial state if needed
-  }
-
-  Future<void> toggleLight() async {
-    setState(() {
-      isOn = !isOn;
-    });
-    widget.onToggle(isOn);
-  }
-
-  void updateState(bool newState) {
-    setState(() {
-      isOn = newState;
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: toggleLight,
+      onTap: () => onToggle(!device.state),
       child: Container(
         width: 150,
         height: 150,
@@ -46,7 +20,7 @@ class _LightComponentState extends State<LightComponent> {
           borderRadius: BorderRadius.circular(25),
           boxShadow: [
             BoxShadow(
-              color: isOn ? Color(0xCCFF9F1C) : Colors.transparent,
+              color: device.state ? Color(0xCCFF9F1C) : Colors.transparent,
               blurRadius: 16,
               offset: Offset(8, 7),
               spreadRadius: -3,
@@ -61,7 +35,7 @@ class _LightComponentState extends State<LightComponent> {
               height: 68,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: isOn ? Color(0xFFFFA52D) : Colors.white.withOpacity(0.5),
+                color: device.state ? Color(0xFFFFA52D) : Colors.white.withOpacity(0.5),
               ),
               child: Center(
                 child: SvgPicture.asset(
@@ -73,7 +47,7 @@ class _LightComponentState extends State<LightComponent> {
             ),
             SizedBox(height: 10),
             Text(
-              widget.device.name,
+              device.name,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: Colors.white,

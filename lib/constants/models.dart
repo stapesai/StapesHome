@@ -77,7 +77,7 @@ class Device {
   final String type;
   final int channelId;
   final String id;
-  // bool isOn;
+  bool state;
 
   Device({
     required this.nodeId,
@@ -85,7 +85,7 @@ class Device {
     required this.type,
     required this.channelId,
     required this.id,
-    // required this.isOn,
+    this.state = false,
   });
 
   factory Device.fromJson(Map<String, dynamic> json) {
@@ -95,19 +95,18 @@ class Device {
       type: json['type'],
       channelId: json['channel_id'],
       id: json['id'],
-      // isOn: false,
-      // isOn: json['state'] == 'on',
+      state: json['state'] ?? false,
     );
   }
 
-  Device copyWith({bool? isOn}) {
+  Device copyWith({bool? state}) {
     return Device(
       nodeId: nodeId,
       name: name,
       type: type,
       channelId: channelId,
       id: id,
-      // isOn: isOn ?? this.isOn,
+      state: state ?? this.state,
     );
   }
 }
