@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
         if (snapshot.connectionState == ConnectionState.done) {
           final session = snapshot.data;
           final webSocketService = session != null
-              ? WebSocketService(WebsocketRoutes.getWebsocketUrl(), session.userId, session.sessionId)
+              ? WebSocketService(WebSocketRoutes.getWebSocketUrl(), session.userId, session.sessionId)
               : null;
 
           if (webSocketService != null) {
