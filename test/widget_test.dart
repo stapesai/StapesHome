@@ -7,7 +7,7 @@
 
 import 'package:flutter_test/flutter_test.dart';
 
-import 'package:StapesHome/main.dart';
+import 'package:stapes_home/main.dart';
 
 void main() {
   testWidgets('Test if the app runs', (WidgetTester tester) async {
