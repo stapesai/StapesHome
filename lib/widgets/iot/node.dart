@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:StapesHome/constants/models.dart';
+import 'package:stapes_home/core/common/models.dart';
 
 class NodeComponent extends StatelessWidget {
   final Node node;

@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:StapesHome/screens/views/nodes/provisioning.dart';
-import 'package:StapesHome/screens/views/nodes/scanner/scanner_overlay.dart';
-import 'package:StapesHome/screens/views/nodes/scanner/scan_instructions.dart';
+import 'package:stapes_home/screens/views/nodes/provisioning.dart';
+import 'package:stapes_home/screens/views/nodes/scanner/scanner_overlay.dart';
+import 'package:stapes_home/screens/views/nodes/scanner/scan_instructions.dart';
 
 class QrScannerScreen extends StatefulWidget {
   final String roomId;
@@ -20,7 +20,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   MobileScannerController? _controller;
   bool _torchOn = false;
   bool _isProcessing = false;
-  bool _hasTorch = true;  // Assume torch is available until proven otherwise
+  bool _hasTorch = true; // Assume torch is available until proven otherwise
 
   @override
   void initState() {
@@ -65,7 +65,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
       // If an error occurs (torch not available), we can assume there's no torch
       print('Torch is not available: $e');
       setState(() {
-        _hasTorch = false;  // Hide the torch toggle button if not available
+        _hasTorch = false; // Hide the torch toggle button if not available
       });
     }
   }
@@ -129,7 +129,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
               onDetect: (barcode) => _handleQRCode(barcode.barcodes),
             ),
           QRScannerOverlay(overlayColour: Colors.black.withOpacity(0.5)),
-          if (_hasTorch)  // Show torch toggle only if the torch is available
+          if (_hasTorch) // Show torch toggle only if the torch is available
             Positioned(
               top: 45,
               right: 20,

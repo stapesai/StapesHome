@@ -1,19 +1,19 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:StapesHome/utils/hive.dart';
+import 'package:stapes_home/utils/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:StapesHome/screens/routes/main.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/widgets/input/password.dart';
-import 'package:StapesHome/widgets/input/textfield.dart';
-import "package:StapesHome/widgets/button.dart";
-import 'package:StapesHome/utils/sessions_model.dart';
-import 'package:StapesHome/screens/authentication/forgot_password.dart';
-import 'package:StapesHome/screens/authentication/common/otp_verify.dart';
-import 'package:StapesHome/screens/authentication/signup/email_input.dart';
+import 'package:stapes_home/screens/routes/main.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
+import 'package:stapes_home/core/constants/api_routes.dart';
+import 'package:stapes_home/widgets/input/password.dart';
+import 'package:stapes_home/widgets/input/textfield.dart';
+import "package:stapes_home/widgets/button.dart";
+import 'package:stapes_home/utils/sessions_model.dart';
+import 'package:stapes_home/screens/authentication/forgot_password.dart';
+import 'package:stapes_home/screens/authentication/common/otp_verify.dart';
+import 'package:stapes_home/screens/authentication/signup/email_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});

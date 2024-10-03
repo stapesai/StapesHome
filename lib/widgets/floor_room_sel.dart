@@ -1,16 +1,16 @@
 // File: lib/widgets/floor_room_sel.dart
 
 import 'dart:convert';
-import 'package:StapesHome/widgets/hold_bottom_sheet.dart';
-import 'package:StapesHome/widgets/skeletons/floor_room_name.dart';
+import 'package:stapes_home/widgets/hold_bottom_sheet.dart';
+import 'package:stapes_home/widgets/skeletons/floor_room_name.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-// import 'package:StapesHome/widgets/popup.dart';
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/constants/models.dart';
-import 'package:StapesHome/screens/views/floor_room_selector/create_floor_page.dart';
-import 'package:StapesHome/screens/views/floor_room_selector/create_room_page.dart';
+// import 'package:stapes_home/widgets/popup.dart';
+import 'package:stapes_home/core/constants/api_routes.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/screens/views/floor_room_selector/create_floor_page.dart';
+import 'package:stapes_home/screens/views/floor_room_selector/create_room_page.dart';
 
 class FloorRoomSelector extends StatefulWidget {
   final BuildContext context;

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/colors.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
 
 class NDropdown<T> extends StatelessWidget {
   final String hintText;

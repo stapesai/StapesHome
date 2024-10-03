@@ -1,8 +1,8 @@
-import 'package:StapesHome/constants/padding.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:flutter/material.dart';
-import 'package:StapesHome/widgets/input/textfield.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/button.dart';
+import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/widgets/button.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);

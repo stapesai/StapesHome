@@ -1,11 +1,11 @@
 import 'dart:async';
-import 'package:StapesHome/constants/colors.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
-import 'package:StapesHome/screens/routes/main.dart';
-import 'package:StapesHome/utils/sessions_model.dart';
-import 'package:StapesHome/screens/authentication/login.dart';
+import 'package:stapes_home/screens/routes/main.dart';
+import 'package:stapes_home/utils/sessions_model.dart';
+import 'package:stapes_home/screens/authentication/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

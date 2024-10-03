@@ -1,5 +1,5 @@
 // import 'package:flutter/material.dart';
-// import 'package:StapesHome/constants/models.dart';
+// import 'package:stapes_home/constants/models.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
 // class FanComponent extends StatefulWidget {

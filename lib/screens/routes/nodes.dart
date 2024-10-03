@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'package:StapesHome/screens/views/nodes/scanner/qr_scanner.dart';
-import 'package:StapesHome/services/websocket_service.dart';
-import 'package:StapesHome/widgets/iot/node.dart';
-import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
-import 'package:StapesHome/widgets/skeletons/node.dart';
+import 'package:stapes_home/screens/views/nodes/scanner/qr_scanner.dart';
+import 'package:stapes_home/services/websocket_service.dart';
+import 'package:stapes_home/widgets/iot/node.dart';
+import 'package:stapes_home/widgets/scan_node_add_device_btn.dart';
+import 'package:stapes_home/widgets/skeletons/node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/models.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/widgets/floor_room_sel.dart';
+import 'package:stapes_home/core/constants/api_routes.dart';
+import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
+import 'package:stapes_home/widgets/floor_room_sel.dart';
 import 'package:provider/provider.dart';
 
 class NodesScreen extends StatefulWidget {
@@ -51,7 +51,7 @@ class _NodesScreenState extends State<NodesScreen> {
       }
     });
   }
-  
+
   void _updateNodeState(NodeStatusUpdate nodeUpdateData) {
     setState(() {
       final index = nodes.indexWhere((n) => n.id == nodeUpdateData.nodeId);

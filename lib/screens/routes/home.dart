@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:StapesHome/constants/padding.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
 
 class HomeScreen extends StatefulWidget {
   final String sessionId;

@@ -1,17 +1,17 @@
 import 'dart:convert';
-import 'package:StapesHome/services/websocket_service.dart';
-import 'package:StapesHome/widgets/skeletons/device.dart';
+import 'package:stapes_home/services/websocket_service.dart';
+import 'package:stapes_home/widgets/skeletons/device.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/widgets/iot/light.dart';
-import 'package:StapesHome/widgets/scan_node_add_device_btn.dart';
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/constants/models.dart';
-import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/widgets/floor_room_sel.dart';
-import 'package:StapesHome/screens/views/devices/add_new_device.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/widgets/iot/light.dart';
+import 'package:stapes_home/widgets/scan_node_add_device_btn.dart';
+import 'package:stapes_home/core/constants/api_routes.dart';
+import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
+import 'package:stapes_home/widgets/floor_room_sel.dart';
+import 'package:stapes_home/screens/views/devices/add_new_device.dart';
 import 'package:provider/provider.dart';
 
 class DevicesScreen extends StatefulWidget {

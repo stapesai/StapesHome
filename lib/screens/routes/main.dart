@@ -1,14 +1,14 @@
-import 'package:StapesHome/constants/models.dart';
+import 'package:stapes_home/core/common/models.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:StapesHome/utils/hive.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/screens/routes/devices.dart';
-import 'package:StapesHome/screens/routes/home.dart';
-import 'package:StapesHome/screens/routes/nodes.dart';
-import 'package:StapesHome/screens/routes/profile.dart';
+import 'package:stapes_home/utils/hive.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/screens/routes/devices.dart';
+import 'package:stapes_home/screens/routes/home.dart';
+import 'package:stapes_home/screens/routes/nodes.dart';
+import 'package:stapes_home/screens/routes/profile.dart';
 import 'package:provider/provider.dart';
-import 'package:StapesHome/services/websocket_service.dart';
+import 'package:stapes_home/services/websocket_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

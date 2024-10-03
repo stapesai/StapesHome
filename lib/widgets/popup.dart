@@ -1,7 +1,7 @@
 // File: lib/widgets/delete_confirmation_dialog.dart
 
 // import 'package:flutter/material.dart';
-// import 'package:StapesHome/constants/colors.dart';
+// import 'package:stapes_home/constants/colors.dart';
 
 // class DeleteConfirmationDialog extends StatelessWidget {
 //   final String itemType;

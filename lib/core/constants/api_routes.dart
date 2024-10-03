@@ -1,4 +1,4 @@
-import 'config.dart';
+import 'package:stapes_home/core/config/config.dart';
 
 class AuthRoutes {
   static final String baseUrl = Config.authBaseUrl;

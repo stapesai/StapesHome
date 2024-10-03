@@ -1,15 +1,15 @@
 import 'dart:convert';
-import 'package:StapesHome/constants/padding.dart';
-import 'package:StapesHome/widgets/input/textfield.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
+import 'package:stapes_home/widgets/input/textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/font_sizes.dart';
-import 'package:StapesHome/utils/hive.dart';
-import 'package:StapesHome/utils/sessions_model.dart';
-import 'package:StapesHome/widgets/button.dart'; // Import the CustomButton widget
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/constants/api_routes.dart';
-import 'package:StapesHome/screens/routes/main.dart';
+import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import 'package:stapes_home/utils/hive.dart';
+import 'package:stapes_home/utils/sessions_model.dart';
+import 'package:stapes_home/widgets/button.dart'; // Import the CustomButton widget
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/constants/api_routes.dart';
+import 'package:stapes_home/screens/routes/main.dart';
 
 class SignupForm extends StatefulWidget {
   final String password;

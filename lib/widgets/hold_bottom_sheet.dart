@@ -1,7 +1,7 @@
 // File: lib/widgets/hold_bottom_sheet.dart
 
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/colors.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
 
 class HoldBottomSheet {
   final IconData icon;
@@ -24,11 +24,9 @@ class CustomBottomSheet extends StatelessWidget {
         // color: Colors.red,
         borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
       ),
-
       constraints: BoxConstraints(
         maxHeight: MediaQuery.of(context).size.height * 0.7,
       ),
-
       child: SingleChildScrollView(
         child: Column(
           // mainAxisSize: MainAxisSize.min,

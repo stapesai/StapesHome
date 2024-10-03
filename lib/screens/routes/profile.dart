@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:StapesHome/constants/colors.dart';
-import 'package:StapesHome/screens/views/profile/edit_profile.dart';
-import 'package:StapesHome/screens/views/profile/logout_dialog.dart';
-import 'package:StapesHome/screens/views/profile/sessions_screen.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/screens/views/profile/edit_profile.dart';
+import 'package:stapes_home/screens/views/profile/logout_dialog.dart';
+import 'package:stapes_home/screens/views/profile/sessions_screen.dart';
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
