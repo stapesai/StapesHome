@@ -1,53 +1,35 @@
-// Path: constants/config.dart
+// File: lib/core/config/config.dart
+// Description: This file contains application-wide configuration settings and constants.
 
+/// Defines the possible environments for the application
 enum Environment { development, production }
 
+/// Provides configuration settings for the application
 class Config {
+  /// The current environment of the application
   static const Environment environment = Environment.development;
 
-  // Base URLs for different services
-  static String get authBaseUrl {
-    switch (environment) {
-      case Environment.development:
-        return '192.168.0.253:8000'; // Dev Auth base URL
-      case Environment.production:
-        return 'auth.jarvishome.in'; // Prod Auth base URL
-      default:
-        throw UnsupportedError('Environment not supported');
-    }
-  }
+  /// The current version of the application
+  static const String appVersion = '1.0.0';
 
-  static String get backendBaseUrl {
-    switch (environment) {
-      case Environment.development:
-        return '192.168.0.253:8001'; // Dev Backend base URL
-      case Environment.production:
-        return 'backend.jarvishome.in'; // Prod Backend base URL
-      default:
-        throw UnsupportedError('Environment not supported');
-    }
-  }
+  /// The maximum number of retry attempts for network requests
+  static const int maxRetryAttempts = 3;
 
-  static String get protocol {
-    switch (environment) {
-      case Environment.development:
-        return 'http';
-      case Environment.production:
-        return 'https';
-      default:
-        throw UnsupportedError('Environment not supported');
-    }
-  }
+  /// The timeout duration for network requests in seconds
+  static const int networkTimeoutSeconds = 30;
 
-  static String get webSocketUrl {
+  /// Delay between retry attempts in milliseconds
+  static const int retryDelayMilliseconds = 1000;
+
+  /// Returns whether detailed logging is enabled based on the current environment
+  static bool get enableDetailedLogs {
     switch (environment) {
       case Environment.development:
-        return 'ws://192.168.0.253:8003/ws'; // Dev WebSocket URL
+        return true;
       case Environment.production:
-        // return 'wss://backend.jarvishome.in/ws'; // Prod WebSocket URL
-        throw UnsupportedError('WebSocket not supported in production');
+        return false;
       default:
-        throw UnsupportedError('Environment not supported');
+        return false;
     }
   }
 }
