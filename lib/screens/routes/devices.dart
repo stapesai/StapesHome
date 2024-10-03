@@ -57,10 +57,7 @@ class _DevicesScreenState extends State<DevicesScreen> {
       final deviceIndex = devices.indexWhere((d) => d.id == update.deviceId);
       if (deviceIndex != -1) {
         print('Device with name ${devices[deviceIndex].name} updated to ${update.state}');
-        // devices[deviceIndex] = devices[deviceIndex].copyWith(isOn: update.state);
-
-        // // This is needed to update the UI
-        // devices = List.from(devices);
+        devices[deviceIndex] = devices[deviceIndex].copyWith(state: update.state);
       }
     });
   }

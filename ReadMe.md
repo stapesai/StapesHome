@@ -5,291 +5,164 @@
 ```text
 lib/
 ├── core/
+│   ├── config/
+│   │   └── app_config.dart
 │   ├── constants/
-│   │   ├── api_routes.dart
-│   │   │   // Contains all API endpoint URLs
-│   │   ├── colors.dart
-│   │   │   // Defines color constants used throughout the app
-│   │   ├── config.dart
-│   │   │   // Holds configuration variables like environment settings
-│   │   ├── font_sizes.dart
-│   │   │   // Defines font size constants
-│   │   └── padding.dart
-│   │       // Defines padding constants
-│   ├── error/
+│   │   └── api_routes.dart
+│   ├── errors/
 │   │   ├── exceptions.dart
-│   │   │   // Custom exception classes
 │   │   └── failures.dart
-│   │       // Failure classes for domain layer
 │   ├── network/
-│   │   └── network_info.dart
-│   │       // Provides network connectivity information
-│   ├── usecases/
-│   │   └── usecase.dart
-│   │       // Abstract base class for use cases
-│   └── util/
-│       ├── input_converter.dart
-│       │   // Utility for input validation and conversion
-│       └── websocket_manager.dart
-│           // Manages WebSocket connections and message handling
-│
+│   │   ├── http_client.dart - Client for making HTTP requests (with logging and error handling)
+│   │   └── network_info.dart - Checks network connectivity
+│   ├── theme/
+│   │   ├── app_colors.dart - Contains colors constants used in the app
+│   │   ├── app_fonts.dart - Contains fonts and text styles used in the app
+│   │   └── app_padding.dart - Constant page padding 
+│   ├── utils/
+│   │   ├── input_converter.dart
+│   │   └── logger.dart
+│   └── success/
+│       └── success.dart
 ├── data/
 │   ├── datasources/
 │   │   ├── local/
 │   │   │   └── hive_local_datasource.dart
-│   │   │       // Implements local data storage using Hive
 │   │   └── remote/
 │   │       ├── auth_remote_datasource.dart
-│   │       │   // Handles authentication API calls
 │   │       ├── device_remote_datasource.dart
-│   │       │   // Manages device-related API calls
 │   │       ├── floor_remote_datasource.dart
-│   │       │   // Handles floor-related API calls
-│   │       ├── mqtt_remote_datasource.dart
-│   │       │   // Manages MQTT connections and message handling
-│   │       ├── node_remote_datasource.dart
-│   │       │   // Handles node-related API calls
 │   │       ├── room_remote_datasource.dart
-│   │       │   // Manages room-related API calls
-│   │       └── websocket_remote_datasource.dart
-│   │           // Handles WebSocket connections and real-time data
+│   │       ├── node_remote_datasource.dart
+│   │       └── user_remote_datasource.dart
 │   ├── models/
 │   │   ├── device_model.dart
-│   │   │   // Data model for devices
 │   │   ├── floor_model.dart
-│   │   │   // Data model for floors
-│   │   ├── mqtt_message_model.dart
-│   │   │   // Data model for MQTT messages
-│   │   ├── node_model.dart
-│   │   │   // Data model for nodes
 │   │   ├── room_model.dart
-│   │   │   // Data model for rooms
-│   │   ├── session_model.dart
-│   │   │   // Data model for user sessions
-│   │   └── websocket_message_model.dart
-│   │       // Data model for WebSocket messages
+│   │   ├── node_model.dart
+│   │   ├── user_model.dart
+│   │   └── session_model.dart
 │   └── repositories/
 │       ├── auth_repository_impl.dart
-│       │   // Implementation of AuthRepository
 │       ├── device_repository_impl.dart
-│       │   // Implementation of DeviceRepository
 │       ├── floor_repository_impl.dart
-│       │   // Implementation of FloorRepository
-│       ├── mqtt_repository_impl.dart
-│       │   // Implementation of MQTTRepository
-│       ├── node_repository_impl.dart
-│       │   // Implementation of NodeRepository
 │       ├── room_repository_impl.dart
-│       │   // Implementation of RoomRepository
-│       └── websocket_repository_impl.dart
-│           // Implementation of WebSocketRepository
-│
+│       ├── node_repository_impl.dart
+│       └── user_repository_impl.dart
 ├── domain/
 │   ├── entities/
 │   │   ├── device.dart
-│   │   │   // Entity class for devices
 │   │   ├── floor.dart
-│   │   │   // Entity class for floors
-│   │   ├── mqtt_message.dart
-│   │   │   // Entity class for MQTT messages
-│   │   ├── node.dart
-│   │   │   // Entity class for nodes
 │   │   ├── room.dart
-│   │   │   // Entity class for rooms
-│   │   ├── session.dart
-│   │   │   // Entity class for user sessions
-│   │   └── websocket_message.dart
-│   │       // Entity class for WebSocket messages
+│   │   ├── node.dart
+│   │   ├── user.dart
+│   │   └── session.dart
 │   ├── repositories/
 │   │   ├── auth_repository.dart
-│   │   │   // Abstract class defining authentication operations
 │   │   ├── device_repository.dart
-│   │   │   // Abstract class defining device operations
 │   │   ├── floor_repository.dart
-│   │   │   // Abstract class defining floor operations
-│   │   ├── mqtt_repository.dart
-│   │   │   // Abstract class defining MQTT operations
-│   │   ├── node_repository.dart
-│   │   │   // Abstract class defining node operations
 │   │   ├── room_repository.dart
-│   │   │   // Abstract class defining room operations
-│   │   └── websocket_repository.dart
-│   │       // Abstract class defining WebSocket operations
+│   │   ├── node_repository.dart
+│   │   └── user_repository.dart
 │   └── usecases/
 │       ├── auth/
 │       │   ├── login_usecase.dart
-│       │   │   // Use case for user login
-│       │   ├── logout_usecase.dart
-│       │   │   // Use case for user logout
-│       │   └── signup_usecase.dart
-│       │       // Use case for user signup
+│       │   ├── signup_usecase.dart
+│       │   ├── verify_otp_usecase.dart
+│       │   └── reset_password_usecase.dart
 │       ├── device/
-│       │   ├── create_device_usecase.dart
-│       │   │   // Use case for creating a new device
-│       │   ├── delete_device_usecase.dart
-│       │   │   // Use case for deleting a device
 │       │   ├── get_devices_usecase.dart
-│       │   │   // Use case for fetching devices
-│       │   └── update_device_usecase.dart
-│       │       // Use case for updating a device
+│       │   ├── toggle_device_usecase.dart
+│       │   └── add_device_usecase.dart
 │       ├── floor/
-│       │   ├── create_floor_usecase.dart
-│       │   │   // Use case for creating a new floor
-│       │   ├── delete_floor_usecase.dart
-│       │   │   // Use case for deleting a floor
 │       │   ├── get_floors_usecase.dart
-│       │   │   // Use case for fetching floors
-│       │   └── update_floor_usecase.dart
-│       │       // Use case for updating a floor
-│       ├── mqtt/
-│       │   ├── connect_mqtt_usecase.dart
-│       │   │   // Use case for connecting to MQTT broker
-│       │   ├── disconnect_mqtt_usecase.dart
-│       │   │   // Use case for disconnecting from MQTT broker
-│       │   ├── publish_mqtt_message_usecase.dart
-│       │   │   // Use case for publishing MQTT messages
-│       │   └── subscribe_mqtt_topic_usecase.dart
-│       │       // Use case for subscribing to MQTT topics
-│       ├── node/
-│       │   ├── create_node_usecase.dart
-│       │   │   // Use case for creating a new node
-│       │   ├── delete_node_usecase.dart
-│       │   │   // Use case for deleting a node
-│       │   ├── get_nodes_usecase.dart
-│       │   │   // Use case for fetching nodes
-│       │   └── update_node_usecase.dart
-│       │       // Use case for updating a node
+│       │   ├── add_floor_usecase.dart
+│       │   └── delete_floor_usecase.dart
 │       ├── room/
-│       │   ├── create_room_usecase.dart
-│       │   │   // Use case for creating a new room
-│       │   ├── delete_room_usecase.dart
-│       │   │   // Use case for deleting a room
 │       │   ├── get_rooms_usecase.dart
-│       │   │   // Use case for fetching rooms
-│       │   └── update_room_usecase.dart
-│       │       // Use case for updating a room
-│       └── websocket/
-│           ├── connect_websocket_usecase.dart
-│           │   // Use case for establishing WebSocket connection
-│           ├── disconnect_websocket_usecase.dart
-│           │   // Use case for closing WebSocket connection
-│           └── send_websocket_message_usecase.dart
-│               // Use case for sending WebSocket messages
-│
+│       │   ├── add_room_usecase.dart
+│       │   └── delete_room_usecase.dart
+│       ├── node/
+│       │   ├── get_nodes_usecase.dart
+│       │   ├── add_node_usecase.dart
+│       │   └── provision_node_usecase.dart
+│       └── user/
+│           └── get_user_details_usecase.dart
 ├── presentation/
-│   ├── bloc/
+│   ├── blocs/
 │   │   ├── auth/
 │   │   │   ├── auth_bloc.dart
-│   │   │   │   // BLoC for managing authentication state
 │   │   │   ├── auth_event.dart
-│   │   │   │   // Events for auth_bloc
 │   │   │   └── auth_state.dart
-│   │   │       // States for auth_bloc
 │   │   ├── device/
 │   │   │   ├── device_bloc.dart
-│   │   │   │   // BLoC for managing device state
 │   │   │   ├── device_event.dart
-│   │   │   │   // Events for device_bloc
 │   │   │   └── device_state.dart
-│   │   │       // States for device_bloc
 │   │   ├── floor/
 │   │   │   ├── floor_bloc.dart
-│   │   │   │   // BLoC for managing floor state
 │   │   │   ├── floor_event.dart
-│   │   │   │   // Events for floor_bloc
 │   │   │   └── floor_state.dart
-│   │   │       // States for floor_bloc
-│   │   ├── mqtt/
-│   │   │   ├── mqtt_bloc.dart
-│   │   │   │   // BLoC for managing MQTT connection state
-│   │   │   ├── mqtt_event.dart
-│   │   │   │   // Events for mqtt_bloc
-│   │   │   └── mqtt_state.dart
-│   │   │       // States for mqtt_bloc
-│   │   ├── node/
-│   │   │   ├── node_bloc.dart
-│   │   │   │   // BLoC for managing node state
-│   │   │   ├── node_event.dart
-│   │   │   │   // Events for node_bloc
-│   │   │   └── node_state.dart
-│   │   │       // States for node_bloc
 │   │   ├── room/
 │   │   │   ├── room_bloc.dart
-│   │   │   │   // BLoC for managing room state
 │   │   │   ├── room_event.dart
-│   │   │   │   // Events for room_bloc
 │   │   │   └── room_state.dart
-│   │   │       // States for room_bloc
-│   │   └── websocket/
-│   │       ├── websocket_bloc.dart
-│   │       │   // BLoC for managing WebSocket connection state
-│   │       ├── websocket_event.dart
-│   │       │   // Events for websocket_bloc
-│   │       └── websocket_state.dart
-│   │           // States for websocket_bloc
+│   │   ├── node/
+│   │   │   ├── node_bloc.dart
+│   │   │   ├── node_event.dart
+│   │   │   └── node_state.dart
+│   │   └── user/
+│   │       ├── user_bloc.dart
+│   │       ├── user_event.dart
+│   │       └── user_state.dart
 │   ├── pages/
 │   │   ├── auth/
 │   │   │   ├── login_page.dart
-│   │   │   │   // Login page UI
 │   │   │   ├── signup_page.dart
-│   │   │   │   // Signup page UI
+│   │   │   ├── otp_verification_page.dart
 │   │   │   └── forgot_password_page.dart
-│   │   │       // Forgot password page UI
-│   │   ├── device/
-│   │   │   ├── devices_page.dart
-│   │   │   │   // Page displaying list of devices
-│   │   │   └── add_device_page.dart
-│   │   │       // Page for adding a new device
-│   │   ├── floor/
-│   │   │   ├── floors_page.dart
-│   │   │   │   // Page displaying list of floors
-│   │   │   └── add_floor_page.dart
-│   │   │       // Page for adding a new floor
 │   │   ├── home/
 │   │   │   └── home_page.dart
-│   │   │       // Main home page of the app
-│   │   ├── node/
+│   │   ├── devices/
+│   │   │   ├── devices_page.dart
+│   │   │   └── add_device_page.dart
+│   │   ├── floors/
+│   │   │   └── create_floor_page.dart
+│   │   ├── rooms/
+│   │   │   └── create_room_page.dart
+│   │   ├── nodes/
 │   │   │   ├── nodes_page.dart
-│   │   │   │   // Page displaying list of nodes
 │   │   │   ├── add_node_page.dart
-│   │   │   │   // Page for adding a new node
-│   │   │   └── node_provisioning_page.dart
-│   │   │       // Page for node provisioning process
+│   │   │   ├── node_provisioning_page.dart
+│   │   │   └── qr_scanner_page.dart
 │   │   ├── profile/
 │   │   │   ├── profile_page.dart
-│   │   │   │   // User profile page
-│   │   │   └── edit_profile_page.dart
-│   │   │       // Page for editing user profile
-│   │   └── room/
-│   │       ├── rooms_page.dart
-│   │       │   // Page displaying list of rooms
-│   │       └── add_room_page.dart
-│   │           // Page for adding a new room
+│   │   │   ├── edit_profile_page.dart
+│   │   │   └── sessions_page.dart
+│   │   └── splash_screen.dart
 │   └── widgets/
-│       ├── common/
+│       ├── buttons/
 │       │   ├── custom_button.dart
-│       │   │   // Reusable custom button widget
+│       │   └── scan_node_add_device_button.dart
+│       ├── dialogs/
+│       │   ├── logout_confirmation_dialog.dart
+│       │   └── delete_confirmation_dialog.dart
+│       ├── input/
 │       │   ├── custom_text_field.dart
-│       │   │   // Reusable custom text field widget
+│       │   ├── password_text_field.dart
 │       │   └── custom_dropdown.dart
-│       │       // Reusable custom dropdown widget
-│       ├── device/
-│       │   ├── device_list_item.dart
-│       │   │   // Widget for displaying a device in a list
-│       │   └── device_grid_item.dart
-│       │       // Widget for displaying a device in a grid
-│       ├── floor/
-│       │   └── floor_list_item.dart
-│       │       // Widget for displaying a floor in a list
-│       ├── node/
-│       │   └── node_list_item.dart
-│       │       // Widget for displaying a node in a list
-│       └── room/
-│           └── room_list_item.dart
-│               // Widget for displaying a room in a list
-│
+│       ├── iot/
+│       │   ├── light_component.dart
+│       │   ├── fan_component.dart
+│       │   └── node_component.dart
+│       ├── selectors/
+│       │   └── floor_room_selector.dart
+│       └── skeletons/
+│           ├── device_skeleton.dart
+│           ├── floor_room_name_skeleton.dart
+│           └── node_skeleton.dart
+├── services/
+│   └── websocket_service.dart
 └── main.dart
-    // Entry point of the application, sets up dependency injection and initial route
 ```
 
 ## Layers
