@@ -10,7 +10,7 @@ class BaseUrls {
       case Environment.development:
         return '192.168.0.253:8000';
       case Environment.production:
-        return 'auth.jarvishome.in';
+        return 'auth.stapesai.in';
       default:
         throw UnsupportedError('Environment not supported');
     }
@@ -21,7 +21,7 @@ class BaseUrls {
       case Environment.development:
         return '192.168.0.253:8001';
       case Environment.production:
-        return 'backend.jarvishome.in';
+        return 'backend.stapesai.in';
       default:
         throw UnsupportedError('Environment not supported');
     }
