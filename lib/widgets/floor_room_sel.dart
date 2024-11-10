@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 // import 'package:stapes_home/widgets/popup.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/data/models/models.dart';
 import 'package:stapes_home/screens/views/floor_room_selector/create_floor_page.dart';
 import 'package:stapes_home/screens/views/floor_room_selector/create_room_page.dart';
 

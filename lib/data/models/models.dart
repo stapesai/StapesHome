@@ -1,3 +1,5 @@
+// TODO: properly arange the models in different files
+
 class Floor {
   final String id;
   final int level;

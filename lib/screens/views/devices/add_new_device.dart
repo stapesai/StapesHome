@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/data/models/models.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/button.dart';
 import 'package:stapes_home/widgets/input/dropdown.dart';

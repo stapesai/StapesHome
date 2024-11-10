@@ -7,7 +7,7 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/widgets/iot/light.dart';
 import 'package:stapes_home/widgets/scan_node_add_device_btn.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
-import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/data/models/models.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/floor_room_sel.dart';

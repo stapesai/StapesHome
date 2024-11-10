@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/data/models/models.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class LightComponent extends StatelessWidget {

@@ -7,7 +7,7 @@ import 'package:stapes_home/widgets/skeletons/node.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stapes_home/core/constants/api_routes.dart';
-import 'package:stapes_home/core/common/models.dart';
+import 'package:stapes_home/data/models/models.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
