@@ -58,7 +58,7 @@ class HttpClient {
   /// - headers: Optional headers to include in the request
   ///
   /// Returns:
-  /// A Future that resolves to the response body as a Map<String, dynamic>
+  /// A Future that re   solves to the response body as a Map<String, dynamic>
   Future<Map<String, dynamic>> delete(Uri url, {Map<String, String>? headers}) async {
     return _sendRequest(() => _client.delete(url, headers: headers));
   }

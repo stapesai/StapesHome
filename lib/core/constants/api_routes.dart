@@ -1,7 +1,7 @@
 // File: lib/core/constants/api_routes.dart
 // Description: This file contains all the API route definitions used in the application.
 
-import '../config/config.dart';
+import 'package:stapes_home/core/config/config.dart';
 
 /// Defines the base URLs for different environments
 class BaseUrls {
@@ -41,7 +41,7 @@ class BaseUrls {
   static String get webSocketUrl {
     switch (Config.environment) {
       case Environment.development:
-        return 'ws://192.168.0.253:8003/ws';
+        return 'ws://192.168.0.253:8002/ws';
       case Environment.production:
         throw UnsupportedError('WebSocket not supported in production');
       default:
