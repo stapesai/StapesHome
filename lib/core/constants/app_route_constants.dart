@@ -21,7 +21,7 @@ class AppRouteConstants {
     routeName: 'LoginPage',
   );
   static final otpVerification = _RouteConfig(
-    routePath: '/auth/otp-verification',
+    routePath: '/auth/otp-verification/:transactionId/:expiryTime',
     routeName: 'OtpVerificationPage',
   );
 }

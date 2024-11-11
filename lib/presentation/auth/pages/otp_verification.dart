@@ -1,3 +1,6 @@
+// Path: lib/presentation/auth/pages/otp_verification.dart
+// Description: This file contains the OTP verification screen UI.
+
 import 'dart:async';
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';

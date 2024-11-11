@@ -9,7 +9,7 @@ import 'package:stapes_home/presentation/auth/pages/login.dart';
 import 'package:stapes_home/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/screens/authentication/common/password.dart';
-import 'package:stapes_home/screens/authentication/common/otp_verify.dart';
+import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});

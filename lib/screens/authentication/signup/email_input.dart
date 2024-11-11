@@ -8,7 +8,7 @@ import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/screens/authentication/common/password.dart';
-import 'package:stapes_home/screens/authentication/common/otp_verify.dart';
+import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
 import 'package:stapes_home/screens/authentication/signup/details_form.dart';
 
 class EmailSignUp extends StatefulWidget {

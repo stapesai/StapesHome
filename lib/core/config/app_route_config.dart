@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/presentation/auth/pages/login.dart';
 import 'package:stapes_home/presentation/splash/pages/splash_screen.dart';
+import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(
@@ -15,7 +16,7 @@ class AppRouter {
           name: AppRouteConstants.splash.routeName,
           path: AppRouteConstants.splash.routePath,
           pageBuilder: (context, state) {
-            return MaterialPage(child: SplashScreen());
+            return MaterialPage(child: const SplashScreen());
           }),
 
       // Login screen
@@ -23,8 +24,16 @@ class AppRouter {
           name: AppRouteConstants.login.routeName,
           path: AppRouteConstants.login.routePath,
           pageBuilder: (context, state) {
-            return MaterialPage(child: LoginScreen());
+            return MaterialPage(child: const LoginScreen());
           }),
+
+      // Otp verification screen
+      // GoRoute(
+      //     name: AppRouteConstants.otpVerification.routeName,
+      //     path: AppRouteConstants.otpVerification.routePath,
+      //     pageBuilder: (context, state) {
+      //       return MaterialPage(child: OtpVerificationScreen());
+      //     }),
     ],
   );
 }
