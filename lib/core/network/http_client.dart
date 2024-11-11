@@ -66,16 +66,28 @@ class HttpClient {
   /// Helper method to send requests with retry logic and error handling
   Future<Map<String, dynamic>> _sendRequest(Future<http.Response> Function() request) async {
     int retries = 0;
+
+    // TODO: log the request details
+    // Create the request (now we capture the request separately for logging)
+    // final http.Request httpRequest = request() as http.Request;
+
+    // Log the request details
+    // logRequest(httpRequest);
+
     while (retries < Config.maxRetryAttempts) {
       try {
         final response = await request().timeout(Duration(seconds: Config.networkTimeoutSeconds));
+        final Map<String, dynamic> responseBody = json.decode(response.body);
+
+        // Log the response details
+        logResponse(response);
 
         // TODO: Don't use range in status code, use explicit checks according to the type
         // of request (GET (200), POST(201), PUT, DELETE). Reffer backend API documentation
         if (response.statusCode >= 200 && response.statusCode < 300) {
-          return json.decode(response.body);
+          return responseBody;
         } else if (response.statusCode == 401) {
-          throw UnauthorizedException();
+          throw UnauthorizedException(responseBody['detail']);
         } else if (response.statusCode == 404) {
           throw NotFoundException();
         } else {
@@ -112,14 +124,14 @@ class HttpClient {
 /// Extension on HttpClient to add logging functionality
 extension HttpClientLogging on HttpClient {
   /// Logs the details of an HTTP request
-  void logRequest(Uri url, String method, {Object? body, Map<String, String>? headers}) {
+  void logRequest(http.Request request) {
     if (Config.enableDetailedLogs) {
       print('------------------------------');
       print('HTTP Request:');
-      print('URL: $url');
-      print('Method: $method');
-      if (headers != null) print('Headers: $headers');
-      if (body != null) print('Body: $body');
+      print('URL: ${request.url}');
+      print('Method: ${request.method}');
+      if (request.headers.isNotEmpty) print('Headers: ${request.headers}');
+      if (request.body.isNotEmpty) print('Body: ${request.body}');
       print('------------------------------');
     }
   }

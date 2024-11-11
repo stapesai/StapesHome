@@ -3,6 +3,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/domain/usecases/login.dart';
 import 'package:stapes_home/presentation/auth/bloc/login_cubit.dart';
 import 'package:stapes_home/presentation/auth/bloc/login_state.dart';
@@ -15,7 +17,6 @@ import 'package:stapes_home/widgets/input/password.dart';
 import 'package:stapes_home/widgets/input/textfield.dart';
 import "package:stapes_home/widgets/button.dart";
 import 'package:stapes_home/screens/authentication/forgot_password.dart';
-import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
 import 'package:stapes_home/screens/authentication/signup/email_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -46,24 +47,23 @@ class _LoginScreenState extends State<LoginScreen> {
           listener: (context, state) {
             if (state is LoginError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
+                SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
               );
             } else if (state is LoginOtpRequired) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OtpVerificationScreen(
-                    transactionId: state.transactionId,
-                    expiryTime: state.expiryTime,
-                    onSuccess: () {
-                      context.read<LoginCubit>().completeLogin(
-                            transactionId: state.transactionId,
-                            context: context,
-                          );
-                    },
-                  ),
-                ),
+              GoRouter.of(context).go(
+                '/otp-verification/${state.transactionId}/${state.expiryTime}',
+                extra: () {
+                  context.read<LoginCubit>().completeLogin(
+                        transactionId: state.transactionId,
+                        context: context,
+                      );
+                },
               );
+            } else if (state is LoginSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+              GoRouter.of(context).go(AppRouteConstants.devPage.routePath);
             }
           },
           child: Scaffold(

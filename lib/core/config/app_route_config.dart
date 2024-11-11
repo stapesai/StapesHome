@@ -28,12 +28,26 @@ class AppRouter {
           }),
 
       // Otp verification screen
-      // GoRoute(
-      //     name: AppRouteConstants.otpVerification.routeName,
-      //     path: AppRouteConstants.otpVerification.routePath,
-      //     pageBuilder: (context, state) {
-      //       return MaterialPage(child: OtpVerificationScreen());
-      //     }),
+      GoRoute(
+          name: AppRouteConstants.otpVerification.routeName,
+          path: AppRouteConstants.otpVerification.routePath,
+          pageBuilder: (context, state) {
+            final VoidCallback onSuccess = state.extra as VoidCallback;
+            return MaterialPage(
+                child: OtpVerificationScreen(
+              transactionId: state.pathParameters['transactionId']!,
+              expiryTime: DateTime.parse(state.pathParameters['expiryTime']!),
+              onSuccess: onSuccess,
+            ));
+          }),
+
+      // Development Page
+      GoRoute(
+          name: AppRouteConstants.devPage.routeName,
+          path: AppRouteConstants.devPage.routePath,
+          pageBuilder: (context, state) {
+            return MaterialPage(child: Container(child: Text('Development Page'),));
+          }),
     ],
   );
 }

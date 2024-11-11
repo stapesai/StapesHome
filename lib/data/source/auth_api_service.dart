@@ -43,7 +43,7 @@ class AuthApiServiceImpl implements AuthApiService {
     try {
       var response = await serviceLocator<HttpClient>().post(
         AuthRoutes.completeLogin,
-        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        // headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: completeLoginParams.toJson(),
       );
 
@@ -58,7 +58,7 @@ class AuthApiServiceImpl implements AuthApiService {
     try {
       var response = await serviceLocator<HttpClient>().post(
         AuthRoutes.verifyOtp,
-        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        // headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: otpVerificationParams.toJson(),
       );
 

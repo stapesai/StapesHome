@@ -1,6 +1,8 @@
 // Path: lib/data/models/auth/login_req_parms.dart
 // Description: This file contains models for the login related requests.
 
+import 'dart:convert';
+
 class RequestLoginParams {
   final String email;
   final String password;
@@ -10,11 +12,11 @@ class RequestLoginParams {
     required this.password,
   });
 
-  Map<String, String> toJson() {
-    return {
+  Object toJson() {
+    return jsonEncode({
       'email': email,
       'password': password,
-    };
+    });
   }
 }
 

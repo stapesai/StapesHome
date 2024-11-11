@@ -24,4 +24,9 @@ class AppRouteConstants {
     routePath: '/auth/otp-verification/:transactionId/:expiryTime',
     routeName: 'OtpVerificationPage',
   );
+
+  static final devPage = _RouteConfig(
+    routePath: '/dev',
+    routeName: 'DevPage',
+  );
 }
