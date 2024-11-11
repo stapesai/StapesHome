@@ -1,10 +1,14 @@
+// Path: lib/main.dart
+// Description: This file contains the main entry point of the application.
+
+import 'package:stapes_home/core/config/app_route_config.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/utils/sessions_model.dart';
-import 'package:stapes_home/screens/splash_screen.dart';
+import 'package:stapes_home/presentation/splash/pages/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:stapes_home/services/websocket_service.dart';
 import 'package:stapes_home/utils/hive.dart';
@@ -31,33 +35,43 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SessionsModel?>(
-      future: HiveService().getSessionData().then((sessions) => sessions.isNotEmpty ? sessions.first : null),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final session = snapshot.data;
-          final webSocketService = session != null
-              ? WebSocketService(WebSocketRoutes.getWebSocketUrl(), session.userId, session.sessionId)
-              : null;
-
-          if (webSocketService != null) {
-            webSocketService.connect();
-          }
-
-          return Provider<WebSocketService?>.value(
-            value: webSocketService,
-            child: MaterialApp(
-              home: const SplashScreen(),
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-              ),
-            ),
-          );
-        }
-        return CircularProgressIndicator();
-      },
+    return MaterialApp.router(
+      routerConfig: AppRouter().route,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        splashColor: Colors.transparent,
+        highlightColor: Colors.transparent,
+      ),
     );
+
+    // return FutureBuilder<SessionsModel?>(
+    //   future: HiveService().getSessionData().then((sessions) => sessions.isNotEmpty ? sessions.first : null),
+    //   builder: (context, snapshot) {
+    //     if (snapshot.connectionState == ConnectionState.done) {
+    //       final session = snapshot.data;
+    //       final webSocketService = session != null
+    //           ? WebSocketService(WebSocketRoutes.getWebSocketUrl(), session.userId, session.sessionId)
+    //           : null;
+
+    //       if (webSocketService != null) {
+    //         webSocketService.connect();
+    //       }
+
+    // return Provider<WebSocketService?>.value(
+    //   value: webSocketService,
+    //   child: MaterialApp.router(
+    //     routeInformationParser: AppRouter.returnRouter().routeInformationParser,
+    //     routerDelegate: AppRouter.returnRouter().routerDelegate,
+    //     debugShowCheckedModeBanner: false,
+    //     theme: ThemeData(
+    //       splashColor: Colors.transparent,
+    //       highlightColor: Colors.transparent,
+    //     ),
+    //   ),
+    // );
+    // }
+    // return CircularProgressIndicator();
+    // },
+    // );
   }
 }
