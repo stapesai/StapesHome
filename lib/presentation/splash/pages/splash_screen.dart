@@ -1,11 +1,14 @@
+// Path: lib/presentation/splash/pages/splash_screen.dart
+// Description: This file contains the splash screen for the application. This screen will show the logo of the app until it is ready to show the login screen or the main screen (home screen).
+
 import 'dart:async';
+import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hive/hive.dart';
-import 'package:stapes_home/screens/routes/main.dart';
 import 'package:stapes_home/utils/sessions_model.dart';
-import 'package:stapes_home/screens/authentication/login.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -28,17 +31,12 @@ class SplashScreenState extends State<SplashScreen> {
 
     if (isLoggedIn) {
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => MainScreen()),
-        );
+        // GoRouter.of(context).go(AppRouteConstants.home.routePath);
+        throw UnimplementedError('GoRouter is not implemented for home page');
       }
     } else {
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => LoginScreen()),
-        );
+        GoRouter.of(context).go(AppRouteConstants.login.routePath);
       }
     }
   }

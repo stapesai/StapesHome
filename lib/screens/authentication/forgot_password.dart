@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/screens/authentication/login.dart';
+import 'package:stapes_home/presentation/auth/pages/login.dart';
 import 'package:stapes_home/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/screens/authentication/common/password.dart';
