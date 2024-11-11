@@ -1,4 +1,4 @@
-// Path: lib/domain/usecases/login.dart
+// Path: lib/domain/usecases/login_usecase.dart
 // Description: This file contains the use case for the login feature.
 
 import 'package:dartz/dartz.dart';

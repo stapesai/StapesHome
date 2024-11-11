@@ -31,7 +31,7 @@ class AuthApiServiceImpl implements AuthApiService {
         body: requestLoginParams.toJson(),
       );
 
-      return Right(response);
+      return Right(RequestLoginResponse.fromJson(response));
     } on AppException catch (e) {
       // TODO: show error messages from server
       return Left(e);
@@ -43,11 +43,11 @@ class AuthApiServiceImpl implements AuthApiService {
     try {
       var response = await serviceLocator<HttpClient>().post(
         AuthRoutes.completeLogin,
-        // headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: completeLoginParams.toJson(),
       );
 
-      return Right(response);
+      return Right(CompleteLoginResponse.fromJson(response));
     } on AppException catch (e) {
       return Left(e);
     }
@@ -58,11 +58,11 @@ class AuthApiServiceImpl implements AuthApiService {
     try {
       var response = await serviceLocator<HttpClient>().post(
         AuthRoutes.verifyOtp,
-        // headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: otpVerificationParams.toJson(),
       );
 
-      return Right(response);
+      return Right(OtpVerificationResponse.fromJson(response));
     } on AppException catch (e) {
       return Left(e);
     }

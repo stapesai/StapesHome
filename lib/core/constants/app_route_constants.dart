@@ -24,6 +24,9 @@ class AppRouteConstants {
     routePath: '/auth/otp-verification/:transactionId/:expiryTime',
     routeName: 'OtpVerificationPage',
   );
+  static String getOtpVerificationPagePath(String transactionId, String expiryTime) {
+    return '/auth/otp-verification/$transactionId/$expiryTime';
+  }
 
   static final devPage = _RouteConfig(
     routePath: '/dev',

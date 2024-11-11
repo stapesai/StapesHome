@@ -34,8 +34,8 @@ class RequestLoginResponse {
   factory RequestLoginResponse.fromJson(Map<String, dynamic> json) {
     return RequestLoginResponse(
       detail: json['detail'],
-      transactionId: json['transactionId'],
-      otpExpiresAt: json['otpExpiresAt'],
+      transactionId: json['transaction_id'],
+      otpExpiresAt: json['otp_expires_at'],
     );
   }
 }
@@ -47,10 +47,10 @@ class CompleteLoginParams {
     required this.transactionId,
   });
 
-  Map<String, String> toJson() {
-    return {
-      'transactionId': transactionId,
-    };
+  Object toJson() {
+    return jsonEncode({
+      'transaction_id': transactionId,
+    });
   }
 }
 

@@ -91,7 +91,8 @@ class HttpClient {
         } else if (response.statusCode == 404) {
           throw NotFoundException();
         } else {
-          throw ServerException('HTTP ${response.statusCode}: ${response.reasonPhrase}');
+          throw ServerException(
+              'HTTP ${response.statusCode}: ${response.reasonPhrase}. Details: ${responseBody['detail']}');
         }
       } on TimeoutException {
         retries++;

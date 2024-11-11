@@ -1,6 +1,8 @@
 // Path: lib/data/models/auth/otp_veri_parms.dart
 // Description: This file contains models for the otp verification related requests.
 
+import 'dart:convert';
+
 class OtpVerificationParams {
   final String transactionId;
   final String otp;
@@ -10,11 +12,11 @@ class OtpVerificationParams {
     required this.otp,
   });
 
-  Map<String, String> toJson() {
-    return {
-      'transactionId': transactionId,
+  Object toJson() {
+    return jsonEncode({
+      'transaction_id': transactionId,
       'code': otp,
-    };
+    });
   }
 }
 

@@ -18,6 +18,7 @@ class AppColor {
   // static const Color themecolor = Color(0XFFC2F656);
   static const Color grayColor = Color(0xFF898989);
   static const Color darkBackgroundColor = Color(0xFF161622);
+  static const Color errorColor = Color(0xFFD32F2F);
 
   // Debug Colors
   // static const Color whiteColor = Color.fromARGB(255, 255, 0, 0);

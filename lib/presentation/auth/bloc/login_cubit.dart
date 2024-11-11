@@ -1,10 +1,9 @@
 // Path: lib/presentation/auth/bloc/login_cubit.dart
 // Description: This file contains the cubit for the login bloc.
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
-import 'package:stapes_home/domain/usecases/login.dart';
+import 'package:stapes_home/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/presentation/auth/bloc/login_state.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:stapes_home/utils/sessions_model.dart';
@@ -38,7 +37,7 @@ class LoginCubit extends Cubit<LoginState> {
       (response) => emit(
         LoginOtpRequired(
           transactionId: response.transactionId,
-          expiryTime: DateTime.parse(response.otpExpiresAt),
+          expiryTime: response.otpExpiresAt,
         ),
       ),
     );
@@ -46,7 +45,6 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> completeLogin({
     required String transactionId,
-    required BuildContext context,
   }) async {
     emit(LoginLoading());
 
@@ -58,13 +56,13 @@ class LoginCubit extends Cubit<LoginState> {
       (failure) => emit(LoginError(failure.toString())),
       (response) async {
         var sessionData = SessionsModel(
-          sessionId: response.session.sessionId,
-          userId: response.session.userId,
+          sessionId: response.sessionId,
+          userId: response.userId,
         );
 
         await hiveService.addBoxes([sessionData], "SessionBox");
 
-        emit(LoginSuccess(response.message));
+        emit(LoginSuccess('Login Successful'));
       },
     );
   }

@@ -16,7 +16,6 @@ abstract class AuthRepository {
 
   // Forgot Password
   // Future<Map<String, dynamic>> requestResetPassword(String email);
-  // Future<Map<String, dynamic>> verifyOtp(String transactionId, String otp);
 
   // OTP Verification
   Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams);

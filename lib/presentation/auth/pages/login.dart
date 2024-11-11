@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/domain/usecases/login.dart';
+import 'package:stapes_home/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/presentation/auth/bloc/login_cubit.dart';
 import 'package:stapes_home/presentation/auth/bloc/login_state.dart';
 import 'package:stapes_home/service_locator.dart';
@@ -50,12 +50,14 @@ class _LoginScreenState extends State<LoginScreen> {
                 SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
               );
             } else if (state is LoginOtpRequired) {
-              GoRouter.of(context).go(
-                '/otp-verification/${state.transactionId}/${state.expiryTime}',
+              GoRouter.of(context).push(
+                AppRouteConstants.getOtpVerificationPagePath(
+                  state.transactionId,
+                  state.expiryTime,
+                ),
                 extra: () {
                   context.read<LoginCubit>().completeLogin(
                         transactionId: state.transactionId,
-                        context: context,
                       );
                 },
               );
