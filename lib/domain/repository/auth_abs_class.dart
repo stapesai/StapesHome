@@ -3,6 +3,7 @@
 
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
+import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
 
 abstract class AuthRepository {
   // Login
@@ -18,5 +19,5 @@ abstract class AuthRepository {
   // Future<Map<String, dynamic>> verifyOtp(String transactionId, String otp);
 
   // OTP Verification
-  // Future<Either> verifyOtp();
+  Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams);
 }

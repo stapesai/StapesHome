@@ -8,6 +8,7 @@ import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
+import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
 import 'package:stapes_home/service_locator.dart';
 
 abstract class AuthApiService {
@@ -16,7 +17,7 @@ abstract class AuthApiService {
   Future<Either> completeLogin(CompleteLoginParams completeLoginParams);
 
   // OTP Verification
-  // Future<Either> verifyOtp(String transactionId, String otp);
+  Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams);
 }
 
 class AuthApiServiceImpl implements AuthApiService {
@@ -44,6 +45,21 @@ class AuthApiServiceImpl implements AuthApiService {
         AuthRoutes.completeLogin,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: completeLoginParams.toJson(),
+      );
+
+      return Right(response);
+    } on AppException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams) async {
+    try {
+      var response = await serviceLocator<HttpClient>().post(
+        AuthRoutes.verifyOtp,
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        body: otpVerificationParams.toJson(),
       );
 
       return Right(response);

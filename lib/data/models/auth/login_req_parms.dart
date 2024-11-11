@@ -53,5 +53,24 @@ class CompleteLoginParams {
 }
 
 class CompleteLoginResponse {
-  
+  final String sessionId;
+  final String userId;
+  final String createdAt;
+  final String lastActiveAt;
+
+  CompleteLoginResponse({
+    required this.sessionId,
+    required this.userId,
+    required this.createdAt,
+    required this.lastActiveAt,
+  });
+
+  factory CompleteLoginResponse.fromJson(Map<String, dynamic> json) {
+    return CompleteLoginResponse(
+      sessionId: json['session']['session_id'],
+      userId: json['session']['user_id'],
+      createdAt: json['session']['created_at'],
+      lastActiveAt: json['session']['last_active_at'],
+    );
+  }
 }
