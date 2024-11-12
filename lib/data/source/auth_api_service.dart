@@ -1,8 +1,6 @@
 // Path: lib/data/source/auth_api_service.dart
 // Description: This file contains code to interact with the API for authentication. We'll register this service in the service locator. Then in the AuthRepositoryImpl, we'll call the methods to make the API calls.
 
-import 'dart:convert';
-
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/error/exceptions.dart';

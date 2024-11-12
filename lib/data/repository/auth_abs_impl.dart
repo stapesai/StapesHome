@@ -2,7 +2,6 @@
 // Description:
 
 import 'package:dartz/dartz.dart';
-import 'package:http/http.dart';
 import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
 import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';

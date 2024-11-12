@@ -16,7 +16,6 @@ import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/input/password.dart';
 import 'package:stapes_home/widgets/input/textfield.dart';
 import "package:stapes_home/widgets/button.dart";
-import 'package:stapes_home/presentation/auth/pages/forgot_password_email_input.dart';
 import 'package:stapes_home/presentation/auth/pages/signup_email_input.dart';
 
 class LoginScreen extends StatefulWidget {
