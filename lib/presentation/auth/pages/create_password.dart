@@ -1,6 +1,3 @@
-// Path: lib/presentation/auth/pages/create_password.dart
-// Description: This file contains the create password screen UI. This screen allows the user to create a new password.
-
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/input/password.dart';

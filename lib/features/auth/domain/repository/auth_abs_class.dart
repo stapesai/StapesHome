@@ -1,10 +1,7 @@
-// File: lib/domain/repository/auth.dart
-// Description:
-
 import 'package:dartz/dartz.dart';
-import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
-import 'package:stapes_home/data/models/auth/login_req_parms.dart';
-import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
+import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
+import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
+import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
 
 abstract class AuthRepository {
   // Login

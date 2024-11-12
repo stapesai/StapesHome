@@ -5,9 +5,9 @@ import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
 import 'package:stapes_home/core/network/http_client.dart';
-import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
-import 'package:stapes_home/data/models/auth/login_req_parms.dart';
-import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
+import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
+import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
+import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
 import 'package:stapes_home/service_locator.dart';
 
 abstract class AuthApiService {

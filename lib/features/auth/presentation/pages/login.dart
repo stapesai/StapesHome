@@ -1,13 +1,11 @@
-// Path: lib/presentation/auth/pages/login.dart
-// Description: This file contains the login screen UI.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/domain/usecases/login_usecase.dart';
-import 'package:stapes_home/presentation/auth/cubit/login_cubit.dart';
-import 'package:stapes_home/presentation/auth/states/login_state.dart';
+import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,7 +13,7 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/input/password.dart';
 import 'package:stapes_home/widgets/input/textfield.dart';
-import "package:stapes_home/widgets/button.dart";
+import 'package:stapes_home/widgets/button.dart';
 import 'package:stapes_home/presentation/auth/pages/signup_email_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -37,12 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
         gradient: AppColor.backgroundColorgradient,
       ),
       child: BlocProvider(
-        create: (context) => LoginCubit(
+        create: (context) => LoginBloc(
           requestLoginUseCase: serviceLocator<RequestLoginUseCase>(),
           completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
           hiveService: serviceLocator<HiveService>(),
         ),
-        child: BlocListener<LoginCubit, LoginState>(
+        child: BlocListener<LoginBloc, LoginState>(
           listener: (context, state) {
             if (state is LoginError) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -55,8 +53,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   state.expiryTime,
                 ),
                 extra: () {
-                  context.read<LoginCubit>().completeLogin(
-                        transactionId: state.transactionId,
+                  context.read<LoginBloc>().add(
+                        CompleteLoginEvent(transactionId: state.transactionId),
                       );
                 },
               );
@@ -75,7 +73,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: LayoutBuilder(
                   builder: (context, constraints) {
                     return SingleChildScrollView(
-                      physics: AlwaysScrollableScrollPhysics(),
+                      physics: const AlwaysScrollableScrollPhysics(),
                       child: ConstrainedBox(
                         constraints: BoxConstraints(minHeight: constraints.maxHeight),
                         child: IntrinsicHeight(
@@ -87,9 +85,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                 _buildLogo(),
                                 SizedBox(height: constraints.maxHeight * 0.05),
                                 _buildLoginForm(),
-                                Spacer(),
+                                const Spacer(),
                                 _buildSocialLogin(),
-                                SizedBox(height: 20),
+                                const SizedBox(height: 20),
                               ],
                             ),
                           ),
@@ -139,13 +137,12 @@ class _LoginScreenState extends State<LoginScreen> {
           controller: emailController,
           icon: Icons.email_rounded,
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         PasswordTextField(
           hintText: 'Password',
           controller: passwordController,
           icon: Icons.remove_red_eye_rounded,
         ),
-        // SizedBox(height: 5),
         Align(
           alignment: Alignment.centerLeft,
           child: TextButton(
@@ -163,22 +160,24 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
-        SizedBox(height: 20),
-        BlocBuilder<LoginCubit, LoginState>(
+        const SizedBox(height: 20),
+        BlocBuilder<LoginBloc, LoginState>(
           builder: (context, state) {
             return CustomButton(
               text: 'Log In',
               isLoading: state is LoginLoading,
               onPressed: () {
-                context.read<LoginCubit>().requestLogin(
-                      email: emailController.text,
-                      password: passwordController.text,
+                context.read<LoginBloc>().add(
+                      RequestLoginEvent(
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ),
                     );
               },
             );
           },
         ),
-        SizedBox(height: 20),
+        const SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -195,7 +194,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EmailSignUp()),
+                  MaterialPageRoute(builder: (context) => const EmailSignUp()),
                 );
               },
               child: Text(

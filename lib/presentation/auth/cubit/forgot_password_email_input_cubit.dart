@@ -4,10 +4,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:stapes_home/core/config/app_route_config.dart';
+import 'package:stapes_home/core/router/app_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
-import 'package:stapes_home/domain/usecases/forgot_password_usecase.dart';
+import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
+import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:stapes_home/presentation/auth/states/forgot_password_email_input_state.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {

@@ -7,7 +7,7 @@ import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/presentation/auth/pages/create_password.dart';
 import 'package:stapes_home/presentation/auth/pages/forgot_password_email_input.dart';
 import 'package:stapes_home/presentation/auth/pages/login.dart';
-import 'package:stapes_home/presentation/splash/pages/splash_screen.dart';
+import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
 import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
 
 class AppRouter {
