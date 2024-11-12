@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 
 class NodeNamingScreen extends StatefulWidget {
   final Function(String) onNameSubmitted;
@@ -61,7 +61,7 @@ class _NodeNamingScreenState extends State<NodeNamingScreen> {
                     ),
                   ),
                   SizedBox(height: screenSize.height * 0.04),
-                  NTextField(
+                  CustomTextField(
                     hintText: 'Enter node name',
                     controller: nodeNameController,
                     icon: Icons.label_rounded,

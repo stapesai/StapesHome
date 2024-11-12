@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/features/auth/presentation/pages/login.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import "package:stapes_home/widgets/button.dart";
+import "package:stapes_home/core/common/widgets/button.dart";
 
 // TODO: move to dialog.dart and then remove this file
 

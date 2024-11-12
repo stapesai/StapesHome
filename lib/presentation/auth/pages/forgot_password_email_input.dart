@@ -9,10 +9,10 @@ import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecas
 import 'package:stapes_home/presentation/auth/states/forgot_password_email_input_state.dart';
 import 'package:stapes_home/presentation/auth/cubit/forgot_password_email_input_cubit.dart';
 import 'package:stapes_home/service_locator.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
 class ForgotPassword extends StatefulWidget {
@@ -179,7 +179,7 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                       ),
                       SizedBox(height: screenSize.height * 0.04),
                       SizedBox(
-                        child: NTextField(
+                        child: CustomTextField(
                           hintText: 'Enter your email',
                           controller: emailController,
                           icon: Icons.email_rounded,

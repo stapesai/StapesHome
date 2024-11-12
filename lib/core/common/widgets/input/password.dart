@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:flutter/services.dart';
 
-class PasswordTextField extends StatefulWidget {
+class CustomPasswordTextField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
   final IconData? icon;
   final FocusNode? focusNode;
 
-  const PasswordTextField({
+  const CustomPasswordTextField({
     super.key,
     required this.hintText,
     this.controller,
@@ -17,10 +17,10 @@ class PasswordTextField extends StatefulWidget {
   });
 
   @override
-  createState() => _PasswordTextFieldState();
+  createState() => _CustomPasswordTextFieldState();
 }
 
-class _PasswordTextFieldState extends State<PasswordTextField> {
+class _CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
   bool _obscureText = true;
 
   void _togglePasswordVisibility() {

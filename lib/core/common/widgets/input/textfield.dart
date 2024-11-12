@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
-class NTextField extends StatefulWidget {
+class CustomTextField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
   final IconData? icon;
   final FocusNode? focusNode;
 
-  const NTextField({
+  const CustomTextField({
     super.key,
     required this.hintText,
     this.controller,
@@ -19,7 +19,7 @@ class NTextField extends StatefulWidget {
   createState() => _CustomTextFieldState();
 }
 
-class _CustomTextFieldState extends State<NTextField> {
+class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(

@@ -1,8 +1,8 @@
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:flutter/material.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({Key? key}) : super(key: key);
@@ -80,22 +80,22 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                         SizedBox(height: screenSize.height * 0.04),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'First Name',
                           controller: _firstnameController,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Last Name',
                           controller: _lastnameController,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Date of Birth',
                           controller: _dobController,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Email',
                           controller: _emailController,
                         ),

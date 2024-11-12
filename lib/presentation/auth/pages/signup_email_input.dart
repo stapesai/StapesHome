@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/presentation/auth/pages/create_password.dart';
 import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
@@ -159,7 +159,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
                         ),
                         SizedBox(height: screenSize.height * 0.04),
                         SizedBox(
-                          child: NTextField(
+                          child: CustomTextField(
                             hintText: 'Enter your email',
                             controller: emailController,
                             icon: Icons.email_rounded,

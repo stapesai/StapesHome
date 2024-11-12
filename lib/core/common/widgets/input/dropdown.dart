@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
-class NDropdown<T> extends StatelessWidget {
+class CustomDropdown<T> extends StatelessWidget {
   final String hintText;
   final T? value;
   final List<DropdownMenuItem<T>> items;
   final void Function(T?) onChanged;
 
-  const NDropdown({
+  const CustomDropdown({
     super.key,
     required this.hintText,
     required this.value,

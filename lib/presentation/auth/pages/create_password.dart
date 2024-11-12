@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/input/password.dart';
+import 'package:stapes_home/core/common/widgets/input/password.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/presentation/auth/pages/signup_details_form.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
 class CreatePasswordScreen extends StatefulWidget {
@@ -137,13 +137,13 @@ class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
                               ),
                             ),
                             SizedBox(height: screenSize.height * 0.04),
-                            PasswordTextField(
+                            CustomPasswordTextField(
                               hintText: 'Password',
                               controller: widget.passWord,
                               icon: Icons.remove_red_eye_outlined,
                             ),
                             SizedBox(height: screenSize.height * 0.02),
-                            PasswordTextField(
+                            CustomPasswordTextField(
                               hintText: 'Confirm Password',
                               controller: widget.confirmPassWord,
                               icon: Icons.remove_red_eye_outlined,

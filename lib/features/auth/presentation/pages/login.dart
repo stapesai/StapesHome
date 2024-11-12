@@ -11,9 +11,9 @@ import 'package:stapes_home/utils/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/input/password.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/input/password.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/presentation/auth/pages/signup_email_input.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -132,13 +132,13 @@ class _LoginScreenState extends State<LoginScreen> {
   Widget _buildLoginForm() {
     return Column(
       children: [
-        NTextField(
+        CustomTextField(
           hintText: 'Email',
           controller: emailController,
           icon: Icons.email_rounded,
         ),
         const SizedBox(height: 20),
-        PasswordTextField(
+        CustomPasswordTextField(
           hintText: 'Password',
           controller: passwordController,
           icon: Icons.remove_red_eye_rounded,

@@ -12,7 +12,7 @@ import 'package:stapes_home/features/auth/domain/usecases/otp_verification_useca
 import 'package:stapes_home/presentation/auth/cubit/otp_verification_cubit.dart';
 import 'package:stapes_home/presentation/auth/states/otp_verification_state.dart';
 import 'package:stapes_home/service_locator.dart';
-import "package:stapes_home/widgets/button.dart";
+import "package:stapes_home/core/common/widgets/button.dart";
 
 class OtpVerificationScreen extends StatefulWidget {
   final String transactionId;

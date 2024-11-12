@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:stapes_home/utils/sessions_model.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/screens/routes/main.dart';
@@ -158,22 +158,22 @@ class _SignupFormState extends State<SignupForm> {
                           ),
                         ),
                         SizedBox(height: screenSize.height * 0.04),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'First Name',
                           controller: widget.first_name,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Last Name',
                           controller: widget.last_name,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Date of Birth',
                           controller: widget.dob,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Gender',
                           controller: widget.gender,
                         ),

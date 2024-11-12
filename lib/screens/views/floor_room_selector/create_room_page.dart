@@ -1,12 +1,12 @@
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 
 class CreateRoomPage extends StatefulWidget {
   final String sessionId;
@@ -137,12 +137,12 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
                           ),
                         ),
                         SizedBox(height: screenSize.height * 0.04),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Room Name',
                           controller: nameController,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Room type',
                           controller: typeController,
                         ),
