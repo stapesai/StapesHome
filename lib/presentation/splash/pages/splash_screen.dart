@@ -29,13 +29,10 @@ class SplashScreenState extends State<SplashScreen> {
     var sessionBox = Hive.box<SessionsModel>('SessionBox');
     bool isLoggedIn = sessionBox.isNotEmpty;
 
-    if (isLoggedIn) {
-      if (mounted) {
-        // GoRouter.of(context).go(AppRouteConstants.home.routePath);
-        throw UnimplementedError('GoRouter is not implemented for home page');
-      }
-    } else {
-      if (mounted) {
+    if (mounted) {
+      if (isLoggedIn) {
+        GoRouter.of(context).go(AppRouteConstants.devPage.routePath); // Change to dev page
+      } else {
         GoRouter.of(context).go(AppRouteConstants.login.routePath);
       }
     }

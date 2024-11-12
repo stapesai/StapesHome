@@ -74,7 +74,7 @@ class AppRouter {
           path: AppRouteConstants.devPage.routePath,
           pageBuilder: (context, state) {
             return MaterialPage(
-              child: Text('Development Page'),
+              child: Text('Development Page - User is logged in'),
             );
           }),
     ],
