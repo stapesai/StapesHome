@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/domain/usecases/forgot_password_usecase.dart';
-import 'package:stapes_home/presentation/auth/bloc/forgot_password_email_input_state.dart';
+import 'package:stapes_home/presentation/auth/states/forgot_password_email_input_state.dart';
 import 'package:stapes_home/presentation/auth/cubit/forgot_password_email_input_cubit.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/widgets/input/textfield.dart';

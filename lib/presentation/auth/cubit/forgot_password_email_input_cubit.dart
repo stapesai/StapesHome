@@ -8,7 +8,7 @@ import 'package:stapes_home/core/config/app_route_config.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
 import 'package:stapes_home/domain/usecases/forgot_password_usecase.dart';
-import 'package:stapes_home/presentation/auth/bloc/forgot_password_email_input_state.dart';
+import 'package:stapes_home/presentation/auth/states/forgot_password_email_input_state.dart';
 
 class ForgotPasswordCubit extends Cubit<ForgotPasswordState> {
   final RequestPasswordResetUseCase requestPasswordResetUseCase;

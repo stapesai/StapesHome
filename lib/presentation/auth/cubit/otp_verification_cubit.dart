@@ -4,7 +4,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
 import 'package:stapes_home/domain/usecases/otp_verification_usecase.dart';
-import 'package:stapes_home/presentation/auth/bloc/otp_verification_state.dart';
+import 'package:stapes_home/presentation/auth/states/otp_verification_state.dart';
 
 class OtpVerificationCubit extends Cubit<OtpVerificationState> {
   final OtpVerificationUsecase otpVerificationUsecase;

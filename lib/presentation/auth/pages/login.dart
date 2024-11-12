@@ -7,7 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/presentation/auth/cubit/login_cubit.dart';
-import 'package:stapes_home/presentation/auth/bloc/login_state.dart';
+import 'package:stapes_home/presentation/auth/states/login_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';

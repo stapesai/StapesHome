@@ -10,7 +10,7 @@ import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/presentation/auth/cubit/otp_verification_cubit.dart';
-import 'package:stapes_home/presentation/auth/bloc/otp_verification_state.dart';
+import 'package:stapes_home/presentation/auth/states/otp_verification_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/widgets/button.dart";
 

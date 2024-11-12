@@ -4,7 +4,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
 import 'package:stapes_home/domain/usecases/login_usecase.dart';
-import 'package:stapes_home/presentation/auth/bloc/login_state.dart';
+import 'package:stapes_home/presentation/auth/states/login_state.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:stapes_home/utils/sessions_model.dart';
 
