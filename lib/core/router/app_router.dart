@@ -56,15 +56,8 @@ class AppRouter {
           name: AppRouteConstants.createPassword.routeName,
           path: AppRouteConstants.createPassword.routePath,
           pageBuilder: (context, state) {
-            final Widget nextScreen = state.extra as Widget;
             return MaterialPage(
-              child: CreatePasswordScreen(
-                title: state.pathParameters['title']!,
-                subtitle: state.pathParameters['subtitle']!,
-                email: state.pathParameters['email']!,
-                transactionId: state.pathParameters['transactionId']!,
-                nextScreen: nextScreen,
-              ),
+              child: 
             );
           }),
 
