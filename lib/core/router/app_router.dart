@@ -5,8 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/features/auth/presentation/pages/login.dart';
-import 'package:stapes_home/presentation/auth/pages/create_password.dart';
-import 'package:stapes_home/presentation/auth/pages/forgot_password_email_input.dart';
+import 'package:stapes_home/presentation/auth/pages/forgot_password_create_new_password.dart';
+import 'package:stapes_home/features/auth/presentation/pages/forgot_password_email_input.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
 import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
 
@@ -48,7 +48,7 @@ class AppRouter {
           name: AppRouteConstants.forgotPassword.routeName,
           path: AppRouteConstants.forgotPassword.routePath,
           pageBuilder: (context, state) {
-            return MaterialPage(child: const ForgotPassword());
+            return MaterialPage(child: const ForgotPasswordEmailInputScreen());
           }),
 
       // Create password screen

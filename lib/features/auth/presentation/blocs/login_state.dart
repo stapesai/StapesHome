@@ -16,7 +16,7 @@ class LoginLoading extends LoginState {}
 
 class LoginOtpRequired extends LoginState {
   final String transactionId;
-  final String expiryTime;
+  final DateTime expiryTime;
 
   const LoginOtpRequired({
     required this.transactionId,

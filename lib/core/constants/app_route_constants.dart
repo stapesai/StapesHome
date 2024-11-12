@@ -29,8 +29,8 @@ class AppRouteConstants {
     routePath: '/auth/otp-verification/:transactionId/:expiryTime',
     routeName: 'OtpVerificationPage',
   );
-  static String getOtpVerificationPagePath(String transactionId, String expiryTime) {
-    return '/auth/otp-verification/$transactionId/$expiryTime';
+  static String getOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
+    return '/auth/otp-verification/$transactionId/${expiryTime.toIso8601String()}';
   }
 
   // Forgot password screen
