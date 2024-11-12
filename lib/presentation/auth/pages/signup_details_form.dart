@@ -47,7 +47,7 @@ class _SignupFormState extends State<SignupForm> {
 
     if (checkEmailResponse.statusCode == 200) {
       var response = await http.post(
-        AuthRoutes.completeSignup,
+        AuthRoutes.completeSignUp,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: jsonEncode({
           "user": {

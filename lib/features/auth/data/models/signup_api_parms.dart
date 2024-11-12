@@ -1,12 +1,11 @@
 import 'dart:convert';
-
 import 'package:stapes_home/features/auth/data/models/user_model.dart';
 import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 
-class RequestSignupParams {
+class RequestSignUpParams {
   final String email;
 
-  RequestSignupParams({
+  RequestSignUpParams({
     required this.email,
   });
 
@@ -28,18 +27,18 @@ class RequestSignUpResponse {
     required this.otpExpiresAt,
   });
 
-  factory RequestSignUpResponse.fromJson(Map<String, dynamic> json) {
+  factory RequestSignUpResponse.fromJson(Map<String, dynamic> response) {
     return RequestSignUpResponse(
-      detail: json['detail'],
-      transactionId: json['transaction_id'],
-      otpExpiresAt: json['otp_expires_at'],
+      detail: response['detail'],
+      transactionId: response['transaction_id'],
+      otpExpiresAt: response['otp_expires_at'],
     );
   }
 }
 
 class CompleteSignUpParams {
   final String transactionId;
-  final User user;
+  final UserModel user;
   final String password;
 
   CompleteSignUpParams({
@@ -59,8 +58,8 @@ class CompleteSignUpParams {
 
 class CompleteSignUpResponse {
   final String detail;
-  final UserSession session;
-  final User user;
+  final UserSessionModel session;
+  final UserModel user;
 
   CompleteSignUpResponse({
     required this.detail,
@@ -68,11 +67,11 @@ class CompleteSignUpResponse {
     required this.user,
   });
 
-  factory CompleteSignUpResponse.fromJson(Map<String, dynamic> json) {
+  factory CompleteSignUpResponse.fromJson(Map<String, dynamic> response) {
     return CompleteSignUpResponse(
-      detail: json['detail'],
-      session: UserSession.fromJson(json['session']),
-      user: User.fromJson(json['user']),
+      detail: response['detail'],
+      session: UserSessionModel.fromJson(response['session']),
+      user: UserModel.fromJson(response['user']),
     );
   }
 }

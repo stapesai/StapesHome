@@ -55,8 +55,8 @@ class AuthRoutes {
   static final String baseUrl = BaseUrls.authBaseUrl;
 
   // Signup
-  static final Uri requestSignup = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/request-signup');
-  static final Uri completeSignup = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/complete-signup');
+  static final Uri requestSignUp = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/request-signup');
+  static final Uri completeSignUp = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/complete-signup');
 
   // Login
   static final Uri requestLogin = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/login/request-login');

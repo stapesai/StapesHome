@@ -1,12 +1,12 @@
-// TODO: @gauransh415
+import 'dart:convert';
 
-class UserSession {
+class UserSessionModel {
   final String sessionId;
   final String userId;
   final String createdAt;
   final String lastActiveAt;
 
-  UserSession({
+  UserSessionModel({
     required this.sessionId,
     required this.userId,
     required this.createdAt,
@@ -14,20 +14,20 @@ class UserSession {
   });
 
   Object toJson() {
-    return { //
+    return jsonEncode({
       'session_id': sessionId,
       'user_id': userId,
       'created_at': createdAt,
       'last_active_at': lastActiveAt,
-    };
+    });
   }
 
-  factory UserSession.fromJson(Map<String, dynamic> json) {
-    return UserSession(
-      sessionId: json['session_id'],
-      userId: json['user_id'],
-      createdAt: json['created_at'],
-      lastActiveAt: json['last_active_at'],
+  factory UserSessionModel.fromJson(Map<String, dynamic> response) {
+    return UserSessionModel(
+      sessionId: response['session_id'],
+      userId: response['user_id'],
+      createdAt: response['created_at'],
+      lastActiveAt: response['last_active_at'],
     );
   }
 }

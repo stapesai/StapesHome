@@ -28,11 +28,11 @@ class RequestPasswordResetResponse {
     required this.otpExpiresAt,
   });
 
-  factory RequestPasswordResetResponse.fromJson(Map<String, dynamic> json) {
+  factory RequestPasswordResetResponse.fromJson(Map<String, dynamic> response) {
     return RequestPasswordResetResponse(
-      detail: json['detail'],
-      transactionId: json['transaction_id'],
-      otpExpiresAt: json['otp_expires_at'],
+      detail: response['detail'],
+      transactionId: response['transaction_id'],
+      otpExpiresAt: response['otp_expires_at'],
     );
   }
 }
@@ -64,9 +64,9 @@ class CompletePasswordResetResponse {
     required this.detail,
   });
 
-  factory CompletePasswordResetResponse.fromJson(Map<String, dynamic> json) {
+  factory CompletePasswordResetResponse.fromJson(Map<String, dynamic> response) {
     return CompletePasswordResetResponse(
-      detail: json['detail'],
+      detail: response['detail'],
     );
   }
 }

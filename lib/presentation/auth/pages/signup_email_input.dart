@@ -34,7 +34,7 @@ class _EmailSignUpState extends State<EmailSignUp> {
 
     if (checkEmailResponse.statusCode == 200) {
       var response = await http.post(
-        AuthRoutes.requestSignup,
+        AuthRoutes.requestSignUp,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: jsonEncode({
           'email': email,

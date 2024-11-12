@@ -8,12 +8,17 @@ import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
+import 'package:stapes_home/features/auth/data/models/signup_api_parms.dart';
 import 'package:stapes_home/service_locator.dart';
 
 abstract class AuthApiService {
   // Login
   Future<Either> requestLoginService(RequestLoginParams requestLoginParams);
   Future<Either> completeLogin(CompleteLoginParams completeLoginParams);
+
+  // SignUp
+  Future<Either> requestSignUp(RequestSignUpParams requestSignupParams);
+  Future<Either> completeSignUp(CompleteSignUpParams completeSignupParams);
 
   // Forgot Password
   Future<Either> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams);
@@ -51,6 +56,37 @@ class AuthApiServiceImpl implements AuthApiService {
       );
 
       return Right(CompleteLoginResponse.fromJson(response));
+    } on AppException catch (e) {
+      return Left(e);
+    }
+  }
+
+  // SignUp
+  @override
+  Future<Either> requestSignUp(RequestSignUpParams requestSignupParams) async {
+    try {
+      var response = await serviceLocator<HttpClient>().post(
+        AuthRoutes.requestSignUp,
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        body: requestSignupParams.toJson(),
+      );
+
+      return Right(RequestSignUpResponse.fromJson(response));
+    } on AppException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> completeSignUp(CompleteSignUpParams completeSignupParams) async {
+    try {
+      var response = await serviceLocator<HttpClient>().post(
+        AuthRoutes.completeSignUp,
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        body: completeSignupParams.toJson(),
+      );
+
+      return Right(CompleteSignUpResponse.fromJson(response));
     } on AppException catch (e) {
       return Left(e);
     }

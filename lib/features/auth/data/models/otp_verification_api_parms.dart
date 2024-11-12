@@ -27,9 +27,9 @@ class OtpVerificationResponse {
     required this.detail,
   });
 
-  factory OtpVerificationResponse.fromJson(Map<String, dynamic> json) {
+  factory OtpVerificationResponse.fromJson(Map<String, dynamic> response) {
     return OtpVerificationResponse(
-      detail: json['detail'],
+      detail: response['detail'],
     );
   }
 }

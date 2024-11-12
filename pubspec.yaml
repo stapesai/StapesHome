@@ -37,6 +37,7 @@ dependencies:
   get_it:
   flutter_bloc:
   go_router: ^14.4.1
+  intl:
 
 dev_dependencies:
   flutter_test:

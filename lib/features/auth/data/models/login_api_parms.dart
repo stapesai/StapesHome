@@ -31,11 +31,11 @@ class RequestLoginResponse {
     required this.otpExpiresAt,
   });
 
-  factory RequestLoginResponse.fromJson(Map<String, dynamic> json) {
+  factory RequestLoginResponse.fromJson(Map<String, dynamic> response) {
     return RequestLoginResponse(
-      detail: json['detail'],
-      transactionId: json['transaction_id'],
-      otpExpiresAt: json['otp_expires_at'],
+      detail: response['detail'],
+      transactionId: response['transaction_id'],
+      otpExpiresAt: response['otp_expires_at'],
     );
   }
 }
@@ -67,13 +67,13 @@ class CompleteLoginResponse {
     required this.lastActiveAt,
   });
 
-  factory CompleteLoginResponse.fromJson(Map<String, dynamic> json) {
+  factory CompleteLoginResponse.fromJson(Map<String, dynamic> response) {
     return CompleteLoginResponse(
       // TODO: @gauransh415 ye change hoga useraur session model ke hisab se
-      sessionId: json['session']['session_id'],
-      userId: json['session']['user_id'],
-      createdAt: json['session']['created_at'],
-      lastActiveAt: json['session']['last_active_at'],
+      sessionId: response['session']['session_id'],
+      userId: response['session']['user_id'],
+      createdAt: response['session']['created_at'],
+      lastActiveAt: response['session']['last_active_at'],
     );
   }
 }
