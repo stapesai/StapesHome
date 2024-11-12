@@ -4,6 +4,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
+import 'package:stapes_home/presentation/auth/pages/create_password.dart';
+import 'package:stapes_home/presentation/auth/pages/forgot_password_email_input.dart';
 import 'package:stapes_home/presentation/auth/pages/login.dart';
 import 'package:stapes_home/presentation/splash/pages/splash_screen.dart';
 import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
@@ -41,12 +43,39 @@ class AppRouter {
             ));
           }),
 
+      // Forgot password screen
+      GoRoute(
+          name: AppRouteConstants.forgotPassword.routeName,
+          path: AppRouteConstants.forgotPassword.routePath,
+          pageBuilder: (context, state) {
+            return MaterialPage(child: const ForgotPassword());
+          }),
+
+      // Create password screen
+      GoRoute(
+          name: AppRouteConstants.createPassword.routeName,
+          path: AppRouteConstants.createPassword.routePath,
+          pageBuilder: (context, state) {
+            final Widget nextScreen = state.extra as Widget;
+            return MaterialPage(
+              child: CreatePasswordScreen(
+                title: state.pathParameters['title']!,
+                subtitle: state.pathParameters['subtitle']!,
+                email: state.pathParameters['email']!,
+                transactionId: state.pathParameters['transactionId']!,
+                nextScreen: nextScreen,
+              ),
+            );
+          }),
+
       // Development Page
       GoRoute(
           name: AppRouteConstants.devPage.routeName,
           path: AppRouteConstants.devPage.routePath,
           pageBuilder: (context, state) {
-            return MaterialPage(child: Container(child: Text('Development Page'),));
+            return MaterialPage(
+              child: Text('Development Page'),
+            );
           }),
     ],
   );

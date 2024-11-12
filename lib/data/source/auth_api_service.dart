@@ -7,6 +7,7 @@ import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
 import 'package:stapes_home/core/network/http_client.dart';
+import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
 import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
 import 'package:stapes_home/service_locator.dart';
@@ -15,6 +16,10 @@ abstract class AuthApiService {
   // Login
   Future<Either> requestLoginService(RequestLoginParams requestLoginParams);
   Future<Either> completeLogin(CompleteLoginParams completeLoginParams);
+
+  // Forgot Password
+  Future<Either> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams);
+  Future<Either> completePasswordReset(CompletePasswordResetParams completePasswordResetParams);
 
   // OTP Verification
   Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams);
@@ -53,6 +58,38 @@ class AuthApiServiceImpl implements AuthApiService {
     }
   }
 
+  // Forgot Password
+  @override
+  Future<Either> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams) async {
+    try {
+      var response = await serviceLocator<HttpClient>().post(
+        AuthRoutes.requestPasswordReset,
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        body: requestPasswordResetParams.toJson(),
+      );
+
+      return Right(RequestPasswordResetResponse.fromJson(response));
+    } on AppException catch (e) {
+      return Left(e);
+    }
+  }
+
+  @override
+  Future<Either> completePasswordReset(CompletePasswordResetParams completePasswordResetParams) async {
+    try {
+      var response = await serviceLocator<HttpClient>().post(
+        AuthRoutes.completePasswordReset,
+        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
+        body: completePasswordResetParams.toJson(),
+      );
+
+      return Right(CompletePasswordResetResponse.fromJson(response));
+    } on AppException catch (e) {
+      return Left(e);
+    }
+  }
+
+  // OTP Verification
   @override
   Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams) async {
     try {

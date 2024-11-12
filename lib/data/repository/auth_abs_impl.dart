@@ -2,6 +2,8 @@
 // Description:
 
 import 'package:dartz/dartz.dart';
+import 'package:http/http.dart';
+import 'package:stapes_home/data/models/auth/forgot_password_parms.dart';
 import 'package:stapes_home/data/models/auth/login_req_parms.dart';
 import 'package:stapes_home/data/models/auth/otp_veri_parms.dart';
 import 'package:stapes_home/data/source/auth_api_service.dart';
@@ -18,6 +20,17 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either> completeLogin(CompleteLoginParams completeLoginParams) {
     return serviceLocator<AuthApiService>().completeLogin(completeLoginParams);
+  }
+
+  // Forgot Password
+  @override
+  Future<Either> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams) {
+    return serviceLocator<AuthApiService>().requestPasswordReset(requestPasswordResetParams);
+  }
+
+  @override
+  Future<Either> completePasswordReset(CompletePasswordResetParams completePasswordResetParams) {
+    return serviceLocator<AuthApiService>().completePasswordReset(completePasswordResetParams);
   }
 
   // OTP Verification

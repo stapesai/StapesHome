@@ -1,3 +1,6 @@
+// Path: lib/presentation/auth/pages/create_password.dart
+// Description: This file contains the create password screen UI. This screen allows the user to create a new password.
+
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/input/password.dart';
@@ -5,33 +8,33 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/screens/authentication/signup/details_form.dart';
+import 'package:stapes_home/presentation/auth/pages/signup_details_form.dart';
 import 'package:stapes_home/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
-class PasswordScreen extends StatefulWidget {
+class CreatePasswordScreen extends StatefulWidget {
   final String title;
   final String subtitle;
   final Widget nextScreen;
   final String email;
-  final String transaction_id;
+  final String transactionId;
   final TextEditingController passWord = TextEditingController();
   final TextEditingController confirmPassWord = TextEditingController();
 
-  PasswordScreen({
+  CreatePasswordScreen({
     super.key,
     required this.title,
     required this.subtitle,
     required this.email,
-    required this.transaction_id,
+    required this.transactionId,
     required this.nextScreen,
   });
 
   @override
-  createState() => _PasswordScreenState();
+  createState() => _CreatePasswordScreenState();
 }
 
-class _PasswordScreenState extends State<PasswordScreen> {
+class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 
@@ -167,7 +170,7 @@ class _PasswordScreenState extends State<PasswordScreen> {
                                         context,
                                         SignupForm(
                                           password: widget.passWord.text,
-                                          transaction_id: widget.transaction_id,
+                                          transaction_id: widget.transactionId,
                                           email: widget.email,
                                         ),
                                       );

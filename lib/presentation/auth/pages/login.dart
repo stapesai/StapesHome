@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/domain/usecases/login_usecase.dart';
-import 'package:stapes_home/presentation/auth/bloc/login_cubit.dart';
+import 'package:stapes_home/presentation/auth/cubit/login_cubit.dart';
 import 'package:stapes_home/presentation/auth/bloc/login_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/utils/hive.dart';
@@ -16,8 +16,8 @@ import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/widgets/input/password.dart';
 import 'package:stapes_home/widgets/input/textfield.dart';
 import "package:stapes_home/widgets/button.dart";
-import 'package:stapes_home/screens/authentication/forgot_password.dart';
-import 'package:stapes_home/screens/authentication/signup/email_input.dart';
+import 'package:stapes_home/presentation/auth/pages/forgot_password_email_input.dart';
+import 'package:stapes_home/presentation/auth/pages/signup_email_input.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -151,10 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
           alignment: Alignment.centerLeft,
           child: TextButton(
             onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ForgotPassword()),
-              );
+              GoRouter.of(context).push(AppRouteConstants.forgotPassword.routePath);
             },
             child: Text(
               'Forgot Password?',

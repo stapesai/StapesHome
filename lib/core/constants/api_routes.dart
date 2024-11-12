@@ -63,9 +63,9 @@ class AuthRoutes {
   static final Uri completeLogin = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/login/complete-login');
 
   // Reset Password
-  static final Uri requestResetPassword =
+  static final Uri requestPasswordReset =
       Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/reset-password/request-reset');
-  static final Uri completeResetPassword =
+  static final Uri completePasswordReset =
       Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/reset-password/complete-reset');
 
   // OTP
