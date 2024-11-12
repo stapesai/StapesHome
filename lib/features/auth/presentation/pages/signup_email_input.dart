@@ -7,18 +7,18 @@ import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/presentation/auth/pages/forgot_password_create_new_password.dart';
+import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
 import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
-import 'package:stapes_home/presentation/auth/pages/signup_details_form.dart';
+import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 
-class EmailSignUp extends StatefulWidget {
-  const EmailSignUp({super.key});
+class SignUpEmailInputScreen extends StatefulWidget {
+  const SignUpEmailInputScreen({super.key});
 
   @override
-  createState() => _EmailSignUpState();
+  createState() => _SignUpEmailInputScreenState();
 }
 
-class _EmailSignUpState extends State<EmailSignUp> {
+class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
   final TextEditingController emailController = TextEditingController();
   bool _isLoading = false;
   Future<void> handlerequestSignup(BuildContext context, String email) async {

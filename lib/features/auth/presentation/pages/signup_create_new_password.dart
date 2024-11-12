@@ -5,11 +5,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/presentation/auth/pages/signup_details_form.dart';
+import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
-class CreatePasswordScreen extends StatefulWidget {
+class SignUpCreateNewPasswordScreen extends StatefulWidget {
   final String title;
   final String subtitle;
   final Widget nextScreen;
@@ -18,7 +18,7 @@ class CreatePasswordScreen extends StatefulWidget {
   final TextEditingController passWord = TextEditingController();
   final TextEditingController confirmPassWord = TextEditingController();
 
-  CreatePasswordScreen({
+  SignUpCreateNewPasswordScreen({
     super.key,
     required this.title,
     required this.subtitle,
@@ -28,10 +28,10 @@ class CreatePasswordScreen extends StatefulWidget {
   });
 
   @override
-  createState() => _CreatePasswordScreenState();
+  createState() => _SignUpCreateNewPasswordScreenState();
 }
 
-class _CreatePasswordScreenState extends State<CreatePasswordScreen> {
+class _SignUpCreateNewPasswordScreenState extends State<SignUpCreateNewPasswordScreen> {
   bool _isLoading = false;
   String? _errorMessage;
 

@@ -1,6 +1,3 @@
-// Path: lib/presentation/auth/pages/otp_verification.dart
-// Description: This file contains the OTP verification screen UI.
-
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
@@ -9,17 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
-import 'package:stapes_home/presentation/auth/cubit/otp_verification_cubit.dart';
-import 'package:stapes_home/presentation/auth/states/otp_verification_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/core/common/widgets/button.dart";
 
-class OtpVerificationScreen extends StatefulWidget {
+class LoginOtpVerificationScreen extends StatefulWidget {
   final String transactionId;
   final VoidCallback onSuccess;
   final DateTime expiryTime;
 
-  const OtpVerificationScreen({
+  const LoginOtpVerificationScreen({
     super.key,
     required this.transactionId,
     required this.onSuccess,
@@ -27,10 +22,10 @@ class OtpVerificationScreen extends StatefulWidget {
   });
 
   @override
-  createState() => _OtpVerificationScreenState();
+  createState() => _LoginOtpVerificationScreenState();
 }
 
-class _OtpVerificationScreenState extends State<OtpVerificationScreen> {
+class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen> {
   final List<TextEditingController> _controllers = List.generate(6, (index) => TextEditingController());
   final List<FocusNode> _focusNodes = List.generate(6, (index) => FocusNode());
   late int _remainingSeconds;

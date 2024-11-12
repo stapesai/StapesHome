@@ -12,8 +12,8 @@ class _RouteConfig {
 }
 
 class AppRouteConstants {
+  // Splash screen
   static final splash = _RouteConfig(
-    // Splash screen
     routePath: '/',
     routeName: 'SplashPage',
   );
@@ -24,13 +24,13 @@ class AppRouteConstants {
     routeName: 'LoginPage',
   );
 
-  // Otp verification screen
-  static final otpVerification = _RouteConfig(
-    routePath: '/auth/otp-verification/:transactionId/:expiryTime',
+  // Login Otp Verification screen
+  static final loginOtpVerification = _RouteConfig(
+    routePath: '/auth/login-otp-verification/:transactionId/:expiryTime',
     routeName: 'OtpVerificationPage',
   );
   static String getOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
-    return '/auth/otp-verification/$transactionId/${expiryTime.toIso8601String()}';
+    return '/auth/login-otp-verification/$transactionId/${expiryTime.toIso8601String()}';
   }
 
   // Forgot password screen
@@ -39,13 +39,22 @@ class AppRouteConstants {
     routeName: 'ForgotPasswordPage',
   );
 
-  // Create password screen
-  static final createPassword = _RouteConfig(
-    routePath: '/auth/create-password/:title/:subtitle/:email/:transactionId',
-    routeName: 'CreatePasswordPage',
+  // Forgot Password Otp Verification screen
+  static final forgotPasswordOtpVerification = _RouteConfig(
+    routePath: '/auth/forgot-password-otp-verification/:transactionId/:expiryTime',
+    routeName: 'OtpVerificationPage',
   );
-  static String getCreatePasswordPagePath(String title, String subtitle, String email, String transactionId) {
-    return '/auth/create-password/$title/$subtitle/$email/$transactionId';
+  static String getForgotPasswordOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
+    return '/auth/forgot-password-otp-verification/$transactionId/${expiryTime.toIso8601String()}';
+  }
+
+  // Forgot Password Reset password screen
+  static final forgotPasswordResetPassword = _RouteConfig(
+    routePath: '/auth/forgot-password-reset-password/:email/:transactionId',
+    routeName: 'ForgotPasswordResetPasswordPage',
+  );
+  static String getForgotPasswordResetPasswordPagePath(String email, String transactionId) {
+    return '/auth/forgot-password-reset-password/$email/$transactionId';
   }
 
   // Development Page (temporary)

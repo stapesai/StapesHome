@@ -11,7 +11,7 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/screens/routes/main.dart';
 
-class SignupForm extends StatefulWidget {
+class SignupDetailsForm extends StatefulWidget {
   final String password;
   final String email;
   final TextEditingController first_name = TextEditingController();
@@ -19,7 +19,7 @@ class SignupForm extends StatefulWidget {
   final TextEditingController dob = TextEditingController();
   final TextEditingController gender = TextEditingController();
   final String transaction_id;
-  SignupForm({
+  SignupDetailsForm({
     super.key,
     required this.password,
     required this.transaction_id,
@@ -27,10 +27,10 @@ class SignupForm extends StatefulWidget {
   });
 
   @override
-  createState() => _SignupFormState();
+  createState() => _SignupDetailsFormState();
 }
 
-class _SignupFormState extends State<SignupForm> {
+class _SignupDetailsFormState extends State<SignupDetailsForm> {
   bool _isLoading = false;
   final HiveService hiveService = HiveService();
 
