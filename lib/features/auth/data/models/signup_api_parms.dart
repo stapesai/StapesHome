@@ -19,7 +19,7 @@ class RequestSignUpParams {
 class RequestSignUpResponse {
   final String detail;
   final String transactionId;
-  final String otpExpiresAt;
+  final DateTime otpExpiresAt;
 
   RequestSignUpResponse({
     required this.detail,
@@ -31,7 +31,7 @@ class RequestSignUpResponse {
     return RequestSignUpResponse(
       detail: response['detail'],
       transactionId: response['transaction_id'],
-      otpExpiresAt: response['otp_expires_at'],
+      otpExpiresAt: DateTime.parse(response['otp_expires_at']),
     );
   }
 }

@@ -20,7 +20,7 @@ class RequestPasswordResetParams {
 class RequestPasswordResetResponse {
   final String detail;
   final String transactionId;
-  final String otpExpiresAt;
+  final DateTime otpExpiresAt;
 
   RequestPasswordResetResponse({
     required this.detail,

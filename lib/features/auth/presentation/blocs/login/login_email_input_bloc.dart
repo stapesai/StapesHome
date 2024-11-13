@@ -15,16 +15,6 @@ class LoginEmailInputBloc extends Bloc<LoginEmailInputEvent, LoginEmailInputStat
     on<RequestLoginEvent>(_onRequestLogin);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onRequestLogin(RequestLoginEvent event, Emitter<LoginEmailInputState> emit) async {
     // Sets state to loading - CustomButton listens to this state and shows loading spinner
     emit(LoginEmailInputLoading());
@@ -37,7 +27,7 @@ class LoginEmailInputBloc extends Bloc<LoginEmailInputEvent, LoginEmailInputStat
     );
 
     result.fold(
-      (failure) => emit(LoginEmailInputError(_mapFailureToMessage(failure))),
+      (failure) => emit(LoginEmailInputError(failure.message)),
       (response) => emit(
         LoginEmailInputOtpRequired(
           email: event.email,

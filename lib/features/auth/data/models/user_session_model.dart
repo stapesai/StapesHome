@@ -38,8 +38,8 @@ class UserSessionModel {
     return UserSessionModel(
       sessionId: response['session_id'],
       userId: response['user_id'],
-      createdAt: response['created_at'],
-      lastActiveAt: response['last_active_at'],
+      createdAt: DateTime.parse(response['created_at']),
+      lastActiveAt: DateTime.parse(response['last_active_at']),
     );
   }
 }

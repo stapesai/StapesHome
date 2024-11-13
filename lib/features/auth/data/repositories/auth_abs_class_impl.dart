@@ -27,7 +27,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
@@ -43,7 +43,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
@@ -58,7 +58,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
@@ -74,7 +74,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
@@ -90,7 +90,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
@@ -105,7 +105,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }
@@ -120,7 +120,7 @@ class AuthRepositoryImpl implements AuthRepository {
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException {
-      return Left(NetworkFailure());
+      return Left(NetworkFailure(message: 'Unable to connect to internet'));
     } catch (e) {
       return Left(UnexpectedFailure(message: e.toString()));
     }

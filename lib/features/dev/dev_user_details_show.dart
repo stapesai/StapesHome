@@ -85,8 +85,8 @@ class DevUserDetailsScreen extends StatelessWidget {
     return [
       _buildKeyValuePair('Session ID', session.sessionId),
       _buildKeyValuePair('User ID', session.userId),
-      _buildKeyValuePair('Created At', session.createdAt),
-      _buildKeyValuePair('Last Active', session.lastActiveAt),
+      _buildKeyValuePair('Created At', session.createdAt.toString()),
+      _buildKeyValuePair('Last Active', session.lastActiveAt.toString()),
     ];
   }
 

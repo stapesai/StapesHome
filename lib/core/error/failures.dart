@@ -2,50 +2,50 @@ import 'package:equatable/equatable.dart';
 
 /// Base class for all failures in the application
 abstract class Failure extends Equatable {
-  final String? message;
+  final String message;
 
-  const Failure([this.message]);
+  const Failure(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }
 
 /// Represents a failure due to a server error
 class ServerFailure extends Failure {
-  const ServerFailure({String? message}) : super(message);
+  const ServerFailure({required String message}) : super(message);
 }
 
 /// Represents a failure due to a cache error
 class CacheFailure extends Failure {
-  const CacheFailure({String? message}) : super(message);
+  const CacheFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to a network error
 class NetworkFailure extends Failure {
-  const NetworkFailure({String? message}) : super(message);
+  const NetworkFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to invalid input or data
 class ValidationFailure extends Failure {
-  const ValidationFailure({String? message}) : super(message);
+  const ValidationFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to authentication issues
 class AuthenticationFailure extends Failure {
-  const AuthenticationFailure({String? message}) : super(message);
+  const AuthenticationFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to unauthorized access
 class UnauthorizedFailure extends Failure {
-  const UnauthorizedFailure({String? message}) : super(message);
+  const UnauthorizedFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to a not found error
 class NotFoundFailure extends Failure {
-  const NotFoundFailure({String? message}) : super(message);
+  const NotFoundFailure({required message}) : super(message);
 }
 
 /// Represents an unexpected failure
 class UnexpectedFailure extends Failure {
-  const UnexpectedFailure({String? message}) : super(message);
+  const UnexpectedFailure({required message}) : super(message);
 }

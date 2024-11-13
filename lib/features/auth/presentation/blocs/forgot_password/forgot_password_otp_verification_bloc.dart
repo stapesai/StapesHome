@@ -28,16 +28,16 @@ class ForgotPasswordOtpVerificationBloc
       ForgotPasswordOtpSubmitted event, Emitter<ForgotPasswordOtpVerificationState> emit) async {
     emit(ForgotPasswordOtpVerificationLoading());
 
-    final result = await verifyOtpUseCase(
+    final otpResult = await verifyOtpUseCase(
       OtpVerificationParams(
         transactionId: event.transactionId,
         otp: event.otp,
       ),
     );
 
-    result.fold(
-      (failure) => emit(ForgotPasswordOtpVerificationError(_mapFailureToMessage(failure))),
-      (response) => emit(
+    await otpResult.fold(
+      (failure) async => emit(ForgotPasswordOtpVerificationError(_mapFailureToMessage(failure))),
+      (response) async => emit(
         ForgotPasswordOtpVerificationSuccess(
           transactionId: event.transactionId,
           email: event.email,

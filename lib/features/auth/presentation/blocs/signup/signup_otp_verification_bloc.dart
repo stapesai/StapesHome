@@ -33,9 +33,9 @@ class SignUpOtpVerificationBloc extends Bloc<SignUpOtpVerificationEvent, SignUpO
       ),
     );
 
-    otpResult.fold(
-      (failure) => emit(SignUpOtpVerificationError(_mapFailureToMessage(failure))),
-      (response) => emit(
+    await otpResult.fold(
+      (failure) async => emit(SignUpOtpVerificationError(_mapFailureToMessage(failure))),
+      (response) async => emit(
         SignUpOtpVerificationSuccess(
           transactionId: event.transactionId,
           email: event.email,

@@ -78,12 +78,6 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
     return '$minuteString $secondString';
   }
 
-  // void _onOtpComplete(String otp) {
-  //   String otp = _controllers.map((controller) => controller.text).join();
-  //   print('OTP Submitted: $otp');
-  //   _onVerifyButtonPressed();
-  // }
-
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -174,10 +168,14 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                           SizedBox(height: screenSize.height * 0.04),
                           SizedBox(
                             child: Center(
-                              child: OtpInputWidget(
-                                controllers: _controllers,
-                                focusNodes: _focusNodes,
-                                onOtpComplete: (otp) => _onVerifyButtonPressed(context),
+                              child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
+                                builder: (context, state) {
+                                  return OtpInputWidget(
+                                    controllers: _controllers,
+                                    focusNodes: _focusNodes,
+                                    onOtpComplete: (otp) => _onVerifyButtonPressed(context),
+                                  );
+                                },
                               ),
                             ),
                           ),
@@ -205,10 +203,9 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                               child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
                                 builder: (context, state) {
                                   return CustomButton(
-                                    text: "Next",
-                                    isLoading: state is LoginOtpVerificationLoading,
-                                    onPressed: () => _onVerifyButtonPressed(context),
-                                  );
+                                      text: "Next",
+                                      isLoading: state is LoginOtpVerificationLoading,
+                                      onPressed: () => _onVerifyButtonPressed(context));
                                 },
                               ),
                             ),

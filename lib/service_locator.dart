@@ -8,6 +8,7 @@ import 'package:stapes_home/features/auth/domain/repository/auth_abs_class.dart'
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
+import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:stapes_home/services/websocket_service.dart';
 
 final GetIt serviceLocator = GetIt.instance;
@@ -36,4 +37,6 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<OtpVerificationUsecase>(OtpVerificationUsecase());
   serviceLocator.registerSingleton<RequestPasswordResetUseCase>(RequestPasswordResetUseCase());
   serviceLocator.registerSingleton<CompletePasswordResetUseCase>(CompletePasswordResetUseCase());
+  serviceLocator.registerSingleton<RequestSignUpUseCase>(RequestSignUpUseCase());
+  serviceLocator.registerSingleton<CompleteSignUpUseCase>(CompleteSignUpUseCase());
 }
