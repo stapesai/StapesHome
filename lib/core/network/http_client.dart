@@ -8,26 +8,28 @@ class HttpClient {
 
   HttpClient({http.Client? client}) : _client = client ?? http.Client();
 
-  Future<Map<String, dynamic>> get(Uri url, {Map<String, String>? headers}) async {
+  Future<T> handleRequest<T>(Future<T> Function() request) async {
     try {
-      final response = await _client.get(url, headers: headers).timeout(Duration(seconds: 30));
-      return _handleResponse(response);
+      return await request();
     } on http.ClientException {
-      throw NetworkException();
+      throw NetworkException('Network error occurred');
     } on TimeoutException {
-      throw TimeoutException();
+      throw TimeoutException('Request timed out');
+    } on FormatException {
+      throw UnexpectedException('Invalid response format');
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
+  Future<Map<String, dynamic>> get(Uri url, {Map<String, String>? headers}) async {
+    final response = await _client.get(url, headers: headers).timeout(const Duration(seconds: 30));
+    return _handleResponse(response);
+  }
+
   Future<Map<String, dynamic>> post(Uri url, {Object? body, Map<String, String>? headers}) async {
-    try {
-      final response = await _client.post(url, headers: headers, body: body).timeout(Duration(seconds: 30));
-      return _handleResponse(response);
-    } on http.ClientException {
-      throw NetworkException();
-    } on TimeoutException {
-      throw TimeoutException();
-    }
+    final response = await _client.post(url, headers: headers, body: body).timeout(const Duration(seconds: 30));
+    return _handleResponse(response);
   }
 
   Map<String, dynamic> _handleResponse(http.Response response) {
@@ -37,13 +39,15 @@ class HttpClient {
     if (statusCode >= 200 && statusCode < 300) {
       return responseBody as Map<String, dynamic>;
     } else if (statusCode == 400) {
-      throw ValidationException(responseBody?['message'] ?? 'Bad Request');
+      throw ValidationException(responseBody?['detail'] ?? 'Bad Request');
     } else if (statusCode == 401 || statusCode == 403) {
-      throw UnauthorizedException(responseBody?['message'] ?? 'Unauthorized');
+      throw UnauthorizedException(responseBody?['detail'] ?? 'Unauthorized');
     } else if (statusCode == 404) {
-      throw NotFoundException(responseBody?['message'] ?? 'Not Found');
-    } else if (statusCode >= 500) {
-      throw ServerException(responseBody?['message'] ?? 'Server Error');
+      throw NotFoundException(responseBody?['detail'] ?? 'Not Found');
+    } else if (statusCode == 422) {
+      throw ValidationException(responseBody?['detail'] ?? 'Validation Error');
+    } else if (statusCode >= 500 && statusCode < 600) {
+      throw ServerException(responseBody?['detail'] ?? 'Server Error');
     } else {
       throw UnexpectedException('Unexpected Error');
     }

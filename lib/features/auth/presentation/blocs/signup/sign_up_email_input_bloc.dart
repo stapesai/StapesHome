@@ -30,7 +30,7 @@ class SignUpEmailInputBloc extends Bloc<SignUpEmailInputEvent, SignUpEmailInputS
       (response) => emit(
         SignUpEmailInputOtpRequired(
           transactionId: response.transactionId,
-          expiryTime: DateTime.parse(response.otpExpiresAt),
+          expiryTime: response.otpExpiresAt,
           email: event.email,
         ),
       ),
