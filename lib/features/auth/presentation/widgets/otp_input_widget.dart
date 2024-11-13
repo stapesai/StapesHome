@@ -1,5 +1,3 @@
-// otp_input_widget.dart
-
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
