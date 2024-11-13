@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:pinput/pinput.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
@@ -9,6 +8,7 @@ import 'package:stapes_home/features/auth/domain/usecases/otp_verification_useca
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_state.dart';
+import 'package:stapes_home/features/auth/presentation/widgets/otp_input_widget.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/core/common/widgets/button.dart";
 
@@ -98,25 +98,6 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
     final screenSize = MediaQuery.of(context).size;
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
 
-    final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
-      textStyle:
-          TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
-      margin: EdgeInsets.symmetric(horizontal: screenSize.width > 640 ? 12 : 2),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment(0.00, -1.00),
-          end: Alignment(0, 1),
-          colors: const [Color(0xFF292B30), Color(0xFF26272C), Color(0xFF1A1B1E)],
-        ),
-      ),
-    );
-
-    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: AppColor.whiteColor, width: 2),
-    );
-
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
       child: Container(
@@ -184,19 +165,10 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                           SizedBox(height: screenSize.height * 0.04),
                           SizedBox(
                             child: Center(
-                              child: Pinput(
-                                length: 6,
-                                showCursor: false,
-                                defaultPinTheme: defaultPinTheme,
-                                focusedPinTheme: focusedPinTheme,
-                                focusNode: _focusNodes[0],
-                                controller: _controllers[0],
-                                onChanged: (String value) {
-                                  if (value.length == 1) {
-                                    _focusNodes[1].requestFocus();
-                                  }
-                                },
-                                // onCompleted: _onOtpComplete
+                              child: OtpInputWidget(
+                                controllers: _controllers,
+                                focusNodes: _focusNodes,
+                                onOtpComplete: (otp) => _onVerifyButtonPressed(context),
                               ),
                             ),
                           ),
