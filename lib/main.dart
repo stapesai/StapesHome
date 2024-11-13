@@ -6,12 +6,12 @@ import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
+import 'package:stapes_home/features/auth/data/models/user_model.dart';
+import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 import 'package:stapes_home/service_locator.dart';
-import 'package:stapes_home/utils/sessions_model.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:stapes_home/services/websocket_service.dart';
-import 'package:stapes_home/utils/hive.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,7 +24,8 @@ void main() async {
   setupServiceLocator();
 
   // Register Hive adapters
-  Hive.registerAdapter(SessionsModelAdapter());
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(UserSessionModelAdapter());
 
   // debugPaintSizeEnabled = true;
   runApp(const MyApp());

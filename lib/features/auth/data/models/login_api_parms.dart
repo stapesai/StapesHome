@@ -3,6 +3,9 @@
 
 import 'dart:convert';
 
+import 'package:stapes_home/features/auth/data/models/user_model.dart';
+import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
+
 class RequestLoginParams {
   final String email;
   final String password;
@@ -55,25 +58,18 @@ class CompleteLoginParams {
 }
 
 class CompleteLoginResponse {
-  final String sessionId;
-  final String userId;
-  final String createdAt;
-  final String lastActiveAt;
+  final UserModel user;
+  final UserSessionModel session;
 
   CompleteLoginResponse({
-    required this.sessionId,
-    required this.userId,
-    required this.createdAt,
-    required this.lastActiveAt,
+    required this.session,
+    required this.user,
   });
 
   factory CompleteLoginResponse.fromJson(Map<String, dynamic> response) {
     return CompleteLoginResponse(
-      // TODO: @gauransh415 ye change hoga useraur session model ke hisab se
-      sessionId: response['session']['session_id'],
-      userId: response['session']['user_id'],
-      createdAt: response['session']['created_at'],
-      lastActiveAt: response['session']['last_active_at'],
+      user: UserModel.fromJson(response['user']),
+      session: UserSessionModel.fromJson(response['session']),
     );
   }
 }

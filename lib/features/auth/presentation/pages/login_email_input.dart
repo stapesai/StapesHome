@@ -7,7 +7,6 @@ import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_i
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_state.dart';
 import 'package:stapes_home/service_locator.dart';
-import 'package:stapes_home/utils/hive.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
@@ -16,14 +15,14 @@ import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class LoginEmailInputScreen extends StatefulWidget {
+  const LoginEmailInputScreen({super.key});
 
   @override
-  createState() => _LoginScreenState();
+  createState() => _LoginEmailInputScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
 
@@ -35,25 +34,24 @@ class _LoginScreenState extends State<LoginScreen> {
         gradient: AppColor.backgroundColorgradient,
       ),
       child: BlocProvider(
-        create: (context) => LoginBloc(
+        create: (context) => LoginEmailInputBloc(
           requestLoginUseCase: serviceLocator<RequestLoginUseCase>(),
           completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
-          hiveService: serviceLocator<HiveService>(),
         ),
-        child: BlocListener<LoginBloc, LoginState>(
+        child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
           listener: (context, state) {
-            if (state is LoginError) {
+            if (state is LoginEmailInputError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
               );
-            } else if (state is LoginOtpRequired) {
+            } else if (state is LoginEmailInputOtpRequired) {
               GoRouter.of(context).push(
                 AppRouteConstants.getOtpVerificationPagePath(
                   state.transactionId,
                   state.expiryTime,
                 ),
               );
-            } else if (state is LoginSuccess) {
+            } else if (state is LoginEmailInputSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
               );
@@ -156,13 +154,13 @@ class _LoginScreenState extends State<LoginScreen> {
           ),
         ),
         const SizedBox(height: 20),
-        BlocBuilder<LoginBloc, LoginState>(
+        BlocBuilder<LoginEmailInputBloc, LoginEmailInputState>(
           builder: (context, state) {
             return CustomButton(
               text: 'Log In',
-              isLoading: state is LoginLoading,
+              isLoading: state is LoginEmailInputLoading,
               onPressed: () {
-                context.read<LoginBloc>().add(
+                context.read<LoginEmailInputBloc>().add(
                       RequestLoginEvent(
                         email: emailController.text,
                         password: passwordController.text,

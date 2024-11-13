@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-abstract class LoginState extends Equatable {
-  const LoginState();
+abstract class LoginEmailInputState extends Equatable {
+  const LoginEmailInputState();
 
   @override
   List<Object> get props => [];
 }
 
-class LoginInitial extends LoginState {}
+class LoginEmailInputInitial extends LoginEmailInputState {}
 
-class LoginLoading extends LoginState {}
+class LoginEmailInputLoading extends LoginEmailInputState {}
 
-class LoginOtpRequired extends LoginState {
+class LoginEmailInputOtpRequired extends LoginEmailInputState {
   final String transactionId;
   final DateTime expiryTime;
 
-  const LoginOtpRequired({
+  const LoginEmailInputOtpRequired({
     required this.transactionId,
     required this.expiryTime,
   });
@@ -24,19 +24,19 @@ class LoginOtpRequired extends LoginState {
   List<Object> get props => [transactionId, expiryTime];
 }
 
-class LoginError extends LoginState {
+class LoginEmailInputError extends LoginEmailInputState {
   final String message;
 
-  const LoginError(this.message);
+  const LoginEmailInputError(this.message);
 
   @override
   List<Object> get props => [message];
 }
 
-class LoginSuccess extends LoginState {
+class LoginEmailInputSuccess extends LoginEmailInputState {
   final String message;
 
-  const LoginSuccess(this.message);
+  const LoginEmailInputSuccess(this.message);
 
   @override
   List<Object> get props => [message];

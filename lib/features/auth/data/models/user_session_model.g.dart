@@ -1,35 +1,41 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'sessions_model.dart';
+part of 'user_session_model.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class SessionsModelAdapter extends TypeAdapter<SessionsModel> {
+class UserSessionModelAdapter extends TypeAdapter<UserSessionModel> {
   @override
-  final int typeId = 0;
+  final int typeId = 1;
 
   @override
-  SessionsModel read(BinaryReader reader) {
+  UserSessionModel read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return SessionsModel(
+    return UserSessionModel(
       sessionId: fields[0] as String,
       userId: fields[1] as String,
+      createdAt: fields[2] as String,
+      lastActiveAt: fields[3] as String,
     );
   }
 
   @override
-  void write(BinaryWriter writer, SessionsModel obj) {
+  void write(BinaryWriter writer, UserSessionModel obj) {
     writer
-      ..writeByte(2)
+      ..writeByte(4)
       ..writeByte(0)
       ..write(obj.sessionId)
       ..writeByte(1)
-      ..write(obj.userId);
+      ..write(obj.userId)
+      ..writeByte(2)
+      ..write(obj.createdAt)
+      ..writeByte(3)
+      ..write(obj.lastActiveAt);
   }
 
   @override
@@ -38,5 +44,7 @@ class SessionsModelAdapter extends TypeAdapter<SessionsModel> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is SessionsModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
+      other is UserSessionModelAdapter &&
+          runtimeType == other.runtimeType &&
+          typeId == other.typeId;
 }

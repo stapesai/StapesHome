@@ -4,17 +4,19 @@
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
+import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/signup_api_parms.dart';
+import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 import 'package:stapes_home/service_locator.dart';
 
-abstract class AuthApiService {
+abstract class AuthRemoteDataSource {
   // Login
   Future<Either> requestLoginService(RequestLoginParams requestLoginParams);
-  Future<Either> completeLogin(CompleteLoginParams completeLoginParams);
+  Future<Either<Failure, CompleteLoginResponse>> completeLogin(CompleteLoginParams completeLoginParams);
 
   // SignUp
   Future<Either> requestSignUp(RequestSignUpParams requestSignupParams);
@@ -28,7 +30,7 @@ abstract class AuthApiService {
   Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams);
 }
 
-class AuthApiServiceImpl implements AuthApiService {
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   // Login
   @override
   Future<Either> requestLoginService(RequestLoginParams requestLoginParams) async {
@@ -47,7 +49,7 @@ class AuthApiServiceImpl implements AuthApiService {
   }
 
   @override
-  Future<Either> completeLogin(CompleteLoginParams completeLoginParams) async {
+  Future<Either<Failure, CompleteLoginResponse>> completeLogin(CompleteLoginParams completeLoginParams) async {
     try {
       var response = await serviceLocator<HttpClient>().post(
         AuthRoutes.completeLogin,

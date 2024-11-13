@@ -1,11 +1,24 @@
 import 'dart:convert';
 import 'package:intl/intl.dart';
+import 'package:hive/hive.dart';
 
+part 'user_model.g.dart';
+
+@HiveType(typeId: 2)
 class UserModel {
+  @HiveField(0)
   final String email;
+
+  @HiveField(1)
   final String firstName;
+
+  @HiveField(2)
   final String lastName;
-  final DateTime _dob; // make it private
+
+  @HiveField(3)
+  final DateTime _dob; // this is private variable `dob` getter is defined later.
+
+  @HiveField(4)
   final String gender;
 
   static final DateFormat dateFormat = DateFormat("yyyy-MM-dd");

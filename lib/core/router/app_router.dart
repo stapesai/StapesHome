@@ -17,19 +17,17 @@ class AppRouter {
     routes: [
       // Splash screen
       GoRoute(
-          name: AppRouteConstants.splash.routeName,
-          path: AppRouteConstants.splash.routePath,
-          pageBuilder: (context, state) {
-            return MaterialPage(child: const SplashScreen());
-          }),
+        name: AppRouteConstants.splash.routeName,
+        path: AppRouteConstants.splash.routePath,
+        builder: (context, state) => const SplashScreen(),
+      ),
 
       // Login screen
       GoRoute(
-          name: AppRouteConstants.login.routeName,
-          path: AppRouteConstants.login.routePath,
-          pageBuilder: (context, state) {
-            return MaterialPage(child: const LoginScreen());
-          }),
+        name: AppRouteConstants.login.routeName,
+        path: AppRouteConstants.login.routePath,
+        builder: (context, state) => const LoginEmailInputScreen(),
+      ),
 
       // Login OTP Verification screen
       GoRoute(
@@ -53,9 +51,7 @@ class AppRouter {
       GoRoute(
         name: AppRouteConstants.signUpEmailInput.routeName,
         path: AppRouteConstants.signUpEmailInput.routePath,
-        pageBuilder: (context, state) {
-          return MaterialPage(child: const SignUpEmailInputScreen());
-        },
+        builder: (context, state) => const SignUpEmailInputScreen(),
       ),
 
       // SignUp OTP Verification screen

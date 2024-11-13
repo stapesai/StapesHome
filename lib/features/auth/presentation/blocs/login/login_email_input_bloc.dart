@@ -1,28 +1,25 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
+import 'package:stapes_home/service_locator.dart';
 import 'login_email_input_event.dart';
 import 'login_email_input_state.dart';
-import 'package:stapes_home/utils/hive.dart';
-import 'package:stapes_home/utils/sessions_model.dart';
 
-class LoginBloc extends Bloc<LoginEvent, LoginState> {
+class LoginEmailInputBloc extends Bloc<LoginEvent, LoginEmailInputState> {
   final RequestLoginUseCase requestLoginUseCase;
   final CompleteLoginUseCase completeLoginUseCase;
-  final HiveService hiveService;
 
-  LoginBloc({
+  LoginEmailInputBloc({
     required this.requestLoginUseCase,
     required this.completeLoginUseCase,
-    required this.hiveService,
-  }) : super(LoginInitial()) {
+  }) : super(LoginEmailInputInitial()) {
     on<RequestLoginEvent>(_onRequestLogin);
     on<CompleteLoginEvent>(_onCompleteLogin);
   }
 
-  Future<void> _onRequestLogin(
-      RequestLoginEvent event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+  Future<void> _onRequestLogin(RequestLoginEvent event, Emitter<LoginEmailInputState> emit) async {
+    emit(LoginEmailInputLoading());
 
     final result = await requestLoginUseCase(
       RequestLoginParams(
@@ -32,9 +29,9 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
 
     result.fold(
-      (failure) => emit(LoginError(failure.toString())),
+      (failure) => emit(LoginEmailInputError(failure.toString())),
       (response) => emit(
-        LoginOtpRequired(
+        LoginEmailInputOtpRequired(
           transactionId: response.transactionId,
           expiryTime: response.otpExpiresAt,
         ),
@@ -42,25 +39,21 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
     );
   }
 
-  Future<void> _onCompleteLogin(
-      CompleteLoginEvent event, Emitter<LoginState> emit) async {
-    emit(LoginLoading());
+  Future<void> _onCompleteLogin(CompleteLoginEvent event, Emitter<LoginEmailInputState> emit) async {
+    emit(LoginEmailInputLoading());
 
     final result = await completeLoginUseCase(
       CompleteLoginParams(transactionId: event.transactionId),
     );
 
     result.fold(
-      (failure) => emit(LoginError(failure.toString())),
+      (failure) => emit(LoginEmailInputError(failure.toString())),
       (response) async {
-        var sessionData = SessionsModel(
-          sessionId: response.sessionId,
-          userId: response.userId,
-        );
+        // Cache user details and user session to local data source
+        serviceLocator<AuthLocalDataSource>().cacheUserSession(response.session);
+        serviceLocator<AuthLocalDataSource>().cacheUser(response.user);
 
-        await hiveService.addBoxes([sessionData], "SessionBox");
-
-        emit(LoginSuccess('Login Successful'));
+        emit(LoginEmailInputSuccess('Login Successful'));
       },
     );
   }

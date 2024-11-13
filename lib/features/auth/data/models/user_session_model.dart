@@ -1,9 +1,20 @@
 import 'dart:convert';
+import 'package:hive/hive.dart';
 
+part 'user_session_model.g.dart';
+
+@HiveType(typeId: 1)
 class UserSessionModel {
+  @HiveField(0)
   final String sessionId;
+
+  @HiveField(1)
   final String userId;
+
+  @HiveField(2)
   final String createdAt;
+
+  @HiveField(3)
   final String lastActiveAt;
 
   UserSessionModel({
