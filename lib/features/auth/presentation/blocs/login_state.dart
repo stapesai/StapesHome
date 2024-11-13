@@ -1,6 +1,3 @@
-// Path: lib/presentation/auth/bloc/login_state.dart
-// Description: This file contains the state for the login bloc.
-
 import 'package:equatable/equatable.dart';
 
 abstract class LoginState extends Equatable {

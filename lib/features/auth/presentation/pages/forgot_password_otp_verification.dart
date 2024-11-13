@@ -63,9 +63,14 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
         });
       } else {
         _timer.cancel();
-        setState(() {
-          // TODO: Enable resend button when timer expires
-        });
+        // setState(() {
+        //   TODO: Enable resend button when timer expires
+        //   context.read<OtpVerificationBloc>().add(
+        //         ResendOtpRequested(
+        //           email: widget.email,
+        //         ),
+        //       );
+        // });
       }
     });
   }
@@ -143,7 +148,7 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
                     content: Text('OTP Verified Successfully'),
                     backgroundColor: AppColor.successColor,
                   ));
-                  GoRouter.of(context).push(AppRouteConstants.getCreatePasswordPagePath(
+                  GoRouter.of(context).push(AppRouteConstants.getForgotPasswordResetPasswordPagePath(
                     state.transactionId,
                     state.email,
                   ));

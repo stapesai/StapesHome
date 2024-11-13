@@ -52,11 +52,6 @@ class _LoginScreenState extends State<LoginScreen> {
                   state.transactionId,
                   state.expiryTime,
                 ),
-                extra: () {
-                  context.read<LoginBloc>().add(
-                        CompleteLoginEvent(transactionId: state.transactionId),
-                      );
-                },
               );
             } else if (state is LoginSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
@@ -194,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => const EmailSignUp()),
+                  MaterialPageRoute(builder: (context) => const SignUpEmailInputScreen()),
                 );
               },
               child: Text(

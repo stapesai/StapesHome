@@ -8,7 +8,8 @@ import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
-import 'package:stapes_home/presentation/auth/pages/otp_verification.dart';
+import 'package:stapes_home/features/auth/presentation/pages/signup_create_new_password.dart';
+import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 
 class SignUpEmailInputScreen extends StatefulWidget {
@@ -48,7 +49,7 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => OtpVerificationScreen(
+              builder: (context) => SignUpOtpVerificationScreen(
                 transactionId: transactionId,
                 expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
                 onSuccess: () async {
@@ -56,10 +57,10 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                     Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => CreatePasswordScreen(
+                        builder: (context) => SignUpCreateNewPasswordScreen(
                           title: 'Create Password',
                           subtitle: 'Lets create a password to secure your account.',
-                          nextScreen: SignupForm(
+                          nextScreen: SignUpDetailsForm(
                             password: '',
                             transaction_id: '',
                             email: '',

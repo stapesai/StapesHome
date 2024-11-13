@@ -6,18 +6,21 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/otp_verification_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/otp_verification_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/otp_verification_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/core/common/widgets/button.dart";
 
 class LoginOtpVerificationScreen extends StatefulWidget {
+  final String email;
   final String transactionId;
-  final VoidCallback onSuccess;
   final DateTime expiryTime;
 
   const LoginOtpVerificationScreen({
     super.key,
+    required this.email,
     required this.transactionId,
-    required this.onSuccess,
     required this.expiryTime,
   });
 
@@ -40,10 +43,11 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
 
   Future<void> handleverifyOtp(BuildContext context) async {
     String otp = _controllers.map((controller) => controller.text).join();
-    context.read<OtpVerificationCubit>().verifyOtp(
+    context.read<OtpVerificationBloc>().add(OtpSubmitted(
+          email: widget.email,
           transactionId: widget.transactionId,
           otp: otp,
-        );
+        ));
   }
 
   void _startTimer() {
@@ -124,13 +128,16 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
             ),
           ),
           child: BlocProvider(
-            create: (context) => OtpVerificationCubit(
-              otpVerificationUsecase: serviceLocator<OtpVerificationUsecase>(),
+            create: (context) => OtpVerificationBloc(
+              verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
             ),
-            child: BlocListener<OtpVerificationCubit, OtpVerificationState>(
+            child: BlocListener<OtpVerificationBloc, OtpVerificationState>(
               listener: (context, state) {
                 if (state is OtpVerificationSuccess) {
-                  widget.onSuccess();
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                    content: Text('OTP Verified Successfully'),
+                    backgroundColor: AppColor.successColor,
+                  ));
                 } else if (state is OtpVerificationError) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
@@ -214,7 +221,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                                   : screenSize.height * 0.1,
                             ),
                             child: Center(
-                              child: BlocBuilder<OtpVerificationCubit, OtpVerificationState>(
+                              child: BlocBuilder<OtpVerificationBloc, OtpVerificationState>(
                                 builder: (context, state) {
                                   return CustomButton(
                                     text: "Next",

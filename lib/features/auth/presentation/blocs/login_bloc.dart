@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login_event.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login_state.dart';
+import 'login_event.dart';
+import 'login_state.dart';
 import 'package:stapes_home/utils/hive.dart';
 import 'package:stapes_home/utils/sessions_model.dart';
 
