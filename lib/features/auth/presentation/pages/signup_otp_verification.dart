@@ -8,11 +8,9 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_event.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_state.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_bloc.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/signup_otp_verification_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/signup_otp_verification_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/signup_otp_verification_state.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/core/common/widgets/button.dart";
 
@@ -47,10 +45,11 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
 
   Future<void> _onVerifyButtonPressed(BuildContext context) async {
     String otp = _controllers.map((controller) => controller.text).join();
-    context.read<SignUpBloc>().add(
-          VerifyOtpEvent(
+    context.read<SignUpOtpVerificationBloc>().add(
+          SignUpOtpSubmittedEvent(
             transactionId: widget.transactionId,
             otp: otp,
+            email: widget.email,
           ),
         );
   }
@@ -134,28 +133,28 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
             ),
           ),
           child: BlocProvider(
-            create: (context) => OtpVerificationBloc(
+            create: (context) => SignUpOtpVerificationBloc(
               verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
             ),
-            child: BlocListener<OtpVerificationBloc, OtpVerificationState>(
+            child: BlocListener<SignUpOtpVerificationBloc, SignUpOtpVerificationState>(
               listener: (context, state) {
-                if (state is OtpVerificationSuccess) {
+                if (state is SignUpOtpVerificationSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('OTP Verified Successfully'),
                     backgroundColor: AppColor.successColor,
                   ));
-                  GoRouter.of(context).push(AppRouteConstants.getCreatePasswordPagePath(
+                  GoRouter.of(context).push(AppRouteConstants.getSignUpCreatePasswordPagePath(
                     state.transactionId,
                     state.email,
                   ));
-                } else if (state is OtpVerificationError) {
+                } else if (state is SignUpOtpVerificationError) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.message),
                       backgroundColor: AppColor.errorColor,
                     ),
                   );
-                } else if (state is OtpVerificationLoading) {}
+                }
               },
               child: Scaffold(
                 backgroundColor: Colors.transparent,
@@ -231,11 +230,11 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
                                   : screenSize.height * 0.1,
                             ),
                             child: Center(
-                              child: BlocBuilder<OtpVerificationBloc, OtpVerificationState>(
+                              child: BlocBuilder<SignUpOtpVerificationBloc, SignUpOtpVerificationState>(
                                 builder: (context, state) {
                                   return CustomButton(
                                     text: "Next",
-                                    isLoading: state is OtpVerificationLoading,
+                                    isLoading: state is SignUpOtpVerificationLoading,
                                     onPressed: () => _onVerifyButtonPressed(context),
                                   );
                                 },

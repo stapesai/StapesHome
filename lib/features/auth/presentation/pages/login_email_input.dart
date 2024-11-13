@@ -42,7 +42,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
             // Show error message if login fails
             if (state is LoginEmailInputError) {
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
+                SnackBar(backgroundColor: AppColor.errorColor, content: Text(state.message)),
               );
             }
             // Navigate to OTP verification screen if OTP is required

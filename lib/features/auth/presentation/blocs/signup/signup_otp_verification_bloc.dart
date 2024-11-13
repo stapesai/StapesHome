@@ -1,31 +1,42 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'signup_otp_verification_event.dart';
 import 'signup_otp_verification_state.dart';
 
-class OtpVerificationBloc extends Bloc<OtpVerificationEvent, OtpVerificationState> {
+class SignUpOtpVerificationBloc extends Bloc<SignUpOtpVerificationEvent, SignUpOtpVerificationState> {
   final OtpVerificationUsecase verifyOtpUseCase;
 
-  OtpVerificationBloc({required this.verifyOtpUseCase}) : super(OtpVerificationInitial()) {
-    on<OtpSubmitted>(_onOtpSubmitted);
-    on<ResendOtpRequested>(_onResendOtpRequested);
+  SignUpOtpVerificationBloc({required this.verifyOtpUseCase}) : super(SignUpOtpVerificationInitial()) {
+    on<SignUpOtpSubmittedEvent>(_onOtpSubmitted);
+    // on<ResendOtpRequested>(_onResendOtpRequested);
   }
 
-  Future<void> _onOtpSubmitted(OtpSubmitted event, Emitter<OtpVerificationState> emit) async {
-    emit(OtpVerificationLoading());
+  String _mapFailureToMessage(Failure failure) {
+    if (failure is ServerFailure) {
+      return failure.message ?? 'Server error occurred.';
+    } else if (failure is NetworkFailure) {
+      return 'Please check your internet connection.';
+    } else {
+      return 'An unexpected error occurred.';
+    }
+  }
 
-    final result = await verifyOtpUseCase(
+  Future<void> _onOtpSubmitted(SignUpOtpSubmittedEvent event, Emitter<SignUpOtpVerificationState> emit) async {
+    emit(SignUpOtpVerificationLoading());
+
+    final otpResult = await verifyOtpUseCase(
       OtpVerificationParams(
         transactionId: event.transactionId,
         otp: event.otp,
       ),
     );
 
-    result.fold(
-      (failure) => emit(OtpVerificationError(message: failure.toString())),
+    otpResult.fold(
+      (failure) => emit(SignUpOtpVerificationError(_mapFailureToMessage(failure))),
       (response) => emit(
-        OtpVerificationSuccess(
+        SignUpOtpVerificationSuccess(
           transactionId: event.transactionId,
           email: event.email,
         ),
@@ -33,5 +44,5 @@ class OtpVerificationBloc extends Bloc<OtpVerificationEvent, OtpVerificationStat
     );
   }
 
-  Future<void> _onResendOtpRequested(ResendOtpRequested event, Emitter<OtpVerificationState> emit) async {}
+  // Future<void> _onResendOtpRequested(ResendOtpRequested event, Emitter<SignUpOtpVerificationState> emit) async {}
 }

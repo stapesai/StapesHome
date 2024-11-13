@@ -1,19 +1,19 @@
 import 'package:equatable/equatable.dart';
 
-abstract class SignUpCreatePasswordEvent extends Equatable {
-  const SignUpCreatePasswordEvent();
+abstract class SignUpCreateNewPasswordEvent extends Equatable {
+  const SignUpCreateNewPasswordEvent();
 
   @override
   List<Object?> get props => [];
 }
 
-class SignUpPasswordSubmitted extends SignUpCreatePasswordEvent {
+class SignUpNewPasswordSubmitted extends SignUpCreateNewPasswordEvent {
   final String password;
   final String confirmPassword;
   final String transactionId;
   final String email;
 
-  const SignUpPasswordSubmitted({
+  const SignUpNewPasswordSubmitted({
     required this.password,
     required this.confirmPassword,
     required this.transactionId,

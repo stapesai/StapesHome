@@ -16,8 +16,8 @@ class SignUpDetailsFormSuccess extends SignUpDetailsFormState {}
 class SignUpDetailsFormError extends SignUpDetailsFormState {
   final String message;
 
-  const SignUpDetailsFormError({required this.message});
+  const SignUpDetailsFormError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }

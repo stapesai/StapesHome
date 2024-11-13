@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/features/auth/data/models/signup_api_parms.dart';
 import 'signup_details_form_event.dart';
 import 'signup_details_form_state.dart';
@@ -8,10 +9,20 @@ class SignUpDetailsFormBloc extends Bloc<SignUpDetailsFormEvent, SignUpDetailsFo
   final CompleteSignUpUseCase completeSignUpUseCase;
 
   SignUpDetailsFormBloc({required this.completeSignUpUseCase}) : super(SignUpDetailsFormInitial()) {
-    on<SignUpDetailsSubmitted>(_onDetailsSubmitted);
+    on<SignUpDetailsFormSubmittedEvent>(_onDetailsSubmitted);
   }
 
-  Future<void> _onDetailsSubmitted(SignUpDetailsSubmitted event, Emitter<SignUpDetailsFormState> emit) async {
+  String _mapFailureToMessage(Failure failure) {
+    if (failure is ServerFailure) {
+      return failure.message ?? 'Server error occurred.';
+    } else if (failure is NetworkFailure) {
+      return 'Please check your internet connection.';
+    } else {
+      return 'An unexpected error occurred.';
+    }
+  }
+
+  Future<void> _onDetailsSubmitted(SignUpDetailsFormSubmittedEvent event, Emitter<SignUpDetailsFormState> emit) async {
     emit(SignUpDetailsFormLoading());
 
     final params = CompleteSignUpParams(
@@ -24,7 +35,7 @@ class SignUpDetailsFormBloc extends Bloc<SignUpDetailsFormEvent, SignUpDetailsFo
 
     result.fold(
       (success) => emit(SignUpDetailsFormSuccess()),
-      (failure) => emit(SignUpDetailsFormError(message: failure.toString())),
+      (failure) => emit(SignUpDetailsFormError(_mapFailureToMessage(failure))),
     );
   }
 }

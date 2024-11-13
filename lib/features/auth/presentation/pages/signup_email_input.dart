@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_event.dart';
@@ -24,7 +23,7 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
   void _onSignUpButtonPressed(BuildContext context) {
     final email = emailController.text.trim();
     if (email.isNotEmpty) {
-      context.read<SignUpBloc>().add(RequestSignUpEvent(email: email));
+      context.read<SignUpEmailInputBloc>().add(RequestSignUpEvent(email: email));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Please enter an email')),
@@ -51,16 +50,18 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
           body: BlocProvider(
-            create: (context) => SignUpBloc(
+            create: (context) => SignUpEmailInputBloc(
               requestSignUpUseCase: serviceLocator<RequestSignUpUseCase>(),
-              verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
-              completeSignUpUseCase: serviceLocator<CompleteSignUpUseCase>(),
             ),
-            child: BlocListener<SignUpBloc, SignUpState>(
+            child: BlocListener<SignUpEmailInputBloc, SignUpEmailInputState>(
               listener: (context, state) {
-                if (state is SignUpLoading) {
-                } else if (state is SignUpOtpRequired) {
-                } else if (state is SignUpError) {}
+                if (state is SignUpEmailInputOtpRequired) {
+                  // push to sign up otp screen
+                } else if (state is SignUpEmailInputError) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
+                  );
+                }
               },
               child: SafeArea(
                 child: Padding(
@@ -111,11 +112,11 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                               keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
                         ),
                         child: Center(
-                          child: BlocBuilder<SignUpBloc, SignUpState>(
+                          child: BlocBuilder<SignUpEmailInputBloc, SignUpEmailInputState>(
                             builder: (context, state) {
                               return CustomButton(
                                 text: "Send Code",
-                                isLoading: state is SignUpLoading,
+                                isLoading: state is SignUpEmailInputLoading,
                                 onPressed: () => _onSignUpButtonPressed(context),
                               );
                             },

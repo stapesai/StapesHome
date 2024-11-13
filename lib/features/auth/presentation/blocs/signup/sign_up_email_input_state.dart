@@ -1,22 +1,22 @@
 import 'package:equatable/equatable.dart';
 
-abstract class SignUpState extends Equatable {
-  const SignUpState();
+abstract class SignUpEmailInputState extends Equatable {
+  const SignUpEmailInputState();
 
   @override
   List<Object?> get props => [];
 }
 
-class SignUpInitial extends SignUpState {}
+class SignUpEmailInputInitial extends SignUpEmailInputState {}
 
-class SignUpLoading extends SignUpState {}
+class SignUpEmailInputLoading extends SignUpEmailInputState {}
 
-class SignUpOtpRequired extends SignUpState {
+class SignUpEmailInputOtpRequired extends SignUpEmailInputState {
   final String transactionId;
   final DateTime expiryTime;
   final String email;
 
-  const SignUpOtpRequired({
+  const SignUpEmailInputOtpRequired({
     required this.transactionId,
     required this.expiryTime,
     required this.email,
@@ -26,24 +26,11 @@ class SignUpOtpRequired extends SignUpState {
   List<Object?> get props => [transactionId, expiryTime, email];
 }
 
-class SignUpOtpVerified extends SignUpState {
-  final String transactionId;
-
-  const SignUpOtpVerified({required this.transactionId});
-
-  @override
-  List<Object?> get props => [transactionId];
-}
-
-class SignUpPasswordCreated extends SignUpState {}
-
-class SignUpSuccess extends SignUpState {}
-
-class SignUpError extends SignUpState {
+class SignUpEmailInputError extends SignUpEmailInputState {
   final String message;
 
-  const SignUpError({required this.message});
+  const SignUpEmailInputError(this.message);
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
 }

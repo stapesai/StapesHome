@@ -8,12 +8,12 @@ abstract class SignUpDetailsFormEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class SignUpDetailsSubmitted extends SignUpDetailsFormEvent {
+class SignUpDetailsFormSubmittedEvent extends SignUpDetailsFormEvent {
   final String transactionId;
   final UserModel user;
   final String password;
 
-  const SignUpDetailsSubmitted({
+  const SignUpDetailsFormSubmittedEvent({
     required this.transactionId,
     required this.user,
     required this.password,
