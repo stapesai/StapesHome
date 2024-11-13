@@ -11,6 +11,7 @@ import 'package:stapes_home/features/auth/domain/usecases/otp_verification_useca
 import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_otp_verification_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_otp_verification_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_otp_verification_state.dart';
+import 'package:stapes_home/features/auth/presentation/widgets/otp_input_widget.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/core/common/widgets/button.dart";
 
@@ -198,19 +199,10 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
                           SizedBox(height: screenSize.height * 0.04),
                           SizedBox(
                             child: Center(
-                              child: Pinput(
-                                length: 6,
-                                showCursor: false,
-                                defaultPinTheme: defaultPinTheme,
-                                focusedPinTheme: focusedPinTheme,
-                                focusNode: _focusNodes[0],
-                                controller: _controllers[0],
-                                onChanged: (String value) {
-                                  if (value.length == 1) {
-                                    _focusNodes[1].requestFocus();
-                                  }
-                                },
-                                // onCompleted: _onOtpComplete
+                              child: OtpInputWidget(
+                                controllers: _controllers,
+                                focusNodes: _focusNodes,
+                                onOtpComplete: (otp) => _onVerifyButtonPressed(context),
                               ),
                             ),
                           ),
