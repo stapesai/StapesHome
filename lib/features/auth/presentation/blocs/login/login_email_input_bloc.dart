@@ -6,10 +6,11 @@ import 'package:stapes_home/service_locator.dart';
 import 'login_email_input_event.dart';
 import 'login_email_input_state.dart';
 
-class LoginEmailInputBloc extends Bloc<LoginEvent, LoginEmailInputState> {
+class LoginEmailInputBloc extends Bloc<LoginEmailInputEvent, LoginEmailInputState> {
   final RequestLoginUseCase requestLoginUseCase;
   final CompleteLoginUseCase completeLoginUseCase;
 
+  // Emits initial state and listens for incoming events
   LoginEmailInputBloc({
     required this.requestLoginUseCase,
     required this.completeLoginUseCase,
@@ -19,6 +20,7 @@ class LoginEmailInputBloc extends Bloc<LoginEvent, LoginEmailInputState> {
   }
 
   Future<void> _onRequestLogin(RequestLoginEvent event, Emitter<LoginEmailInputState> emit) async {
+    // Sets state to loading - CustomButton listens to this state and shows loading spinner
     emit(LoginEmailInputLoading());
 
     final result = await requestLoginUseCase(

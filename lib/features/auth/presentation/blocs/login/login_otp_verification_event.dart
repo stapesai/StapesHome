@@ -22,11 +22,11 @@ class LoginOtpSubmitted extends LoginOtpVerificationEvent {
   List<Object?> get props => [transactionId, otp, email];
 }
 
-class LoginResendOtpRequested extends LoginOtpVerificationEvent {
-  final String email;
+// class LoginResendOtpRequested extends LoginOtpVerificationEvent {
+//   final String email;
 
-  const LoginResendOtpRequested({required this.email});
+//   const LoginResendOtpRequested({required this.email});
 
-  @override
-  List<Object?> get props => [email];
-}
+//   @override
+//   List<Object?> get props => [email];
+// }

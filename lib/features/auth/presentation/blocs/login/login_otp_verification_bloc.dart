@@ -7,12 +7,14 @@ import 'login_otp_verification_state.dart';
 class LoginOtpVerificationBloc extends Bloc<LoginOtpVerificationEvent, LoginOtpVerificationState> {
   final OtpVerificationUsecase verifyOtpUseCase;
 
+  // Emits initial state and listens for incoming events
   LoginOtpVerificationBloc({required this.verifyOtpUseCase}) : super(LoginOtpVerificationInitial()) {
     on<LoginOtpSubmitted>(_onOtpSubmitted);
-    on<LoginResendOtpRequested>(_onResendOtpRequested);
+    // on<LoginResendOtpRequested>(_onResendOtpRequested);
   }
 
   Future<void> _onOtpSubmitted(LoginOtpSubmitted event, Emitter<LoginOtpVerificationState> emit) async {
+    // Sets state to loading - CustomButton listens to this state and shows loading spinner
     emit(LoginOtpVerificationLoading());
 
     final result = await verifyOtpUseCase(
@@ -27,13 +29,12 @@ class LoginOtpVerificationBloc extends Bloc<LoginOtpVerificationEvent, LoginOtpV
       (response) => emit(
         LoginOtpVerificationSuccess(
           transactionId: event.transactionId,
-          email: event.email,
         ),
       ),
     );
   }
 
-  Future<void> _onResendOtpRequested(LoginResendOtpRequested event, Emitter<LoginOtpVerificationState> emit) async {
-    // Implement resend OTP logic here
-  }
+  // Future<void> _onResendOtpRequested(LoginResendOtpRequested event, Emitter<LoginOtpVerificationState> emit) async {
+  //   Implement resend OTP logic here
+  // }
 }

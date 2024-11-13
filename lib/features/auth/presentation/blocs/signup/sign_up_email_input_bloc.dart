@@ -17,7 +17,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     required this.completeSignUpUseCase,
   }) : super(SignUpInitial()) {
     on<RequestSignUpEvent>(_onRequestSignUp);
-    on<VerifyOtpEvent>(_onVerifyOtp);
+    on<SignUpVerifyOtpEvent>(_onVerifyOtp);
     on<SubmitUserDetailsEvent>(_onSubmitUserDetails);
   }
 
@@ -38,7 +38,7 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
     );
   }
 
-  Future<void> _onVerifyOtp(VerifyOtpEvent event, Emitter<SignUpState> emit) async {
+  Future<void> _onVerifyOtp(SignUpVerifyOtpEvent event, Emitter<SignUpState> emit) async {
     emit(SignUpLoading());
 
     final result = await verifyOtpUseCase(
@@ -47,8 +47,25 @@ class SignUpBloc extends Bloc<SignUpEvent, SignUpState> {
 
     result.fold(
       (failure) => emit(SignUpError(message: failure.toString())),
-      (response) => emit(SignUpOtpVerified(transactionId: event.transactionId)),
+      (_) => emit(SignUpOtpVerified(transactionId: event.transactionId)),
     );
+  }
+
+  Future<void> _onCreatePassword(CreatePasswordEvent event, Emitter<SignUpState> emit) async {
+    emit(SignUpLoading());
+
+    if (event.password != event.confirmPassword) {
+      emit(SignUpError(message: 'Passwords do not match'));
+      return;
+    }
+
+    // Implement CreatePasswordUseCase or handle password creation logic here
+    // After successful password creation, emit SignUpPasswordCreated
+    emit(SignUpPasswordCreated(
+      transactionId: event.transactionId,
+      email: event.email,
+      password: event.password,
+    ));
   }
 
   Future<void> _onSubmitUserDetails(SubmitUserDetailsEvent event, Emitter<SignUpState> emit) async {

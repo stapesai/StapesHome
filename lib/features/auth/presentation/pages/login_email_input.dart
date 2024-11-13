@@ -40,18 +40,23 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         ),
         child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
           listener: (context, state) {
+            // Show error message if login fails
             if (state is LoginEmailInputError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
               );
-            } else if (state is LoginEmailInputOtpRequired) {
+            }
+            // Navigate to OTP verification screen if OTP is required
+            else if (state is LoginEmailInputOtpRequired) {
               GoRouter.of(context).push(
                 AppRouteConstants.getOtpVerificationPagePath(
                   state.transactionId,
                   state.expiryTime,
                 ),
               );
-            } else if (state is LoginEmailInputSuccess) {
+            }
+            // Navigate to Dev page if login is successful
+            else if (state is LoginEmailInputSuccess) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
               );
@@ -160,6 +165,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
               text: 'Log In',
               isLoading: state is LoginEmailInputLoading,
               onPressed: () {
+                // Add LoginEmailInputBloc event to request login
                 context.read<LoginEmailInputBloc>().add(
                       RequestLoginEvent(
                         email: emailController.text,

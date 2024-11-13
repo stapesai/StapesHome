@@ -17,11 +17,11 @@ class RequestSignUpEvent extends SignUpEvent {
   List<Object?> get props => [email];
 }
 
-class VerifyOtpEvent extends SignUpEvent {
+class SignUpVerifyOtpEvent extends SignUpEvent {
   final String transactionId;
   final String otp;
 
-  const VerifyOtpEvent({required this.transactionId, required this.otp});
+  const SignUpVerifyOtpEvent({required this.transactionId, required this.otp});
 
   @override
   List<Object?> get props => [transactionId, otp];

@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_state.dart';
@@ -42,6 +44,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
   }
 
   Future<void> _onVerifyButtonPressed(BuildContext context) async {
+    // OTP is joined from all text controllers and LoginOtpSubmitted event is dispatched
     String otp = _controllers.map((controller) => controller.text).join();
     context.read<LoginOtpVerificationBloc>().add(LoginOtpSubmitted(
           email: widget.email,
@@ -114,19 +117,23 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
             ),
             child: BlocListener<LoginOtpVerificationBloc, LoginOtpVerificationState>(
               listener: (context, state) {
+                // OTP Verification success
                 if (state is LoginOtpVerificationSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('OTP Verified Successfully'),
                     backgroundColor: AppColor.successColor,
                   ));
-                } else if (state is LoginOtpVerificationError) {
+                  context.read<LoginEmailInputBloc>().add(CompleteLoginEvent(transactionId: state.transactionId));
+                }
+                // OTP Verification error
+                else if (state is LoginOtpVerificationError) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.message),
                       backgroundColor: AppColor.errorColor,
                     ),
                   );
-                } else if (state is LoginOtpVerificationLoading) {}
+                }
               },
               child: Scaffold(
                 backgroundColor: Colors.transparent,

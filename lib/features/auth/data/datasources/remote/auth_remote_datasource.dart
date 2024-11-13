@@ -10,7 +10,6 @@ import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/signup_api_parms.dart';
-import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 import 'package:stapes_home/service_locator.dart';
 
 abstract class AuthRemoteDataSource {
