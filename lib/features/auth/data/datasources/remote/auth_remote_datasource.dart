@@ -1,142 +1,168 @@
-// Path: lib/data/source/auth_api_service.dart
-// Description: This file contains code to interact with the API for authentication. We'll register this service in the service locator. Then in the AuthRepositoryImpl, we'll call the methods to make the API calls.
-
-import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
-import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/otp_verification_api_parms.dart';
 import 'package:stapes_home/features/auth/data/models/signup_api_parms.dart';
-import 'package:stapes_home/service_locator.dart';
-
 abstract class AuthRemoteDataSource {
   // Login
-  Future<Either> requestLoginService(RequestLoginParams requestLoginParams);
-  Future<Either<Failure, CompleteLoginResponse>> completeLogin(CompleteLoginParams completeLoginParams);
+  Future<RequestLoginResponse> requestLoginService(RequestLoginParams requestLoginParams);
+  Future<CompleteLoginResponse> completeLogin(CompleteLoginParams completeLoginParams);
 
   // SignUp
-  Future<Either> requestSignUp(RequestSignUpParams requestSignupParams);
-  Future<Either> completeSignUp(CompleteSignUpParams completeSignupParams);
+  Future<RequestSignUpResponse> requestSignUp(RequestSignUpParams requestSignupParams);
+  Future<CompleteSignUpResponse> completeSignUp(CompleteSignUpParams completeSignupParams);
 
   // Forgot Password
-  Future<Either> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams);
-  Future<Either> completePasswordReset(CompletePasswordResetParams completePasswordResetParams);
+  Future<RequestPasswordResetResponse> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams);
+  Future<CompletePasswordResetResponse> completePasswordReset(CompletePasswordResetParams completePasswordResetParams);
 
   // OTP Verification
-  Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams);
+  Future<OtpVerificationResponse> verifyOtp(OtpVerificationParams otpVerificationParams);
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final HttpClient httpClient;
+
+  AuthRemoteDataSourceImpl({required this.httpClient});
+
   // Login
   @override
-  Future<Either> requestLoginService(RequestLoginParams requestLoginParams) async {
+  Future<RequestLoginResponse> requestLoginService(RequestLoginParams requestLoginParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.requestLogin,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: requestLoginParams.toJson(),
       );
 
-      return Right(RequestLoginResponse.fromJson(response));
-    } on AppException catch (e) {
-      // TODO: show error messages from server
-      return Left(e);
+      return RequestLoginResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
   @override
-  Future<Either<Failure, CompleteLoginResponse>> completeLogin(CompleteLoginParams completeLoginParams) async {
+  Future<CompleteLoginResponse> completeLogin(CompleteLoginParams completeLoginParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.completeLogin,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: completeLoginParams.toJson(),
       );
 
-      return Right(CompleteLoginResponse.fromJson(response));
-    } on AppException catch (e) {
-      return Left(e);
+      return CompleteLoginResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
   // SignUp
   @override
-  Future<Either> requestSignUp(RequestSignUpParams requestSignupParams) async {
+  Future<RequestSignUpResponse> requestSignUp(RequestSignUpParams requestSignupParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.requestSignUp,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: requestSignupParams.toJson(),
       );
 
-      return Right(RequestSignUpResponse.fromJson(response));
-    } on AppException catch (e) {
-      return Left(e);
+      return RequestSignUpResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
   @override
-  Future<Either> completeSignUp(CompleteSignUpParams completeSignupParams) async {
+  Future<CompleteSignUpResponse> completeSignUp(CompleteSignUpParams completeSignupParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.completeSignUp,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: completeSignupParams.toJson(),
       );
 
-      return Right(CompleteSignUpResponse.fromJson(response));
-    } on AppException catch (e) {
-      return Left(e);
+      return CompleteSignUpResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
   // Forgot Password
   @override
-  Future<Either> requestPasswordReset(RequestPasswordResetParams requestPasswordResetParams) async {
+  Future<RequestPasswordResetResponse> requestPasswordReset(
+      RequestPasswordResetParams requestPasswordResetParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.requestPasswordReset,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: requestPasswordResetParams.toJson(),
       );
 
-      return Right(RequestPasswordResetResponse.fromJson(response));
-    } on AppException catch (e) {
-      return Left(e);
+      return RequestPasswordResetResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
   @override
-  Future<Either> completePasswordReset(CompletePasswordResetParams completePasswordResetParams) async {
+  Future<CompletePasswordResetResponse> completePasswordReset(
+      CompletePasswordResetParams completePasswordResetParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.completePasswordReset,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: completePasswordResetParams.toJson(),
       );
 
-      return Right(CompletePasswordResetResponse.fromJson(response));
-    } on AppException catch (e) {
-      return Left(e);
+      return CompletePasswordResetResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 
   // OTP Verification
   @override
-  Future<Either> verifyOtp(OtpVerificationParams otpVerificationParams) async {
+  Future<OtpVerificationResponse> verifyOtp(OtpVerificationParams otpVerificationParams) async {
     try {
-      var response = await serviceLocator<HttpClient>().post(
+      var response = await httpClient.post(
         AuthRoutes.verifyOtp,
         headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
         body: otpVerificationParams.toJson(),
       );
 
-      return Right(OtpVerificationResponse.fromJson(response));
-    } on AppException catch (e) {
-      return Left(e);
+      return OtpVerificationResponse.fromJson(response);
+    } on ServerException catch (e) {
+      throw ServerException(e.message);
+    } on NetworkException {
+      throw NetworkException();
+    } catch (e) {
+      throw UnexpectedException(e.toString());
     }
   }
 }

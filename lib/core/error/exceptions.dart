@@ -1,6 +1,3 @@
-// File: lib/core/error/exceptions.dart
-// Description: This file contains custom exception classes used throughout the application for specific error scenarios.
-
 /// Base class for custom exceptions in the application
 abstract class AppException implements Exception {
   final String message;
@@ -28,22 +25,22 @@ class CacheException extends AppException {
 
 /// Exception thrown when authentication fails
 class UnauthorizedException extends AppException {
-  UnauthorizedException([super.message = 'Authentication failed']);
+  UnauthorizedException([super.message = 'Unauthorized access']);
 }
 
 /// Exception thrown when a requested resource is not found
 class NotFoundException extends AppException {
-  NotFoundException([super.message = 'The requested resource was not found']);
+  NotFoundException([super.message = 'Requested resource not found']);
 }
 
 /// Exception thrown when user input is invalid
 class ValidationException extends AppException {
-  ValidationException([super.message = 'Invalid input']);
+  ValidationException([super.message = 'Input validation failed']);
 }
 
 /// Exception thrown when an operation times out
 class TimeoutException extends AppException {
-  TimeoutException([super.message = 'The operation timed out']);
+  TimeoutException([super.message = 'Request timeout']);
 }
 
 /// Exception thrown when an unexpected error occurs
