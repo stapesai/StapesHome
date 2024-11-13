@@ -26,7 +26,7 @@ class LoginOtpVerificationSuccess extends LoginOtpVerificationState {
   });
 
   @override
-  List<Object?> get props => [transactionId, email, user, userSession];
+  List<Object?> get props => [transactionId];
 }
 
 // When VerifyOtpUseCase returns failure with error message.
