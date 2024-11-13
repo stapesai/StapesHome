@@ -1,6 +1,3 @@
-// Path: lib/core/constants/app_route_constants.dart
-// Description: This file contains the route constants for the application. We'll use these constants to navigate between screens.
-
 class _RouteConfig {
   final String routePath;
   final String routeName;
@@ -12,85 +9,96 @@ class _RouteConfig {
 }
 
 class AppRouteConstants {
-  // Splash screen
   static final splash = _RouteConfig(
     routePath: '/',
     routeName: 'SplashPage',
   );
 
-  // Login screen
   static final login = _RouteConfig(
     routePath: '/auth/login',
     routeName: 'LoginPage',
   );
 
-  // Login Otp Verification screen
   static final loginOtpVerification = _RouteConfig(
-    routePath: '/auth/login-otp-verification/:transactionId/:expiryTime',
+    routePath: '/auth/login-otp-verification/:email/:transactionId/:expiryTime',
     routeName: 'LoginOtpVerificationPage',
   );
-  static String getLoginOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
-    return '/auth/login-otp-verification/$transactionId/${expiryTime.toIso8601String()}';
+  static String getLoginOtpVerificationPagePath({
+    required String email,
+    required String transactionId,
+    required DateTime expiryTime,
+  }) {
+    return '/auth/login-otp-verification/$email/$transactionId/${expiryTime.toIso8601String()}';
   }
 
-  // SignUp Email Input screen
   static final signUpEmailInput = _RouteConfig(
     routePath: '/auth/signup',
     routeName: 'SignUpEmailInputPage',
   );
 
-  // SignUp OTP Verification screen
   static final signUpOtpVerification = _RouteConfig(
-    routePath: '/auth/signup-otp-verification/:transactionId/:expiryTime/:email',
+    routePath: '/auth/signup-otp-verification/:email/:transactionId/:expiryTime',
     routeName: 'SignUpOtpVerificationPage',
   );
-  static String getSignUpOtpVerificationPagePath(String transactionId, DateTime expiryTime, String email) {
-    return '/auth/signup-otp-verification/$transactionId/${expiryTime.toIso8601String()}/$email';
+  static String getSignUpOtpVerificationPagePath({
+    required String email,
+    required String transactionId,
+    required DateTime expiryTime,
+  }) {
+    return '/auth/signup-otp-verification/$email/$transactionId/${expiryTime.toIso8601String()}';
   }
 
-  // SignUp Create Password screen
   static final signUpCreatePassword = _RouteConfig(
-    routePath: '/auth/signup-create-password/:transactionId/:email',
+    routePath: '/auth/signup-create-password/:email/:transactionId',
     routeName: 'SignUpCreatePasswordPage',
   );
-  static String getSignUpCreatePasswordPagePath(String transactionId, String email) {
-    return '/auth/signup-create-password/$transactionId/$email';
+  static String getSignUpCreatePasswordPagePath({
+    required String email,
+    required String transactionId,
+  }) {
+    return '/auth/signup-create-password/$email/$transactionId';
   }
 
-  // SignUp Details Form screen
   static final signUpDetailsForm = _RouteConfig(
-    routePath: '/auth/signup-details-form/:transactionId/:email/:password',
+    routePath: '/auth/signup-details-form/:email/:transactionId/:password',
     routeName: 'SignUpDetailsFormPage',
   );
-  static String getSignUpDetailsFormPagePath(String transactionId, String email, String password) {
-    return '/auth/signup-details-form/$transactionId/$email/$password';
+  static String getSignUpDetailsFormPagePath({
+    required String email,
+    required String transactionId,
+    required String password,
+  }) {
+    return '/auth/signup-details-form/$email/$transactionId/$password';
   }
 
-  // Forgot password screen
   static final forgotPassword = _RouteConfig(
     routePath: '/auth/forgot-password',
     routeName: 'ForgotPasswordPage',
   );
 
-  // Forgot Password Otp Verification screen
   static final forgotPasswordOtpVerification = _RouteConfig(
-    routePath: '/auth/forgot-password-otp-verification/:transactionId/:expiryTime',
+    routePath: '/auth/forgot-password-otp-verification/:email/:transactionId/:expiryTime',
     routeName: 'ForgotPasswordOtpVerificationPage',
   );
-  static String getForgotPasswordOtpVerificationPagePath(String email, String transactionId, DateTime expiryTime) {
+  static String getForgotPasswordOtpVerificationPagePath({
+    required String email,
+    required String transactionId,
+    required DateTime expiryTime,
+  }) {
     return '/auth/forgot-password-otp-verification/$email/$transactionId/${expiryTime.toIso8601String()}';
   }
 
-  // Forgot Password Reset password screen
   static final forgotPasswordResetPassword = _RouteConfig(
     routePath: '/auth/forgot-password-reset-password/:email/:transactionId',
     routeName: 'ForgotPasswordResetPasswordPage',
   );
-  static String getForgotPasswordResetPasswordPagePath(String email, String transactionId) {
+  static String getForgotPasswordResetPasswordPagePath({
+    required String email,
+    required String transactionId,
+  }) {
     return '/auth/forgot-password-reset-password/$email/$transactionId';
   }
 
-  // Development Page (temporary)
   static final devPage = _RouteConfig(
     routePath: '/dev',
     routeName: 'DevelopmentPage',

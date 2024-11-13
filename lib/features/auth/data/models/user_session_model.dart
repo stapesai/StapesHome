@@ -3,6 +3,7 @@ import 'package:hive/hive.dart';
 
 part 'user_session_model.g.dart';
 
+// dart run build_runner build
 @HiveType(typeId: 1)
 class UserSessionModel {
   @HiveField(0)
@@ -12,10 +13,10 @@ class UserSessionModel {
   final String userId;
 
   @HiveField(2)
-  final String createdAt;
+  final DateTime createdAt;
 
   @HiveField(3)
-  final String lastActiveAt;
+  final DateTime lastActiveAt;
 
   UserSessionModel({
     required this.sessionId,

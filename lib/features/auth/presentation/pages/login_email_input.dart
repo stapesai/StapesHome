@@ -49,8 +49,9 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
             else if (state is LoginEmailInputOtpRequired) {
               GoRouter.of(context).push(
                 AppRouteConstants.getLoginOtpVerificationPagePath(
-                  state.transactionId,
-                  state.expiryTime,
+                  email: state.email,
+                  expiryTime: state.expiryTime,
+                  transactionId: state.transactionId,
                 ),
               );
             }

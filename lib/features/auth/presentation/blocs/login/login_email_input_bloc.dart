@@ -40,6 +40,7 @@ class LoginEmailInputBloc extends Bloc<LoginEmailInputEvent, LoginEmailInputStat
       (failure) => emit(LoginEmailInputError(_mapFailureToMessage(failure))),
       (response) => emit(
         LoginEmailInputOtpRequired(
+          email: event.email,
           transactionId: response.transactionId,
           expiryTime: response.otpExpiresAt,
         ),

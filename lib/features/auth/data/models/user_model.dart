@@ -4,6 +4,7 @@ import 'package:hive/hive.dart';
 
 part 'user_model.g.dart';
 
+// dart run build_runner build
 @HiveType(typeId: 2)
 class UserModel {
   @HiveField(0)

@@ -48,9 +48,9 @@ class _SignUpCreateNewPasswordScreenState extends State<SignUpCreateNewPasswordS
           listener: (context, state) {
             if (state is SignUpCreatePasswordSuccess) {
               GoRouter.of(context).go(AppRouteConstants.getSignUpDetailsFormPagePath(
-                state.email,
-                state.transactionId,
-                state.password,
+                email: state.email,
+                transactionId: state.transactionId,
+                password: state.password,
               ));
             } else if (state is SignUpCreatePasswordError) {
               ScaffoldMessenger.of(context).showSnackBar(

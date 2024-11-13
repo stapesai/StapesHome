@@ -18,10 +18,12 @@ class LoginEmailInputLoading extends LoginEmailInputState {}
 // When RequestLoginUseCase returns success with response containing transaction ID and OTP expiry time.
 // This state is emitted, then presenation layer will navigate to Login OTP verification screen.
 class LoginEmailInputOtpRequired extends LoginEmailInputState {
+  final String email;
   final String transactionId;
   final DateTime expiryTime;
 
   const LoginEmailInputOtpRequired({
+    required this.email,
     required this.transactionId,
     required this.expiryTime,
   });

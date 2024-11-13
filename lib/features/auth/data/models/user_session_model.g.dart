@@ -19,8 +19,8 @@ class UserSessionModelAdapter extends TypeAdapter<UserSessionModel> {
     return UserSessionModel(
       sessionId: fields[0] as String,
       userId: fields[1] as String,
-      createdAt: fields[2] as String,
-      lastActiveAt: fields[3] as String,
+      createdAt: fields[2] as DateTime,
+      lastActiveAt: fields[3] as DateTime,
     );
   }
 

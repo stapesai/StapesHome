@@ -54,9 +54,9 @@ class _ForgotPasswordEmailInputScreenState extends State<ForgotPasswordEmailInpu
               } else if (state is ForgotPasswordEmailInputOtpSent) {
                 GoRouter.of(context).push(
                   AppRouteConstants.getForgotPasswordOtpVerificationPagePath(
-                    emailController.text,
-                    state.transactionId,
-                    state.expiryTime,
+                    email: emailController.text,
+                    transactionId: state.transactionId,
+                    expiryTime: state.expiryTime,
                   ),
                   extra: {
                     'email': emailController.text,

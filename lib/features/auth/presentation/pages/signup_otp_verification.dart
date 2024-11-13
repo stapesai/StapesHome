@@ -144,8 +144,8 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
                     backgroundColor: AppColor.successColor,
                   ));
                   GoRouter.of(context).push(AppRouteConstants.getSignUpCreatePasswordPagePath(
-                    state.transactionId,
-                    state.email,
+                    email: state.email,
+                    transactionId: state.transactionId,
                   ));
                 } else if (state is SignUpOtpVerificationError) {
                   ScaffoldMessenger.of(context).showSnackBar(

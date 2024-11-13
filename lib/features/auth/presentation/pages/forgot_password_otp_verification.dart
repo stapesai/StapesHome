@@ -130,8 +130,8 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
                     backgroundColor: AppColor.successColor,
                   ));
                   GoRouter.of(context).push(AppRouteConstants.getForgotPasswordResetPasswordPagePath(
-                    state.transactionId,
-                    state.email,
+                    email: state.email,
+                    transactionId: state.transactionId,
                   ));
                 } else if (state is ForgotPasswordOtpVerificationError) {
                   ScaffoldMessenger.of(context).showSnackBar(

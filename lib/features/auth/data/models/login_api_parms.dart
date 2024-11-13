@@ -26,7 +26,7 @@ class RequestLoginParams {
 class RequestLoginResponse {
   final String detail;
   final String transactionId;
-  final String otpExpiresAt;
+  final DateTime otpExpiresAt;
 
   RequestLoginResponse({
     required this.detail,
@@ -38,7 +38,7 @@ class RequestLoginResponse {
     return RequestLoginResponse(
       detail: response['detail'],
       transactionId: response['transaction_id'],
-      otpExpiresAt: response['otp_expires_at'],
+      otpExpiresAt: DateTime.parse(response['otp_expires_at']),
     );
   }
 }
