@@ -23,8 +23,8 @@ class SignUpDetailsFormBloc extends Bloc<SignUpDetailsFormEvent, SignUpDetailsFo
     final result = await completeSignUpUseCase(params);
 
     result.fold(
-      (success) => emit(SignUpDetailsFormSuccess()),
       (failure) => emit(SignUpDetailsFormError(failure.message)),
+      (success) => emit(SignUpDetailsFormSuccess()),
     );
   }
 }
