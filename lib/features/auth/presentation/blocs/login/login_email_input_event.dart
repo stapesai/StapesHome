@@ -24,11 +24,11 @@ class RequestLoginEvent extends LoginEmailInputEvent {
 
 // Triggered when the OTP verification is successful.
 // Emitted from LoginOtpVerificationScreen.
-class CompleteLoginEvent extends LoginEmailInputEvent {
-  final String transactionId;
+// class CompleteLoginEvent extends LoginEmailInputEvent {
+//   final String transactionId;
 
-  const CompleteLoginEvent({required this.transactionId});
+//   const CompleteLoginEvent({required this.transactionId});
 
-  @override
-  List<Object?> get props => [transactionId];
-}
+//   @override
+//   List<Object?> get props => [transactionId];
+// }

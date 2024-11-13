@@ -18,16 +18,7 @@ class LoginOtpVerificationLoading extends LoginOtpVerificationState {}
 
 // When VerifyOtpUseCase returns success with response containing user and user session models.
 // This state is emitted, then presenation layer will navigate to Home screen.
-class LoginOtpVerificationSuccess extends LoginOtpVerificationState {
-  final String transactionId;
-
-  const LoginOtpVerificationSuccess({
-    required this.transactionId,
-  });
-
-  @override
-  List<Object?> get props => [transactionId];
-}
+class LoginOtpVerificationSuccess extends LoginOtpVerificationState {}
 
 // When VerifyOtpUseCase returns failure with error message.
 // This state is emitted, then UI layer will listen to this state and show an error message, returned from server.

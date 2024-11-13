@@ -1,9 +1,12 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_event.dart';
@@ -114,6 +117,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
           child: BlocProvider(
             create: (context) => LoginOtpVerificationBloc(
               verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
+              completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
             ),
             child: BlocListener<LoginOtpVerificationBloc, LoginOtpVerificationState>(
               listener: (context, state) {
@@ -123,7 +127,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                     content: Text('OTP Verified Successfully'),
                     backgroundColor: AppColor.successColor,
                   ));
-                  context.read<LoginEmailInputBloc>().add(CompleteLoginEvent(transactionId: state.transactionId));
+                  GoRouter.of(context).go(AppRouteConstants.devPage.routePath);
                 }
                 // OTP Verification error
                 else if (state is LoginOtpVerificationError) {

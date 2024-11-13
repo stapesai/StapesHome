@@ -36,7 +36,6 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
       child: BlocProvider(
         create: (context) => LoginEmailInputBloc(
           requestLoginUseCase: serviceLocator<RequestLoginUseCase>(),
-          completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
         ),
         child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
           listener: (context, state) {
