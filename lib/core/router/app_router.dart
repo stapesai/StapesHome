@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
-import 'package:stapes_home/features/auth/data/models/user_model.dart';
-import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_otp_verification.dart';
 import 'package:stapes_home/features/auth/presentation/pages/login_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
@@ -15,7 +12,6 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
 import 'package:stapes_home/features/dev/dev_user_details_show.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
-import 'package:stapes_home/service_locator.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(

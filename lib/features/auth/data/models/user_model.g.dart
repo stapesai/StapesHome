@@ -20,6 +20,7 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
       email: fields[0] as String,
       firstName: fields[1] as String,
       lastName: fields[2] as String,
+      dob: fields[3] as DateTime,
       gender: fields[4] as String,
     );
   }
@@ -45,8 +46,5 @@ class UserModelAdapter extends TypeAdapter<UserModel> {
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is UserModelAdapter &&
-          runtimeType == other.runtimeType &&
-          typeId == other.typeId;
+      identical(this, other) || other is UserModelAdapter && runtimeType == other.runtimeType && typeId == other.typeId;
 }
