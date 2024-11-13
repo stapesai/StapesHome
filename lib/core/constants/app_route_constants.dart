@@ -27,7 +27,7 @@ class AppRouteConstants {
   // Login Otp Verification screen
   static final loginOtpVerification = _RouteConfig(
     routePath: '/auth/login-otp-verification/:transactionId/:expiryTime',
-    routeName: 'OtpVerificationPage',
+    routeName: 'LoginOtpVerificationPage',
   );
   static String getLoginOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
     return '/auth/login-otp-verification/$transactionId/${expiryTime.toIso8601String()}';
@@ -75,7 +75,7 @@ class AppRouteConstants {
   // Forgot Password Otp Verification screen
   static final forgotPasswordOtpVerification = _RouteConfig(
     routePath: '/auth/forgot-password-otp-verification/:transactionId/:expiryTime',
-    routeName: 'OtpVerificationPage',
+    routeName: 'ForgotPasswordOtpVerificationPage',
   );
   static String getForgotPasswordOtpVerificationPagePath(String email, String transactionId, DateTime expiryTime) {
     return '/auth/forgot-password-otp-verification/$email/$transactionId/${expiryTime.toIso8601String()}';

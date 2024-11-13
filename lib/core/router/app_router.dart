@@ -98,7 +98,7 @@ class AppRouter {
           final String email = state.pathParameters['email']!;
           final String password = state.pathParameters['password']!;
           return MaterialPage(
-            child: SignUpDetailsForm(
+            child: SignUpDetailsFormScreen(
               transactionId: transactionId,
               email: email,
               password: password,
