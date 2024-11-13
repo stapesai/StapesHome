@@ -20,23 +20,13 @@ class SignUpEmailInputBloc extends Bloc<SignUpEmailInputEvent, SignUpEmailInputS
     // on<SubmitUserDetailsEvent>(_onSubmitUserDetails);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onRequestSignUp(RequestSignUpEvent event, Emitter<SignUpEmailInputState> emit) async {
     emit(SignUpEmailInputLoading());
 
     final result = await requestSignUpUseCase(RequestSignUpParams(email: event.email));
 
     result.fold(
-      (failure) => emit(SignUpEmailInputError(_mapFailureToMessage(failure))),
+      (failure) => emit(SignUpEmailInputError(failure.message)),
       (response) => emit(
         SignUpEmailInputOtpRequired(
           transactionId: response.transactionId,

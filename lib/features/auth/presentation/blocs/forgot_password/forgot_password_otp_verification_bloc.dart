@@ -14,16 +14,6 @@ class ForgotPasswordOtpVerificationBloc
     // on<ForgotPasswordResendOtpRequested>(_onResendOtpRequested);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onOtpSubmitted(
       ForgotPasswordOtpSubmitted event, Emitter<ForgotPasswordOtpVerificationState> emit) async {
     emit(ForgotPasswordOtpVerificationLoading());
@@ -36,7 +26,7 @@ class ForgotPasswordOtpVerificationBloc
     );
 
     await otpResult.fold(
-      (failure) async => emit(ForgotPasswordOtpVerificationError(_mapFailureToMessage(failure))),
+      (failure) async => emit(ForgotPasswordOtpVerificationError(failure.message)),
       (response) async => emit(
         ForgotPasswordOtpVerificationSuccess(
           transactionId: event.transactionId,

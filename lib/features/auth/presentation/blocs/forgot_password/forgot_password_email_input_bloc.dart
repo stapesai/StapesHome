@@ -12,16 +12,6 @@ class ForgotPasswordEmailInputBloc extends Bloc<ForgotPasswordEmailInputEvent, F
     on<ForgotPasswordEmailSubmitted>(_onEmailSubmitted);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onEmailSubmitted(
       ForgotPasswordEmailSubmitted event, Emitter<ForgotPasswordEmailInputState> emit) async {
     emit(ForgotPasswordEmailInputLoading());
@@ -31,7 +21,7 @@ class ForgotPasswordEmailInputBloc extends Bloc<ForgotPasswordEmailInputEvent, F
     );
 
     result.fold(
-      (failure) => emit(ForgotPasswordErrorInSendingOtp(_mapFailureToMessage(failure))),
+      (failure) => emit(ForgotPasswordErrorInSendingOtp(failure.message)),
       (response) => emit(
         ForgotPasswordEmailInputOtpSent(
           transactionId: response.transactionId,

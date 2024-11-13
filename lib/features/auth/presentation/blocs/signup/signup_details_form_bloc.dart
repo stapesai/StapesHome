@@ -12,16 +12,6 @@ class SignUpDetailsFormBloc extends Bloc<SignUpDetailsFormEvent, SignUpDetailsFo
     on<SignUpDetailsFormSubmittedEvent>(_onDetailsSubmitted);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onDetailsSubmitted(SignUpDetailsFormSubmittedEvent event, Emitter<SignUpDetailsFormState> emit) async {
     emit(SignUpDetailsFormLoading());
 
@@ -35,7 +25,7 @@ class SignUpDetailsFormBloc extends Bloc<SignUpDetailsFormEvent, SignUpDetailsFo
 
     result.fold(
       (success) => emit(SignUpDetailsFormSuccess()),
-      (failure) => emit(SignUpDetailsFormError(_mapFailureToMessage(failure))),
+      (failure) => emit(SignUpDetailsFormError(failure.message)),
     );
   }
 }

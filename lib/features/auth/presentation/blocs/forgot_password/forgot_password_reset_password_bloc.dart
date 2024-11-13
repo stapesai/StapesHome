@@ -13,16 +13,6 @@ class ForgotPasswordResetPasswordBloc extends Bloc<ForgotPasswordResetPasswordEv
     on<ForgotPasswordNewPasswordSubmitted>(_onNewPasswordSubmitted);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onNewPasswordSubmitted(
       ForgotPasswordNewPasswordSubmitted event, Emitter<ForgotPasswordResetPasswordState> emit) async {
     if (event.password != event.confirmPassword) {
@@ -41,7 +31,7 @@ class ForgotPasswordResetPasswordBloc extends Bloc<ForgotPasswordResetPasswordEv
     );
 
     result.fold(
-      (failure) => emit(ForgotPasswordResetPasswordError(_mapFailureToMessage(failure))),
+      (failure) => emit(ForgotPasswordResetPasswordError(failure.message)),
       (response) => emit(ForgotPasswordResetPasswordSuccess(response.detail)),
     );
   }

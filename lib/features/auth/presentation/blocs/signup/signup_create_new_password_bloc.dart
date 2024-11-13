@@ -7,16 +7,6 @@ class SignUpCreateNewPasswordBloc extends Bloc<SignUpCreateNewPasswordEvent, Sig
     on<SignUpNewPasswordSubmitted>(_onPasswordSubmitted);
   }
 
-  // String _mapFailureToMessage(Failure failure) {
-  //   if (failure is ServerFailure) {
-  //     return failure.message ?? 'Server error occurred.';
-  //   } else if (failure is NetworkFailure) {
-  //     return 'Please check your internet connection.';
-  //   } else {
-  //     return 'An unexpected error occurred.';
-  //   }
-  // }
-
   Future<void> _onPasswordSubmitted(SignUpNewPasswordSubmitted event, Emitter<SignUpCreatePasswordState> emit) async {
     emit(SignUpCreatePasswordLoading());
 

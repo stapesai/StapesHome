@@ -13,16 +13,6 @@ class SignUpOtpVerificationBloc extends Bloc<SignUpOtpVerificationEvent, SignUpO
     // on<ResendOtpRequested>(_onResendOtpRequested);
   }
 
-  String _mapFailureToMessage(Failure failure) {
-    if (failure is ServerFailure) {
-      return failure.message ?? 'Server error occurred.';
-    } else if (failure is NetworkFailure) {
-      return 'Please check your internet connection.';
-    } else {
-      return 'An unexpected error occurred.';
-    }
-  }
-
   Future<void> _onOtpSubmitted(SignUpOtpSubmittedEvent event, Emitter<SignUpOtpVerificationState> emit) async {
     emit(SignUpOtpVerificationLoading());
 
@@ -34,7 +24,7 @@ class SignUpOtpVerificationBloc extends Bloc<SignUpOtpVerificationEvent, SignUpO
     );
 
     await otpResult.fold(
-      (failure) async => emit(SignUpOtpVerificationError(_mapFailureToMessage(failure))),
+      (failure) async => emit(SignUpOtpVerificationError(failure.message)),
       (response) async => emit(
         SignUpOtpVerificationSuccess(
           transactionId: event.transactionId,
