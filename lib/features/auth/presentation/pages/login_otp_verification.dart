@@ -43,7 +43,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
 
   Future<void> _onVerifyButtonPressed(BuildContext context) async {
     String otp = _controllers.map((controller) => controller.text).join();
-    context.read<OtpVerificationBloc>().add(OtpSubmitted(
+    context.read<LoginOtpVerificationBloc>().add(LoginOtpSubmitted(
           email: widget.email,
           transactionId: widget.transactionId,
           otp: otp,
@@ -128,24 +128,24 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
             ),
           ),
           child: BlocProvider(
-            create: (context) => OtpVerificationBloc(
+            create: (context) => LoginOtpVerificationBloc(
               verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
             ),
-            child: BlocListener<OtpVerificationBloc, OtpVerificationState>(
+            child: BlocListener<LoginOtpVerificationBloc, LoginOtpVerificationState>(
               listener: (context, state) {
-                if (state is OtpVerificationSuccess) {
+                if (state is LoginOtpVerificationSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                     content: Text('OTP Verified Successfully'),
                     backgroundColor: AppColor.successColor,
                   ));
-                } else if (state is OtpVerificationError) {
+                } else if (state is LoginOtpVerificationError) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: Text(state.message),
                       backgroundColor: AppColor.errorColor,
                     ),
                   );
-                } else if (state is OtpVerificationLoading) {}
+                } else if (state is LoginOtpVerificationLoading) {}
               },
               child: Scaffold(
                 backgroundColor: Colors.transparent,
@@ -221,11 +221,11 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                                   : screenSize.height * 0.1,
                             ),
                             child: Center(
-                              child: BlocBuilder<OtpVerificationBloc, OtpVerificationState>(
+                              child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
                                 builder: (context, state) {
                                   return CustomButton(
                                     text: "Next",
-                                    isLoading: state is OtpVerificationLoading,
+                                    isLoading: state is LoginOtpVerificationLoading,
                                     onPressed: () => _onVerifyButtonPressed(context),
                                   );
                                 },

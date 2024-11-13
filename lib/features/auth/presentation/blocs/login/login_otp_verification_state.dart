@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-abstract class OtpVerificationState extends Equatable {
-  const OtpVerificationState();
+abstract class LoginOtpVerificationState extends Equatable {
+  const LoginOtpVerificationState();
 
   @override
   List<Object?> get props => [];
 }
 
-class OtpVerificationInitial extends OtpVerificationState {}
+class LoginOtpVerificationInitial extends LoginOtpVerificationState {}
 
-class OtpVerificationLoading extends OtpVerificationState {}
+class LoginOtpVerificationLoading extends LoginOtpVerificationState {}
 
-class OtpVerificationSuccess extends OtpVerificationState {
+class LoginOtpVerificationSuccess extends LoginOtpVerificationState {
   final String transactionId;
   final String email;
 
-  const OtpVerificationSuccess({
+  const LoginOtpVerificationSuccess({
     required this.transactionId,
     required this.email,
   });
@@ -24,10 +24,10 @@ class OtpVerificationSuccess extends OtpVerificationState {
   List<Object?> get props => [transactionId, email];
 }
 
-class OtpVerificationError extends OtpVerificationState {
+class LoginOtpVerificationError extends LoginOtpVerificationState {
   final String message;
 
-  const OtpVerificationError({required this.message});
+  const LoginOtpVerificationError({required this.message});
 
   @override
   List<Object?> get props => [message];

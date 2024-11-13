@@ -4,16 +4,18 @@ import 'package:stapes_home/features/auth/domain/usecases/otp_verification_useca
 import 'forgot_password_otp_verification_event.dart';
 import 'forgot_password_otp_verification_state.dart';
 
-class OtpVerificationBloc extends Bloc<OtpVerificationEvent, OtpVerificationState> {
+class ForgotPasswordOtpVerificationBloc
+    extends Bloc<ForgotPasswordOtpVerificationEvent, ForgotPasswordOtpVerificationState> {
   final OtpVerificationUsecase verifyOtpUseCase;
 
-  OtpVerificationBloc({required this.verifyOtpUseCase}) : super(OtpVerificationInitial()) {
-    on<OtpSubmitted>(_onOtpSubmitted);
-    on<ResendOtpRequested>(_onResendOtpRequested);
+  ForgotPasswordOtpVerificationBloc({required this.verifyOtpUseCase}) : super(ForgotPasswordOtpVerificationInitial()) {
+    on<ForgotPasswordOtpSubmitted>(_onOtpSubmitted);
+    on<ForgotPasswordResendOtpRequested>(_onResendOtpRequested);
   }
 
-  Future<void> _onOtpSubmitted(OtpSubmitted event, Emitter<OtpVerificationState> emit) async {
-    emit(OtpVerificationLoading());
+  Future<void> _onOtpSubmitted(
+      ForgotPasswordOtpSubmitted event, Emitter<ForgotPasswordOtpVerificationState> emit) async {
+    emit(ForgotPasswordOtpVerificationLoading());
 
     final result = await verifyOtpUseCase(
       OtpVerificationParams(
@@ -23,9 +25,9 @@ class OtpVerificationBloc extends Bloc<OtpVerificationEvent, OtpVerificationStat
     );
 
     result.fold(
-      (failure) => emit(OtpVerificationError(message: failure.toString())),
+      (failure) => emit(ForgotPasswordOtpVerificationError(message: failure.toString())),
       (response) => emit(
-        OtpVerificationSuccess(
+        ForgotPasswordOtpVerificationSuccess(
           transactionId: event.transactionId,
           email: event.email,
         ),
@@ -33,5 +35,8 @@ class OtpVerificationBloc extends Bloc<OtpVerificationEvent, OtpVerificationStat
     );
   }
 
-  Future<void> _onResendOtpRequested(ResendOtpRequested event, Emitter<OtpVerificationState> emit) async {}
+  Future<void> _onResendOtpRequested(
+      ForgotPasswordResendOtpRequested event, Emitter<ForgotPasswordOtpVerificationState> emit) async {
+    // Implement resend OTP logic here
+  }
 }

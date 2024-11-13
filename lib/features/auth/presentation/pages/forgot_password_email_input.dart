@@ -39,19 +39,19 @@ class _ForgotPasswordEmailInputScreenState extends State<ForgotPasswordEmailInpu
           ),
         ),
         child: BlocProvider(
-          create: (context) => ForgotPasswordBloc(
+          create: (context) => ForgotPasswordEmailInputBloc(
             requestPasswordResetUseCase: serviceLocator<RequestPasswordResetUseCase>(),
           ),
-          child: BlocListener<ForgotPasswordBloc, ForgotPasswordState>(
+          child: BlocListener<ForgotPasswordEmailInputBloc, ForgotPasswordEmailInputState>(
             listener: (context, state) {
-              if (state is ForgotPasswordError) {
+              if (state is ForgotPasswordEmailInputError) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
                     backgroundColor: AppColor.errorColor,
                   ),
                 );
-              } else if (state is ForgotPasswordOtpSent) {
+              } else if (state is ForgotPasswordEmailInputOtpSent) {
                 GoRouter.of(context).push(
                   AppRouteConstants.getOtpVerificationPagePath(
                     state.transactionId,
@@ -114,13 +114,13 @@ class _ForgotPasswordEmailInputScreenState extends State<ForgotPasswordEmailInpu
                               keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
                         ),
                         child: Center(
-                          child: BlocBuilder<ForgotPasswordBloc, ForgotPasswordState>(
+                          child: BlocBuilder<ForgotPasswordEmailInputBloc, ForgotPasswordEmailInputState>(
                             builder: (context, state) {
                               return CustomButton(
                                 text: 'Send OTP',
-                                isLoading: state is ForgotPasswordLoading,
+                                isLoading: state is ForgotPasswordEmailInputLoading,
                                 onPressed: () {
-                                  context.read<ForgotPasswordBloc>().add(
+                                  context.read<ForgotPasswordEmailInputBloc>().add(
                                         ForgotPasswordEmailSubmitted(
                                           email: emailController.text,
                                         ),

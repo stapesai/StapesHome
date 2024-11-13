@@ -1,21 +1,21 @@
 import 'package:equatable/equatable.dart';
 
-abstract class ForgotPasswordState extends Equatable {
-  const ForgotPasswordState();
+abstract class ForgotPasswordEmailInputState extends Equatable {
+  const ForgotPasswordEmailInputState();
 
   @override
   List<Object?> get props => [];
 }
 
-class ForgotPasswordInitial extends ForgotPasswordState {}
+class ForgotPasswordEmailInputInitial extends ForgotPasswordEmailInputState {}
 
-class ForgotPasswordLoading extends ForgotPasswordState {}
+class ForgotPasswordEmailInputLoading extends ForgotPasswordEmailInputState {}
 
-class ForgotPasswordOtpSent extends ForgotPasswordState {
+class ForgotPasswordEmailInputOtpSent extends ForgotPasswordEmailInputState {
   final String transactionId;
   final DateTime expiryTime;
 
-  const ForgotPasswordOtpSent({
+  const ForgotPasswordEmailInputOtpSent({
     required this.transactionId,
     required this.expiryTime,
   });
@@ -24,10 +24,10 @@ class ForgotPasswordOtpSent extends ForgotPasswordState {
   List<Object?> get props => [transactionId, expiryTime];
 }
 
-class ForgotPasswordError extends ForgotPasswordState {
+class ForgotPasswordEmailInputError extends ForgotPasswordEmailInputState {
   final String message;
 
-  const ForgotPasswordError({required this.message});
+  const ForgotPasswordEmailInputError({required this.message});
 
   @override
   List<Object?> get props => [message];

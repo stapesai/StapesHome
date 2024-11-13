@@ -7,14 +7,13 @@ import 'forgot_password_reset_password_state.dart';
 class ForgotPasswordResetPasswordBloc extends Bloc<ForgotPasswordResetPasswordEvent, ForgotPasswordResetPasswordState> {
   final CompletePasswordResetUseCase completePasswordResetUseCase;
 
-  ForgotPasswordResetPasswordBloc({required this.completePasswordResetUseCase}) 
+  ForgotPasswordResetPasswordBloc({required this.completePasswordResetUseCase})
       : super(ForgotPasswordResetPasswordInitial()) {
-    on<ForgotPasswordResetPasswordNewPasswordSubmitted>(_onNewPasswordSubmitted);
+    on<ForgotPasswordNewPasswordSubmitted>(_onNewPasswordSubmitted);
   }
 
   Future<void> _onNewPasswordSubmitted(
-      ForgotPasswordResetPasswordNewPasswordSubmitted event, 
-      Emitter<ForgotPasswordResetPasswordState> emit) async {
+      ForgotPasswordNewPasswordSubmitted event, Emitter<ForgotPasswordResetPasswordState> emit) async {
     if (event.password != event.confirmPassword) {
       emit(ForgotPasswordResetPasswordError(message: 'Passwords do not match'));
       return;

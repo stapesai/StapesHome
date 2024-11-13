@@ -7,13 +7,13 @@ abstract class ForgotPasswordResetPasswordEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ForgotPasswordResetPasswordNewPasswordSubmitted extends ForgotPasswordResetPasswordEvent {
+class ForgotPasswordNewPasswordSubmitted extends ForgotPasswordResetPasswordEvent {
   final String password;
   final String confirmPassword;
   final String email;
   final String transactionId;
 
-  const ForgotPasswordResetPasswordNewPasswordSubmitted({
+  const ForgotPasswordNewPasswordSubmitted({
     required this.password,
     required this.confirmPassword,
     required this.email,

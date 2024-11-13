@@ -133,7 +133,7 @@ class _ForgotPasswordResetPasswordScreenState extends State<ForgotPasswordResetP
                                     onPressed: () {
                                       context
                                           .read<ForgotPasswordResetPasswordBloc>()
-                                          .add(ForgotPasswordResetPasswordNewPasswordSubmitted(
+                                          .add(ForgotPasswordNewPasswordSubmitted(
                                             email: widget.email,
                                             transactionId: widget.transactionId,
                                             password: passwordController.text,
