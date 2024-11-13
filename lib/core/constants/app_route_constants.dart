@@ -33,6 +33,39 @@ class AppRouteConstants {
     return '/auth/login-otp-verification/$transactionId/${expiryTime.toIso8601String()}';
   }
 
+  // SignUp Email Input screen
+  static final signUpEmailInput = _RouteConfig(
+    routePath: '/auth/signup',
+    routeName: 'SignUpEmailInputPage',
+  );
+
+  // SignUp OTP Verification screen
+  static final signUpOtpVerification = _RouteConfig(
+    routePath: '/auth/signup-otp-verification/:transactionId/:expiryTime/:email',
+    routeName: 'SignUpOtpVerificationPage',
+  );
+  static String getSignUpOtpVerificationPagePath(String transactionId, DateTime expiryTime, String email) {
+    return '/auth/signup-otp-verification/$transactionId/${expiryTime.toIso8601String()}/$email';
+  }
+
+  // SignUp Create Password screen
+  static final signUpCreatePassword = _RouteConfig(
+    routePath: '/auth/signup-create-password/:transactionId/:email',
+    routeName: 'SignUpCreatePasswordPage',
+  );
+  static String getSignUpCreatePasswordPagePath(String transactionId, String email) {
+    return '/auth/signup-create-password/$transactionId/$email';
+  }
+
+  // SignUp Details Form screen
+  static final signUpDetailsForm = _RouteConfig(
+    routePath: '/auth/signup-details-form/:transactionId/:email/:password',
+    routeName: 'SignUpDetailsFormPage',
+  );
+  static String getSignUpDetailsFormPagePath(String transactionId, String email, String password) {
+    return '/auth/signup-details-form/$transactionId/$email/$password';
+  }
+
   // Forgot password screen
   static final forgotPassword = _RouteConfig(
     routePath: '/auth/forgot-password',
@@ -60,6 +93,6 @@ class AppRouteConstants {
   // Development Page (temporary)
   static final devPage = _RouteConfig(
     routePath: '/dev',
-    routeName: 'DevPage',
+    routeName: 'DevelopmentPage',
   );
 }

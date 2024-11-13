@@ -1,9 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:equatable/equatable.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/forgot_password_event.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/forgot_password_state.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_state.dart';
 
 class ForgotPasswordBloc extends Bloc<ForgotPasswordEvent, ForgotPasswordState> {
   final RequestPasswordResetUseCase requestPasswordResetUseCase;

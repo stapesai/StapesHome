@@ -8,9 +8,11 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/otp_verification_bloc.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/otp_verification_event.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/otp_verification_state.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_state.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_event.dart';
 import 'package:stapes_home/service_locator.dart';
 import "package:stapes_home/core/common/widgets/button.dart";
 
@@ -43,13 +45,12 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
     _startTimer();
   }
 
-  Future<void> handleverifyOtp(BuildContext context) async {
+  Future<void> _onVerifyButtonPressed(BuildContext context) async {
     String otp = _controllers.map((controller) => controller.text).join();
-    context.read<OtpVerificationBloc>().add(
-          OtpSubmitted(
+    context.read<SignUpBloc>().add(
+          VerifyOtpEvent(
             transactionId: widget.transactionId,
             otp: otp,
-            email: widget.email,
           ),
         );
   }
@@ -82,7 +83,7 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
   // void _onOtpComplete(String otp) {
   //   String otp = _controllers.map((controller) => controller.text).join();
   //   print('OTP Submitted: $otp');
-  //   handleverifyOtp();
+  //   _onVerifyButtonPressed();
   // }
 
   @override
@@ -235,7 +236,7 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
                                   return CustomButton(
                                     text: "Next",
                                     isLoading: state is OtpVerificationLoading,
-                                    onPressed: () => handleverifyOtp(context),
+                                    onPressed: () => _onVerifyButtonPressed(context),
                                   );
                                 },
                               ),

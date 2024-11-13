@@ -1,16 +1,16 @@
-import 'dart:convert';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/common/widgets/input/textfield.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
-import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
-import 'package:stapes_home/features/auth/presentation/pages/signup_create_new_password.dart';
-import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
-import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
+import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
+import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/signup/sign_up_email_input_state.dart';
+import 'package:stapes_home/service_locator.dart';
 
 class SignUpEmailInputScreen extends StatefulWidget {
   const SignUpEmailInputScreen({super.key});
@@ -21,85 +21,15 @@ class SignUpEmailInputScreen extends StatefulWidget {
 
 class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
   final TextEditingController emailController = TextEditingController();
-  bool _isLoading = false;
-  Future<void> handlerequestSignup(BuildContext context, String email) async {
-    setState(() {
-      _isLoading = true;
-    });
-
-    var checkEmailResponse = await http.post(
-      AuthRoutes.checkEmail(email),
-      headers: {'accept': 'application/json'},
-    );
-    var checkEmailResponsebody = json.decode(checkEmailResponse.body);
-
-    if (checkEmailResponse.statusCode == 200) {
-      var response = await http.post(
-        AuthRoutes.requestSignUp,
-        headers: {'Content-Type': 'application/json', 'accept': 'application/json'},
-        body: jsonEncode({
-          'email': email,
-        }),
-      );
-      var responseBody = json.decode(response.body);
-
-      if (response.statusCode == 200) {
-        String transactionId = responseBody['transaction_id'];
-        if (context.mounted) {
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => SignUpOtpVerificationScreen(
-                transactionId: transactionId,
-                expiryTime: DateTime.parse(responseBody["otp_expires_at"]),
-                onSuccess: () async {
-                  if (context.mounted) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => SignUpCreateNewPasswordScreen(
-                          title: 'Create Password',
-                          subtitle: 'Lets create a password to secure your account.',
-                          nextScreen: SignUpDetailsForm(
-                            password: '',
-                            transaction_id: '',
-                            email: '',
-                          ),
-                          email: email,
-                          transactionId: transactionId,
-                        ),
-                      ),
-                    );
-                  } else {
-                    print('context not mounted');
-                  }
-                },
-              ),
-            ),
-          );
-        }
-      } else {
-        if (context.mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Error : ${response.statusCode} - ${responseBody["detail"]} '),
-            ),
-          );
-        }
-      }
+  void _onSignUpButtonPressed(BuildContext context) {
+    final email = emailController.text.trim();
+    if (email.isNotEmpty) {
+      context.read<SignUpBloc>().add(RequestSignUpEvent(email: email));
     } else {
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Error : ${checkEmailResponse.statusCode} - ${checkEmailResponsebody["detail"]} '),
-          ),
-        );
-      }
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter an email')),
+      );
     }
-
-    setState(() {
-      _isLoading = false; // Stop loading indicator
-    });
   }
 
   @override
@@ -120,72 +50,84 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
-          body: _isLoading
-              ? const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColor.whiteColor,
-                  ),
-                )
-              : SafeArea(
-                  child: Padding(
-                    padding: AppPadding.pagePadding(context),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: screenSize.height * 0.05),
-                        SizedBox(
-                          width: double.infinity,
-                          child: Text(
-                            'Sign Up',
-                            style: TextStyle(
-                              color: AppColor.whiteColor,
-                              // fontSize: screenSize.width * 0.1,
-                              fontSize: AppFontSizes.pageHeading,
-                              fontFamily: 'Ubuntu',
-                              fontWeight: FontWeight.w700,
-                            ),
+          body: BlocProvider(
+            create: (context) => SignUpBloc(
+              requestSignUpUseCase: serviceLocator<RequestSignUpUseCase>(),
+              verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
+              completeSignUpUseCase: serviceLocator<CompleteSignUpUseCase>(),
+            ),
+            child: BlocListener<SignUpBloc, SignUpState>(
+              listener: (context, state) {
+                if (state is SignUpLoading) {
+                } else if (state is SignUpOtpRequired) {
+                } else if (state is SignUpError) {}
+              },
+              child: SafeArea(
+                child: Padding(
+                  padding: AppPadding.pagePadding(context),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: screenSize.height * 0.05),
+                      SizedBox(
+                        width: double.infinity,
+                        child: Text(
+                          'Sign Up',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            // fontSize: screenSize.width * 0.1,
+                            fontSize: AppFontSizes.pageHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w700,
                           ),
                         ),
-                        SizedBox(height: screenSize.height * 0.02),
-                        SizedBox(
-                          child: Text(
-                            'Enter your email to receive verification code.',
-                            style: TextStyle(
-                              color: AppColor.whiteColor,
-                              fontSize: AppFontSizes.pageSubHeading,
-                              fontFamily: 'Ubuntu',
-                              fontWeight: FontWeight.w400,
-                            ),
+                      ),
+                      SizedBox(height: screenSize.height * 0.02),
+                      SizedBox(
+                        child: Text(
+                          'Enter your email to receive verification code.',
+                          style: TextStyle(
+                            color: AppColor.whiteColor,
+                            fontSize: AppFontSizes.pageSubHeading,
+                            fontFamily: 'Ubuntu',
+                            fontWeight: FontWeight.w400,
                           ),
                         ),
-                        SizedBox(height: screenSize.height * 0.04),
-                        SizedBox(
-                          child: CustomTextField(
-                            hintText: 'Enter your email',
-                            controller: emailController,
-                            icon: Icons.email_rounded,
+                      ),
+                      SizedBox(height: screenSize.height * 0.04),
+                      SizedBox(
+                        child: CustomTextField(
+                          hintText: 'Enter your email',
+                          controller: emailController,
+                          icon: Icons.email_rounded,
+                        ),
+                      ),
+                      const Spacer(),
+                      AnimatedContainer(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeOut,
+                        margin: EdgeInsets.only(
+                          bottom:
+                              keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
+                        ),
+                        child: Center(
+                          child: BlocBuilder<SignUpBloc, SignUpState>(
+                            builder: (context, state) {
+                              return CustomButton(
+                                text: "Send Code",
+                                isLoading: state is SignUpLoading,
+                                onPressed: () => _onSignUpButtonPressed(context),
+                              );
+                            },
                           ),
                         ),
-                        const Spacer(),
-                        AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          curve: Curves.easeOut,
-                          margin: EdgeInsets.only(
-                            bottom: keyboardHeight > 0
-                                ? keyboardHeight + screenSize.height * 0.02
-                                : screenSize.height * 0.1,
-                          ),
-                          child: Center(
-                            child: CustomButton(
-                              text: "Send Code",
-                              onPressed: () => handlerequestSignup(context, emailController.text),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
                 ),
+              ),
+            ),
+          ),
         ),
       ),
     );

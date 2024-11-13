@@ -8,9 +8,9 @@ import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/forgot_password_reset_password_bloc.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/forgot_password_reset_password_event.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/forgot_password_reset_password_state.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_reset_password_bloc.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_reset_password_event.dart';
+import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_reset_password_state.dart';
 import 'package:stapes_home/service_locator.dart';
 
 class ForgotPasswordResetPasswordScreen extends StatefulWidget {
