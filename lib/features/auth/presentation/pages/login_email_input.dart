@@ -55,13 +55,6 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
                 ),
               );
             }
-            // Navigate to Dev page if login is successful
-            else if (state is LoginEmailInputSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
-              GoRouter.of(context).go(AppRouteConstants.devPageUserDetailsShow.routePath);
-            }
           },
           child: Scaffold(
             backgroundColor: Colors.transparent,

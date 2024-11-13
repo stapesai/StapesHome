@@ -43,11 +43,11 @@ class LoginEmailInputError extends LoginEmailInputState {
   List<Object> get props => [message];
 }
 
-class LoginEmailInputSuccess extends LoginEmailInputState {
-  final String message;
+// class LoginEmailInputSuccess extends LoginEmailInputState {
+//   final String message;
 
-  const LoginEmailInputSuccess(this.message);
+//   const LoginEmailInputSuccess(this.message);
 
-  @override
-  List<Object> get props => [message];
-}
+//   @override
+//   List<Object> get props => [message];
+// }
