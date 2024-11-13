@@ -18,6 +18,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
 
   AuthLocalDataSourceImpl({required this.hive});
 
+  // User Session
   @override
   Future<void> cacheUserSession(UserSessionModel session) async {
     final box = await hive.openBox<UserSessionModel>(_sessionBoxName);
@@ -33,6 +34,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     return session;
   }
 
+  // User
   @override
   Future<void> cacheUser(UserModel user) async {
     final box = await hive.openBox<UserModel>(_userBoxName);
@@ -48,6 +50,7 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
     return user;
   }
 
+  // Clear Session
   @override
   Future<void> clearSession() async {
     final sessionBox = await hive.openBox<UserSessionModel>(_sessionBoxName);

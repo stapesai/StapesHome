@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/constants/app_route_constants.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/auth/data/models/user_model.dart';
 import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
@@ -11,6 +14,27 @@ class DevUserDetailsScreen extends StatelessWidget {
     final userSession = await serviceLocator<AuthLocalDataSource>().getUserSession();
     final user = await serviceLocator<AuthLocalDataSource>().getUser();
     return {'session': userSession, 'user': user};
+  }
+
+  Future<void> _handleLogout(BuildContext context) async {
+    try {
+      // Clear user session and data
+      await serviceLocator<AuthLocalDataSource>().clearSession();
+
+      // Navigate to login screen and remove all previous routes
+      if (context.mounted) {
+        GoRouter.of(context).go(
+          AppRouteConstants.login.routePath,
+        );
+      }
+    } catch (e) {
+      // Show error if logout fails
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Logout failed: $e', style: const TextStyle(color: AppColor.errorColor))),
+        );
+      }
+    }
   }
 
   Widget _buildKeyValuePair(String key, String value) {
@@ -95,6 +119,18 @@ class DevUserDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Developer Details'),
+        actions: [
+          TextButton(
+            onPressed: () => _handleLogout(context),
+            child: const Text(
+              'Logout',
+              style: TextStyle(
+                color: Colors.red,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
         future: _loadUserData(),

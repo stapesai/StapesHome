@@ -151,8 +151,8 @@ class AppRouter {
 
       // Development Page
       GoRoute(
-        name: AppRouteConstants.devPage.routeName,
-        path: AppRouteConstants.devPage.routePath,
+        name: AppRouteConstants.devPageUserDetailsShow.routeName,
+        path: AppRouteConstants.devPageUserDetailsShow.routePath,
         builder: (context, state) => const DevUserDetailsScreen(),
       )
     ],

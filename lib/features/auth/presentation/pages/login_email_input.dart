@@ -60,7 +60,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(content: Text(state.message)),
               );
-              GoRouter.of(context).go(AppRouteConstants.devPage.routePath);
+              GoRouter.of(context).go(AppRouteConstants.devPageUserDetailsShow.routePath);
             }
           },
           child: Scaffold(

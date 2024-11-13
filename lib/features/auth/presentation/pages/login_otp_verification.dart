@@ -119,7 +119,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
                     content: Text('OTP Verified Successfully'),
                     backgroundColor: AppColor.successColor,
                   ));
-                  GoRouter.of(context).go(AppRouteConstants.devPage.routePath);
+                  GoRouter.of(context).go(AppRouteConstants.devPageUserDetailsShow.routePath);
                 }
                 // OTP Verification error
                 else if (state is LoginOtpVerificationError) {

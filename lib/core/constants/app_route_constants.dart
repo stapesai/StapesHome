@@ -99,8 +99,8 @@ class AppRouteConstants {
     return '/auth/forgot-password-reset-password/$email/$transactionId';
   }
 
-  static final devPage = _RouteConfig(
-    routePath: '/dev',
-    routeName: 'DevelopmentPage',
+  static final devPageUserDetailsShow = _RouteConfig(
+    routePath: '/dev_user_details_show',
+    routeName: 'DevPage-UserDetailsShow',
   );
 }
