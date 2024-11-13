@@ -32,7 +32,7 @@ class RequestPasswordResetResponse {
     return RequestPasswordResetResponse(
       detail: response['detail'],
       transactionId: response['transaction_id'],
-      otpExpiresAt: response['otp_expires_at'],
+      otpExpiresAt: DateTime.parse(response['otp_expires_at']),
     );
   }
 }

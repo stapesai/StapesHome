@@ -84,12 +84,6 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
     return '$minuteString $secondString';
   }
 
-  // void _onOtpComplete(String otp) {
-  //   String otp = _controllers.map((controller) => controller.text).join();
-  //   print('OTP Submitted: $otp');
-  //   _onVerifyButtonPressed();
-  // }
-
   @override
   void dispose() {
     for (var controller in _controllers) {
@@ -179,10 +173,14 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
                           SizedBox(height: screenSize.height * 0.04),
                           SizedBox(
                             child: Center(
-                              child: OtpInputWidget(
-                                controllers: _controllers,
-                                focusNodes: _focusNodes,
-                                onOtpComplete: (otp) => _onVerifyButtonPressed(context),
+                              child: BlocBuilder<ForgotPasswordOtpVerificationBloc, ForgotPasswordOtpVerificationState>(
+                                builder: (context, state) {
+                                  return OtpInputWidget(
+                                    controllers: _controllers,
+                                    focusNodes: _focusNodes,
+                                    onOtpComplete: (otp) => _onVerifyButtonPressed(context),
+                                  );
+                                },
                               ),
                             ),
                           ),

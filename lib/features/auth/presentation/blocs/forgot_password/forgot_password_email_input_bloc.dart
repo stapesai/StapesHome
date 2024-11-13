@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'forgot_password_email_input_event.dart';
@@ -25,7 +24,7 @@ class ForgotPasswordEmailInputBloc extends Bloc<ForgotPasswordEmailInputEvent, F
       (response) => emit(
         ForgotPasswordEmailInputOtpSent(
           transactionId: response.transactionId,
-          expiryTime: DateTime.parse(response.otpExpiresAt),
+          expiryTime: response.otpExpiresAt,
         ),
       ),
     );
