@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_otp_verification.dart';
-import 'package:stapes_home/features/auth/presentation/pages/login.dart';
+import 'package:stapes_home/features/auth/presentation/pages/login_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/login_otp_verification.dart';
