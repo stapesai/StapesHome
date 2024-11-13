@@ -7,12 +7,10 @@ import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:hive/hive.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/auth/data/models/user_model.dart';
 import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 import 'package:stapes_home/service_locator.dart';
-import 'package:stapes_home/utils/sessions_model.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
