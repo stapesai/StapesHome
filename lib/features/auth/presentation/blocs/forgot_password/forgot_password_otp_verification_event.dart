@@ -22,11 +22,11 @@ class ForgotPasswordOtpSubmitted extends ForgotPasswordOtpVerificationEvent {
   List<Object?> get props => [transactionId, otp, email];
 }
 
-class ForgotPasswordResendOtpRequested extends ForgotPasswordOtpVerificationEvent {
-  final String email;
+// class ForgotPasswordResendOtpRequested extends ForgotPasswordOtpVerificationEvent {
+//   final String email;
 
-  const ForgotPasswordResendOtpRequested({required this.email});
+//   const ForgotPasswordResendOtpRequested({required this.email});
 
-  @override
-  List<Object?> get props => [email];
-}
+//   @override
+//   List<Object?> get props => [email];
+// }

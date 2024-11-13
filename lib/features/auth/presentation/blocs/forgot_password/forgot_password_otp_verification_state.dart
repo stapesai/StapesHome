@@ -7,11 +7,15 @@ abstract class ForgotPasswordOtpVerificationState extends Equatable {
   List<Object?> get props => [];
 }
 
-class ForgotPasswordOtpVerificationInitial extends ForgotPasswordOtpVerificationState {}
+class ForgotPasswordOtpVerificationInitial
+    extends ForgotPasswordOtpVerificationState {}
 
-class ForgotPasswordOtpVerificationLoading extends ForgotPasswordOtpVerificationState {}
+class ForgotPasswordOtpVerificationLoading
+    extends ForgotPasswordOtpVerificationState {}
 
-class ForgotPasswordOtpVerificationSuccess extends ForgotPasswordOtpVerificationState {
+// When VerifyOtpUsecase returns success
+class ForgotPasswordOtpVerificationSuccess
+    extends ForgotPasswordOtpVerificationState {
   final String transactionId;
   final String email;
 
@@ -24,10 +28,12 @@ class ForgotPasswordOtpVerificationSuccess extends ForgotPasswordOtpVerification
   List<Object?> get props => [transactionId, email];
 }
 
-class ForgotPasswordOtpVerificationError extends ForgotPasswordOtpVerificationState {
+// When VerifyOtpUsecase returns error
+class ForgotPasswordOtpVerificationError
+    extends ForgotPasswordOtpVerificationState {
   final String message;
 
-  const ForgotPasswordOtpVerificationError({required this.message});
+  const ForgotPasswordOtpVerificationError(this.message);
 
   @override
   List<Object?> get props => [message];

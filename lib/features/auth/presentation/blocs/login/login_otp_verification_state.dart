@@ -1,6 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:stapes_home/features/auth/data/models/user_model.dart';
-import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
 
 abstract class LoginOtpVerificationState extends Equatable {
   const LoginOtpVerificationState();

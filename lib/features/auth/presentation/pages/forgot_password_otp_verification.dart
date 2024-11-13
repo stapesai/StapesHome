@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
-import 'package:pinput/pinput.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:flutter/material.dart';
@@ -108,25 +107,6 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
-
-    final defaultPinTheme = PinTheme(
-      width: 56,
-      height: 56,
-      textStyle:
-          TextStyle(fontSize: AppFontSizes.pageSubHeading, color: AppColor.whiteColor, fontWeight: FontWeight.w600),
-      margin: EdgeInsets.symmetric(horizontal: screenSize.width > 640 ? 12 : 2),
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment(0.00, -1.00),
-          end: Alignment(0, 1),
-          colors: const [Color(0xFF292B30), Color(0xFF26272C), Color(0xFF1A1B1E)],
-        ),
-      ),
-    );
-
-    final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: AppColor.whiteColor, width: 2),
-    );
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),

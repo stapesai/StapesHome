@@ -7,7 +7,9 @@ abstract class ForgotPasswordResetPasswordEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-class ForgotPasswordNewPasswordSubmitted extends ForgotPasswordResetPasswordEvent {
+// When the user clicks on the submit button after entering the new password and confirming it
+class ForgotPasswordNewPasswordSubmitted
+    extends ForgotPasswordResetPasswordEvent {
   final String password;
   final String confirmPassword;
   final String email;

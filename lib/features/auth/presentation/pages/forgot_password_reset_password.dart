@@ -66,6 +66,7 @@ class _ForgotPasswordResetPasswordScreenState extends State<ForgotPasswordResetP
                     backgroundColor: AppColor.successColor,
                   ),
                 );
+                // Go back to login page
                 GoRouter.of(context).go(AppRouteConstants.login.routePath);
               }
             },

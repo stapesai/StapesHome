@@ -7,6 +7,7 @@ abstract class ForgotPasswordEmailInputEvent extends Equatable {
   List<Object?> get props => [];
 }
 
+// When the user clicks on the submit button
 class ForgotPasswordEmailSubmitted extends ForgotPasswordEmailInputEvent {
   final String email;
 

@@ -29,7 +29,7 @@ class AppRouteConstants {
     routePath: '/auth/login-otp-verification/:transactionId/:expiryTime',
     routeName: 'OtpVerificationPage',
   );
-  static String getOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
+  static String getLoginOtpVerificationPagePath(String transactionId, DateTime expiryTime) {
     return '/auth/login-otp-verification/$transactionId/${expiryTime.toIso8601String()}';
   }
 

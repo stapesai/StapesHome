@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'forgot_password_email_input_event.dart';
@@ -11,6 +12,16 @@ class ForgotPasswordEmailInputBloc extends Bloc<ForgotPasswordEmailInputEvent, F
     on<ForgotPasswordEmailSubmitted>(_onEmailSubmitted);
   }
 
+  String _mapFailureToMessage(Failure failure) {
+    if (failure is ServerFailure) {
+      return failure.message ?? 'Server error occurred.';
+    } else if (failure is NetworkFailure) {
+      return 'Please check your internet connection.';
+    } else {
+      return 'An unexpected error occurred.';
+    }
+  }
+
   Future<void> _onEmailSubmitted(
       ForgotPasswordEmailSubmitted event, Emitter<ForgotPasswordEmailInputState> emit) async {
     emit(ForgotPasswordEmailInputLoading());
@@ -20,7 +31,7 @@ class ForgotPasswordEmailInputBloc extends Bloc<ForgotPasswordEmailInputEvent, F
     );
 
     result.fold(
-      (failure) => emit(ForgotPasswordEmailInputError(message: failure.toString())),
+      (failure) => emit(ForgotPasswordErrorInSendingOtp(_mapFailureToMessage(failure))),
       (response) => emit(
         ForgotPasswordEmailInputOtpSent(
           transactionId: response.transactionId,

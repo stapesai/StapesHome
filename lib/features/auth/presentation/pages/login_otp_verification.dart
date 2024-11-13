@@ -8,8 +8,6 @@ import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_bloc.dart';
-import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_state.dart';

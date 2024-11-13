@@ -44,7 +44,7 @@ class _ForgotPasswordEmailInputScreenState extends State<ForgotPasswordEmailInpu
           ),
           child: BlocListener<ForgotPasswordEmailInputBloc, ForgotPasswordEmailInputState>(
             listener: (context, state) {
-              if (state is ForgotPasswordEmailInputError) {
+              if (state is ForgotPasswordErrorInSendingOtp) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(
                     content: Text(state.message),
@@ -53,7 +53,8 @@ class _ForgotPasswordEmailInputScreenState extends State<ForgotPasswordEmailInpu
                 );
               } else if (state is ForgotPasswordEmailInputOtpSent) {
                 GoRouter.of(context).push(
-                  AppRouteConstants.getOtpVerificationPagePath(
+                  AppRouteConstants.getForgotPasswordOtpVerificationPagePath(
+                    emailController.text,
                     state.transactionId,
                     state.expiryTime,
                   ),

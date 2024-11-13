@@ -7,23 +7,30 @@ abstract class ForgotPasswordResetPasswordState extends Equatable {
   List<Object?> get props => [];
 }
 
-class ForgotPasswordResetPasswordInitial extends ForgotPasswordResetPasswordState {}
+class ForgotPasswordResetPasswordInitial
+    extends ForgotPasswordResetPasswordState {}
 
-class ForgotPasswordResetPasswordLoading extends ForgotPasswordResetPasswordState {}
+class ForgotPasswordResetPasswordLoading
+    extends ForgotPasswordResetPasswordState {}
 
-class ForgotPasswordResetPasswordSuccess extends ForgotPasswordResetPasswordState {
+// When ResetPasswordUsecase returns success
+class ForgotPasswordResetPasswordSuccess
+    extends ForgotPasswordResetPasswordState {
   final String message;
 
-  const ForgotPasswordResetPasswordSuccess({required this.message});
+  const ForgotPasswordResetPasswordSuccess(this.message);
 
   @override
   List<Object?> get props => [message];
 }
 
-class ForgotPasswordResetPasswordError extends ForgotPasswordResetPasswordState {
+// When ResetPasswordUsecase returns error
+// There can be some internal server error here. error message is being returned from server and shown to user
+class ForgotPasswordResetPasswordError
+    extends ForgotPasswordResetPasswordState {
   final String message;
 
-  const ForgotPasswordResetPasswordError({required this.message});
+  const ForgotPasswordResetPasswordError(this.message);
 
   @override
   List<Object?> get props => [message];

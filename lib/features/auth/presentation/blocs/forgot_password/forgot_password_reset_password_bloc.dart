@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/features/auth/data/models/forgot_password_api_parms.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'forgot_password_reset_password_event.dart';
@@ -12,10 +13,20 @@ class ForgotPasswordResetPasswordBloc extends Bloc<ForgotPasswordResetPasswordEv
     on<ForgotPasswordNewPasswordSubmitted>(_onNewPasswordSubmitted);
   }
 
+  String _mapFailureToMessage(Failure failure) {
+    if (failure is ServerFailure) {
+      return failure.message ?? 'Server error occurred.';
+    } else if (failure is NetworkFailure) {
+      return 'Please check your internet connection.';
+    } else {
+      return 'An unexpected error occurred.';
+    }
+  }
+
   Future<void> _onNewPasswordSubmitted(
       ForgotPasswordNewPasswordSubmitted event, Emitter<ForgotPasswordResetPasswordState> emit) async {
     if (event.password != event.confirmPassword) {
-      emit(ForgotPasswordResetPasswordError(message: 'Passwords do not match'));
+      emit(ForgotPasswordResetPasswordError('Passwords do not match'));
       return;
     }
 
@@ -30,8 +41,8 @@ class ForgotPasswordResetPasswordBloc extends Bloc<ForgotPasswordResetPasswordEv
     );
 
     result.fold(
-      (failure) => emit(ForgotPasswordResetPasswordError(message: failure.toString())),
-      (response) => emit(ForgotPasswordResetPasswordSuccess(message: response.message)),
+      (failure) => emit(ForgotPasswordResetPasswordError(_mapFailureToMessage(failure))),
+      (response) => emit(ForgotPasswordResetPasswordSuccess(response.detail)),
     );
   }
 }
