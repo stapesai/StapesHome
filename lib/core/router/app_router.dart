@@ -10,8 +10,11 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_create_new_p
 import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
+import 'package:stapes_home/features/dev/dev_test_page.dart';
 import 'package:stapes_home/features/dev/dev_user_details_show.dart';
+import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
+import 'package:stapes_home/screens/routes/main.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(
@@ -137,6 +140,7 @@ class AppRouter {
       GoRoute(
         name: AppRouteConstants.forgotPasswordResetPassword.routeName,
         path: AppRouteConstants.forgotPasswordResetPassword.routePath,
+        routes: [],
         pageBuilder: (context, state) {
           final String email = state.pathParameters['email']!;
           final String transactionId = state.pathParameters['transactionId']!;
@@ -149,12 +153,66 @@ class AppRouter {
         },
       ),
 
+      // Main Navigation Page
+      GoRoute(
+        name: AppRouteConstants.main.routeName,
+        path: AppRouteConstants.main.routePath,
+        builder: (context, state) => const NavigationScreen(
+          child: DevUserDetailsScreen(),
+        ),
+      ),
+
+      // Navigation Shell Routes
+      ShellRoute(
+        builder: (context, state, child) {
+          return NavigationScreen(
+            child: child,
+          );
+        },
+        routes: [
+          GoRoute(
+            name: AppRouteConstants.home.routeName,
+            path: AppRouteConstants.home.routePath,
+            builder: (context, state) => const DevUserDetailsScreen(),
+          ),
+          GoRoute(
+            name: AppRouteConstants.nodes.routeName,
+            path: AppRouteConstants.nodes.routePath,
+            builder: (context, state) => const DevTestPage(text: 'Devices'),
+          ),
+          GoRoute(
+            name: AppRouteConstants.devices.routeName,
+            path: AppRouteConstants.devices.routePath,
+            builder: (context, state) => const DevTestPage(text: 'Nodes'),
+          ),
+          GoRoute(
+            name: AppRouteConstants.profile.routeName,
+            path: AppRouteConstants.profile.routePath,
+            builder: (context, state) => const DevTestPage(text: 'Profile Page'),
+          ),
+        ],
+      ),
+
       // Development Page
       GoRoute(
         name: AppRouteConstants.devPageUserDetailsShow.routeName,
         path: AppRouteConstants.devPageUserDetailsShow.routePath,
         builder: (context, state) => const DevUserDetailsScreen(),
-      )
+      ),
+
+      // Dev Test Page (just shows given text)
+      GoRoute(
+        name: AppRouteConstants.devPageTest.routeName,
+        path: AppRouteConstants.devPageTest.routePath,
+        pageBuilder: (context, state) {
+          final String text = state.pathParameters['text']!;
+          return MaterialPage(
+            child: DevTestPage(
+              text: text,
+            ),
+          );
+        },
+      ),
     ],
   );
 }
