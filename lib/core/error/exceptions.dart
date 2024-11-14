@@ -47,3 +47,11 @@ class TimeoutException extends AppException {
 class UnexpectedException extends AppException {
   UnexpectedException([super.message = 'An unexpected error occurred']);
 }
+
+class WebSocketConnectionException extends AppException {
+  WebSocketConnectionException([super.message = 'Failed to connect to WebSocket server']);
+}
+
+class WebSocketMessageException extends AppException {
+  WebSocketMessageException([super.message = 'Failed to process WebSocket message']);
+}

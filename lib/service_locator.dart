@@ -9,14 +9,14 @@ import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecas
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
-import 'package:stapes_home/services/websocket_service.dart';
+import 'package:stapes_home/core/network/websocket_service.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
 void setupServiceLocator() {
-  // This will help us to use the same instance of HttpClient throughout the app.
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
-  // serviceLocator.registerSingleton<WebSocketService>(WebSocketService());
+
+  // serviceLocator.registerLazySingleton<WebSocketService>(() => WebSocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
 
   // Register services (API or local services) with their implementations

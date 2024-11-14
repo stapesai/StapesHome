@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:stapes_home/screens/views/nodes/scanner/qr_scanner.dart';
-import 'package:stapes_home/services/websocket_service.dart';
+import 'package:stapes_home/core/network/websocket_service.dart';
 import 'package:stapes_home/widgets/iot/node.dart';
 import 'package:stapes_home/widgets/scan_node_add_device_btn.dart';
 import 'package:stapes_home/widgets/skeletons/node.dart';

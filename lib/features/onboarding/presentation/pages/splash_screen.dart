@@ -8,8 +8,8 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
-import 'package:stapes_home/features/auth/data/models/user_model.dart';
-import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
+import 'package:stapes_home/core/models/user_model.dart';
+import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/service_locator.dart';
 
 class SplashScreen extends StatefulWidget {

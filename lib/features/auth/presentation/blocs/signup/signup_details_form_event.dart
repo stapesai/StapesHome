@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:stapes_home/features/auth/data/models/user_model.dart';
+import 'package:stapes_home/core/models/user_model.dart';
 
 abstract class SignUpDetailsFormEvent extends Equatable {
   const SignUpDetailsFormEvent();

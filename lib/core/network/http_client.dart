@@ -45,7 +45,9 @@ class HttpClient {
     } else if (statusCode == 404) {
       throw NotFoundException(responseBody?['detail'] ?? 'Not Found');
     } else if (statusCode == 422) {
-      throw ValidationException(responseBody?['detail'] ?? 'Validation Error');
+      // throw ValidationException(responseBody?['detail'] ?? 'Validation Error');
+      // TODO: show error from server. but server returns validation error in differnt format.
+      throw ValidationException('Validation Error. You Entered Something Wrong.');
     } else if (statusCode >= 500 && statusCode < 600) {
       throw ServerException(responseBody?['detail'] ?? 'Server Error');
     } else {

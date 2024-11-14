@@ -3,8 +3,8 @@
 
 import 'dart:convert';
 
-import 'package:stapes_home/features/auth/data/models/user_model.dart';
-import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
+import 'package:stapes_home/core/models/user_model.dart';
+import 'package:stapes_home/core/models/user_session_model.dart';
 
 class RequestLoginParams {
   final String email;

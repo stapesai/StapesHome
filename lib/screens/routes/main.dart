@@ -8,7 +8,7 @@ import 'package:stapes_home/screens/routes/home.dart';
 import 'package:stapes_home/screens/routes/nodes.dart';
 import 'package:stapes_home/screens/routes/profile.dart';
 import 'package:provider/provider.dart';
-import 'package:stapes_home/services/websocket_service.dart';
+import 'package:stapes_home/core/network/websocket_service.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

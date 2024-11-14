@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:stapes_home/features/auth/data/models/user_model.dart';
-import 'package:stapes_home/features/auth/data/models/user_session_model.dart';
+import 'package:stapes_home/core/models/user_model.dart';
+import 'package:stapes_home/core/models/user_session_model.dart';
 
 abstract class AuthLocalDataSource {
   Future<void> cacheUserSession(UserSessionModel session);

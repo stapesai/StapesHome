@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:stapes_home/services/websocket_service.dart';
+import 'package:stapes_home/core/network/websocket_service.dart';
 import 'package:stapes_home/widgets/skeletons/device.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
