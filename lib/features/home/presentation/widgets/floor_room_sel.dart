@@ -2,7 +2,7 @@
 
 import 'dart:convert';
 import 'package:stapes_home/widgets/hold_bottom_sheet.dart';
-import 'package:stapes_home/widgets/skeletons/floor_room_name.dart';
+import 'package:stapes_home/features/home/presentation/skeletons/floor_room_name_skel.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 // import 'package:stapes_home/widgets/popup.dart';
