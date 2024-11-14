@@ -38,6 +38,7 @@ dependencies:
   flutter_bloc:
   go_router: ^14.4.1
   intl:
+  flutter_keyboard_visibility:
 
 dev_dependencies:
   flutter_test:

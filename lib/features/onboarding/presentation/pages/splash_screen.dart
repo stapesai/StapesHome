@@ -1,10 +1,6 @@
-// Path: lib/presentation/splash/pages/splash_screen.dart
-// Description: This file contains the splash screen for the application. This screen will show the logo of the app until it is ready to show the login screen or the main screen (home screen).
-
 import 'dart:async';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';

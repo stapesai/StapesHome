@@ -5,7 +5,7 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 
 class EditProfileScreen extends StatefulWidget {
-  const EditProfileScreen({Key? key}) : super(key: key);
+  const EditProfileScreen({super.key});
 
   @override
   _EditProfileScreenState createState() => _EditProfileScreenState();
@@ -17,7 +17,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   final TextEditingController _dobController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
 
-  bool _isLoading = false;
+  final bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {

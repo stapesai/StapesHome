@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:stapes_home/features/auth/data/models/signup_api_parms.dart';
 import 'sign_up_email_input_event.dart';

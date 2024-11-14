@@ -9,7 +9,6 @@ import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecas
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
-import 'package:stapes_home/core/network/websocket_service.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
