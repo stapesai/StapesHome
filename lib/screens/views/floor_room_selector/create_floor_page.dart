@@ -1,10 +1,10 @@
 import 'dart:convert';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:stapes_home/core/constants/api_routes.dart';
-import 'package:stapes_home/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 
@@ -130,12 +130,12 @@ class _CreateFloorPageState extends State<CreateFloorPage> {
                           ),
                         ),
                         SizedBox(height: screenSize.height * 0.04),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Floor Name',
                           controller: aliasController,
                         ),
                         SizedBox(height: screenSize.height * 0.02),
-                        NTextField(
+                        CustomTextField(
                           hintText: 'Floor Level',
                           controller: levelController,
                         ),

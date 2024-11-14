@@ -4,9 +4,9 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/data/models/models.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/widgets/button.dart';
-import 'package:stapes_home/widgets/input/dropdown.dart';
-import 'package:stapes_home/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/input/dropdown.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -236,7 +236,7 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                       physics: AlwaysScrollableScrollPhysics(),
                       child: Column(
                         children: [
-                          NDropdown<String>(
+                          CustomDropdown<String>(
                             hintText: 'Floor',
                             value: _selectedFloorId,
                             items: floors.map((floor) {
@@ -259,7 +259,7 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                             },
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          NDropdown<String>(
+                          CustomDropdown<String>(
                             hintText: 'Room',
                             value: _selectedRoomId,
                             items: rooms.map((room) {
@@ -280,7 +280,7 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                             },
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          NDropdown<String>(
+                          CustomDropdown<String>(
                             hintText: 'Node',
                             value: _selectedNodeId,
                             items: nodes.map((node) {
@@ -296,12 +296,12 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                             },
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          NTextField(
+                          CustomTextField(
                             hintText: 'Device Name',
                             controller: deviceNameController,
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          NDropdown<String>(
+                          CustomDropdown<String>(
                             hintText: 'Device Type',
                             value: _selectedDeviceType,
                             items: _deviceTypes.map((String type) {
@@ -317,7 +317,7 @@ class _AddNewDeviceState extends State<AddNewDevicePage> {
                             },
                           ),
                           SizedBox(height: screenSize.height * 0.02),
-                          NDropdown(
+                          CustomDropdown(
                             hintText: 'Channel Id',
                             value: _selectedChannelId,
                             items: _channelIds.map((int channelId) {
