@@ -38,117 +38,97 @@ class _ForgotPasswordResetPasswordScreenState extends State<ForgotPasswordResetP
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
+      child: BlocProvider(
+        create: (context) => ForgotPasswordResetPasswordBloc(
+          completePasswordResetUseCase: serviceLocator<CompletePasswordResetUseCase>(),
         ),
-        child: BlocProvider(
-          create: (context) => ForgotPasswordResetPasswordBloc(
-            completePasswordResetUseCase: serviceLocator<CompletePasswordResetUseCase>(),
-          ),
-          child: BlocListener<ForgotPasswordResetPasswordBloc, ForgotPasswordResetPasswordState>(
-            listener: (BuildContext context, ForgotPasswordResetPasswordState state) {
-              if (state is ForgotPasswordResetPasswordError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: AppColor.errorColor,
-                  ),
-                );
-              } else if (state is ForgotPasswordResetPasswordSuccess) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text(state.message),
-                    backgroundColor: AppColor.successColor,
-                  ),
-                );
-                // Go back to login page
-                GoRouter.of(context).go(AppRouteConstants.login.routePath);
-              }
-            },
-            child: Scaffold(
-              backgroundColor: Colors.transparent,
-              resizeToAvoidBottomInset: false,
-              body: SafeArea(
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: AppPadding.pagePadding(context),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: screenSize.height * 0.05),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              'Create New Password',
-                              style: const TextStyle(
-                                color: AppColor.whiteColor,
-                                fontSize: AppFontSizes.pageHeading,
-                                fontFamily: 'Ubuntu',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: screenSize.height * 0.02),
-                          Text(
-                            'Enter your new password.',
-                            style: const TextStyle(
-                              color: AppColor.whiteColor,
-                              fontSize: AppFontSizes.pageSubHeading,
-                              fontFamily: 'Ubuntu',
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                          CustomPasswordTextField(
-                            hintText: 'Password',
-                            controller: passwordController,
-                            icon: Icons.remove_red_eye_outlined,
-                          ),
-                          SizedBox(height: screenSize.height * 0.02),
-                          CustomPasswordTextField(
-                            hintText: 'Confirm Password',
-                            controller: confirmPasswordController,
-                            icon: Icons.remove_red_eye_outlined,
-                          ),
-                          const Spacer(),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeOut,
-                            margin: EdgeInsets.only(
-                              bottom: keyboardHeight > 0
-                                  ? keyboardHeight + screenSize.height * 0.02
-                                  : screenSize.height * 0.1,
-                            ),
-                            child: Center(
-                              child: BlocBuilder<ForgotPasswordResetPasswordBloc, ForgotPasswordResetPasswordState>(
-                                  builder: (context, state) {
-                                return CustomButton(
-                                    text: "Continue",
-                                    isLoading: state is ForgotPasswordResetPasswordLoading,
-                                    onPressed: () {
-                                      context
-                                          .read<ForgotPasswordResetPasswordBloc>()
-                                          .add(ForgotPasswordNewPasswordSubmitted(
-                                            email: widget.email,
-                                            transactionId: widget.transactionId,
-                                            password: passwordController.text,
-                                            confirmPassword: confirmPasswordController.text,
-                                          ));
-                                    });
-                              }),
-                            ),
-                          ),
-                        ],
+        child: BlocListener<ForgotPasswordResetPasswordBloc, ForgotPasswordResetPasswordState>(
+          listener: (BuildContext context, ForgotPasswordResetPasswordState state) {
+            if (state is ForgotPasswordResetPasswordError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColor.errorColor,
+                ),
+              );
+            } else if (state is ForgotPasswordResetPasswordSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColor.successColor,
+                ),
+              );
+              // Go back to login page
+              GoRouter.of(context).go(AppRouteConstants.login.routePath);
+            }
+          },
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: screenSize.height * 0.05),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      'Create New Password',
+                      style: const TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: AppFontSizes.pageHeading,
+                        fontFamily: 'Ubuntu',
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.02),
+                  Text(
+                    'Enter your new password.',
+                    style: const TextStyle(
+                      color: AppColor.whiteColor,
+                      fontSize: AppFontSizes.pageSubHeading,
+                      fontFamily: 'Ubuntu',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.04),
+                  CustomPasswordTextField(
+                    hintText: 'Password',
+                    controller: passwordController,
+                    icon: Icons.remove_red_eye_outlined,
+                  ),
+                  SizedBox(height: screenSize.height * 0.02),
+                  CustomPasswordTextField(
+                    hintText: 'Confirm Password',
+                    controller: confirmPasswordController,
+                    icon: Icons.remove_red_eye_outlined,
+                  ),
+                  const Spacer(),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    margin: EdgeInsets.only(
+                      bottom: keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
+                    ),
+                    child: Center(
+                      child: BlocBuilder<ForgotPasswordResetPasswordBloc, ForgotPasswordResetPasswordState>(
+                          builder: (context, state) {
+                        return CustomButton(
+                            text: "Continue",
+                            isLoading: state is ForgotPasswordResetPasswordLoading,
+                            onPressed: () {
+                              context.read<ForgotPasswordResetPasswordBloc>().add(ForgotPasswordNewPasswordSubmitted(
+                                    email: widget.email,
+                                    transactionId: widget.transactionId,
+                                    password: passwordController.text,
+                                    confirmPassword: confirmPasswordController.text,
+                                  ));
+                            });
+                      }),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),

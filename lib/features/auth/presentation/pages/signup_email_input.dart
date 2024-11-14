@@ -40,14 +40,6 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
         child: Scaffold(
           backgroundColor: Colors.transparent,
           resizeToAvoidBottomInset: false,
@@ -72,8 +64,6 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                 }
               },
               child: SafeArea(
-                child: Padding(
-                  padding: AppPadding.pagePadding(context),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -133,12 +123,10 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                       ),
                     ],
                   ),
-                ),
               ),
             ),
           ),
         ),
-      ),
     );
   }
 }

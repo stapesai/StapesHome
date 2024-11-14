@@ -43,14 +43,6 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-      child: Container(
-        clipBehavior: Clip.antiAlias,
-        decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(30),
-          ),
-        ),
         child: BlocProvider(
           create: (context) => SignUpDetailsFormBloc(
             completeSignUpUseCase: serviceLocator<CompleteSignUpUseCase>(),
@@ -72,8 +64,6 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
               backgroundColor: Colors.transparent,
               resizeToAvoidBottomInset: false,
               body: SafeArea(
-                child: Padding(
-                  padding: AppPadding.pagePadding(context),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -158,12 +148,10 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
                       ),
                     ],
                   ),
-                ),
               ),
             ),
           ),
         ),
-      ),
     );
   }
 }
