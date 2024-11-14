@@ -9,7 +9,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  flutter_regex: 
   flutter_blue_plus: ^1.32.12
   dotted_border: ^2.1.0
   http: ^1.2.1
