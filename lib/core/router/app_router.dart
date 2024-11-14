@@ -177,12 +177,12 @@ class AppRouter {
           GoRoute(
             name: AppRouteConstants.nodes.routeName,
             path: AppRouteConstants.nodes.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Devices Page'),
+            builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
           ),
           GoRoute(
             name: AppRouteConstants.devices.routeName,
             path: AppRouteConstants.devices.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
+            builder: (context, state) => const DevTestPage(text: 'Devices Page'),
           ),
           GoRoute(
             name: AppRouteConstants.profile.routeName,

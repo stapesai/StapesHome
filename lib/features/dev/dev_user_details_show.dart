@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -49,14 +51,17 @@ class DevUserDetailsScreen extends StatelessWidget {
               key,
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
-                color: Colors.grey,
+                color: Colors.white70,
               ),
             ),
           ),
           Expanded(
             child: Text(
               value,
-              style: const TextStyle(fontSize: 14),
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 14,
+              ),
             ),
           ),
         ],
@@ -64,7 +69,7 @@ class DevUserDetailsScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSection(String title, List<Widget> children) {
+  Widget _buildSection(String title, List<Widget> children, {bool hasError = false}) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -75,15 +80,36 @@ class DevUserDetailsScreen extends StatelessWidget {
             style: const TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ),
-        Card(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: children,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(15),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                color: hasError ? Colors.red.withOpacity(0.2) : Colors.green.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(15),
+                border: Border.all(
+                  color: hasError ? Colors.red.withOpacity(0.3) : Colors.green.withOpacity(0.3),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: hasError ? Colors.red.withOpacity(0.1) : Colors.green.withOpacity(0.1),
+                    blurRadius: 10,
+                    spreadRadius: 1,
+                  ),
+                ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: children,
+                ),
+              ),
             ),
           ),
         ),
@@ -117,8 +143,13 @@ class DevUserDetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: const Text('Developer Details'),
+        backgroundColor: Colors.transparent,
+        title: const Text(
+          'Developer Details',
+          style: TextStyle(color: Colors.white),
+        ),
         actions: [
           TextButton(
             onPressed: () => _handleLogout(context),
@@ -138,13 +169,26 @@ class DevUserDetailsScreen extends StatelessWidget {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
           }
-          if (snapshot.hasError) {
-            return Center(child: Text('Error: ${snapshot.error}'));
-          }
 
-          final userData = snapshot.data!;
-          final UserModel? user = userData['user'];
-          final UserSessionModel? session = userData['session'];
+          bool hasError = snapshot.hasError || snapshot.data == null;
+          final userData = snapshot.data;
+          final UserModel? user = userData?['user'];
+          final UserSessionModel? session = userData?['session'];
+
+          if (hasError) {
+            return SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSection('User Details', [_buildKeyValuePair('Error', '${snapshot.error}')], hasError: true),
+                  const SizedBox(height: 16),
+                  _buildSection('Session Details', [_buildKeyValuePair('Error', 'Session data unavailable')],
+                      hasError: true),
+                ],
+              ),
+            );
+          }
 
           return SingleChildScrollView(
             padding: const EdgeInsets.all(16),

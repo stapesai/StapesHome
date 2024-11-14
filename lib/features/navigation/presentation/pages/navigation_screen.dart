@@ -38,6 +38,7 @@ class NavigationScreen extends StatelessWidget {
           }
         },
         child: Scaffold(
+          backgroundColor: Colors.transparent,
           body: child,
           bottomNavigationBar: const CustomNavigationBar(),
         ),

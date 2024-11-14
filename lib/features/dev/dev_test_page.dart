@@ -8,13 +8,17 @@ class DevTestPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text('Dev Test Page'),
+        title: Text('Dev Test Page', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.transparent,
       ),
-      body: Center(
-        child: Text(
-          text,
-          style: TextStyle(fontSize: 24),
+      body: SafeArea(
+        child: Center(
+          child: Text(
+            text,
+            style: TextStyle(color: Colors.white, fontSize: 24),
+          ),
         ),
       ),
     );

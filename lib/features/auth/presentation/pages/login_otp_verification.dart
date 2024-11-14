@@ -97,114 +97,112 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
-          child: BlocProvider(
-            create: (context) => LoginOtpVerificationBloc(
-              verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
-              completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
-            ),
-            child: BlocListener<LoginOtpVerificationBloc, LoginOtpVerificationState>(
-              listener: (context, state) {
-                // OTP Verification success
-                if (state is LoginOtpVerificationSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                    content: Text('OTP Verified Successfully'),
-                    backgroundColor: AppColor.successColor,
-                  ));
-                  GoRouter.of(context).go(AppRouteConstants.main.routePath);
-                }
-                // OTP Verification error
-                else if (state is LoginOtpVerificationError) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text(state.message),
-                      backgroundColor: AppColor.errorColor,
-                    ),
-                  );
-                }
-              },
-              child: Scaffold(
-                backgroundColor: Colors.transparent,
-                resizeToAvoidBottomInset: false,
-                body: SafeArea(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: screenSize.height * 0.05),
-                          SizedBox(
-                            width: double.infinity,
-                            child: Text(
-                              'OTP Verification',
-                              style: TextStyle(
-                                color: AppColor.whiteColor,
-                                fontSize: AppFontSizes.pageHeading,
-                                fontFamily: 'Ubuntu',
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: screenSize.height * 0.02),
-                          SizedBox(
-                            child: Text(
-                              'Enter the verification code sent to your email address.',
-                              style: TextStyle(
-                                color: AppColor.whiteColor,
-                                fontSize: AppFontSizes.pageSubHeading,
-                                fontFamily: 'Ubuntu',
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: screenSize.height * 0.04),
-                          SizedBox(
-                            child: Center(
-                              child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
-                                builder: (context, state) {
-                                  return OtpInputWidget(
-                                    controllers: _controllers,
-                                    focusNodes: _focusNodes,
-                                    onOtpComplete: (otp) => _onVerifyButtonPressed(context),
-                                  );
-                                },
-                              ),
-                            ),
-                          ),
-                          SizedBox(height: screenSize.height * 0.02),
-                          Center(
-                            child: Text(
-                              'Your verification code will expire in ${_remainingTime()} ',
-                              style: const TextStyle(
-                                color: AppColor.whiteColor,
-                                fontSize: 16.0,
-                              ),
-                              textAlign: TextAlign.center,
-                            ),
-                          ),
-                          const Spacer(),
-                          AnimatedContainer(
-                            duration: const Duration(milliseconds: 300),
-                            curve: Curves.easeOut,
-                            margin: EdgeInsets.only(
-                              bottom: keyboardHeight > 0
-                                  ? keyboardHeight + screenSize.height * 0.02
-                                  : screenSize.height * 0.1,
-                            ),
-                            child: Center(
-                              child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
-                                builder: (context, state) {
-                                  return CustomButton(
-                                      text: "Next",
-                                      isLoading: state is LoginOtpVerificationLoading,
-                                      onPressed: () => _onVerifyButtonPressed(context));
-                                },
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+      child: BlocProvider(
+        create: (context) => LoginOtpVerificationBloc(
+          verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
+          completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
+        ),
+        child: BlocListener<LoginOtpVerificationBloc, LoginOtpVerificationState>(
+          listener: (context, state) {
+            // OTP Verification success
+            if (state is LoginOtpVerificationSuccess) {
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text('OTP Verified Successfully'),
+                backgroundColor: AppColor.successColor,
+              ));
+              GoRouter.of(context).go(AppRouteConstants.main.routePath);
+            }
+            // OTP Verification error
+            else if (state is LoginOtpVerificationError) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text(state.message),
+                  backgroundColor: AppColor.errorColor,
                 ),
+              );
+            }
+          },
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: false,
+            body: SafeArea(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: screenSize.height * 0.05),
+                  SizedBox(
+                    width: double.infinity,
+                    child: Text(
+                      'OTP Verification',
+                      style: TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: AppFontSizes.pageHeading,
+                        fontFamily: 'Ubuntu',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.02),
+                  SizedBox(
+                    child: Text(
+                      'Enter the verification code sent to your email address.',
+                      style: TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: AppFontSizes.pageSubHeading,
+                        fontFamily: 'Ubuntu',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.04),
+                  SizedBox(
+                    child: Center(
+                      child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
+                        builder: (context, state) {
+                          return OtpInputWidget(
+                            controllers: _controllers,
+                            focusNodes: _focusNodes,
+                            onOtpComplete: (otp) => _onVerifyButtonPressed(context),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: screenSize.height * 0.02),
+                  Center(
+                    child: Text(
+                      'Your verification code will expire in ${_remainingTime()} ',
+                      style: const TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: 16.0,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                  const Spacer(),
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeOut,
+                    margin: EdgeInsets.only(
+                      bottom: keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
+                    ),
+                    child: Center(
+                      child: BlocBuilder<LoginOtpVerificationBloc, LoginOtpVerificationState>(
+                        builder: (context, state) {
+                          return CustomButton(
+                              text: "Next",
+                              isLoading: state is LoginOtpVerificationLoading,
+                              onPressed: () => _onVerifyButtonPressed(context));
+                        },
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
+        ),
+      ),
     );
   }
 }

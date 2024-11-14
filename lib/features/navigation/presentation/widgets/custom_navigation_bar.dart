@@ -33,7 +33,10 @@ class CustomNavigationBar extends StatelessWidget {
             final selectedItem = NavigationItem.values[index];
             context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
           },
+          backgroundColor: Colors.transparent,
           type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.white,
+          unselectedItemColor: Colors.white,
           items: [
             _buildNavigationItem(
               'Home',
