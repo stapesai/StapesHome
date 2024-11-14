@@ -9,9 +9,8 @@ import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_i
 import 'package:stapes_home/service_locator.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/common/widgets/input/password.dart';
-import 'package:stapes_home/core/common/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/text_field.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 
@@ -52,7 +51,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
           }
         },
         child: Scaffold(
-          backgroundColor: Colors.transparent,
+          // backgroundColor: Colors.transparent,
           body: SafeArea(
             child: GestureDetector(
               onTap: () => FocusScope.of(context).unfocus(),

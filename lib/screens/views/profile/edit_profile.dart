@@ -1,6 +1,6 @@
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:flutter/material.dart';
-import 'package:stapes_home/core/common/widgets/input/textfield.dart';
+import 'package:stapes_home/core/common/widgets/input/text_field.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
 
