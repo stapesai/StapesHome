@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/widgets/button.dart';
-import 'package:stapes_home/widgets/input/dropdown.dart';
-import 'package:stapes_home/widgets/input/password.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/input/dropdown.dart';
+import 'package:stapes_home/core/common/widgets/input/password.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 // import 'package:wifi_iot/wifi_iot.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -227,7 +227,7 @@ class _WifiCredentialsState extends State<WifiCredentials> {
                   SizedBox(height: screenSize.height * 0.04),
                   _isScanning
                       ? Center(child: CircularProgressIndicator(color: AppColor.whiteColor))
-                      : NDropdown<WiFiAccessPoint>(
+                      : CustomDropdown<WiFiAccessPoint>(
                           hintText: 'Select Wi-Fi Network',
                           value: _selectedNetwork,
                           items: _networks
@@ -246,7 +246,7 @@ class _WifiCredentialsState extends State<WifiCredentials> {
                           },
                         ),
                   SizedBox(height: screenSize.height * 0.02),
-                  PasswordTextField(
+                  CustomPasswordTextField(
                     hintText: 'Wi-Fi Password',
                     controller: wifiPasswordController,
                     icon: Icons.lock_outline,
