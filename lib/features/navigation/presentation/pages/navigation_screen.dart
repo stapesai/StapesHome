@@ -32,8 +32,8 @@ class NavigationScreen extends StatelessWidget {
             case NavigationItem.nodes:
               context.go(AppRouteConstants.nodes.routePath);
               break;
-            case NavigationItem.profile:
-              context.go(AppRouteConstants.profile.routePath);
+            case NavigationItem.settings:
+              context.go(AppRouteConstants.settings.routePath);
               break;
           }
         },

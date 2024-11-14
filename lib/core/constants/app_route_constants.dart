@@ -119,9 +119,9 @@ class AppRouteConstants {
     routeName: 'DevicesPage',
   );
 
-  static final profile = _RouteConfig(
-    routePath: '/profile',
-    routeName: 'ProfilePage',
+  static final settings = _RouteConfig(
+    routePath: '/settings',
+    routeName: 'SettingsPage',
   );
 
   static final devPageUserDetailsShow = _RouteConfig(

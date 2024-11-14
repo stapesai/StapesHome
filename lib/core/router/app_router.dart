@@ -185,9 +185,9 @@ class AppRouter {
             builder: (context, state) => const DevTestPage(text: 'Devices Page'),
           ),
           GoRoute(
-            name: AppRouteConstants.profile.routeName,
-            path: AppRouteConstants.profile.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Profile Page'),
+            name: AppRouteConstants.settings.routeName,
+            path: AppRouteConstants.settings.routePath,
+            builder: (context, state) => const DevTestPage(text: 'Settings Page'),
           ),
         ],
       ),

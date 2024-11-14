@@ -60,7 +60,7 @@ class CustomNavigationBar extends StatelessWidget {
               'Settings',
               'assets/icons/navbar/profile.svg',
               'assets/icons/navbar/profile-active.svg',
-              state.selectedItem == NavigationItem.profile,
+              state.selectedItem == NavigationItem.settings,
             ),
           ],
         );
