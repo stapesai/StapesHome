@@ -28,65 +28,56 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        gradient: AppColor.backgroundColorgradient,
+    return BlocProvider(
+      create: (context) => LoginEmailInputBloc(
+        requestLoginUseCase: serviceLocator<RequestLoginUseCase>(),
       ),
-      child: BlocProvider(
-        create: (context) => LoginEmailInputBloc(
-          requestLoginUseCase: serviceLocator<RequestLoginUseCase>(),
-        ),
-        child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
-          listener: (context, state) {
-            // Show error message if login fails
-            if (state is LoginEmailInputError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(backgroundColor: AppColor.errorColor, content: Text(state.message)),
-              );
-            }
-            // Navigate to OTP verification screen if OTP is required
-            else if (state is LoginEmailInputOtpRequired) {
-              GoRouter.of(context).push(
-                AppRouteConstants.getLoginOtpVerificationPagePath(
-                  email: state.email,
-                  expiryTime: state.expiryTime,
-                  transactionId: state.transactionId,
-                ),
-              );
-            }
-          },
-          child: Scaffold(
-            backgroundColor: Colors.transparent,
-            body: SafeArea(
-              child: GestureDetector(
-                onTap: () => FocusScope.of(context).unfocus(),
-                child: LayoutBuilder(
-                  builder: (context, constraints) {
-                    return SingleChildScrollView(
-                      physics: const AlwaysScrollableScrollPhysics(),
-                      child: ConstrainedBox(
-                        constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                        child: IntrinsicHeight(
-                          child: Padding(
-                            padding: AppPadding.pagePadding(context),
-                            child: Column(
-                              children: [
-                                SizedBox(height: constraints.maxHeight * 0.1),
-                                _buildLogo(),
-                                SizedBox(height: constraints.maxHeight * 0.05),
-                                _buildLoginForm(),
-                                const Spacer(),
-                                _buildSocialLogin(),
-                                const SizedBox(height: 20),
-                              ],
-                            ),
-                          ),
+      child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
+        listener: (context, state) {
+          // Show error message if login fails
+          if (state is LoginEmailInputError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(backgroundColor: AppColor.errorColor, content: Text(state.message)),
+            );
+          }
+          // Navigate to OTP verification screen if OTP is required
+          else if (state is LoginEmailInputOtpRequired) {
+            GoRouter.of(context).push(
+              AppRouteConstants.getLoginOtpVerificationPagePath(
+                email: state.email,
+                expiryTime: state.expiryTime,
+                transactionId: state.transactionId,
+              ),
+            );
+          }
+        },
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: SafeArea(
+            child: GestureDetector(
+              onTap: () => FocusScope.of(context).unfocus(),
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  return SingleChildScrollView(
+                    physics: const AlwaysScrollableScrollPhysics(),
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                      child: IntrinsicHeight(
+                        child: Column(
+                          children: [
+                            SizedBox(height: constraints.maxHeight * 0.1),
+                            _buildLogo(),
+                            SizedBox(height: constraints.maxHeight * 0.05),
+                            _buildLoginForm(),
+                            const Spacer(),
+                            _buildSocialLogin(),
+                            const SizedBox(height: 20),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                },
               ),
             ),
           ),

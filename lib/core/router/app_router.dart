@@ -14,10 +14,10 @@ import 'package:stapes_home/features/dev/dev_test_page.dart';
 import 'package:stapes_home/features/dev/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
-import 'package:stapes_home/screens/routes/main.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(
+    initialLocation: AppRouteConstants.splash.routePath,
     routes: [
       // Splash screen
       GoRoute(
@@ -140,7 +140,6 @@ class AppRouter {
       GoRoute(
         name: AppRouteConstants.forgotPasswordResetPassword.routeName,
         path: AppRouteConstants.forgotPasswordResetPassword.routePath,
-        routes: [],
         pageBuilder: (context, state) {
           final String email = state.pathParameters['email']!;
           final String transactionId = state.pathParameters['transactionId']!;
@@ -178,12 +177,12 @@ class AppRouter {
           GoRoute(
             name: AppRouteConstants.nodes.routeName,
             path: AppRouteConstants.nodes.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Devices'),
+            builder: (context, state) => const DevTestPage(text: 'Devices Page'),
           ),
           GoRoute(
             name: AppRouteConstants.devices.routeName,
             path: AppRouteConstants.devices.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Nodes'),
+            builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
           ),
           GoRoute(
             name: AppRouteConstants.profile.routeName,

@@ -27,8 +27,8 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   Future<void> _checkLoginStatus() async {
-    UserSessionModel? sessionBox = await serviceLocator<AuthLocalDataSource>().getUserSession();
     UserModel? userBox = await serviceLocator<AuthLocalDataSource>().getUser();
+    UserSessionModel? sessionBox = await serviceLocator<AuthLocalDataSource>().getUserSession();
 
     bool isLoggedIn = sessionBox != null && userBox != null;
 
@@ -44,23 +44,16 @@ class SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     // this is the splash screen, it will show the logo of the app until it is ready to show the login screen or the main screen (home screen)
-    return Container(
-      clipBehavior: Clip.antiAlias,
-      decoration: BoxDecoration(
-        gradient: AppColor.backgroundColorgradient,
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            SvgPicture.asset(
-              'assets/icons/logo.svg',
-              width: 110.0,
-              height: 110.0,
-            ),
-          ],
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        SvgPicture.asset(
+          'assets/icons/logo.svg',
+          width: 110.0,
+          height: 110.0,
         ),
-      ),
+      ],
     );
   }
 }
