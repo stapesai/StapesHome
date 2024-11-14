@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class AppColor {
   AppColor._();
   static const Color whiteColor = Colors.white;
-  static Color whiteColor50 = Colors.white.withOpacity(0.5);
+  static const Color whiteColor50 = Color.fromRGBO(255, 255, 255, 0.5); // Colors.white.withOpacity(0.5);
   static const Color textHyperlinkColor = Color(0xFF0085FF);
   static const Color backgroundColorDark = Color(0xFF161622);
   static const instructionPanelColor = Color(0xFF181819);

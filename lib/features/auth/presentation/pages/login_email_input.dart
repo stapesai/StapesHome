@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
@@ -22,8 +23,29 @@ class LoginEmailInputScreen extends StatefulWidget {
 }
 
 class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
+  late final Widget _logoWidget;
+  late final Widget _socialLoginWidget;
+
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    // TODO: how to precache images?
+    // precacheImage(AssetImage('assets/icons/sso/apple.png'), context);
+    // precacheImage(AssetImage('assets/icons/sso/google.png'), context);
+    // precacheImage(AssetImage('assets/icons/sso/microsoft.png'), context);
+    super.initState();
+    _logoWidget = _buildLogo();
+    _socialLoginWidget = _buildSocialLogin();
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,11 +72,13 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
             );
           }
         },
-        child: Scaffold(
-          // backgroundColor: Colors.transparent,
-          body: SafeArea(
-            child: GestureDetector(
-              onTap: () => FocusScope.of(context).unfocus(),
+        child: KeyboardDismissOnTap(
+          child: Scaffold(
+            backgroundColor: Colors.transparent,
+            resizeToAvoidBottomInset: true,
+            body: SafeArea(
+              // child: GestureDetector(
+              // onTap: () => FocusScope.of(context).unfocus(),
               child: LayoutBuilder(
                 builder: (context, constraints) {
                   return SingleChildScrollView(
@@ -65,11 +89,11 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
                         child: Column(
                           children: [
                             SizedBox(height: constraints.maxHeight * 0.1),
-                            _buildLogo(),
+                            RepaintBoundary(child: _logoWidget),
                             SizedBox(height: constraints.maxHeight * 0.05),
                             _buildLoginForm(),
                             const Spacer(),
-                            _buildSocialLogin(),
+                            RepaintBoundary(child: _socialLoginWidget),
                             const SizedBox(height: 20),
                           ],
                         ),
@@ -78,6 +102,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
                   );
                 },
               ),
+              // ),
             ),
           ),
         ),
@@ -96,7 +121,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        Text(
+        const Text(
           'stapes.ai',
           textAlign: TextAlign.center,
           style: TextStyle(
@@ -130,7 +155,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
             onPressed: () {
               GoRouter.of(context).push(AppRouteConstants.forgotPassword.routePath);
             },
-            child: Text(
+            child: const Text(
               'Forgot Password?',
               style: TextStyle(
                 color: AppColor.textHyperlinkColor,
@@ -163,7 +188,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               'Don\'t have an account?',
               style: TextStyle(
                 color: AppColor.whiteColor,
@@ -179,7 +204,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
                   MaterialPageRoute(builder: (context) => const SignUpEmailInputScreen()),
                 );
               },
-              child: Text(
+              child: const Text(
                 'Sign Up',
                 style: TextStyle(
                   color: AppColor.textHyperlinkColor,
@@ -201,10 +226,10 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Row(
-            children: [
+            children: const [
               Expanded(child: Divider(color: AppColor.whiteColor50, thickness: 1)),
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20),
+                padding: EdgeInsets.symmetric(horizontal: 20),
                 child: Text(
                   'or continue with',
                   style: TextStyle(
@@ -222,6 +247,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         SizedBox(height: 20),
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             _buildSocialButton('assets/icons/sso/google.png', () {}),
             SizedBox(width: 20),
@@ -241,7 +267,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         height: 50,
         width: 50,
         decoration: ShapeDecoration(
-          color: Color(0xFF34373F),
+          color: const Color(0xFF34373F),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(25)),
           shadows: const [
             BoxShadow(
