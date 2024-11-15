@@ -49,7 +49,7 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
         child: BlocListener<SignUpDetailsFormBloc, SignUpDetailsFormState>(
           listener: (context, state) {
             if (state is SignUpDetailsFormSuccess) {
-              GoRouter.of(context).go(AppRouteConstants.home.routePath);
+              GoRouter.of(context).go(AppRouteConstants.main.routePath);
             } else if (state is SignUpDetailsFormError) {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(

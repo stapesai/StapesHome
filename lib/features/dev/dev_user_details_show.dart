@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -9,8 +8,24 @@ import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/service_locator.dart';
 
-class DevUserDetailsScreen extends StatelessWidget {
+class DevUserDetailsScreen extends StatefulWidget {
   const DevUserDetailsScreen({super.key});
+
+  @override
+  State<DevUserDetailsScreen> createState() => _DevUserDetailsScreenState();
+}
+
+class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with AutomaticKeepAliveClientMixin {
+  late Future<Map<String, dynamic>> _userDataFuture;
+
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _userDataFuture = _loadUserData();
+  }
 
   Future<Map<String, dynamic>> _loadUserData() async {
     final userSession = await serviceLocator<AuthLocalDataSource>().getUserSession();
@@ -20,17 +35,11 @@ class DevUserDetailsScreen extends StatelessWidget {
 
   Future<void> _handleLogout(BuildContext context) async {
     try {
-      // Clear user session and data
       await serviceLocator<AuthLocalDataSource>().clearSession();
-
-      // Navigate to login screen and remove all previous routes
       if (context.mounted) {
-        GoRouter.of(context).go(
-          AppRouteConstants.login.routePath,
-        );
+        GoRouter.of(context).go(AppRouteConstants.login.routePath);
       }
     } catch (e) {
-      // Show error if logout fails
       if (context.mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Logout failed: $e', style: const TextStyle(color: AppColor.errorColor))),
@@ -142,6 +151,8 @@ class DevUserDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
+
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -164,7 +175,7 @@ class DevUserDetailsScreen extends StatelessWidget {
         ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: _loadUserData(),
+        future: _userDataFuture, // Use cached future
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -181,10 +192,21 @@ class DevUserDetailsScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildSection('User Details', [_buildKeyValuePair('Error', '${snapshot.error}')], hasError: true),
+                  _buildSection(
+                    'User Details',
+                    [
+                      _buildKeyValuePair('Error', '${snapshot.error}'),
+                    ],
+                    hasError: true,
+                  ),
                   const SizedBox(height: 16),
-                  _buildSection('Session Details', [_buildKeyValuePair('Error', 'Session data unavailable')],
-                      hasError: true),
+                  _buildSection(
+                    'Session Details',
+                    [
+                      _buildKeyValuePair('Error', 'Session data unavailable'),
+                    ],
+                    hasError: true,
+                  ),
                 ],
               ),
             );

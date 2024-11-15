@@ -152,46 +152,53 @@ class AppRouter {
         },
       ),
 
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return NavigationScreen(
-            navigationShell: navigationShell,
-          );
-        },
-        branches: [
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRouteConstants.home.routePath,
-                builder: (context, state) => const DevUserDetailsScreen(),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRouteConstants.devices.routePath,
-                builder: (context, state) => const DevTestPage(text: 'Devices Page'),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRouteConstants.nodes.routePath,
-                builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
-              ),
-            ],
-          ),
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: AppRouteConstants.settings.routePath,
-                builder: (context, state) => const DevTestPage(text: 'Settings Page'),
-              ),
-            ],
-          ),
-        ],
+      // StatefulShellRoute.indexedStack(
+      //   builder: (context, state, navigationShell) {
+      //     return NavigationScreen(
+      //       navigationShell: navigationShell,
+      //     );
+      //   },
+      //   branches: [
+      //     StatefulShellBranch(
+      //       routes: [
+      //         GoRoute(
+      //           path: AppRouteConstants.home.routePath,
+      //           builder: (context, state) => const DevUserDetailsScreen(),
+      //         ),
+      //       ],
+      //     ),
+      //     StatefulShellBranch(
+      //       routes: [
+      //         GoRoute(
+      //           path: AppRouteConstants.devices.routePath,
+      //           builder: (context, state) => const DevTestPage(text: 'Devices Page'),
+      //         ),
+      //       ],
+      //     ),
+      //     StatefulShellBranch(
+      //       routes: [
+      //         GoRoute(
+      //           path: AppRouteConstants.nodes.routePath,
+      //           builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
+      //         ),
+      //       ],
+      //     ),
+      //     StatefulShellBranch(
+      //       routes: [
+      //         GoRoute(
+      //           path: AppRouteConstants.settings.routePath,
+      //           builder: (context, state) => const DevTestPage(text: 'Settings Page'),
+      //         ),
+      //       ],
+      //     ),
+      //   ],
+      // ),
+
+      // Main Page Route - Temporary
+      GoRoute(
+        name: AppRouteConstants.main.routeName,
+        path: AppRouteConstants.main.routePath,
+        builder: (context, state) => const NavigationScreen(),
       ),
 
       // Development Page

@@ -9,10 +9,12 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   }
 
   void _onNavigationItemSelected(NavigationItemSelected event, Emitter<NavigationState> emit) {
+    print('Item selected: ${event.navigationItem}');
     emit(NavigationState(event.navigationItem));
   }
 
   void _onNavigationPageSwiped(NavigationPageSwiped event, Emitter<NavigationState> emit) {
+    print('Page swiped to: ${event.navigationItem}');
     emit(NavigationState(event.navigationItem));
   }
 }

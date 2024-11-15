@@ -11,7 +11,7 @@ class NodeNamingScreen extends StatefulWidget {
   const NodeNamingScreen({super.key, required this.onNameSubmitted});
 
   @override
-  _NodeNamingScreenState createState() => _NodeNamingScreenState();
+  createState() => _NodeNamingScreenState();
 }
 
 class _NodeNamingScreenState extends State<NodeNamingScreen> {

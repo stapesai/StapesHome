@@ -99,25 +99,30 @@ class AppRouteConstants {
     return '/auth/forgot-password-reset-password/$email/$transactionId';
   }
 
-  static final home = _RouteConfig(
-    routePath: '/home',
-    routeName: 'HomePage',
+  static final main = _RouteConfig(
+    routePath: '/main',
+    routeName: 'MainPage',
   );
 
-  static final nodes = _RouteConfig(
-    routePath: '/nodes',
-    routeName: 'NodesPage',
-  );
+  // static final home = _RouteConfig(
+  //   routePath: '/home',
+  //   routeName: 'HomePage',
+  // );
 
-  static final devices = _RouteConfig(
-    routePath: '/devices',
-    routeName: 'DevicesPage',
-  );
+  // static final nodes = _RouteConfig(
+  //   routePath: '/nodes',
+  //   routeName: 'NodesPage',
+  // );
 
-  static final settings = _RouteConfig(
-    routePath: '/settings',
-    routeName: 'SettingsPage',
-  );
+  // static final devices = _RouteConfig(
+  //   routePath: '/devices',
+  //   routeName: 'DevicesPage',
+  // );
+
+  // static final settings = _RouteConfig(
+  //   routePath: '/settings',
+  //   routeName: 'SettingsPage',
+  // );
 
   static final devPageUserDetailsShow = _RouteConfig(
     routePath: '/dev-user-details-show',

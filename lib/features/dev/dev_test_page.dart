@@ -10,14 +10,24 @@ class DevTestPage extends StatelessWidget {
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
-        title: Text('Dev Test Page', style: TextStyle(color: Colors.white)),
+        title: Text('Dev Page - $text', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.transparent,
       ),
       body: SafeArea(
         child: Center(
-          child: Text(
-            text,
-            style: TextStyle(color: Colors.white, fontSize: 24),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            children: const [
+              Text(
+                'This page is under development.',
+                style: TextStyle(color: Colors.white, fontSize: 24),
+              ),
+              Text(
+                'This is a temporary page to test the navigation.',
+                style: TextStyle(color: Colors.white, fontSize: 16),
+              ),
+            ],
           ),
         ),
       ),

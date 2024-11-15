@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/features/dev/dev_test_page.dart';
 import 'package:stapes_home/features/dev/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
@@ -10,11 +8,11 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_st
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
 
 class NavigationScreen extends StatefulWidget {
-  final StatefulNavigationShell navigationShell;
+  // final StatefulNavigationShell navigationShell;
 
   const NavigationScreen({
     super.key,
-    required this.navigationShell,
+    // required this.navigationShell,
   });
 
   @override
@@ -23,39 +21,63 @@ class NavigationScreen extends StatefulWidget {
 
 class _NavigationScreenState extends State<NavigationScreen> {
   late final PageController _pageController;
+  late final NavigationBloc _navigationBloc;
+  bool _isHandlingTap = false;
 
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
+    _navigationBloc = NavigationBloc();
   }
 
   @override
   void dispose() {
     _pageController.dispose();
+    _navigationBloc.close();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NavigationBloc(),
+    return BlocProvider.value(
+      value: _navigationBloc,
+      // return BlocProvider(
+      //   create: (context) => NavigationBloc(),
       child: BlocListener<NavigationBloc, NavigationState>(
         listener: (context, state) {
           final index = NavigationTab.values.indexOf(state.currentTab);
-          _pageController.animateToPage(
-            index,
-            duration: const Duration(milliseconds: 100),
-            curve: Curves.easeInOut,
-          );
-          widget.navigationShell.goBranch(index);
+
+          // Animated Scrolling
+          _isHandlingTap = true;
+          _pageController
+              .animateToPage(
+                index,
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.easeInOut,
+              )
+              .then(
+                (_) => _isHandlingTap = false,
+              );
+
+          // Jump to page without animation
+          // _pageController.jumpToPage(index);
+
+          // Don't know its functionallity - used when using StatefulShellRoute.indexedStack
+          // widget.navigationShell.goBranch(index);
         },
         child: Scaffold(
           backgroundColor: Colors.transparent,
           body: PageView(
             controller: _pageController,
+            // physics: const BouncingScrollPhysics(),
             onPageChanged: (index) {
-              context.read<NavigationBloc>().add(NavigationPageSwiped(NavigationTab.values[index]));
+              // Update navigation state when page is swiped
+              if (!_isHandlingTap) {
+                final selectedItem = NavigationTab.values[index];
+                // context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
+                _navigationBloc.add(NavigationPageSwiped(selectedItem));
+              }
             },
             children: const [
               // TODO: I have tried to take the chidren from the navigationShell, but it doesn't work
