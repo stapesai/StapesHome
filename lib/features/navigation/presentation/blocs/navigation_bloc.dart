@@ -3,11 +3,16 @@ import 'navigation_event.dart';
 import 'navigation_state.dart';
 
 class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
-  NavigationBloc() : super(NavigationState(NavigationItem.home)) {
+  NavigationBloc() : super(NavigationState(NavigationTab.home)) {
     on<NavigationItemSelected>(_onNavigationItemSelected);
+    on<NavigationPageSwiped>(_onNavigationPageSwiped);
   }
 
   void _onNavigationItemSelected(NavigationItemSelected event, Emitter<NavigationState> emit) {
+    emit(NavigationState(event.navigationItem));
+  }
+
+  void _onNavigationPageSwiped(NavigationPageSwiped event, Emitter<NavigationState> emit) {
     emit(NavigationState(event.navigationItem));
   }
 }

@@ -27,40 +27,41 @@ class CustomNavigationBar extends StatelessWidget {
     return BlocBuilder<NavigationBloc, NavigationState>(
       builder: (context, state) {
         return BottomNavigationBar(
-          currentIndex: state.selectedItem.index,
-          onTap: (index) {
-            // Emit event when user clicks on a button
-            final selectedItem = NavigationItem.values[index];
-            context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
-          },
           backgroundColor: Colors.transparent,
-          type: BottomNavigationBarType.fixed,
           selectedItemColor: Colors.white,
           unselectedItemColor: Colors.white,
+          currentIndex: state.currentTab.index,
+          // type: BottomNavigationBarType.shifting,
+          type: BottomNavigationBarType.fixed,
+          onTap: (index) {
+            // Emit event when user clicks on a button
+            final selectedItem = NavigationTab.values[index];
+            context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
+          },
           items: [
             _buildNavigationItem(
               'Home',
               'assets/icons/navbar/home.svg',
               'assets/icons/navbar/home-active.svg',
-              state.selectedItem == NavigationItem.home,
+              state.currentTab == NavigationTab.home,
             ),
             _buildNavigationItem(
               'Devices',
               'assets/icons/navbar/devices.svg',
               'assets/icons/navbar/devices-active.svg',
-              state.selectedItem == NavigationItem.devices,
+              state.currentTab == NavigationTab.devices,
             ),
             _buildNavigationItem(
               'Nodes',
               'assets/icons/navbar/nodes.svg',
               'assets/icons/navbar/nodes-active.svg',
-              state.selectedItem == NavigationItem.nodes,
+              state.currentTab == NavigationTab.nodes,
             ),
             _buildNavigationItem(
               'Settings',
               'assets/icons/navbar/profile.svg',
               'assets/icons/navbar/profile-active.svg',
-              state.selectedItem == NavigationItem.settings,
+              state.currentTab == NavigationTab.settings,
             ),
           ],
         );

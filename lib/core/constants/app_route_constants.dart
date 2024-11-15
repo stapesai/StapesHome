@@ -99,11 +99,6 @@ class AppRouteConstants {
     return '/auth/forgot-password-reset-password/$email/$transactionId';
   }
 
-  static final main = _RouteConfig(
-    routePath: '/main',
-    routeName: 'MainPage',
-  );
-
   static final home = _RouteConfig(
     routePath: '/home',
     routeName: 'HomePage',

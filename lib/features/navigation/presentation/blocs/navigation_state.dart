@@ -1,6 +1,6 @@
-import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
+enum NavigationTab { home, devices, nodes, settings }
 
 class NavigationState {
-  final NavigationItem selectedItem;
-  NavigationState(this.selectedItem);
+  final NavigationTab currentTab;
+  NavigationState(this.currentTab);
 }

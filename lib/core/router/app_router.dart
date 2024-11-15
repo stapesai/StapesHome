@@ -152,42 +152,44 @@ class AppRouter {
         },
       ),
 
-      // Main Navigation Page
-      GoRoute(
-        name: AppRouteConstants.main.routeName,
-        path: AppRouteConstants.main.routePath,
-        builder: (context, state) => const NavigationScreen(
-          child: DevUserDetailsScreen(),
-        ),
-      ),
-
-      // Navigation Shell Routes
-      ShellRoute(
-        builder: (context, state, child) {
+      StatefulShellRoute.indexedStack(
+        builder: (context, state, navigationShell) {
           return NavigationScreen(
-            child: child,
+            navigationShell: navigationShell,
           );
         },
-        routes: [
-          GoRoute(
-            name: AppRouteConstants.home.routeName,
-            path: AppRouteConstants.home.routePath,
-            builder: (context, state) => const DevUserDetailsScreen(),
+        branches: [
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteConstants.home.routePath,
+                builder: (context, state) => const DevUserDetailsScreen(),
+              ),
+            ],
           ),
-          GoRoute(
-            name: AppRouteConstants.nodes.routeName,
-            path: AppRouteConstants.nodes.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteConstants.devices.routePath,
+                builder: (context, state) => const DevTestPage(text: 'Devices Page'),
+              ),
+            ],
           ),
-          GoRoute(
-            name: AppRouteConstants.devices.routeName,
-            path: AppRouteConstants.devices.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Devices Page'),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteConstants.nodes.routePath,
+                builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
+              ),
+            ],
           ),
-          GoRoute(
-            name: AppRouteConstants.settings.routeName,
-            path: AppRouteConstants.settings.routePath,
-            builder: (context, state) => const DevTestPage(text: 'Settings Page'),
+          StatefulShellBranch(
+            routes: [
+              GoRoute(
+                path: AppRouteConstants.settings.routePath,
+                builder: (context, state) => const DevTestPage(text: 'Settings Page'),
+              ),
+            ],
           ),
         ],
       ),
@@ -204,10 +206,9 @@ class AppRouter {
         name: AppRouteConstants.devPageTest.routeName,
         path: AppRouteConstants.devPageTest.routePath,
         pageBuilder: (context, state) {
-          final String text = state.pathParameters['text']!;
           return MaterialPage(
             child: DevTestPage(
-              text: text,
+              text: state.pathParameters['text']!,
             ),
           );
         },

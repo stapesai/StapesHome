@@ -1,8 +1,13 @@
+import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
+
 abstract class NavigationEvent {}
 
-enum NavigationItem { home, devices, nodes, settings }
-
 class NavigationItemSelected extends NavigationEvent {
-  final NavigationItem navigationItem;
+  final NavigationTab navigationItem;
   NavigationItemSelected(this.navigationItem);
+}
+
+class NavigationPageSwiped extends NavigationEvent {
+  final NavigationTab navigationItem;
+  NavigationPageSwiped(this.navigationItem);
 }

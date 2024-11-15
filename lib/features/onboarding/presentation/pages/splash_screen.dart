@@ -30,7 +30,7 @@ class SplashScreenState extends State<SplashScreen> {
 
     if (mounted) {
       if (isLoggedIn) {
-        GoRouter.of(context).go(AppRouteConstants.main.routePath);
+        GoRouter.of(context).go(AppRouteConstants.home.routePath);
       } else {
         GoRouter.of(context).go(AppRouteConstants.login.routePath);
       }
