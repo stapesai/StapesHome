@@ -23,8 +23,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
   late final PageController _pageController;
   late final NavigationBloc _navigationBloc;
   bool _isHandlingTap = false;
-  double _dragStart = 0.0;
-  double _dragOffset = 0.0;
+  // double _dragStart = 0.0;
+  // double _dragOffset = 0.0;
 
   @override
   void initState() {
@@ -43,7 +43,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   Widget build(BuildContext context) {
     // Get screen width
-    final double screenWidth = MediaQuery.of(context).size.width;
+    // final double screenWidth = MediaQuery.of(context).size.width;
 
     // TODO: i dont understand why we can't use BlocProvider directly here.
     // BlocProvider should not rerender as the Scaffold is its child.
