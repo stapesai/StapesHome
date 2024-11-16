@@ -131,7 +131,13 @@ class WebsocketService {
     print('Disconnecting from Websocket server');
     _reconnectTimer?.cancel();
     await _socket?.close();
-    await _messageController.close();
-    await _connectionStateController.close();
+    // Don't dispose the stream controllers here.
+    // await _messageController.close();
+    // await _connectionStateController.close();
+  }
+
+  void closeControllers() {
+    _messageController.close();
+    _connectionStateController.close();
   }
 }

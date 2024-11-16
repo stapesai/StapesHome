@@ -22,6 +22,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     try {
       await _webSocketService.connect();
       emit(WebsocketConnected());
+
       _messageSubscription = _webSocketService.messageStream.listen(
         (message) {
           add(WebsocketMessageReceivedEvent(message));
@@ -30,6 +31,12 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
           add(WebsocketErrorOccurredEvent(error.toString()));
         },
       );
+
+      _webSocketService.connectionState.listen((state) {
+        if (state == WebsocketConnectionState.disconnected) {
+          add(DisconnectWebsocketEvent());
+        }
+      });
     } catch (e) {
       add(WebsocketErrorOccurredEvent(e.toString()));
     }
@@ -46,12 +53,16 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     WebsocketIncommingMessage websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
     print('Received message in WS bloc: ${websocketMessage.toString()}');
 
-    if (websocketMessage.type == WebsocketIncommingMessageType.nodeStatusUpdate) {
-      emit(WebsocketNodeStatusUpdateMessageState(websocketMessage.payload));
-    } else if (websocketMessage.type == WebsocketIncommingMessageType.deviceStatusUpdate) {
-      emit(WebsocketDeviceStatusUpdateMessageState(websocketMessage.payload));
-    } else if (websocketMessage.type == WebsocketIncommingMessageType.error) {
-      emit(WebsocketErrorMessageState(websocketMessage.payload));
+    switch (websocketMessage.type) {
+      case WebsocketIncommingMessageType.nodeStatusUpdate:
+        emit(WebsocketNodeStatusUpdateMessageState(websocketMessage.payload));
+        break;
+      case WebsocketIncommingMessageType.deviceStatusUpdate:
+        emit(WebsocketDeviceStatusUpdateMessageState(websocketMessage.payload));
+        break;
+      case WebsocketIncommingMessageType.error:
+        emit(WebsocketErrorMessageState(websocketMessage.payload));
+        break;
     }
   }
 
@@ -62,6 +73,8 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   @override
   Future<void> close() {
     _messageSubscription?.cancel();
+    _webSocketService.disconnect();
+    _webSocketService.closeControllers();
     return super.close();
   }
 }

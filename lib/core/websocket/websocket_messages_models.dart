@@ -23,9 +23,7 @@ class WebsocketNodeStatusUpdate {
     return WebsocketNodeStatusUpdate(
       nodeId: json['node_id'],
       isOnline: json['is_online'],
-      lastSeen: json['last_keepalive'] != null
-          ? DateTime.parse(json['last_keepalive'])
-          : null,
+      lastSeen: json['last_keepalive'] != null ? DateTime.parse(json['last_keepalive']) : null,
     );
   }
 
@@ -93,28 +91,27 @@ class WebsocketIncommingMessage {
     switch (type) {
       case 'node_status_update':
         return WebsocketIncommingMessage(
-          id: json['id'],
+          id: id,
           type: WebsocketIncommingMessageType.nodeStatusUpdate,
           payload: WebsocketNodeStatusUpdate.fromJson(payload),
         );
       case 'entity_status_update':
         return WebsocketIncommingMessage(
-          id: json['id'],
+          id: id,
           type: WebsocketIncommingMessageType.deviceStatusUpdate,
           payload: WebsocketDeviceStatusUpdate.fromJson(payload),
         );
       case 'error':
         return WebsocketIncommingMessage(
-          id: json['id'],
+          id: id,
           type: WebsocketIncommingMessageType.error,
           payload: WebsocketErrorMessage.fromJson(payload),
         );
       default:
         return WebsocketIncommingMessage(
-          id: json['id'],
+          id: id,
           type: WebsocketIncommingMessageType.error,
-          payload:
-              WebsocketErrorMessage(details: 'Unknown message type - $type'),
+          payload: WebsocketErrorMessage(details: 'Unknown message type - $type'),
         );
     }
   }
