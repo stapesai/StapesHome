@@ -46,7 +46,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // final double screenWidth = MediaQuery.of(context).size.width;
 
     // TODO: i dont understand why we can't use BlocProvider directly here.
-    // BlocProvider should not rerender as the Scaffold is its child.
+    // When the page is repainted, BlocProvider should not rerender as the Scaffold is its child.
     // So, on any event maximum Scaffold will rerender.
     return BlocProvider.value(
       value: _navigationBloc,
@@ -76,6 +76,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
         },
         child: Scaffold(
           backgroundColor: Colors.transparent,
+          // FIXME: Refer whatsapp and see the animation when we swipe the page. Implement the same here.
+          // Probabily that can be done by changing the physics of the PageView.
+          // FIXME: I am not able to swipe pages when using PhoneLink to connect to phone via PC using ADB.
           //   body: GestureDetector(
           //     onHorizontalDragStart: (details) {
           //       _dragStart = details.globalPosition.dx;
@@ -129,7 +132,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
               }
             },
             children: const [
-              // TODO: I have tried to take the chidren from the navigationShell, but it doesn't work
+              // When using navigation shell:
+              // I have tried to take the chidren from the navigationShell, but it doesn't work
+              // Now, this is not in use as we are using PageView
               // widget.navigationShell.branches[0],
               // widget.navigationShell.branches[1],
               // widget.navigationShell.branches[2],

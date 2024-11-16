@@ -34,6 +34,8 @@ class CustomNavigationBar extends StatelessWidget {
         // buildWhen: (previous, current) => previous.currentTab != current.currentTab,
         builder: (context, state) {
           return NavigationBar(
+            // FIXME: There is some effect when i click on a navigation bar item.
+            // Increase the brightness of the phone and see the effect.
             backgroundColor: Colors.transparent,
             indicatorColor: Colors.transparent,
             shadowColor: Colors.transparent,

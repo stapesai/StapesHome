@@ -22,16 +22,6 @@ class HttpClient {
     }
   }
 
-  Future<Map<String, dynamic>> get(Uri url, {Map<String, String>? headers}) async {
-    final response = await _client.get(url, headers: headers).timeout(const Duration(seconds: 30));
-    return _handleResponse(response);
-  }
-
-  Future<Map<String, dynamic>> post(Uri url, {Object? body, Map<String, String>? headers}) async {
-    final response = await _client.post(url, headers: headers, body: body).timeout(const Duration(seconds: 30));
-    return _handleResponse(response);
-  }
-
   Map<String, dynamic> _handleResponse(http.Response response) {
     final statusCode = response.statusCode;
     final responseBody = response.body.isNotEmpty ? json.decode(response.body) : null;
@@ -53,5 +43,15 @@ class HttpClient {
     } else {
       throw UnexpectedException('Unexpected Error');
     }
+  }
+
+  Future<Map<String, dynamic>> get(Uri url, {Map<String, String>? headers}) async {
+    final response = await _client.get(url, headers: headers).timeout(const Duration(seconds: 30));
+    return _handleResponse(response);
+  }
+
+  Future<Map<String, dynamic>> post(Uri url, {Object? body, Map<String, String>? headers}) async {
+    final response = await _client.post(url, headers: headers, body: body).timeout(const Duration(seconds: 30));
+    return _handleResponse(response);
   }
 }
