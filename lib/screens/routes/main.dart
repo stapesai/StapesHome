@@ -53,18 +53,18 @@
 //           _isLoading = false;
 //         });
 
-//         // Set up WebSocket message handling
-//         final webSocketService = Provider.of<WebSocketService?>(context, listen: false);
+//         // Set up Websocket message handling
+//         final webSocketService = Provider.of<WebsocketService?>(context, listen: false);
 //         if (webSocketService != null) {
 //           webSocketService.messageStream.listen((message) {
-//             _handleWebSocketErrorMessage(message);
+//             _handleWebsocketErrorMessage(message);
 //           });
 //         }
 //       }
 //     }
 //   }
 
-//   void _handleWebSocketErrorMessage(Map<String, dynamic> message) {
+//   void _handleWebsocketErrorMessage(Map<String, dynamic> message) {
 //     switch (message['type']) {
 //       // case 'entity_status_update':
 //       //   try {

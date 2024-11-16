@@ -35,16 +35,16 @@
 //   bool isLoading = true;
 //   String? errorMessage;
 //   final GlobalKey<FloorRoomSelectorState> _floorRoomSelectorKey = GlobalKey();
-//   late WebSocketService _webSocketService;
+//   late WebsocketService _webSocketService;
 
 //   @override
 //   void initState() {
 //     super.initState();
-//     _webSocketService = Provider.of<WebSocketService>(context, listen: false);
-//     _setupWebSocketListener();
+//     _webSocketService = Provider.of<WebsocketService>(context, listen: false);
+//     _setupWebsocketListener();
 //   }
 
-//   void _setupWebSocketListener() {
+//   void _setupWebsocketListener() {
 //     _webSocketService.messageStream.listen((message) {
 //       if (message['type'] == 'node_status_update') {
 //         _updateNodeState(NodeStatusUpdate.fromJson(message['data']));

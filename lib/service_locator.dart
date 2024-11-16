@@ -18,7 +18,7 @@ void setupServiceLocator() {
   // Optimize the registration of services and use cases.
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
 
-  serviceLocator.registerLazySingleton<WebSocketService>(() => WebSocketService());
+  serviceLocator.registerLazySingleton<WebsocketService>(() => WebsocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
 
   // Register services (API or local services) with their implementations

@@ -29,7 +29,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   void initState() {
     super.initState();
     _userDataFuture = _loadUserData();
-    _websocketBloc = WebsocketBloc(serviceLocator<WebSocketService>());
+    _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
     _websocketBloc.add(ConnectWebsocket());
   }
 

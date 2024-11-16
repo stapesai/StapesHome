@@ -7,7 +7,7 @@ import 'websocket_event.dart';
 import 'websocket_state.dart';
 
 class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
-  final WebSocketService _webSocketService;
+  final WebsocketService _webSocketService;
   StreamSubscription<dynamic>? _messageSubscription;
 
   WebsocketBloc(this._webSocketService) : super(WebsocketInitial()) {

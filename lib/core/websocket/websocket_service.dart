@@ -11,11 +11,11 @@ import 'package:stapes_home/core/error/exceptions.dart';
 
 enum WebsocketConnectionState { connected, disconnected, error }
 
-class WebSocketService {
+class WebsocketService {
   // Socket connection
-  WebSocket? _socket;
-  // URL of the WebSocket server
-  final Uri url = WebSocketRoutes.getWebSocketUrl();
+  Websocket? _socket;
+  // URL of the Websocket server
+  final Uri url = WebsocketRoutes.getWebsocketUrl();
   // User session (can be null), fetched from the local data source later
   late UserSessionModel? _userSession;
   // Used to generate unique message IDs
@@ -37,11 +37,11 @@ class WebSocketService {
       _connectionStateController.hasListener &&
       _connectionStateController.stream.last == WebsocketConnectionState.connected;
 
-  WebSocketService();
+  WebsocketService();
 
   Future<void> connect() async {
     if (isConnected) {
-      print('Already connected to WebSocket server');
+      print('Already connected to Websocket server');
       return;
     }
 
@@ -49,14 +49,14 @@ class WebSocketService {
       // Fetch the user session from the local data source
       _userSession = await serviceLocator<AuthLocalDataSource>().getUserSession();
       if (_userSession == null) {
-        throw WebSocketConnectionException('No user session available');
+        throw WebsocketConnectionException('No user session available');
       }
 
-      // Connect to the WebSocket server
-      print('Connecting to WebSocket server at ${url.toString()}');
+      // Connect to the Websocket server
+      print('Connecting to Websocket server at ${url.toString()}');
       print('User ID: ${_userSession!.userId}');
       print('Session ID: ${_userSession!.sessionId}');
-      _socket = await WebSocket.connect(
+      _socket = await Websocket.connect(
         url.toString(),
         headers: {
           'X-User-Id': _userSession!.userId,
@@ -65,8 +65,8 @@ class WebSocketService {
       );
       _connectionStateController.add(WebsocketConnectionState.connected);
       _setupSocketListeners();
-    } on WebSocketException catch (e) {
-      _handleConnectionError(WebSocketConnectionException(e.message));
+    } on WebsocketException catch (e) {
+      _handleConnectionError(WebsocketConnectionException(e.message));
     } catch (e) {
       _handleConnectionError(UnexpectedException(e.toString()));
     }
@@ -77,25 +77,25 @@ class WebSocketService {
       // print(message);
       _messageController.add(message);
       // if (message is! String) {
-      //   throw WebSocketMessageException('Invalid message format');
+      //   throw WebsocketMessageException('Invalid message format');
       // }
 
       // final decodedMessage = json.decode(json.decode(message));
       // if (decodedMessage is! Map<String, dynamic>) {
-      //   throw WebSocketMessageException('Invalid message structure');
+      //   throw WebsocketMessageException('Invalid message structure');
       // }
 
       // if (decodedMessage['command'] != 'control_device') {
       //   _messageController.add(decodedMessage);
       // }
     } catch (e) {
-      _handleError(WebSocketMessageException(e.toString()));
+      _handleError(WebsocketMessageException(e.toString()));
     }
   }
 
   // void sendDeviceStateUpdate(String deviceId, bool state) {
   //   if (!isConnected) {
-  //     throw WebSocketConnectionException('Not connected to server');
+  //     throw WebsocketConnectionException('Not connected to server');
   //   }
 
   //   final message = json.encode({
@@ -118,12 +118,12 @@ class WebSocketService {
   }
 
   void _handleError(dynamic error) {
-    print('WebSocket Error: $error');
+    print('Websocket Error: $error');
     _connectionStateController.add(WebsocketConnectionState.error);
   }
 
   void _handleDisconnection() {
-    print('Disconnected from WebSocket server');
+    print('Disconnected from Websocket server');
     _connectionStateController.add(WebsocketConnectionState.disconnected);
     _scheduleReconnection();
   }
@@ -141,7 +141,7 @@ class WebSocketService {
   }
 
   Future<void> disconnect() async {
-    print('Disconnecting from WebSocket server');
+    print('Disconnecting from Websocket server');
     _reconnectTimer?.cancel();
     await _socket?.close();
     await _messageController.close();

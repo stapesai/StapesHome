@@ -45,13 +45,13 @@ class WebsocketDeviceStatusUpdate {
   }
 }
 
-class WebSocketErrorMessage {
+class WebsocketErrorMessage {
   final String details;
 
-  WebSocketErrorMessage({required this.details});
+  WebsocketErrorMessage({required this.details});
 
-  factory WebSocketErrorMessage.fromJson(Map<String, dynamic> json) {
-    return WebSocketErrorMessage(
+  factory WebsocketErrorMessage.fromJson(Map<String, dynamic> json) {
+    return WebsocketErrorMessage(
       details: json['details'],
     );
   }
@@ -89,10 +89,10 @@ class WebsocketIncommingMessage {
         return WebsocketIncommingMessage(
           id: json['id'],
           type: WebsocketIncommingMessageType.error,
-          payload: WebSocketErrorMessage.fromJson(payload),
+          payload: WebsocketErrorMessage.fromJson(payload),
         );
       default:
-        throw WebSocketErrorMessage(details: 'Invalid message received. - $json');
+        throw WebsocketErrorMessage(details: 'Invalid message received. - $json');
     }
   }
 }

@@ -47,14 +47,14 @@ class MyApp extends StatelessWidget {
     //     if (snapshot.connectionState == ConnectionState.done) {
     //       final session = snapshot.data;
     //       final webSocketService = session != null
-    //           ? WebSocketService(WebSocketRoutes.getWebSocketUrl(), session.userId, session.sessionId)
+    //           ? WebsocketService(WebsocketRoutes.getWebsocketUrl(), session.userId, session.sessionId)
     //           : null;
 
     //       if (webSocketService != null) {
     //         webSocketService.connect();
     //       }
 
-    // return Provider<WebSocketService?>.value(
+    // return Provider<WebsocketService?>.value(
     //   value: webSocketService,
     //   child: MaterialApp.router(
     //     routeInformationParser: AppRouter.returnRouter().routeInformationParser,

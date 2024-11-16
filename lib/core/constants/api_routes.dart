@@ -43,7 +43,7 @@ class BaseUrls {
       case Environment.development:
         return 'ws://192.168.0.253:8002/ws';
       case Environment.production:
-        throw UnsupportedError('WebSocket not supported in production');
+        throw UnsupportedError('Websocket not supported in production');
       default:
         throw UnsupportedError('Environment not supported');
     }
@@ -128,7 +128,7 @@ class BackendRoutes {
       Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev/$favoriteDeviceId');
 }
 
-/// Defines WebSocket-related routes
-class WebSocketRoutes {
-  static Uri getWebSocketUrl() => Uri.parse(BaseUrls.webSocketUrl);
+/// Defines Websocket-related routes
+class WebsocketRoutes {
+  static Uri getWebsocketUrl() => Uri.parse(BaseUrls.webSocketUrl);
 }

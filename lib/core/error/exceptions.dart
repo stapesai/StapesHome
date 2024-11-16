@@ -48,10 +48,10 @@ class UnexpectedException extends AppException {
   UnexpectedException([super.message = 'An unexpected error occurred']);
 }
 
-class WebSocketConnectionException extends AppException {
-  WebSocketConnectionException([super.message = 'Failed to connect to WebSocket server']);
+class WebsocketConnectionException extends AppException {
+  WebsocketConnectionException([super.message = 'Failed to connect to Websocket server']);
 }
 
-class WebSocketMessageException extends AppException {
-  WebSocketMessageException([super.message = 'Failed to process WebSocket message']);
+class WebsocketMessageException extends AppException {
+  WebsocketMessageException([super.message = 'Failed to process Websocket message']);
 }
