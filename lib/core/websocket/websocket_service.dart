@@ -13,7 +13,7 @@ enum WebsocketConnectionState { connected, disconnected, error }
 
 class WebsocketService {
   // Socket connection
-  Websocket? _socket;
+  WebSocket? _socket;
   // URL of the Websocket server
   final Uri url = WebsocketRoutes.getWebsocketUrl();
   // User session (can be null), fetched from the local data source later
@@ -56,7 +56,7 @@ class WebsocketService {
       print('Connecting to Websocket server at ${url.toString()}');
       print('User ID: ${_userSession!.userId}');
       print('Session ID: ${_userSession!.sessionId}');
-      _socket = await Websocket.connect(
+      _socket = await WebSocket.connect(
         url.toString(),
         headers: {
           'X-User-Id': _userSession!.userId,
@@ -65,7 +65,7 @@ class WebsocketService {
       );
       _connectionStateController.add(WebsocketConnectionState.connected);
       _setupSocketListeners();
-    } on WebsocketException catch (e) {
+    } on WebSocketException catch (e) {
       _handleConnectionError(WebsocketConnectionException(e.message));
     } catch (e) {
       _handleConnectionError(UnexpectedException(e.toString()));
