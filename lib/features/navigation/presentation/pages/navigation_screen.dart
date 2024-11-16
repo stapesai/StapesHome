@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stapes_home/features/dev/dev_test_page.dart';
-import 'package:stapes_home/features/dev/dev_user_details_show.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';

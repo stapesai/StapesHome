@@ -1,8 +1,13 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
+import 'package:stapes_home/core/websocket/websocket_bloc.dart';
+import 'package:stapes_home/core/websocket/websocket_event.dart';
+import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
@@ -15,16 +20,24 @@ class DevUserDetailsScreen extends StatefulWidget {
   State<DevUserDetailsScreen> createState() => _DevUserDetailsScreenState();
 }
 
-class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with AutomaticKeepAliveClientMixin {
+class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   late Future<Map<String, dynamic>> _userDataFuture;
-
-  @override
-  bool get wantKeepAlive => true;
+  late WebsocketBloc _websocketBloc;
+  final List<dynamic> _websocketMessages = [];
 
   @override
   void initState() {
     super.initState();
     _userDataFuture = _loadUserData();
+    _websocketBloc = WebsocketBloc(serviceLocator<WebSocketService>());
+    _websocketBloc.add(ConnectWebsocket());
+  }
+
+  @override
+  void dispose() {
+    _websocketBloc.add(DisconnectWebsocket());
+    _websocketBloc.close();
+    super.dispose();
   }
 
   Future<Map<String, dynamic>> _loadUserData() async {
@@ -46,6 +59,43 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with Automa
         );
       }
     }
+  }
+
+  Widget _buildWebsocketSection() {
+    return BlocListener<WebsocketBloc, WebsocketState>(
+      bloc: _websocketBloc,
+      listener: (context, state) {
+        if (state is WebsocketMessageState) {
+          setState(() {
+            _websocketMessages.add(state.message);
+          });
+        }
+      },
+      child: _buildSection(
+        'Websocket Service',
+        [
+          SizedBox(
+            height: 200,
+            child: ListView.builder(
+              reverse: true,
+              itemCount: _websocketMessages.length,
+              itemBuilder: (context, index) {
+                final message = _websocketMessages[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ListTile(
+                      title: Text(message.toString(), style: const TextStyle(color: Colors.white)),
+                    ),
+                    const Divider(color: Colors.white54),
+                  ],
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget _buildKeyValuePair(String key, String value) {
@@ -151,8 +201,6 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with Automa
 
   @override
   Widget build(BuildContext context) {
-    super.build(context); // Required for AutomaticKeepAliveClientMixin
-
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -175,7 +223,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with Automa
         ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
-        future: _userDataFuture, // Use cached future
+        future: _userDataFuture,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -207,6 +255,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with Automa
                     ],
                     hasError: true,
                   ),
+                  const SizedBox(height: 16),
                 ],
               ),
             );
@@ -220,6 +269,8 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> with Automa
                 _buildSection('User Details', _buildUserSection(user)),
                 const SizedBox(height: 16),
                 _buildSection('Session Details', _buildSessionSection(session)),
+                const SizedBox(height: 16),
+                _buildWebsocketSection(),
               ],
             ),
           );

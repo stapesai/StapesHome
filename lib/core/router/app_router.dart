@@ -10,8 +10,8 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_create_new_p
 import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
-import 'package:stapes_home/features/dev/dev_test_page.dart';
-import 'package:stapes_home/features/dev/dev_user_details_show.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
 

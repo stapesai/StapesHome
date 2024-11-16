@@ -15,50 +15,55 @@ class AuthLocalDataSourceImpl implements AuthLocalDataSource {
   static const String _userBoxName = 'userBox';
 
   final HiveInterface hive;
+  Box<UserSessionModel>? _sessionBox;
+  Box<UserModel>? _userBox;
 
   AuthLocalDataSourceImpl({required this.hive});
+
+  Future<void> _initBoxes() async {
+    _sessionBox ??= await hive.openBox<UserSessionModel>(_sessionBoxName);
+    _userBox ??= await hive.openBox<UserModel>(_userBoxName);
+  }
 
   // User Session
   @override
   Future<void> cacheUserSession(UserSessionModel session) async {
-    final box = await hive.openBox<UserSessionModel>(_sessionBoxName);
-    await box.put('session', session);
-    await box.close();
+    await _initBoxes();
+    await _sessionBox?.put('session', session);
   }
 
   @override
   Future<UserSessionModel?> getUserSession() async {
-    final box = await hive.openBox<UserSessionModel>(_sessionBoxName);
-    final session = box.get('session');
-    await box.close();
-    return session;
+    await _initBoxes();
+    return _sessionBox?.get('session');
   }
 
   // User
   @override
   Future<void> cacheUser(UserModel user) async {
-    final box = await hive.openBox<UserModel>(_userBoxName);
-    await box.put('user', user);
-    await box.close();
+    await _initBoxes();
+    await _userBox?.put('user', user);
   }
 
   @override
   Future<UserModel?> getUser() async {
-    final box = await hive.openBox<UserModel>(_userBoxName);
-    final user = box.get('user');
-    await box.close();
-    return user;
+    await _initBoxes();
+    return _userBox?.get('user');
   }
 
   // Clear Session
   @override
   Future<void> clearSession() async {
-    final sessionBox = await hive.openBox<UserSessionModel>(_sessionBoxName);
-    await sessionBox.clear();
-    await sessionBox.close();
+    await _initBoxes();
+    await _sessionBox?.clear();
+    await _userBox?.clear();
+    await _closeBoxes();
+  }
 
-    final userBox = await hive.openBox<UserModel>(_userBoxName);
-    await userBox.clear();
-    await userBox.close();
+  Future<void> _closeBoxes() async {
+    await _sessionBox?.close();
+    await _userBox?.close();
+    _sessionBox = null;
+    _userBox = null;
   }
 }

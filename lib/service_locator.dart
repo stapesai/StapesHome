@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:stapes_home/core/network/http_client.dart';
+import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/auth/data/repositories/auth_abs_class_impl.dart';
 import 'package:stapes_home/features/auth/data/datasources/remote/auth_remote_datasource.dart';
@@ -13,9 +14,11 @@ import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
 final GetIt serviceLocator = GetIt.instance;
 
 void setupServiceLocator() {
+  // TODO: difference between registerSingleton and registerLazySingleton.
+  // Optimize the registration of services and use cases.
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
 
-  // serviceLocator.registerLazySingleton<WebSocketService>(() => WebSocketService());
+  serviceLocator.registerLazySingleton<WebSocketService>(() => WebSocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
 
   // Register services (API or local services) with their implementations

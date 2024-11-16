@@ -21,6 +21,9 @@ class Config {
   /// Delay between retry attempts in milliseconds
   static const int retryDelayMilliseconds = 1000;
 
+  /// Websocket reconnection interval in seconds
+  static const int websocketReconnectInterval = 5;
+
   /// Returns whether detailed logging is enabled based on the current environment
   static bool get enableDetailedLogs {
     switch (environment) {
