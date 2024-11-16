@@ -5,10 +5,12 @@ import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
+import 'package:stapes_home/features/dev/presentation/pages/websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
+import 'package:stapes_home/features/navigation/presentation/widgets/keep_alive_page.dart';
 import 'package:stapes_home/service_locator.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -152,8 +154,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
               // widget.navigationShell.branches[1],
               // widget.navigationShell.branches[2],
               // widget.navigationShell.branches[3],
-              DevUserDetailsScreen(),
-              DevUserDetailsScreen(),
+              // KeepAlivePage(child: DevUserDetailsScreen()),
+              // KeepAlivePage(child: DevUserDetailsScreen()),
+              KeepAlivePage(child: DevTestWebsocketMessagesPage()),
+              KeepAlivePage(child: DevTestWebsocketMessagesPage()),
               // DevTestPage(text: 'Devices Page'),
               DevTestPage(text: 'Nodes Page'),
               DevTestPage(text: 'Settings Page'),

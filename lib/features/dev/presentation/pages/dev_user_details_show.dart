@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/core/models/user_model.dart';
@@ -12,13 +13,13 @@ import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/features/dev/presentation/widgets/websocket_message.dart';
 import 'package:stapes_home/service_locator.dart';
 
-enum MessageType { deviceStatusUpdate, nodeStatusUpdate, error }
-
-class Message {
-  final MessageType type;
+// TODO: we should not need this class
+class DevWebsocketMessage {
+  final WebsocketIncommingMessageType type;
+  // final WebsocketIncommingMessage data;
   final dynamic data;
 
-  Message({required this.type, required this.data});
+  DevWebsocketMessage({required this.type, required this.data});
 }
 
 class DevUserDetailsScreen extends StatefulWidget {
@@ -30,7 +31,7 @@ class DevUserDetailsScreen extends StatefulWidget {
 
 class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   late Future<Map<String, dynamic>> _userDataFuture;
-  final List<Message> _messages = [];
+  final List<DevWebsocketMessage> _messages = [];
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
@@ -69,13 +70,13 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
     return BlocListener<WebsocketBloc, WebsocketState>(
       bloc: websocketBloc,
       listener: (context, state) {
-        Message? message;
+        DevWebsocketMessage? message;
         if (state is WebsocketDeviceStatusUpdateMessageState) {
-          message = Message(type: MessageType.deviceStatusUpdate, data: state.update);
+          message = DevWebsocketMessage(type: WebsocketIncommingMessageType.deviceStatusUpdate, data: state.update);
         } else if (state is WebsocketNodeStatusUpdateMessageState) {
-          message = Message(type: MessageType.nodeStatusUpdate, data: state.update);
+          message = DevWebsocketMessage(type: WebsocketIncommingMessageType.nodeStatusUpdate, data: state.update);
         } else if (state is WebsocketErrorMessageState) {
-          message = Message(type: MessageType.error, data: state.error);
+          message = DevWebsocketMessage(type: WebsocketIncommingMessageType.error, data: state.error);
         }
 
         if (message != null) {
@@ -97,11 +98,11 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
               itemBuilder: (context, index, animation) {
                 final message = _messages[index];
                 switch (message.type) {
-                  case MessageType.deviceStatusUpdate:
+                  case WebsocketIncommingMessageType.deviceStatusUpdate:
                     return DeviceStatusUpdateWidget(data: message.data, animation: animation);
-                  case MessageType.nodeStatusUpdate:
+                  case WebsocketIncommingMessageType.nodeStatusUpdate:
                     return NodeStatusUpdateWidget(data: message.data, animation: animation);
-                  case MessageType.error:
+                  case WebsocketIncommingMessageType.error:
                     return ErrorMessageWidget(data: message.data, animation: animation);
                 }
               },
