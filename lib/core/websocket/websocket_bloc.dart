@@ -74,7 +74,9 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   Future<void> close() {
     _messageSubscription?.cancel();
     _webSocketService.disconnect();
-    _webSocketService.closeControllers();
+    // FIXME: We have not disposed controllers anywhere. If we dispose them here, we can't reconnect.
+    // If we dont dispose them, we will have memory leaks and we'll get repeated websocket messages after hot reload.
+    // _webSocketService.closeControllers();
     return super.close();
   }
 }
