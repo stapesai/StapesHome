@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/websocket/websocket_bloc.dart';
+import 'package:stapes_home/core/websocket/websocket_event.dart';
+import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
+import 'package:stapes_home/service_locator.dart';
 
 class NavigationScreen extends StatefulWidget {
   // final StatefulNavigationShell navigationShell;
@@ -22,6 +26,7 @@ class NavigationScreen extends StatefulWidget {
 class _NavigationScreenState extends State<NavigationScreen> {
   late final PageController _pageController;
   late final NavigationBloc _navigationBloc;
+  late final WebsocketBloc _websocketBloc;
   bool _isHandlingTap = false;
   // double _dragStart = 0.0;
   // double _dragOffset = 0.0;
@@ -31,12 +36,16 @@ class _NavigationScreenState extends State<NavigationScreen> {
     super.initState();
     _pageController = PageController();
     _navigationBloc = NavigationBloc();
+    _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
+    _websocketBloc.add(ConnectWebsocketEvent());
   }
 
   @override
   void dispose() {
     _pageController.dispose();
     _navigationBloc.close();
+    _websocketBloc.add(DisconnectWebsocketEvent());
+    _websocketBloc.close();
     super.dispose();
   }
 
@@ -48,8 +57,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // TODO: i dont understand why we can't use BlocProvider directly here.
     // When the page is repainted, BlocProvider should not rerender as the Scaffold is its child.
     // So, on any event maximum Scaffold will rerender.
-    return BlocProvider.value(
-      value: _navigationBloc,
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider.value(value: _navigationBloc),
+        BlocProvider.value(value: _websocketBloc),
+      ],
+      // value: _navigationBloc,
       // return BlocProvider(
       //   create: (context) => NavigationBloc(),
       child: BlocListener<NavigationBloc, NavigationState>(
@@ -140,7 +153,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
               // widget.navigationShell.branches[2],
               // widget.navigationShell.branches[3],
               DevUserDetailsScreen(),
-              DevTestPage(text: 'Devices Page'),
+              DevUserDetailsScreen(),
+              // DevTestPage(text: 'Devices Page'),
               DevTestPage(text: 'Nodes Page'),
               DevTestPage(text: 'Settings Page'),
             ],

@@ -11,44 +11,52 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   StreamSubscription<dynamic>? _messageSubscription;
 
   WebsocketBloc(this._webSocketService) : super(WebsocketInitial()) {
-    on<ConnectWebsocket>(_onConnect);
-    on<DisconnectWebsocket>(_onDisconnect);
-    on<WebsocketMessageReceived>(_onMessageReceived);
-    on<WebsocketErrorOccurred>(_onErrorOccurred);
+    on<ConnectWebsocketEvent>(_onConnect);
+    on<DisconnectWebsocketEvent>(_onDisconnect);
+    on<WebsocketMessageReceivedEvent>(_onMessageReceived);
+    on<WebsocketErrorOccurredEvent>(_onErrorOccurred);
   }
 
-  Future<void> _onConnect(ConnectWebsocket event, Emitter<WebsocketState> emit) async {
+  Future<void> _onConnect(ConnectWebsocketEvent event, Emitter<WebsocketState> emit) async {
     emit(WebsocketConnecting());
     try {
       await _webSocketService.connect();
       emit(WebsocketConnected());
       _messageSubscription = _webSocketService.messageStream.listen(
         (message) {
-          // Map<String, dynamic> messageMap = jsonDecode(message);
-          // var websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
-          add(WebsocketMessageReceived(message));
+          add(WebsocketMessageReceivedEvent(message));
         },
         onError: (error) {
-          add(WebsocketErrorOccurred(error.toString()));
+          add(WebsocketErrorOccurredEvent(error.toString()));
         },
       );
     } catch (e) {
-      emit(WebsocketError(e.toString()));
+      add(WebsocketErrorOccurredEvent(e.toString()));
     }
   }
 
-  Future<void> _onDisconnect(DisconnectWebsocket event, Emitter<WebsocketState> emit) async {
+  Future<void> _onDisconnect(DisconnectWebsocketEvent event, Emitter<WebsocketState> emit) async {
     await _messageSubscription?.cancel();
     await _webSocketService.disconnect();
     emit(WebsocketDisconnected());
   }
 
-  void _onMessageReceived(WebsocketMessageReceived event, Emitter<WebsocketState> emit) {
-    emit(WebsocketMessageState(event.message));
+  void _onMessageReceived(WebsocketMessageReceivedEvent event, Emitter<WebsocketState> emit) {
+    Map<String, dynamic> messageMap = json.decode(json.decode(event.message));
+    WebsocketIncommingMessage websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
+    print('Received message in WS bloc: ${websocketMessage.toString()}');
+
+    if (websocketMessage.type == WebsocketIncommingMessageType.nodeStatusUpdate) {
+      emit(WebsocketNodeStatusUpdateMessageState(websocketMessage.payload));
+    } else if (websocketMessage.type == WebsocketIncommingMessageType.deviceStatusUpdate) {
+      emit(WebsocketDeviceStatusUpdateMessageState(websocketMessage.payload));
+    } else if (websocketMessage.type == WebsocketIncommingMessageType.error) {
+      emit(WebsocketErrorMessageState(websocketMessage.payload));
+    }
   }
 
-  void _onErrorOccurred(WebsocketErrorOccurred event, Emitter<WebsocketState> emit) {
-    emit(WebsocketError(event.error));
+  void _onErrorOccurred(WebsocketErrorOccurredEvent event, Emitter<WebsocketState> emit) {
+    emit(WebsocketErrorOccurredState(event.error));
   }
 
   @override

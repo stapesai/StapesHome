@@ -23,8 +23,15 @@ class WebsocketNodeStatusUpdate {
     return WebsocketNodeStatusUpdate(
       nodeId: json['node_id'],
       isOnline: json['is_online'],
-      lastSeen: json['last_keepalive'] != null ? DateTime.parse(json['last_seen']) : null,
+      lastSeen: json['last_keepalive'] != null
+          ? DateTime.parse(json['last_keepalive'])
+          : null,
     );
+  }
+
+  @override
+  String toString() {
+    return 'WebsocketNodeStatusUpdate{nodeId: $nodeId, isOnline: $isOnline, lastSeen: $lastSeen}';
   }
 }
 
@@ -43,6 +50,11 @@ class WebsocketDeviceStatusUpdate {
       state: json['state'],
     );
   }
+
+  @override
+  String toString() {
+    return 'WebsocketDeviceStatusUpdate{deviceId: $deviceId, state: $state}';
+  }
 }
 
 class WebsocketErrorMessage {
@@ -54,6 +66,11 @@ class WebsocketErrorMessage {
     return WebsocketErrorMessage(
       details: json['details'],
     );
+  }
+
+  @override
+  String toString() {
+    return 'WebsocketErrorMessage{details: $details}';
   }
 }
 
@@ -69,6 +86,7 @@ class WebsocketIncommingMessage {
   });
 
   factory WebsocketIncommingMessage.fromJson(Map<String, dynamic> json) {
+    final id = json['id'];
     final type = json['type'];
     final payload = json['payload'];
 
@@ -79,7 +97,7 @@ class WebsocketIncommingMessage {
           type: WebsocketIncommingMessageType.nodeStatusUpdate,
           payload: WebsocketNodeStatusUpdate.fromJson(payload),
         );
-      case 'device_status_update':
+      case 'entity_status_update':
         return WebsocketIncommingMessage(
           id: json['id'],
           type: WebsocketIncommingMessageType.deviceStatusUpdate,
@@ -92,7 +110,17 @@ class WebsocketIncommingMessage {
           payload: WebsocketErrorMessage.fromJson(payload),
         );
       default:
-        throw WebsocketErrorMessage(details: 'Invalid message received. - $json');
+        return WebsocketIncommingMessage(
+          id: json['id'],
+          type: WebsocketIncommingMessageType.error,
+          payload:
+              WebsocketErrorMessage(details: 'Unknown message type - $type'),
+        );
     }
+  }
+
+  @override
+  String toString() {
+    return 'WebsocketIncommingMessage{id: $id, type: $type, payload: $payload}';
   }
 }

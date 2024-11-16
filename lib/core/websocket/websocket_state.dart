@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 
 abstract class WebsocketState extends Equatable {
   const WebsocketState();
@@ -15,20 +16,38 @@ class WebsocketConnected extends WebsocketState {}
 
 class WebsocketDisconnected extends WebsocketState {}
 
-class WebsocketError extends WebsocketState {
-  final String error;
+class WebsocketNodeStatusUpdateMessageState extends WebsocketState {
+  final WebsocketNodeStatusUpdate update;
 
-  const WebsocketError(this.error);
+  const WebsocketNodeStatusUpdateMessageState(this.update);
+
+  @override
+  List<Object> get props => [update];
+}
+
+class WebsocketDeviceStatusUpdateMessageState extends WebsocketState {
+  final WebsocketDeviceStatusUpdate update;
+
+  const WebsocketDeviceStatusUpdateMessageState(this.update);
+
+  @override
+  List<Object> get props => [update];
+}
+
+class WebsocketErrorMessageState extends WebsocketState {
+  final WebsocketErrorMessage error;
+
+  const WebsocketErrorMessageState(this.error);
 
   @override
   List<Object> get props => [error];
 }
 
-class WebsocketMessageState extends WebsocketState {
-  final dynamic message;
+class WebsocketErrorOccurredState extends WebsocketState {
+  final String error;
 
-  const WebsocketMessageState(this.message);
+  const WebsocketErrorOccurredState(this.error);
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [error];
 }

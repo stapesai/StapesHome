@@ -7,23 +7,23 @@ abstract class WebsocketEvent extends Equatable {
   List<Object> get props => [];
 }
 
-class ConnectWebsocket extends WebsocketEvent {}
+class ConnectWebsocketEvent extends WebsocketEvent {}
 
-class DisconnectWebsocket extends WebsocketEvent {}
+class DisconnectWebsocketEvent extends WebsocketEvent {}
 
-class WebsocketMessageReceived extends WebsocketEvent {
-  final dynamic message;
+class WebsocketMessageReceivedEvent extends WebsocketEvent {
+  final String message;
 
-  const WebsocketMessageReceived(this.message);
+  const WebsocketMessageReceivedEvent(this.message);
 
   @override
   List<Object> get props => [message];
 }
 
-class WebsocketErrorOccurred extends WebsocketEvent {
+class WebsocketErrorOccurredEvent extends WebsocketEvent {
   final String error;
 
-  const WebsocketErrorOccurred(this.error);
+  const WebsocketErrorOccurredEvent(this.error);
 
   @override
   List<Object> get props => [error];

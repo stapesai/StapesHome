@@ -4,14 +4,22 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
-import 'package:stapes_home/core/websocket/websocket_event.dart';
-import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
+import 'package:stapes_home/features/dev/presentation/widgets/websocket_message.dart';
 import 'package:stapes_home/service_locator.dart';
+
+enum MessageType { deviceStatusUpdate, nodeStatusUpdate, error }
+
+class Message {
+  final MessageType type;
+  final dynamic data;
+
+  Message({required this.type, required this.data});
+}
 
 class DevUserDetailsScreen extends StatefulWidget {
   const DevUserDetailsScreen({super.key});
@@ -22,21 +30,17 @@ class DevUserDetailsScreen extends StatefulWidget {
 
 class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   late Future<Map<String, dynamic>> _userDataFuture;
-  late WebsocketBloc _websocketBloc;
-  final List<dynamic> _websocketMessages = [];
+  final List<Message> _messages = [];
+  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
 
   @override
   void initState() {
     super.initState();
     _userDataFuture = _loadUserData();
-    _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
-    _websocketBloc.add(ConnectWebsocket());
   }
 
   @override
   void dispose() {
-    _websocketBloc.add(DisconnectWebsocket());
-    _websocketBloc.close();
     super.dispose();
   }
 
@@ -61,13 +65,23 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
     }
   }
 
-  Widget _buildWebsocketSection() {
+  Widget _buildWebsocketSection(WebsocketBloc websocketBloc) {
     return BlocListener<WebsocketBloc, WebsocketState>(
-      bloc: _websocketBloc,
+      bloc: websocketBloc,
       listener: (context, state) {
-        if (state is WebsocketMessageState) {
+        Message? message;
+        if (state is WebsocketDeviceStatusUpdateMessageState) {
+          message = Message(type: MessageType.deviceStatusUpdate, data: state.update);
+        } else if (state is WebsocketNodeStatusUpdateMessageState) {
+          message = Message(type: MessageType.nodeStatusUpdate, data: state.update);
+        } else if (state is WebsocketErrorMessageState) {
+          message = Message(type: MessageType.error, data: state.error);
+        }
+
+        if (message != null) {
           setState(() {
-            _websocketMessages.add(state.message);
+            _messages.insert(0, message!);
+            _listKey.currentState?.insertItem(0);
           });
         }
       },
@@ -75,21 +89,21 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
         'Websocket Service',
         [
           SizedBox(
-            height: 200,
-            child: ListView.builder(
-              reverse: true,
-              itemCount: _websocketMessages.length,
-              itemBuilder: (context, index) {
-                final message = _websocketMessages[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    ListTile(
-                      title: Text(message.toString(), style: const TextStyle(color: Colors.white)),
-                    ),
-                    const Divider(color: Colors.white54),
-                  ],
-                );
+            height: 500,
+            child: AnimatedList(
+              key: _listKey,
+              reverse: false,
+              initialItemCount: _messages.length,
+              itemBuilder: (context, index, animation) {
+                final message = _messages[index];
+                switch (message.type) {
+                  case MessageType.deviceStatusUpdate:
+                    return DeviceStatusUpdateWidget(data: message.data, animation: animation);
+                  case MessageType.nodeStatusUpdate:
+                    return NodeStatusUpdateWidget(data: message.data, animation: animation);
+                  case MessageType.error:
+                    return ErrorMessageWidget(data: message.data, animation: animation);
+                }
               },
             ),
           ),
@@ -201,6 +215,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    WebsocketBloc websocketBloc = context.read<WebsocketBloc>();
     return Scaffold(
       backgroundColor: Colors.transparent,
       appBar: AppBar(
@@ -270,7 +285,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
                 const SizedBox(height: 16),
                 _buildSection('Session Details', _buildSessionSection(session)),
                 const SizedBox(height: 16),
-                _buildWebsocketSection(),
+                _buildWebsocketSection(websocketBloc),
               ],
             ),
           );

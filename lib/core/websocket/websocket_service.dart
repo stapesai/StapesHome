@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'dart:io';
 import 'package:stapes_home/core/config/config.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
@@ -74,20 +73,8 @@ class WebsocketService {
 
   void _handleMessage(dynamic message) {
     try {
-      // print(message);
+      print('Received message in WS service: $message');
       _messageController.add(message);
-      // if (message is! String) {
-      //   throw WebsocketMessageException('Invalid message format');
-      // }
-
-      // final decodedMessage = json.decode(json.decode(message));
-      // if (decodedMessage is! Map<String, dynamic>) {
-      //   throw WebsocketMessageException('Invalid message structure');
-      // }
-
-      // if (decodedMessage['command'] != 'control_device') {
-      //   _messageController.add(decodedMessage);
-      // }
     } catch (e) {
       _handleError(WebsocketMessageException(e.toString()));
     }
