@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
-import 'package:stapes_home/features/dev/presentation/pages/websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
-import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
 import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
-import 'package:stapes_home/service_locator.dart';
+import 'package:stapes_home/features/dev/presentation/pages/websocket_messages_test.dart';
+import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
 
 class NavigationScreen extends StatefulWidget {
   // final StatefulNavigationShell navigationShell;
@@ -54,8 +54,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-    );
+    _pageController = PageController();
     _navigationBloc = NavigationBloc();
     _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
     // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
@@ -65,6 +64,16 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
     // Future.delayed(const Duration(milliseconds: 500));
     _websocketBloc.add(ConnectWebsocketEvent());
+
+    _pageController.addListener(() {
+      final pageIndex = _pageController.page?.round() ?? 0;
+
+      // Ensure updates only happen when the page animation has fully settled
+      if (!_isHandlingTap && pageIndex == _pageController.page) {
+        final selectedItem = NavigationTab.values[pageIndex];
+        _navigationBloc.add(NavigationPageSwiped(selectedItem));
+      }
+    });
   }
 
   @override
@@ -157,18 +166,8 @@ class _NavigationScreenState extends State<NavigationScreen> {
           //     },
           // child: PageView(
           body: PageView(
-              physics: PageScrollPhysics(),
-
             controller: _pageController,
-            // physics: const FixedExtentScrollPhysics(),
-            onPageChanged: (index) {
-              // Update navigation state when page is swiped
-              if (!_isHandlingTap) {
-                final selectedItem = NavigationTab.values[index];
-                // context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
-                _navigationBloc.add(NavigationPageSwiped(selectedItem));
-              }
-            },
+            physics: ClampingScrollPhysics(),
             children: _pages,
           ),
           // ),
