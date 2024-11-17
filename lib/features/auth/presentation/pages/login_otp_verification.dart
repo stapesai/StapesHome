@@ -99,7 +99,7 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
       onTap: () => FocusScope.of(context).unfocus(),
       child: BlocProvider(
         create: (context) => LoginOtpVerificationBloc(
-          verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
+          verifyOtpUseCase: serviceLocator<OtpVerificationUseCase>(),
           completeLoginUseCase: serviceLocator<CompleteLoginUseCase>(),
         ),
         child: BlocListener<LoginOtpVerificationBloc, LoginOtpVerificationState>(

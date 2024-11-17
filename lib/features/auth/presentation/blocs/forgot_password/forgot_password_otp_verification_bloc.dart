@@ -6,7 +6,7 @@ import 'forgot_password_otp_verification_state.dart';
 
 class ForgotPasswordOtpVerificationBloc
     extends Bloc<ForgotPasswordOtpVerificationEvent, ForgotPasswordOtpVerificationState> {
-  final OtpVerificationUsecase verifyOtpUseCase;
+  final OtpVerificationUseCase verifyOtpUseCase;
 
   ForgotPasswordOtpVerificationBloc({required this.verifyOtpUseCase}) : super(ForgotPasswordOtpVerificationInitial()) {
     on<ForgotPasswordOtpSubmitted>(_onOtpSubmitted);

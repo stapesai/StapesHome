@@ -57,12 +57,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
     _pageController = PageController();
     _navigationBloc = NavigationBloc();
     _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
-    // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
-    // _navigationBloc.add(NavigationItemSelected(NavigationTab.devices));
-    // _navigationBloc.add(NavigationItemSelected(NavigationTab.nodes));
-    // _navigationBloc.add(NavigationItemSelected(NavigationTab.settings));
-    // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
-    // Future.delayed(const Duration(milliseconds: 500));
     _websocketBloc.add(ConnectWebsocketEvent());
 
     _pageController.addListener(() {

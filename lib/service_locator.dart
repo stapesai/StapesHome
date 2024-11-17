@@ -43,7 +43,7 @@ void setupServiceLocator() {
   // Use cases
   serviceLocator.registerSingleton<RequestLoginUseCase>(RequestLoginUseCase());
   serviceLocator.registerSingleton<CompleteLoginUseCase>(CompleteLoginUseCase());
-  serviceLocator.registerSingleton<OtpVerificationUsecase>(OtpVerificationUsecase());
+  serviceLocator.registerSingleton<OtpVerificationUseCase>(OtpVerificationUseCase());
   serviceLocator.registerSingleton<RequestPasswordResetUseCase>(RequestPasswordResetUseCase());
   serviceLocator.registerSingleton<CompletePasswordResetUseCase>(CompletePasswordResetUseCase());
   serviceLocator.registerSingleton<RequestSignUpUseCase>(RequestSignUpUseCase());
@@ -54,14 +54,14 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<NodesRemoteDataSource>(NodesRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
   ));
-  serviceLocator.registerSingleton<NodesLocalDataSource>(NodesLocalDataSourceImpl(
-    sqliteService: serviceLocator<SQLiteService>(),
-  ));
+  // serviceLocator.registerSingleton<NodesLocalDataSource>(NodesLocalDataSourceImpl(
+  //   sqliteService: serviceLocator<SQLiteService>(),
+  // ));
 
   // Repositories
   serviceLocator.registerSingleton<NodeRepository>(NodeRepositoryImpl(
     remoteDataSource: serviceLocator<NodesRemoteDataSource>(),
-    localDataSource: serviceLocator<NodesLocalDataSource>(),
+    // localDataSource: serviceLocator<NodesLocalDataSource>(),
   ));
 
   // Use cases

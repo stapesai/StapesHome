@@ -7,7 +7,7 @@ import 'login_otp_verification_event.dart';
 import 'login_otp_verification_state.dart';
 
 class LoginOtpVerificationBloc extends Bloc<LoginOtpVerificationEvent, LoginOtpVerificationState> {
-  final OtpVerificationUsecase verifyOtpUseCase;
+  final OtpVerificationUseCase verifyOtpUseCase;
   final CompleteLoginUseCase completeLoginUseCase;
 
   // Emits initial state and listens for incoming events

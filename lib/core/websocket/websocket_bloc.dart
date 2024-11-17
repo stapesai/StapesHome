@@ -21,6 +21,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     on<WebsocketMessageReceivedEvent>(_onMessageReceived);
     on<WebsocketErrorOccurredEvent>(_onErrorOccurred);
     on<GetWebsocketMessageHistory>(_onGetMessageHistory);
+    // TODO: implement a event for user logout so that service can stop reconnecting.
   }
 
   Future<void> _onConnect(ConnectWebsocketEvent event, Emitter<WebsocketState> emit) async {

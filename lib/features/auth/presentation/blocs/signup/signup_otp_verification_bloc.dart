@@ -5,7 +5,7 @@ import 'signup_otp_verification_event.dart';
 import 'signup_otp_verification_state.dart';
 
 class SignUpOtpVerificationBloc extends Bloc<SignUpOtpVerificationEvent, SignUpOtpVerificationState> {
-  final OtpVerificationUsecase verifyOtpUseCase;
+  final OtpVerificationUseCase verifyOtpUseCase;
 
   SignUpOtpVerificationBloc({required this.verifyOtpUseCase}) : super(SignUpOtpVerificationInitial()) {
     on<SignUpOtpSubmittedEvent>(_onOtpSubmitted);

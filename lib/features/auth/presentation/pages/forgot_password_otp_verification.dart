@@ -105,7 +105,7 @@ class _ForgotPasswordOtpVerificationScreenState extends State<ForgotPasswordOtpV
       onTap: () => FocusScope.of(context).unfocus(),
       child: BlocProvider(
         create: (context) => ForgotPasswordOtpVerificationBloc(
-          verifyOtpUseCase: serviceLocator<OtpVerificationUsecase>(),
+          verifyOtpUseCase: serviceLocator<OtpVerificationUseCase>(),
         ),
         child: BlocListener<ForgotPasswordOtpVerificationBloc, ForgotPasswordOtpVerificationState>(
           listener: (context, state) {

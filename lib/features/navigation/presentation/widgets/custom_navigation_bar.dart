@@ -42,8 +42,8 @@ class CustomNavigationBar extends StatelessWidget {
             overlayColor: WidgetStateProperty.all(Colors.transparent),
             // This means that the label will only be shown when the button is selected, otherwise it will be hidden
             // Options: alwaysShow, alwaysHide, onlyShowSelected
-            // labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
-            labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
+            labelBehavior: NavigationDestinationLabelBehavior.onlyShowSelected,
+            // labelBehavior: NavigationDestinationLabelBehavior.alwaysShow,
             // This is the duration of the animation when the user clicks on a button.
             // The old button text will fade out and the new button text will fade in.
             // But the color of the icon will change instantly.
