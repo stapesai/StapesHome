@@ -11,10 +11,27 @@ import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecas
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
-import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_datasource.dart';
+import 'package:stapes_home/features/floors/data/datasources/remote/floors_remote_datasource.dart';
+import 'package:stapes_home/features/floors/data/repositories/floor_repository_impl.dart';
+import 'package:stapes_home/features/floors/domain/repository/floor_repository.dart';
+import 'package:stapes_home/features/floors/domain/usecases/create_floor_usecase.dart';
+import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
+import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
+import 'package:stapes_home/features/floors/domain/usecases/update_floor_usecase.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/data/repositories/node_repository_impl.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/create_node_usecase.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/delete_node_usecase.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/get_nodes_by_room_id_usecase.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/update_node_usecase.dart';
+import 'package:stapes_home/features/rooms/data/datasources/remote/rooms_remote_datasource.dart';
+import 'package:stapes_home/features/rooms/data/repositories/room_repository_impl.dart';
+import 'package:stapes_home/features/rooms/domain/repository/room_repository.dart';
+import 'package:stapes_home/features/rooms/domain/usecases/create_room_usecase.dart';
+import 'package:stapes_home/features/rooms/domain/usecases/delete_room_usecase.dart';
+import 'package:stapes_home/features/rooms/domain/usecases/get_rooms_usecase.dart';
+import 'package:stapes_home/features/rooms/domain/usecases/update_room_usecase.dart';
 
 final GetIt serviceLocator = GetIt.instance;
 
@@ -49,6 +66,48 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<RequestSignUpUseCase>(RequestSignUpUseCase());
   serviceLocator.registerSingleton<CompleteSignUpUseCase>(CompleteSignUpUseCase());
 
+  // ---------------------Floors feature---------------------
+  // Data sources
+  serviceLocator.registerSingleton<FloorsRemoteDataSource>(FloorsRemoteDataSourceImpl(
+    httpClient: serviceLocator<HttpClient>(),
+  ));
+  // serviceLocator.registerSingleton<FloorsLocalDataSource>(FloorsLocalDataSourceImpl(
+  //   sqliteService: serviceLocator<SQLiteService>(),
+  // ));
+
+  // Repositories
+  serviceLocator.registerSingleton<FloorRepository>(FloorRepositoryImpl(
+    remoteDataSource: serviceLocator<FloorsRemoteDataSource>(),
+    // localDataSource: serviceLocator<FloorsLocalDataSource>(),
+  ));
+
+  // Use cases
+  serviceLocator.registerSingleton<GetFloorsUseCase>(GetFloorsUseCase());
+  serviceLocator.registerSingleton<CreateFloorUseCase>(CreateFloorUseCase());
+  serviceLocator.registerSingleton<DeleteFloorUseCase>(DeleteFloorUseCase());
+  serviceLocator.registerSingleton<UpdateFloorUseCase>(UpdateFloorUseCase());
+
+  // ---------------------Rooms feature---------------------
+  // Data sources
+  serviceLocator.registerSingleton<RoomsRemoteDataSource>(RoomsRemoteDataSourceImpl(
+    httpClient: serviceLocator<HttpClient>(),
+  ));
+  // serviceLocator.registerSingleton<RoomsLocalDataSource>(RoomsLocalDataSourceImpl(
+  //   sqliteService: serviceLocator<SQLiteService>(),
+  // ));
+
+  // Repositories
+  serviceLocator.registerSingleton<RoomRepository>(RoomRepositoryImpl(
+    remoteDataSource: serviceLocator<RoomsRemoteDataSource>(),
+    // localDataSource: serviceLocator<RoomsLocalDataSource>(),
+  ));
+
+  // Use cases
+  serviceLocator.registerSingleton<GetRoomsUseCase>(GetRoomsUseCase());
+  serviceLocator.registerSingleton<CreateRoomUseCase>(CreateRoomUseCase());
+  serviceLocator.registerSingleton<DeleteRoomUseCase>(DeleteRoomUseCase());
+  serviceLocator.registerSingleton<UpdateRoomUseCase>(UpdateRoomUseCase());
+
   // ---------------------Nodes feature---------------------
   // Data sources
   serviceLocator.registerSingleton<NodesRemoteDataSource>(NodesRemoteDataSourceImpl(
@@ -65,9 +124,8 @@ void setupServiceLocator() {
   ));
 
   // Use cases
-  // serviceLocator.registerSingleton<GetNodesByRoomIdUseCase>(GetNodesByRoomIdUseCase());
-  // serviceLocator.registerSingleton<GetCachedNodesUseCase>(GetCachedNodesUseCase());
-  // serviceLocator.registerSingleton<CreateNodeUseCase>(CreateNodeUseCase());
-  // serviceLocator.registerSingleton<DeleteNodeUseCase>(DeleteNodeUseCase());
-  // serviceLocator.registerSingleton<UpdateNodeUseCase>(UpdateNodeUseCase());
+  serviceLocator.registerSingleton<GetNodesByRoomIdUseCase>(GetNodesByRoomIdUseCase());
+  serviceLocator.registerSingleton<CreateNodeUseCase>(CreateNodeUseCase());
+  serviceLocator.registerSingleton<DeleteNodeUseCase>(DeleteNodeUseCase());
+  serviceLocator.registerSingleton<UpdateNodeUseCase>(UpdateNodeUseCase());
 }
