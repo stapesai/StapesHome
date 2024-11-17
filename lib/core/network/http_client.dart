@@ -54,4 +54,14 @@ class HttpClient {
     final response = await _client.post(url, headers: headers, body: body).timeout(const Duration(seconds: 30));
     return _handleResponse(response);
   }
+
+  Future<Map<String, dynamic>> put(Uri url, {Object? body, Map<String, String>? headers}) async {
+    final response = await _client.put(url, headers: headers, body: body).timeout(const Duration(seconds: 30));
+    return _handleResponse(response);
+  }
+
+  Future<Map<String, dynamic>> delete(Uri url, {Map<String, String>? headers}) async {
+    final response = await _client.delete(url, headers: headers).timeout(const Duration(seconds: 30));
+    return _handleResponse(response);
+  }
 }
