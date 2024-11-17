@@ -166,6 +166,13 @@ class _NavigationScreenState extends State<NavigationScreen> {
           //     },
           // child: PageView(
           body: PageView(
+            // physics: PageScrollPhysics(),
+            // physics: const BouncingScrollPhysics(),
+            // physics: const ClampingScrollPhysics(),
+            // physics: const FixedExtentScrollPhysics(),
+            // This will disable the swipe gesture of the PageView.
+            // physics: const NeverScrollableScrollPhysics(),
+
             controller: _pageController,
             physics: ClampingScrollPhysics(),
             children: _pages,

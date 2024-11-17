@@ -41,6 +41,7 @@ dependencies:
   flutter_keyboard_visibility:
   freezed_annotation:
   bloc: ^8.1.4
+  sqflite: ^2.4.1
 
 dev_dependencies:
   flutter_test:
