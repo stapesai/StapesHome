@@ -1,3 +1,4 @@
+import 'package:stapes_home/core/database/sqlite_service.dart';
 import 'package:stapes_home/core/router/app_router.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
@@ -21,6 +22,14 @@ void main() async {
   Hive.registerAdapter(UserModelAdapter());
   Hive.registerAdapter(UserSessionModelAdapter());
 
+  // Initialize SQLite database
+  try {
+    final sqliteService = serviceLocator<SQLiteService>();
+    await sqliteService.initializeDatabase();
+  } catch (e) {
+    debugPrint('Failed to initialize database: $e');
+    rethrow;
+  }
   // debugPaintSizeEnabled = true;
   runApp(const MyApp());
 }

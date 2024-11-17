@@ -4,10 +4,20 @@ import 'package:path/path.dart';
 class SQLiteService {
   static Database? _database;
 
+  Future<void> initializeDatabase() async {
+    if (_database != null) return;
+
+    try {
+      _database = await _initDB('stapes_home.db');
+    } catch (e) {
+      print('Database initialization failed: $e');
+      rethrow;
+    }
+  }
+
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('stapes_home.db');
-    return _database!;
+    throw StateError('Database not initialized. Call initializeDatabase() first.');
   }
 
   Future<Database> _initDB(String filePath) async {
