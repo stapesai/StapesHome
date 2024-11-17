@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/error/failures.dart';
-import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
