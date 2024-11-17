@@ -67,7 +67,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
     _pageController.addListener(() {
       final pageIndex = _pageController.page?.round() ?? 0;
+      print('Page Index: $pageIndex');
 
+      // FIXME: this has very bad performance. It is called on every pixel change. See debug console.
       // Ensure updates only happen when the page animation has fully settled
       if (!_isHandlingTap && pageIndex == _pageController.page) {
         final selectedItem = NavigationTab.values[pageIndex];
@@ -125,8 +127,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
         },
         child: Scaffold(
           backgroundColor: Colors.transparent,
-          // FIXME: Refer whatsapp and see the animation when we swipe the page. Implement the same here.
-          // Probabily that can be done by changing the physics of the PageView.
           // FIXME: I am not able to swipe pages when using PhoneLink to connect to phone via PC using ADB.
           //   body: GestureDetector(
           //     onHorizontalDragStart: (details) {
@@ -166,15 +166,22 @@ class _NavigationScreenState extends State<NavigationScreen> {
           //     },
           // child: PageView(
           body: PageView(
+            physics: ClampingScrollPhysics(),
             // physics: PageScrollPhysics(),
             // physics: const BouncingScrollPhysics(),
             // physics: const ClampingScrollPhysics(),
             // physics: const FixedExtentScrollPhysics(),
             // This will disable the swipe gesture of the PageView.
             // physics: const NeverScrollableScrollPhysics(),
-
             controller: _pageController,
-            physics: ClampingScrollPhysics(),
+            // onPageChanged: (index) {
+            //   // Update navigation state when page is swiped
+            //   if (!_isHandlingTap) {
+            //     final selectedItem = NavigationTab.values[index];
+            //     // context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
+            //     _navigationBloc.add(NavigationPageSwiped(selectedItem));
+            //   }
+            // },
             children: _pages,
           ),
           // ),
