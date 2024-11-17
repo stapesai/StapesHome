@@ -8,7 +8,7 @@ import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dar
 
 abstract class NodesRemoteDataSource {
   Future<List<NodeModel>> getNodesByRoomId(GetNodesByRoomIdParams params);
-  Future<NodeModel> createNode(CreateNodeParam params);
+  Future<NodeModel> createNode(CreateNodeParams params);
   Future<NodeModel> updateNode(UpdateNodeParams params);
   Future<void> deleteNode(DeleteNodeParams params);
 }
@@ -32,7 +32,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
   }
 
   @override
-  Future<NodeModel> createNode(CreateNodeParam params) {
+  Future<NodeModel> createNode(CreateNodeParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.post(
         BackendRoutes.createNode,

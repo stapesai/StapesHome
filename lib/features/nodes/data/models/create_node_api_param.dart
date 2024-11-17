@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:stapes_home/core/models/node_model.dart';
 
-class CreateNodeParam {
+class CreateNodeParams {
   final String roomId;
   final String name;
   final String hardwareChip;
@@ -9,7 +9,7 @@ class CreateNodeParam {
   final String hardwareMacAddress;
   final String firmwareVersion;
 
-  CreateNodeParam({
+  CreateNodeParams({
     required this.roomId,
     required this.name,
     required this.hardwareChip,

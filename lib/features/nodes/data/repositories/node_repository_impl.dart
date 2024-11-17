@@ -2,7 +2,6 @@ import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
-import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_datasource.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
 import 'package:stapes_home/features/nodes/data/models/create_node_api_param.dart';
@@ -12,92 +11,76 @@ import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dar
 
 class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
   final NodesRemoteDataSource remoteDataSource;
-  final NodesLocalDataSource localDataSource;
+  // final NodesLocalDataSource localDataSource;
 
   NodeRepositoryImpl({
     required this.remoteDataSource,
-    required this.localDataSource,
+    // required this.localDataSource,
   });
 
   @override
-  Future<Either<Failure, List<NodeModel>>> getNodesByRoomId(String roomId) {
+  Future<Either<Failure, CreateNodeResponse>> createNode(CreateNodeParams params) {
     return handleEither(() async {
-      final params = GetNodesByRoomIdParams(roomId: roomId);
-      final nodes = await remoteDataSource.getNodesByRoomId(params);
-      for (var node in nodes) {
-        await localDataSource.saveNode(node);
-      }
-      return nodes;
+      final node = await remoteDataSource.createNode(params);
+      return CreateNodeResponse(node: node);
     });
   }
 
   @override
-  Future<Either<Failure, NodeModel>> createNode(NodeModel node) {
+  Future<Either<Failure, DeleteNodeResponse>> deleteNode(DeleteNodeParams params) {
     return handleEither(() async {
-      final params = CreateNodeParam(
-        roomId: node.roomId,
-        name: node.name,
-        hardwareChip: node.hardwareChip,
-        hardwareVersion: node.hardwareVersion,
-        hardwareMacAddress: node.hardwareMacAddress,
-        firmwareVersion: node.firmwareVersion,
-      );
-      final createdNode = await remoteDataSource.createNode(params);
-      await localDataSource.saveNode(createdNode);
-      return createdNode;
-    });
-  }
-
-  @override
-  Future<Either<Failure, NodeModel>> updateNode(String nodeId, NodeModel node) {
-    return handleEither(() async {
-      final params = UpdateNodeParams(nodeId: nodeId, node: node);
-      final updatedNode = await remoteDataSource.updateNode(params);
-      await localDataSource.updateNode(updatedNode);
-      return updatedNode;
-    });
-  }
-
-  @override
-  Future<Either<Failure, void>> deleteNode(String nodeId) {
-    return handleEither(() async {
-      final params = DeleteNodeParams(nodeId: nodeId);
       await remoteDataSource.deleteNode(params);
-      await localDataSource.deleteNode(nodeId);
+      return DeleteNodeResponse();
     });
   }
 
   @override
-  Future<Either<Failure, List<NodeModel>>> getCachedNodes() {
-    return handleEither(() => localDataSource.getAllNodes());
-  }
-
-  @override
-  Future<Either<Failure, void>> cacheNode(NodeModel node) {
-    return handleEither(() => localDataSource.saveNode(node));
-  }
-
-  @override
-  Future<Either<Failure, void>> cacheNodes(List<NodeModel> nodes) {
+  Future<Either<Failure, GetNodesByRoomIdResponse>> getNodesByRoomId(GetNodesByRoomIdParams params) {
     return handleEither(() async {
-      for (var node in nodes) {
-        await localDataSource.saveNode(node);
-      }
+      final nodes = await remoteDataSource.getNodesByRoomId(params);
+      return GetNodesByRoomIdResponse(nodes: nodes);
     });
   }
 
   @override
-  Future<Either<Failure, void>> deleteCachedNode(String nodeId) {
-    return handleEither(() => localDataSource.deleteNode(nodeId));
-  }
-
-  @override
-  Future<Either<Failure, void>> deleteCachedNodes() {
+  Future<Either<Failure, UpdateNodeResponse>> updateNode(UpdateNodeParams params) {
     return handleEither(() async {
-      final nodes = await localDataSource.getAllNodes();
-      for (var node in nodes) {
-        await localDataSource.deleteNode(node.id);
-      }
+      final node = await remoteDataSource.updateNode(params);
+      return UpdateNodeResponse(node: node);
     });
   }
+
+  // @override
+  // Future<Either<Failure, List<NodeModel>>> getCachedNodes() {
+  //   return handleEither(() => localDataSource.getAllNodes());
+  // }
+
+  // @override
+  // Future<Either<Failure, void>> cacheNode(NodeModel node) {
+  // return handleEither(() => localDataSource.saveNode(node));
+  // }
+
+  // @override
+  // Future<Either<Failure, void>> cacheNodes(List<NodeModel> nodes) {
+  //   return handleEither(() async {
+  //     for (var node in nodes) {
+  //       await localDataSource.saveNode(node);
+  //     }
+  //   });
+  // }
+
+  // @override
+  // Future<Either<Failure, void>> deleteCachedNode(String nodeId) {
+  //   return handleEither(() => localDataSource.deleteNode(nodeId));
+  // }
+
+  // @override
+  // Future<Either<Failure, void>> deleteCachedNodes() {
+  //   return handleEither(() async {
+  //     final nodes = await localDataSource.getAllNodes();
+  //     for (var node in nodes) {
+  //       await localDataSource.deleteNode(node.id);
+  //     }
+  //   });
+  // }
 }
