@@ -54,8 +54,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(
-    );
+    _pageController = PageController();
     _navigationBloc = NavigationBloc();
     _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
     // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
@@ -157,10 +156,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
           //     },
           // child: PageView(
           body: PageView(
-              physics: PageScrollPhysics(),
+            physics: PageScrollPhysics(),
+            // physics: const BouncingScrollPhysics(),
+            // physics: const ClampingScrollPhysics(),
+            // physics: const FixedExtentScrollPhysics(),
+            // This will disable the swipe gesture of the PageView.
+            // physics: const NeverScrollableScrollPhysics(),
 
             controller: _pageController,
-            // physics: const FixedExtentScrollPhysics(),
             onPageChanged: (index) {
               // Update navigation state when page is swiped
               if (!_isHandlingTap) {

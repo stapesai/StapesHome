@@ -1,38 +1,22 @@
 import 'dart:convert';
+import 'package:stapes_home/core/models/node_model.dart';
 
-class NodeModel {
+class CreateNodeParam {
   final String roomId;
   final String name;
   final String hardwareChip;
   final String hardwareVersion;
   final String hardwareMacAddress;
   final String firmwareVersion;
-  final String id;
-  final int numEntities;
 
-  NodeModel({
+  CreateNodeParam({
     required this.roomId,
     required this.name,
     required this.hardwareChip,
     required this.hardwareVersion,
     required this.hardwareMacAddress,
     required this.firmwareVersion,
-    required this.id,
-    required this.numEntities,
   });
-
-  factory NodeModel.fromJson(Map<String, dynamic> json) {
-    return NodeModel(
-      roomId: json['room_id'],
-      name: json['name'],
-      hardwareChip: json['hardware_chip'],
-      hardwareVersion: json['hardware_version'],
-      hardwareMacAddress: json['hardware_mac_address'],
-      firmwareVersion: json['firmware_version'],
-      id: json['id'],
-      numEntities: json['num_entities'],
-    );
-  }
 
   Object toJson() {
     return jsonEncode({
@@ -42,8 +26,18 @@ class NodeModel {
       'hardware_version': hardwareVersion,
       'hardware_mac_address': hardwareMacAddress,
       'firmware_version': firmwareVersion,
-      'id': id,
-      'num_entities': numEntities,
     });
+  }
+}
+
+class CreateNodeResponse {
+  final NodeModel node;
+
+  CreateNodeResponse({required this.node});
+
+  factory CreateNodeResponse.fromJson(Map<String, dynamic> json) {
+    return CreateNodeResponse(
+      node: NodeModel.fromJson(json),
+    );
   }
 }
