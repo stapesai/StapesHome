@@ -7,6 +7,9 @@ import 'websocket_event.dart';
 import 'websocket_state.dart';
 
 class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
+  // FIXME: We have to do this as there was an issue in the app that only the home page was being loaded by default,
+  // so only that page is receiving web socket events by default, until user opens the other pages, they don't receive the events.
+  final List<WebsocketIncommingMessage> messagesHistory = [];
   final WebsocketService _webSocketService;
   StreamSubscription<dynamic>? _messageSubscription;
 
@@ -15,6 +18,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     on<DisconnectWebsocketEvent>(_onDisconnect);
     on<WebsocketMessageReceivedEvent>(_onMessageReceived);
     on<WebsocketErrorOccurredEvent>(_onErrorOccurred);
+    on<GetWebsocketMessageHistory>(_onGetMessageHistory);
   }
 
   Future<void> _onConnect(ConnectWebsocketEvent event, Emitter<WebsocketState> emit) async {
@@ -48,11 +52,8 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     emit(WebsocketDisconnected());
   }
 
-  void _onMessageReceived(WebsocketMessageReceivedEvent event, Emitter<WebsocketState> emit) {
-    Map<String, dynamic> messageMap = json.decode(json.decode(event.message));
-    WebsocketIncommingMessage websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
-    print('Received message in WS bloc: ${websocketMessage.toString()}');
-
+  void _emitProperStateForIncommingWebsocketMessage(
+      WebsocketIncommingMessage websocketMessage, Emitter<WebsocketState> emit) {
     switch (websocketMessage.type) {
       case WebsocketIncommingMessageType.nodeStatusUpdate:
         emit(WebsocketNodeStatusUpdateMessageState(websocketMessage.payload));
@@ -63,6 +64,21 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
       case WebsocketIncommingMessageType.error:
         emit(WebsocketErrorMessageState(websocketMessage.payload));
         break;
+    }
+  }
+
+  void _onMessageReceived(WebsocketMessageReceivedEvent event, Emitter<WebsocketState> emit) {
+    Map<String, dynamic> messageMap = json.decode(json.decode(event.message));
+    WebsocketIncommingMessage websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
+    messagesHistory.add(websocketMessage);
+    print('Received message in WS bloc: ${websocketMessage.toString()}');
+
+    _emitProperStateForIncommingWebsocketMessage(websocketMessage, emit);
+  }
+
+  void _onGetMessageHistory(GetWebsocketMessageHistory event, Emitter<WebsocketState> emit) {
+    for (var message in messagesHistory) {
+      _emitProperStateForIncommingWebsocketMessage(message, emit);
     }
   }
 

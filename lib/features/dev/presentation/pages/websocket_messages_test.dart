@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
+import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/dev/presentation/widgets/websocket_message.dart';
@@ -23,6 +24,17 @@ class DevTestWebsocketMessagesPage extends StatefulWidget {
 class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
   final List<DevWebsocketMessage> _messages = [];
   final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -5,6 +5,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
@@ -13,7 +14,7 @@ import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/features/dev/presentation/widgets/websocket_message.dart';
 import 'package:stapes_home/service_locator.dart';
 
-// TODO: we should not need this class
+// TODO: we should not need this class - use WebsocketIncommingMessage directly.
 class DevWebsocketMessage {
   final WebsocketIncommingMessageType type;
   // final WebsocketIncommingMessage data;
@@ -38,6 +39,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   void initState() {
     super.initState();
     _userDataFuture = _loadUserData();
+    BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
   }
 
   @override
@@ -204,7 +206,9 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   }
 
   List<Widget> _buildSessionSection(UserSessionModel? session) {
-    if (session == null) return [_buildKeyValuePair('Status', 'No active session')];
+    if (session == null) {
+      return [_buildKeyValuePair('Status', 'No active session')];
+    }
 
     return [
       _buildKeyValuePair('Session ID', session.sessionId),

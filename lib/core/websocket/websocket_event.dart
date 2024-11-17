@@ -28,3 +28,5 @@ class WebsocketErrorOccurredEvent extends WebsocketEvent {
   @override
   List<Object> get props => [error];
 }
+
+class GetWebsocketMessageHistory extends WebsocketEvent {}

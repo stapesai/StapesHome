@@ -10,7 +10,7 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bl
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
-import 'package:stapes_home/features/navigation/presentation/widgets/keep_alive_page.dart';
+import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
 import 'package:stapes_home/service_locator.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -33,18 +33,42 @@ class _NavigationScreenState extends State<NavigationScreen> {
   // double _dragStart = 0.0;
   // double _dragOffset = 0.0;
 
+  final List<Widget> _pages = const [
+    // When using navigation shell:
+    // I have tried to take the chidren from the navigationShell, but it doesn't work
+    // Now, this is not in use as we are using PageView
+    // widget.navigationShell.branches[0],
+    // widget.navigationShell.branches[1],
+    // widget.navigationShell.branches[2],
+    // widget.navigationShell.branches[3],
+    KeepAlivePage(child: DevTestWebsocketMessagesPage()),
+    KeepAlivePage(child: DevTestWebsocketMessagesPage()),
+    // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
+    // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
+    DevTestPage(text: 'Nodes Page'),
+    KeepAlivePage(child: DevUserDetailsScreen()),
+    // DevTestPage(text: 'Devices Page'),
+    // DevTestPage(text: 'Settings Page'),
+  ];
+
   @override
   void initState() {
     super.initState();
     _pageController = PageController();
     _navigationBloc = NavigationBloc();
     _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
+    // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
+    // _navigationBloc.add(NavigationItemSelected(NavigationTab.devices));
+    // _navigationBloc.add(NavigationItemSelected(NavigationTab.nodes));
+    // _navigationBloc.add(NavigationItemSelected(NavigationTab.settings));
+    // _navigationBloc.add(NavigationItemSelected(NavigationTab.home));
+    // Future.delayed(const Duration(milliseconds: 500));
     _websocketBloc.add(ConnectWebsocketEvent());
   }
 
   @override
   void dispose() {
-    _pageController.dispose();
+    // _pageController.dispose();
     _navigationBloc.close();
     _websocketBloc.add(DisconnectWebsocketEvent());
     _websocketBloc.close();
@@ -146,23 +170,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 _navigationBloc.add(NavigationPageSwiped(selectedItem));
               }
             },
-            children: const [
-              // When using navigation shell:
-              // I have tried to take the chidren from the navigationShell, but it doesn't work
-              // Now, this is not in use as we are using PageView
-              // widget.navigationShell.branches[0],
-              // widget.navigationShell.branches[1],
-              // widget.navigationShell.branches[2],
-              // widget.navigationShell.branches[3],
-              KeepAlivePage(child: DevTestWebsocketMessagesPage()),
-              KeepAlivePage(child: DevTestWebsocketMessagesPage()),
-              // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
-              // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
-              // DevTestPage(text: 'Nodes Page'),
-              KeepAlivePage(child: DevUserDetailsScreen()),
-              // DevTestPage(text: 'Devices Page'),
-              // DevTestPage(text: 'Settings Page'),
-            ],
+            children: _pages,
           ),
           // ),
           bottomNavigationBar: const CustomNavigationBar(),

@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 
-abstract class WebsocketState extends Equatable {
-  const WebsocketState();
+class WebsocketState extends Equatable {
+  // final List<WebsocketIncommingMessage> messagesHistory;
+  const WebsocketState(
+      // this.messagesHistory = const [],
+      );
 
   @override
   List<Object> get props => [];
