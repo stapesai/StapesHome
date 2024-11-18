@@ -13,6 +13,7 @@ import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecas
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
+import 'package:stapes_home/features/floors/data/datasources/local/floors_local_datasource.dart';
 import 'package:stapes_home/features/floors/data/datasources/remote/floors_remote_datasource.dart';
 import 'package:stapes_home/features/floors/data/repositories/floor_repository_impl.dart';
 import 'package:stapes_home/features/floors/domain/repository/floor_repository.dart';
@@ -82,7 +83,7 @@ void setupServiceLocator() {
   // Repositories
   serviceLocator.registerSingleton<FloorRepository>(FloorRepositoryImpl(
     remoteDataSource: serviceLocator<FloorsRemoteDataSource>(),
-    // localDataSource: serviceLocator<FloorsLocalDataSource>(),
+    localDataSource: serviceLocator<FloorsLocalDataSource>(),
     networkInfo: serviceLocator<NetworkInfo>(),
   ));
 

@@ -19,23 +19,23 @@ class NetworkException extends AppException {
 }
 
 /// Exception thrown when a cache operation fails
-class CacheException extends AppException {
-  CacheException([super.message = 'A cache error occurred']);
-}
+// class CacheException extends AppException {
+//   CacheException([super.message = 'A cache error occurred']);
+// }
 
 /// Exception thrown when authentication fails
 class UnauthorizedException extends AppException {
   UnauthorizedException([super.message = 'Unauthorized access']);
 }
 
-/// Exception thrown when a requested resource is not found
-class NotFoundException extends AppException {
-  NotFoundException([super.message = 'Requested resource not found']);
-}
-
 /// Exception thrown when user input is invalid
 class ValidationException extends AppException {
   ValidationException([super.message = 'Input validation failed']);
+}
+
+/// Exception thrown when a requested resource is not found
+class NotFoundException extends AppException {
+  NotFoundException([super.message = 'Requested resource not found']);
 }
 
 /// Exception thrown when an operation times out
@@ -49,9 +49,15 @@ class UnexpectedException extends AppException {
 }
 
 class WebsocketConnectionException extends AppException {
-  WebsocketConnectionException([super.message = 'Failed to connect to Websocket server']);
+  WebsocketConnectionException(
+      [super.message = 'Failed to connect to Websocket server']);
 }
 
 class WebsocketMessageException extends AppException {
-  WebsocketMessageException([super.message = 'Failed to process Websocket message']);
+  WebsocketMessageException(
+      [super.message = 'Failed to process Websocket message']);
+}
+
+class SQLiteException extends AppException {
+  SQLiteException([super.message = 'A database error occurred']);
 }

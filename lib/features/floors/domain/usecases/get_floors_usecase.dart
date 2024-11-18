@@ -7,7 +7,7 @@ import 'package:stapes_home/service_locator.dart';
 
 class GetFloorsUseCase implements UseCase<GetFloorsParams, GetFloorsResponse> {
   @override
-  Future<Either<Failure, GetFloorsResponse>> call(GetFloorsParams params) async {
-    return serviceLocator<FloorRepository>().getFloors(params);
+  Future<Either<Failure, GetFloorsResponse>> call(GetFloorsParams params, {bool refresh = false}) async {
+    return serviceLocator<FloorRepository>().getFloors(params, refresh: refresh);
   }
 }

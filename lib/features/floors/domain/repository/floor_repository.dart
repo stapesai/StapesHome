@@ -8,6 +8,6 @@ import 'package:stapes_home/features/floors/data/models/update_floor_api_param.d
 abstract class FloorRepository {
   Future<Either<Failure, CreateFloorResponse>> createFloor(CreateFloorParams params);
   Future<Either<Failure, DeleteFloorResponse>> deleteFloor(DeleteFloorParams params);
-  Future<Either<Failure, GetFloorsResponse>> getFloors(GetFloorsParams params);
+  Future<Either<Failure, GetFloorsResponse>> getFloors(GetFloorsParams params, {bool refresh = false});
   Future<Either<Failure, UpdateFloorResponse>> updateFloor(UpdateFloorParams params);
 }

@@ -33,6 +33,14 @@ class SQLiteService {
 
   Future<void> _createDB(Database db, int version) async {
     await db.execute('''
+      CREATE TABLE floors(
+        id TEXT PRIMARY KEY,
+        level INTEGER NOT NULL,
+        alias TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
       CREATE TABLE nodes(
         id TEXT PRIMARY KEY,
         room_id TEXT NOT NULL,

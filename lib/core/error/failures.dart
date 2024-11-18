@@ -15,15 +15,15 @@ class ServerFailure extends Failure {
   const ServerFailure({required String message}) : super(message);
 }
 
-/// Represents a failure due to a cache error
-class CacheFailure extends Failure {
-  const CacheFailure({required message}) : super(message);
-}
-
 /// Represents a failure due to a network error
 class NetworkFailure extends Failure {
   const NetworkFailure({required message}) : super(message);
 }
+
+/// Represents a failure due to a cache error
+// class CacheFailure extends Failure {
+//   const CacheFailure({required message}) : super(message);
+// }
 
 /// Represents a failure due to invalid input or data
 class ValidationFailure extends Failure {
@@ -31,9 +31,9 @@ class ValidationFailure extends Failure {
 }
 
 /// Represents a failure due to authentication issues
-class AuthenticationFailure extends Failure {
-  const AuthenticationFailure({required message}) : super(message);
-}
+// class AuthenticationFailure extends Failure {
+//   const AuthenticationFailure({required message}) : super(message);
+// }
 
 /// Represents a failure due to unauthorized access
 class UnauthorizedFailure extends Failure {
@@ -45,7 +45,19 @@ class NotFoundFailure extends Failure {
   const NotFoundFailure({required message}) : super(message);
 }
 
+/// Represents a failure due to a timeout error
+class TimeoutFailure extends Failure {
+  const TimeoutFailure({required message}) : super(message);
+}
+
 /// Represents an unexpected failure
 class UnexpectedFailure extends Failure {
   const UnexpectedFailure({required message}) : super(message);
+}
+
+/// No websocket related failures are required yet.
+
+/// Represents a sqlite database failure
+class SQLiteFailure extends Failure {
+  const SQLiteFailure({required message}) : super(message);
 }
