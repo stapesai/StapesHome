@@ -119,9 +119,9 @@ class BackendRoutes {
   static final Uri mqttInfo = Uri.parse('${BaseUrls.protocol}://$baseUrl/mqtt/info');
 
   // Favorite Device routes
-  static final Uri addFavoriteDevice = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
-  static final Uri getFavoriteDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
-  static Uri removeFavoriteDevice(String favoriteDeviceId) =>
+  static final Uri addFavouriteDevice = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
+  static final Uri getFavouriteDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
+  static Uri removeFavouriteDevice(String favoriteDeviceId) =>
       Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev/$favoriteDeviceId');
 }
 

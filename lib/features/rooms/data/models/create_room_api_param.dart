@@ -2,18 +2,15 @@ import 'dart:convert';
 import 'package:stapes_home/core/models/room_model.dart';
 
 class CreateRoomParams {
-  final String name;
-  final String description;
+  final RoomModel room;
 
   CreateRoomParams({
-    required this.name,
-    required this.description,
+    required this.room
   });
 
   Object toJson() {
     return jsonEncode({
-      'name': name,
-      'description': description,
+      'room': room.toJson(),
     });
   }
 }
