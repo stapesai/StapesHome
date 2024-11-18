@@ -41,7 +41,7 @@ class BaseUrls {
   static String get webSocketUrl {
     switch (Config.environment) {
       case Environment.development:
-        return '192.168.0.253:8002';
+        return 'ws://192.168.0.253:8002/ws';
       case Environment.production:
         throw UnsupportedError('Websocket not supported in production');
       default:
