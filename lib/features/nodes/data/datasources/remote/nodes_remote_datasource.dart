@@ -16,7 +16,9 @@ abstract class NodesRemoteDataSource {
 class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
   final HttpClient httpClient;
 
-  NodesRemoteDataSourceImpl({required this.httpClient});
+  NodesRemoteDataSourceImpl({
+    required this.httpClient,
+  });
 
   @override
   Future<List<NodeModel>> getNodesByRoomId(GetNodesByRoomIdParams params) {

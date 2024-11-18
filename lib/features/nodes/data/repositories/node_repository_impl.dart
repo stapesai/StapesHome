@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/error/failures.dart';
+import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
@@ -11,10 +12,13 @@ import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dar
 class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
   final NodesRemoteDataSource remoteDataSource;
   // final NodesLocalDataSource localDataSource;
+  // TODO: add support for is network available, and show custom screen if internet is not available.
+  final NetworkInfo networkInfo;
 
   NodeRepositoryImpl({
     required this.remoteDataSource,
     // required this.localDataSource,
+    required this.networkInfo,
   });
 
   @override

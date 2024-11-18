@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/error/failures.dart';
+import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/auth/data/datasources/remote/auth_remote_datasource.dart';
@@ -12,10 +13,13 @@ import 'package:stapes_home/features/auth/domain/repository/auth_abs_class.dart'
 class AuthRepositoryImpl with RepositoryHelper implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final AuthLocalDataSource localDataSource;
+  // TODO: add support for is network available, and show custom screen if internet is not available.
+  final NetworkInfo networkInfo;
 
   AuthRepositoryImpl({
     required this.remoteDataSource,
     required this.localDataSource,
+    required this.networkInfo,
   });
 
   @override

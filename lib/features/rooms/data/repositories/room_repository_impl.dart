@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/error/failures.dart';
+import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
 import 'package:stapes_home/features/rooms/data/datasources/remote/rooms_remote_datasource.dart';
 import 'package:stapes_home/features/rooms/domain/repository/room_repository.dart';
@@ -10,8 +11,13 @@ import 'package:stapes_home/features/rooms/data/models/delete_room_api_param.dar
 
 class RoomRepositoryImpl with RepositoryHelper implements RoomRepository {
   final RoomsRemoteDataSource remoteDataSource;
+  // TODO: add support for is network available, and show custom screen if internet is not available.
+  final NetworkInfo networkInfo;
 
-  RoomRepositoryImpl({required this.remoteDataSource});
+  RoomRepositoryImpl({
+    required this.remoteDataSource,
+    required this.networkInfo,
+  });
 
   @override
   Future<Either<Failure, CreateRoomResponse>> createRoom(CreateRoomParams params) {

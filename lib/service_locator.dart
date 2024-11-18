@@ -1,5 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
+import 'package:internet_connection_checker/internet_connection_checker.dart';
+import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/database/sqlite_service.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/core/websocket/websocket_service.dart';
@@ -40,6 +42,7 @@ void setupServiceLocator() {
   // Optimize the registration of services and use cases.
   // ---------------------Common services---------------------
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
+  serviceLocator.registerSingleton<NetworkInfo>(NetworkInfoImpl(InternetConnectionChecker()));
   serviceLocator.registerLazySingleton<WebsocketService>(() => WebsocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
   serviceLocator.registerLazySingleton(() => SQLiteService());
@@ -55,6 +58,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<AuthRepository>(AuthRepositoryImpl(
     remoteDataSource: serviceLocator<AuthRemoteDataSource>(),
     localDataSource: serviceLocator<AuthLocalDataSource>(),
+    networkInfo: serviceLocator<NetworkInfo>(),
   ));
 
   // Use cases
@@ -79,6 +83,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<FloorRepository>(FloorRepositoryImpl(
     remoteDataSource: serviceLocator<FloorsRemoteDataSource>(),
     // localDataSource: serviceLocator<FloorsLocalDataSource>(),
+    networkInfo: serviceLocator<NetworkInfo>(),
   ));
 
   // Use cases
@@ -100,6 +105,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<RoomRepository>(RoomRepositoryImpl(
     remoteDataSource: serviceLocator<RoomsRemoteDataSource>(),
     // localDataSource: serviceLocator<RoomsLocalDataSource>(),
+    networkInfo: serviceLocator<NetworkInfo>(),
   ));
 
   // Use cases
@@ -121,6 +127,7 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<NodeRepository>(NodeRepositoryImpl(
     remoteDataSource: serviceLocator<NodesRemoteDataSource>(),
     // localDataSource: serviceLocator<NodesLocalDataSource>(),
+    networkInfo: serviceLocator<NetworkInfo>(),
   ));
 
   // Use cases
