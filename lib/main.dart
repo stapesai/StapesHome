@@ -43,6 +43,7 @@ class MyApp extends StatelessWidget {
       child: MaterialApp.router(
         routerConfig: AppRouter().route,
         debugShowCheckedModeBanner: false,
+        // showPerformanceOverlay: true,
         theme: ThemeData(
           splashColor: Colors.transparent,
           highlightColor: Colors.transparent,
