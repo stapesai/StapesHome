@@ -1,16 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
-import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/dev/presentation/widgets/websocket_message.dart';
 
-class DevWebsocketMessage {
-  final WebsocketIncommingMessageType type;
-  // final WebsocketIncommingMessage data;
-  final dynamic data;
+class WebsocketMessageViewModel {
+  final Key key;
+  final Widget widget;
 
-  DevWebsocketMessage({required this.type, required this.data});
+  const WebsocketMessageViewModel({required this.key, required this.widget});
 }
 
 class DevTestWebsocketMessagesPage extends StatefulWidget {
@@ -21,8 +19,9 @@ class DevTestWebsocketMessagesPage extends StatefulWidget {
 }
 
 class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
-  final List<DevWebsocketMessage> _messages = [];
-  final GlobalKey<AnimatedListState> _listKey = GlobalKey<AnimatedListState>();
+  static const int _pageSize = 20;
+  final List<WebsocketMessageViewModel> _messages = [];
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -32,7 +31,43 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
 
   @override
   void dispose() {
+    _messages.clear();
     super.dispose();
+  }
+
+  WebsocketMessageViewModel _createMessageViewModel(WebsocketState state) {
+    if (state is WebsocketDeviceStatusUpdateMessageState) {
+      return WebsocketMessageViewModel(
+        key: ValueKey('device_${state.update.deviceId}_${DateTime.now().millisecondsSinceEpoch}'),
+        widget: RepaintBoundary(
+          child: DeviceStatusUpdateWidget(
+            data: state.update,
+            animation: const AlwaysStoppedAnimation(1),
+          ),
+        ),
+      );
+    } else if (state is WebsocketNodeStatusUpdateMessageState) {
+      return WebsocketMessageViewModel(
+        key: ValueKey('node_${state.update.nodeId}_${DateTime.now().millisecondsSinceEpoch}'),
+        widget: RepaintBoundary(
+          child: NodeStatusUpdateWidget(
+            data: state.update,
+            animation: const AlwaysStoppedAnimation(1),
+          ),
+        ),
+      );
+    } else if (state is WebsocketErrorMessageState) {
+      return WebsocketMessageViewModel(
+        key: ValueKey('error_${DateTime.now().millisecondsSinceEpoch}'),
+        widget: RepaintBoundary(
+          child: ErrorMessageWidget(
+            data: state.error,
+            animation: const AlwaysStoppedAnimation(1),
+          ),
+        ),
+      );
+    }
+    throw Exception('Unknown websocket state');
   }
 
   @override
@@ -41,7 +76,10 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
       backgroundColor: Colors.transparent,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: const Text('Received Websocket Messages', style: TextStyle(color: Colors.white)),
+        title: const Text(
+          'Received Websocket Messages',
+          style: TextStyle(color: Colors.white),
+        ),
         // actions: [
         // IconButton(
         //   icon: const Icon(Icons.refresh, color: Colors.white),
@@ -49,42 +87,56 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
         // ),
         // ],
       ),
-      body: BlocListener<WebsocketBloc, WebsocketState>(
-        listener: (context, state) {
-          DevWebsocketMessage? message;
-          if (state is WebsocketDeviceStatusUpdateMessageState) {
-            message = DevWebsocketMessage(type: WebsocketIncommingMessageType.deviceStatusUpdate, data: state.update);
-          } else if (state is WebsocketNodeStatusUpdateMessageState) {
-            message = DevWebsocketMessage(type: WebsocketIncommingMessageType.nodeStatusUpdate, data: state.update);
-          } else if (state is WebsocketErrorMessageState) {
-            message = DevWebsocketMessage(type: WebsocketIncommingMessageType.error, data: state.error);
+      body: BlocBuilder<WebsocketBloc, WebsocketState>(
+        builder: (context, state) {
+          if (state is WebsocketInitial) {
+            return const Center(child: Text('No messages yet'));
           }
 
-          if (message != null) {
-            setState(() {
-              _messages.insert(0, message!);
-              _listKey.currentState?.insertItem(0);
-            });
+          if (state is WebsocketConnecting) {
+            return const Center(child: Text('Connecting...'));
           }
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: AnimatedList(
-            key: _listKey,
-            initialItemCount: _messages.length,
-            itemBuilder: (context, index, animation) {
-              final message = _messages[index];
-              switch (message.type) {
-                case WebsocketIncommingMessageType.deviceStatusUpdate:
-                  return DeviceStatusUpdateWidget(data: message.data, animation: animation);
-                case WebsocketIncommingMessageType.nodeStatusUpdate:
-                  return NodeStatusUpdateWidget(data: message.data, animation: animation);
-                case WebsocketIncommingMessageType.error:
-                  return ErrorMessageWidget(data: message.data, animation: animation);
+
+          if (state is WebsocketConnected) {
+            return const Center(child: Text('Connected'));
+          }
+
+          if (state is WebsocketDisconnected) {
+            return const Center(child: Text('Disconnected'));
+          }
+
+          if (state is WebsocketErrorOccurredState) {
+            return Center(child: Text('Error: ${state.error}'));
+          }
+
+          if (state is WebsocketDeviceStatusUpdateMessageState ||
+              state is WebsocketNodeStatusUpdateMessageState ||
+              state is WebsocketErrorMessageState) {
+            try {
+              final messageVM = _createMessageViewModel(state);
+              _messages.insert(0, messageVM);
+              if (_messages.length > 100) {
+                _messages.removeLast();
               }
-            },
-          ),
-        ),
+            } catch (e) {
+              debugPrint('Error creating message view model: $e');
+            }
+          }
+          return CustomScrollView(
+            physics: const AlwaysScrollableScrollPhysics(),
+            slivers: [
+              SliverPadding(
+                padding: const EdgeInsets.all(16.0),
+                sliver: SliverList.builder(
+                  itemCount: _messages.length,
+                  itemBuilder: (context, index) {
+                    return _messages[index].widget;
+                  },
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }
