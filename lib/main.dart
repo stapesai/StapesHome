@@ -1,3 +1,5 @@
+import 'package:device_preview/device_preview.dart';
+import 'package:flutter/foundation.dart';
 import 'package:stapes_home/core/database/sqlite_service.dart';
 import 'package:stapes_home/core/router/app_router.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +33,13 @@ void main() async {
     rethrow;
   }
   // debugPaintSizeEnabled = true;
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      builder: (context) => const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -41,9 +49,17 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return CustomGradientAndPaddingContainer(
       child: MaterialApp.router(
-        routerConfig: AppRouter().route,
         debugShowCheckedModeBanner: false,
         // showPerformanceOverlay: true,
+
+        // DevicePreview
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
+
+        // App Router
+        routerConfig: AppRouter().route,
+
+        // Theme
         themeMode: ThemeMode.dark,
         // theme: ThemeData(
         //   splashColor: Colors.transparent,
