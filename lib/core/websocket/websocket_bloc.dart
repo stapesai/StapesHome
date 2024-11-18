@@ -11,7 +11,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   // so only that page is receiving web socket events by default, until user opens the other pages, they don't receive the events.
   // For now, we can solve this issue by keeping the history of the messages and emitting them to all the pages.
   // But, this is not a good solution. We have to find a better solution for this.
-  final List<WebsocketIncommingMessage> messagesHistory = [];
+  // final List<WebsocketIncommingMessage> messagesHistory = [];
   final WebsocketService _webSocketService;
   StreamSubscription<dynamic>? _messageSubscription;
 
@@ -20,7 +20,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     on<DisconnectWebsocketEvent>(_onDisconnect);
     on<WebsocketMessageReceivedEvent>(_onMessageReceived);
     on<WebsocketErrorOccurredEvent>(_onErrorOccurred);
-    on<GetWebsocketMessageHistory>(_onGetMessageHistory);
+    // on<GetWebsocketMessageHistory>(_onGetMessageHistory);
     // TODO: implement a event for user logout so that service can stop reconnecting.
   }
 
@@ -73,17 +73,17 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   void _onMessageReceived(WebsocketMessageReceivedEvent event, Emitter<WebsocketState> emit) {
     Map<String, dynamic> messageMap = json.decode(json.decode(event.message));
     WebsocketIncommingMessage websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
-    messagesHistory.add(websocketMessage);
+    // messagesHistory.add(websocketMessage);
     print('Received message in WS bloc: ${websocketMessage.toString()}');
 
     _emitProperStateForIncommingWebsocketMessage(websocketMessage, emit);
   }
 
-  void _onGetMessageHistory(GetWebsocketMessageHistory event, Emitter<WebsocketState> emit) {
-    for (var message in messagesHistory) {
-      _emitProperStateForIncommingWebsocketMessage(message, emit);
-    }
-  }
+  // void _onGetMessageHistory(GetWebsocketMessageHistory event, Emitter<WebsocketState> emit) {
+  //   for (var message in messagesHistory) {
+  //     _emitProperStateForIncommingWebsocketMessage(message, emit);
+  //   }
+  // }
 
   void _onErrorOccurred(WebsocketErrorOccurredEvent event, Emitter<WebsocketState> emit) {
     emit(WebsocketErrorOccurredState(event.error));

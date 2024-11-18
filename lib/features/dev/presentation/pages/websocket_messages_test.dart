@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
-import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/dev/presentation/widgets/websocket_message.dart';
@@ -28,7 +27,7 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
+    // BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
   }
 
   @override

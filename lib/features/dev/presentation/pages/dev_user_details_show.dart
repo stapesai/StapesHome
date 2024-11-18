@@ -5,7 +5,6 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
@@ -39,7 +38,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
   void initState() {
     super.initState();
     _userDataFuture = _loadUserData();
-    BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
+    // BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
   }
 
   @override
