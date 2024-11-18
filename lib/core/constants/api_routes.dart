@@ -8,6 +8,7 @@ class BaseUrls {
   static String get authBaseUrl {
     switch (Config.environment) {
       case Environment.development:
+        return '192.168.0.253:8000';
       case Environment.production:
         return 'auth.stapesai.com';
       default:
@@ -18,6 +19,7 @@ class BaseUrls {
   static String get backendBaseUrl {
     switch (Config.environment) {
       case Environment.development:
+        return '192.168.0.253:8001';
       case Environment.production:
         return 'backend.stapesai.com';
       default:
@@ -39,6 +41,7 @@ class BaseUrls {
   static String get webSocketUrl {
     switch (Config.environment) {
       case Environment.development:
+        return '192.168.0.253:8002';
       case Environment.production:
         throw UnsupportedError('Websocket not supported in production');
       default:

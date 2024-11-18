@@ -18,7 +18,7 @@ class WebsocketService {
   // User session (can be null), fetched from the local data source later
   late UserSessionModel? _userSession;
   // Used to generate unique message IDs
-  final Uuid _uuid = Uuid();
+  // final Uuid _uuid = Uuid();
   // Reconnection timer, used to reconnect to the server after disconnection
   Timer? _reconnectTimer;
 

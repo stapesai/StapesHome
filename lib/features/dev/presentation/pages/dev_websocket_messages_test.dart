@@ -19,9 +19,8 @@ class DevTestWebsocketMessagesPage extends StatefulWidget {
 }
 
 class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
-  static const int _pageSize = 20;
+  // static const int _pageSize = 20;
   final List<WebsocketMessageViewModel> _messages = [];
-  bool _isLoading = false;
 
   @override
   void initState() {

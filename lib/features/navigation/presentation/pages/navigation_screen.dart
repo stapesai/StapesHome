@@ -10,7 +10,7 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bl
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
 import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
-import 'package:stapes_home/features/dev/presentation/pages/websocket_messages_test.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -58,18 +58,23 @@ class _NavigationScreenState extends State<NavigationScreen> {
     _navigationBloc = NavigationBloc();
     _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
     _websocketBloc.add(ConnectWebsocketEvent());
+    _pageController.addListener(_handlePageChange);
+  }
 
-    _pageController.addListener(() {
-      final pageIndex = _pageController.page?.round() ?? 0;
-      print('Page Index: $pageIndex');
+  void _handlePageChange() {
+    if (_isHandlingTap) return;
 
-      // FIXME: this has very bad performance. It is called on every pixel change. See debug console.
-      // Ensure updates only happen when the page animation has fully settled
-      if (!_isHandlingTap && pageIndex == _pageController.page) {
-        final selectedItem = NavigationTab.values[pageIndex];
-        _navigationBloc.add(NavigationPageSwiped(selectedItem));
-      }
-    });
+    final pageIndex = _pageController.page?.round() ?? 0;
+    print('Page Index: $pageIndex');
+    print('Page Controller Page: ${_pageController.page}');
+    print('Page Controller Position: ${_pageController.position}');
+
+    // FIXME: this has very bad performance. It is called on every pixel change. See debug console.
+    // Ensure updates only happen when the page animation has fully settled
+    if (pageIndex == _pageController.page) {
+      final selectedItem = NavigationTab.values[pageIndex];
+      _navigationBloc.add(NavigationPageSwiped(selectedItem));
+    }
   }
 
   @override
