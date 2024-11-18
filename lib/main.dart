@@ -44,10 +44,11 @@ class MyApp extends StatelessWidget {
         routerConfig: AppRouter().route,
         debugShowCheckedModeBanner: false,
         // showPerformanceOverlay: true,
-        theme: ThemeData(
-          splashColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-        ),
+        themeMode: ThemeMode.dark,
+        // theme: ThemeData(
+        //   splashColor: Colors.transparent,
+        //   highlightColor: Colors.transparent,
+        // ),
       ),
     );
 
