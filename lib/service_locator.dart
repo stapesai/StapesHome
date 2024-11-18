@@ -44,16 +44,19 @@ void setupServiceLocator() {
   // ---------------------Common services---------------------
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
   serviceLocator.registerSingleton<NetworkInfo>(NetworkInfoImpl(InternetConnectionChecker()));
-  serviceLocator.registerLazySingleton<WebsocketService>(() => WebsocketService());
+  serviceLocator.registerSingleton<WebsocketService>(WebsocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
-  serviceLocator.registerLazySingleton(() => SQLiteService());
+  serviceLocator.registerSingleton<SQLiteService>(SQLiteService());
 
   // ---------------------Auth feature---------------------
   // Data sources
   serviceLocator.registerSingleton<AuthRemoteDataSource>(AuthRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
   ));
-  serviceLocator.registerSingleton<AuthLocalDataSource>(AuthLocalDataSourceImpl(hive: serviceLocator<HiveInterface>()));
+  serviceLocator.registerSingleton<AuthLocalDataSource>(AuthLocalDataSourceImpl(
+    // sqliteService: serviceLocator<SQLiteService>(),
+    hive: serviceLocator<HiveInterface>(),
+  ));
 
   // Repositories
   serviceLocator.registerSingleton<AuthRepository>(AuthRepositoryImpl(

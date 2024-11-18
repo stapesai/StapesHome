@@ -32,6 +32,23 @@ class SQLiteService {
   }
 
   Future<void> _createDB(Database db, int version) async {
+    //   await db.execute('''
+    //   CREATE TABLE user_session(
+    //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //     access_token TEXT NOT NULL,
+    //     refresh_token TEXT NOT NULL,
+    //     expires_at INTEGER NOT NULL
+    //   )
+    // ''');
+
+    //   await db.execute('''
+    //   CREATE TABLE user(
+    //     id INTEGER PRIMARY KEY AUTOINCREMENT,
+    //     email TEXT NOT NULL,
+    //     name TEXT NOT NULL
+    //   )
+    // ''');
+
     await db.execute('''
       CREATE TABLE floors(
         id TEXT PRIMARY KEY,
