@@ -21,16 +21,16 @@ class FavDeviceRepositoryImpl with RepositoryHelper implements FavDeviceReposito
 
   @override
   Future<Either<Failure, CreateFavDeviceResponse>> createFavDevice(CreateFavDeviceParams params) async {
-    return handleEither(() => remoteDataSource.createFavDevice(params));
+    return handleEither(() => remoteDataSource.createFavDevice(params), networkInfo);
   }
 
   @override
   Future<Either<Failure, GetFavDeviceResponse>> getFavDevices(GetFavDeviceParams params) async {
-    return handleEither(() => remoteDataSource.getFavDevices(params));
+    return handleEither(() => remoteDataSource.getFavDevices(params), networkInfo);
   }
 
   @override
   Future<Either<Failure, void>> deleteFavDevice(RemoveFavDeviceParams params) async {
-    return handleEither(() => remoteDataSource.deleteFavDevice(params));
+    return handleEither(() => remoteDataSource.deleteFavDevice(params), networkInfo);
   }
 }

@@ -12,7 +12,6 @@ import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dar
 class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
   final NodesRemoteDataSource remoteDataSource;
   // final NodesLocalDataSource localDataSource;
-  // TODO: add support for is network available, and show custom screen if internet is not available.
   final NetworkInfo networkInfo;
 
   NodeRepositoryImpl({
@@ -26,7 +25,7 @@ class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
     return handleEither(() async {
       final node = await remoteDataSource.createNode(params);
       return CreateNodeResponse(node: node);
-    });
+    }, networkInfo);
   }
 
   @override
@@ -34,7 +33,7 @@ class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
     return handleEither(() async {
       await remoteDataSource.deleteNode(params);
       return DeleteNodeResponse();
-    });
+    }, networkInfo);
   }
 
   @override
@@ -42,7 +41,7 @@ class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
     return handleEither(() async {
       final nodes = await remoteDataSource.getNodesByRoomId(params);
       return GetNodesByRoomIdResponse(nodes: nodes);
-    });
+    }, networkInfo);
   }
 
   @override
@@ -50,7 +49,7 @@ class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
     return handleEither(() async {
       final node = await remoteDataSource.updateNode(params);
       return UpdateNodeResponse(node: node);
-    });
+    }, networkInfo);
   }
 
   // @override

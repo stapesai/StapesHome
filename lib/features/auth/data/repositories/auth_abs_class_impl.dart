@@ -13,7 +13,6 @@ import 'package:stapes_home/features/auth/domain/repository/auth_abs_class.dart'
 class AuthRepositoryImpl with RepositoryHelper implements AuthRepository {
   final AuthRemoteDataSource remoteDataSource;
   final AuthLocalDataSource localDataSource;
-  // TODO: add support for is network available, and show custom screen if internet is not available.
   final NetworkInfo networkInfo;
 
   AuthRepositoryImpl({
@@ -24,7 +23,7 @@ class AuthRepositoryImpl with RepositoryHelper implements AuthRepository {
 
   @override
   Future<Either<Failure, RequestLoginResponse>> requestLogin(RequestLoginParams params) {
-    return handleEither(() => remoteDataSource.requestLoginService(params));
+    return handleEither(() => remoteDataSource.requestLoginService(params), networkInfo);
   }
 
   @override
@@ -34,12 +33,12 @@ class AuthRepositoryImpl with RepositoryHelper implements AuthRepository {
       await localDataSource.cacheUserSession(response.session);
       await localDataSource.cacheUser(response.user);
       return response;
-    });
+    }, networkInfo);
   }
 
   @override
   Future<Either<Failure, RequestSignUpResponse>> requestSignUp(RequestSignUpParams params) {
-    return handleEither(() => remoteDataSource.requestSignUp(params));
+    return handleEither(() => remoteDataSource.requestSignUp(params), networkInfo);
   }
 
   @override
@@ -49,21 +48,21 @@ class AuthRepositoryImpl with RepositoryHelper implements AuthRepository {
       await localDataSource.cacheUserSession(response.session);
       await localDataSource.cacheUser(response.user);
       return response;
-    });
+    }, networkInfo);
   }
 
   @override
   Future<Either<Failure, RequestPasswordResetResponse>> requestPasswordReset(RequestPasswordResetParams params) {
-    return handleEither(() => remoteDataSource.requestPasswordReset(params));
+    return handleEither(() => remoteDataSource.requestPasswordReset(params), networkInfo);
   }
 
   @override
   Future<Either<Failure, CompletePasswordResetResponse>> completePasswordReset(CompletePasswordResetParams params) {
-    return handleEither(() => remoteDataSource.completePasswordReset(params));
+    return handleEither(() => remoteDataSource.completePasswordReset(params), networkInfo);
   }
 
   @override
   Future<Either<Failure, OtpVerificationResponse>> verifyOtp(OtpVerificationParams params) {
-    return handleEither(() => remoteDataSource.verifyOtp(params));
+    return handleEither(() => remoteDataSource.verifyOtp(params), networkInfo);
   }
 }

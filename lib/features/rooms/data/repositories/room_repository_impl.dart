@@ -11,7 +11,6 @@ import 'package:stapes_home/features/rooms/data/models/delete_room_api_param.dar
 
 class RoomRepositoryImpl with RepositoryHelper implements RoomRepository {
   final RoomsRemoteDataSource remoteDataSource;
-  // TODO: add support for is network available, and show custom screen if internet is not available.
   final NetworkInfo networkInfo;
 
   RoomRepositoryImpl({
@@ -24,7 +23,7 @@ class RoomRepositoryImpl with RepositoryHelper implements RoomRepository {
     return handleEither(() async {
       final room = await remoteDataSource.createRoom(params);
       return CreateRoomResponse(room: room);
-    });
+    }, networkInfo);
   }
 
   @override
@@ -32,7 +31,7 @@ class RoomRepositoryImpl with RepositoryHelper implements RoomRepository {
     return handleEither(() async {
       await remoteDataSource.deleteRoom(params);
       return DeleteRoomResponse();
-    });
+    }, networkInfo);
   }
 
   @override
@@ -40,7 +39,7 @@ class RoomRepositoryImpl with RepositoryHelper implements RoomRepository {
     return handleEither(() async {
       final rooms = await remoteDataSource.getRooms(params);
       return GetRoomsResponse(rooms: rooms);
-    });
+    }, networkInfo);
   }
 
   @override
@@ -48,6 +47,6 @@ class RoomRepositoryImpl with RepositoryHelper implements RoomRepository {
     return handleEither(() async {
       final room = await remoteDataSource.updateRoom(params);
       return UpdateRoomResponse(room: room);
-    });
+    }, networkInfo);
   }
 }
