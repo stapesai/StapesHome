@@ -110,6 +110,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
 
   @override
   void initState() {
+    print('DevUserDetailsScreen initState');
     super.initState();
     _userDataFuture = _loadUserData();
     // BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
@@ -117,6 +118,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
 
   @override
   void dispose() {
+    print('DevUserDetailsScreen dispose');
     super.dispose();
   }
 

@@ -35,7 +35,9 @@ class WebsocketService {
       _connectionStateController.hasListener &&
       _connectionStateController.stream.last == WebsocketConnectionState.connected;
 
-  WebsocketService();
+  WebsocketService() {
+    print('Websocket service initialized');
+  }
 
   Future<void> connect() async {
     if (isConnected) {
@@ -63,6 +65,7 @@ class WebsocketService {
       );
       _connectionStateController.add(WebsocketConnectionState.connected);
       _setupSocketListeners();
+      print('Connected to Websocket server');
     } on WebSocketException catch (e) {
       _handleConnectionError(WebsocketConnectionException(e.message));
     } catch (e) {
@@ -72,7 +75,7 @@ class WebsocketService {
 
   void _handleMessage(dynamic message) {
     try {
-      print('Received message in WS service: $message');
+      // print('Received message in WS service: $message');
       _messageController.add(message);
     } catch (e) {
       _handleError(WebsocketMessageException(e.toString()));
@@ -129,6 +132,7 @@ class WebsocketService {
   }
 
   void closeControllers() {
+    print('Closing Websocket service controllers');
     _messageController.close();
     _connectionStateController.close();
   }

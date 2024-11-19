@@ -46,7 +46,7 @@ void setupServiceLocator() {
   // ---------------------Common services---------------------
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
   serviceLocator.registerSingleton<NetworkInfo>(NetworkInfoImpl(InternetConnectionChecker()));
-  serviceLocator.registerSingleton<WebsocketService>(WebsocketService());
+  // serviceLocator.registerSingleton<WebsocketService>(WebsocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
   serviceLocator.registerSingleton<SQLiteService>(SQLiteService());
 

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 
 class MessageCard extends StatelessWidget {
+  final String page;
   final String title;
   final Color borderColor;
   final Color backgroundColor;
@@ -10,12 +11,19 @@ class MessageCard extends StatelessWidget {
 
   const MessageCard({
     super.key,
+    required this.page,
     required this.title,
     required this.borderColor,
     required this.backgroundColor,
     required this.details,
     required this.animation,
   });
+
+  @override
+  StatelessElement createElement() {
+    print('Creating MessageCard for $title on $page');
+    return super.createElement();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -105,14 +113,22 @@ class MessageCard extends StatelessWidget {
 }
 
 class DeviceStatusUpdateWidget extends StatelessWidget {
+  final String page;
   final WebsocketDeviceStatusUpdate data;
   final Animation<double> animation;
 
-  const DeviceStatusUpdateWidget({super.key, required this.data, required this.animation});
+  const DeviceStatusUpdateWidget({
+    super.key,
+    required this.page,
+    required this.data,
+    required this.animation,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MessageCard(
+      key: key,
+      page: page,
       title: 'Device Status Update',
       borderColor: Colors.blue,
       backgroundColor: Colors.blue.withOpacity(0.1),
@@ -126,14 +142,22 @@ class DeviceStatusUpdateWidget extends StatelessWidget {
 }
 
 class NodeStatusUpdateWidget extends StatelessWidget {
+  final String page;
   final WebsocketNodeStatusUpdate data;
   final Animation<double> animation;
 
-  const NodeStatusUpdateWidget({super.key, required this.data, required this.animation});
+  const NodeStatusUpdateWidget({
+    super.key,
+    required this.page,
+    required this.data,
+    required this.animation,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MessageCard(
+      key: key,
+      page: page,
       title: 'Node Status Update',
       borderColor: Colors.yellow,
       backgroundColor: Colors.yellow.withOpacity(0.1),
@@ -148,14 +172,22 @@ class NodeStatusUpdateWidget extends StatelessWidget {
 }
 
 class ErrorMessageWidget extends StatelessWidget {
+  final String page;
   final WebsocketErrorMessage data;
   final Animation<double> animation;
 
-  const ErrorMessageWidget({super.key, required this.data, required this.animation});
+  const ErrorMessageWidget({
+    super.key,
+    required this.page,
+    required this.data,
+    required this.animation,
+  });
 
   @override
   Widget build(BuildContext context) {
     return MessageCard(
+      key: key,
+      page: page,
       title: 'Error Message',
       borderColor: Colors.red,
       backgroundColor: Colors.red.withOpacity(0.1),

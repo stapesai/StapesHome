@@ -12,7 +12,11 @@ class WebsocketMessageViewModel {
 }
 
 class DevTestWebsocketMessagesPage extends StatefulWidget {
-  const DevTestWebsocketMessagesPage({super.key});
+  final String page;
+  const DevTestWebsocketMessagesPage({
+    required this.page,
+    super.key,
+  });
 
   @override
   State<DevTestWebsocketMessagesPage> createState() => _DevTestMessagesPageState();
@@ -24,12 +28,14 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
 
   @override
   void initState() {
+    print('DevTestMessagesPage initState for ${widget.page} page');
     super.initState();
     // BlocProvider.of<WebsocketBloc>(context).add(GetWebsocketMessageHistory());
   }
 
   @override
   void dispose() {
+    print('DevTestMessagesPage dispose for ${widget.page} page');
     _messages.clear();
     super.dispose();
   }
@@ -40,6 +46,8 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
         key: ValueKey('device_${state.update.deviceId}_${DateTime.now().millisecondsSinceEpoch}'),
         widget: RepaintBoundary(
           child: DeviceStatusUpdateWidget(
+            key: ValueKey('device_${state.update.deviceId}_${DateTime.now().millisecondsSinceEpoch}'),
+            page: widget.page,
             data: state.update,
             animation: const AlwaysStoppedAnimation(1),
           ),
@@ -50,6 +58,8 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
         key: ValueKey('node_${state.update.nodeId}_${DateTime.now().millisecondsSinceEpoch}'),
         widget: RepaintBoundary(
           child: NodeStatusUpdateWidget(
+            key: ValueKey('node_${state.update.nodeId}_${DateTime.now().millisecondsSinceEpoch}'),
+            page: widget.page,
             data: state.update,
             animation: const AlwaysStoppedAnimation(1),
           ),
@@ -60,6 +70,8 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
         key: ValueKey('error_${DateTime.now().millisecondsSinceEpoch}'),
         widget: RepaintBoundary(
           child: ErrorMessageWidget(
+            key: ValueKey('error_${DateTime.now().millisecondsSinceEpoch}'),
+            page: widget.page,
             data: state.error,
             animation: const AlwaysStoppedAnimation(1),
           ),

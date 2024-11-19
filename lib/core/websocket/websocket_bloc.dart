@@ -12,10 +12,10 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   // For now, we can solve this issue by keeping the history of the messages and emitting them to all the pages.
   // But, this is not a good solution. We have to find a better solution for this.
   // final List<WebsocketIncommingMessage> messagesHistory = [];
-  final WebsocketService _webSocketService;
+  final WebsocketService _webSocketService = WebsocketService();
   StreamSubscription<dynamic>? _messageSubscription;
 
-  WebsocketBloc(this._webSocketService) : super(WebsocketInitial()) {
+  WebsocketBloc() : super(WebsocketInitial()) {
     on<ConnectWebsocketEvent>(_onConnect);
     on<DisconnectWebsocketEvent>(_onDisconnect);
     on<WebsocketMessageReceivedEvent>(_onMessageReceived);
@@ -23,6 +23,16 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     on<WebsocketSendDeviceControlRequest>(_onSendDeviceControlRequest);
     // on<GetWebsocketMessageHistory>(_onGetMessageHistory);
     // TODO: implement a event for user logout so that service can stop reconnecting.
+    print('WebsocketBloc created');
+  }
+
+  @override
+  Future<void> close() {
+    print('WebsocketBloc closed');
+    _messageSubscription?.cancel();
+    _webSocketService.disconnect();
+    _webSocketService.closeControllers();
+    return super.close();
   }
 
   Future<void> _onConnect(ConnectWebsocketEvent event, Emitter<WebsocketState> emit) async {
@@ -100,15 +110,5 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     );
 
     _webSocketService.sendMessage(message.toJson());
-  }
-
-  @override
-  Future<void> close() {
-    _messageSubscription?.cancel();
-    _webSocketService.disconnect();
-    // FIXME: We have not disposed controllers anywhere. If we dispose them here, we can't reconnect.
-    // If we dont dispose them, we will have memory leaks and we'll get repeated websocket messages after hot reload.
-    // _webSocketService.closeControllers();
-    return super.close();
   }
 }

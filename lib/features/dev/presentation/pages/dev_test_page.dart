@@ -6,6 +6,12 @@ class DevTestPage extends StatelessWidget {
   const DevTestPage({super.key, required this.text});
 
   @override
+  StatelessElement createElement() {
+    print('Creating DevTestPage for $text');
+    return super.createElement();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.transparent,

@@ -41,8 +41,14 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[1],
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
-    KeepAlivePage(child: DevTestWebsocketMessagesPage()),
-    KeepAlivePage(child: DevTestWebsocketMessagesPage()),
+    KeepAlivePage(
+        child: DevTestWebsocketMessagesPage(
+      page: 'home',
+    )),
+    KeepAlivePage(
+        child: DevTestWebsocketMessagesPage(
+      page: 'devices',
+    )),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
     DevTestPage(text: 'Nodes Page'),
@@ -53,12 +59,23 @@ class _NavigationScreenState extends State<NavigationScreen> {
 
   @override
   void initState() {
+    print('NavigationScreen initState');
     super.initState();
     _pageController = PageController();
     _navigationBloc = NavigationBloc();
-    _websocketBloc = WebsocketBloc(serviceLocator<WebsocketService>());
+    _websocketBloc = WebsocketBloc();
     _websocketBloc.add(ConnectWebsocketEvent());
     _pageController.addListener(_handlePageChange);
+  }
+
+  @override
+  void dispose() {
+    print('NavigationScreen dispose');
+    _pageController.dispose();
+    _navigationBloc.close();
+    _websocketBloc.add(DisconnectWebsocketEvent());
+    _websocketBloc.close();
+    super.dispose();
   }
 
   void _handlePageChange() {
@@ -75,15 +92,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
       final selectedItem = NavigationTab.values[pageIndex];
       _navigationBloc.add(NavigationPageSwiped(selectedItem));
     }
-  }
-
-  @override
-  void dispose() {
-    // _pageController.dispose();
-    _navigationBloc.close();
-    _websocketBloc.add(DisconnectWebsocketEvent());
-    _websocketBloc.close();
-    super.dispose();
   }
 
   @override
