@@ -1,5 +1,7 @@
+import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
+import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/rooms/data/models/create_room_api_param.dart';
 import 'package:stapes_home/features/rooms/data/models/update_room_api_param.dart';
 import 'package:stapes_home/features/rooms/data/models/get_rooms_api_param.dart';
@@ -14,15 +16,21 @@ abstract class RoomsRemoteDataSource {
 
 class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
   final HttpClient httpClient;
+  final AuthLocalDataSource authLocalDataSource;
 
-  RoomsRemoteDataSourceImpl({required this.httpClient});
+  RoomsRemoteDataSourceImpl({required this.httpClient, required this.authLocalDataSource});
 
   @override
   Future<GetRoomsResponse> getRooms(GetRoomsParams params) {
     return httpClient.handleRequest(() async {
+      UserSessionModel? session = await authLocalDataSource.getUserSession();
       final response = await httpClient.get(
         BackendRoutes.getRoomsByFloorId(params.floorId),
-        headers: {'accept': 'application/json'},
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': session?.userId ?? 'not_found',
+          'X-Session-Id': session?.sessionId ?? 'not_found',
+        },
       );
       return GetRoomsResponse.fromJson(response);
     });
@@ -31,11 +39,14 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
   @override
   Future<CreateRoomResponse> createRoom(CreateRoomParams params) {
     return httpClient.handleRequest(() async {
+      UserSessionModel? session = await authLocalDataSource.getUserSession();
       final response = await httpClient.post(
         BackendRoutes.createRoom,
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
+          'X-User-Id': session?.userId ?? 'not_found',
+          'X-Session-Id': session?.sessionId ?? 'not_found',
         },
         body: params.toJson(),
       );
@@ -46,11 +57,14 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
   @override
   Future<UpdateRoomResponse> updateRoom(UpdateRoomParams params) {
     return httpClient.handleRequest(() async {
+      UserSessionModel? session = await authLocalDataSource.getUserSession();
       final response = await httpClient.put(
         BackendRoutes.updateRoom(params.roomId),
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
+          'X-User-Id': session?.userId ?? 'not_found',
+          'X-Session-Id': session?.sessionId ?? 'not_found',
         },
         body: params.toJson(),
       );
@@ -61,9 +75,14 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
   @override
   Future<DeleteRoomResponse> deleteRoom(DeleteRoomParams params) {
     return httpClient.handleRequest(() async {
+      UserSessionModel? session = await authLocalDataSource.getUserSession();
       await httpClient.delete(
         BackendRoutes.deleteRoom(params.roomId),
-        headers: {'accept': 'application/json'},
+        headers: {
+          'accept': 'application/json',
+          'X-User-Id': session?.userId ?? 'not_found',
+          'X-Session-Id': session?.sessionId ?? 'not_found',
+        },
       );
       return DeleteRoomResponse();
     });

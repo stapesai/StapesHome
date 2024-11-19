@@ -12,6 +12,22 @@ import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecas
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
+import 'package:stapes_home/features/devices/data/datasources/local/devices_local_datasource.dart';
+import 'package:stapes_home/features/devices/data/datasources/remote/devices_remote_datasource.dart';
+import 'package:stapes_home/features/devices/data/repositories/devices_repository_impl.dart';
+import 'package:stapes_home/features/devices/domain/repositories/devices_repository.dart';
+import 'package:stapes_home/features/devices/domain/usecases/create_device_usecase.dart';
+import 'package:stapes_home/features/devices/domain/usecases/delete_device_usecase.dart';
+import 'package:stapes_home/features/devices/domain/usecases/get_devices_by_node_id_usecase.dart';
+import 'package:stapes_home/features/devices/domain/usecases/get_devices_by_room_id_usecase.dart';
+import 'package:stapes_home/features/devices/domain/usecases/update_device_usecase.dart';
+import 'package:stapes_home/features/fav_devices/data/datasources/local/fav_device_local_datasource.dart';
+import 'package:stapes_home/features/fav_devices/data/datasources/remote/fav_device_remote_datasource.dart';
+import 'package:stapes_home/features/fav_devices/data/repositories/fav_device_repository_impl.dart';
+import 'package:stapes_home/features/fav_devices/domain/repositories/fav_device_repository.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/create_fav_devices.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/get_fav_devices.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/remove_fav_devices.dart';
 import 'package:stapes_home/features/floors/data/datasources/local/floors_local_datasource.dart';
 import 'package:stapes_home/features/floors/data/datasources/remote/floors_remote_datasource.dart';
 import 'package:stapes_home/features/floors/data/repositories/floor_repository_impl.dart';
@@ -79,6 +95,7 @@ void setupServiceLocator() {
   // Data sources
   serviceLocator.registerSingleton<FloorsRemoteDataSource>(FloorsRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
+    authLocalDataSource: serviceLocator<AuthLocalDataSource>(),
   ));
   serviceLocator.registerSingleton<FloorsLocalDataSource>(FloorsLocalDataSourceImpl(
     sqliteService: serviceLocator<SQLiteService>(),
@@ -101,6 +118,7 @@ void setupServiceLocator() {
   // Data sources
   serviceLocator.registerSingleton<RoomsRemoteDataSource>(RoomsRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
+    authLocalDataSource: serviceLocator<AuthLocalDataSource>(),
   ));
   serviceLocator.registerSingleton<RoomsLocalDataSource>(RoomsLocalDataSourceImpl(
     sqliteService: serviceLocator<SQLiteService>(),
@@ -123,6 +141,7 @@ void setupServiceLocator() {
   // Data sources
   serviceLocator.registerSingleton<NodesRemoteDataSource>(NodesRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
+    authLocalDataSource: serviceLocator<AuthLocalDataSource>(),
   ));
   serviceLocator.registerSingleton<NodesLocalDataSource>(NodesLocalDataSourceImpl(
     sqliteService: serviceLocator<SQLiteService>(),
@@ -140,4 +159,50 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<CreateNodeUseCase>(CreateNodeUseCase());
   serviceLocator.registerSingleton<DeleteNodeUseCase>(DeleteNodeUseCase());
   serviceLocator.registerSingleton<UpdateNodeUseCase>(UpdateNodeUseCase());
+
+  // ---------------------Devices feature---------------------
+  // Data sources
+  serviceLocator.registerSingleton<DevicesRemoteDataSource>(DevicesRemoteDataSourceImpl(
+    httpClient: serviceLocator<HttpClient>(),
+    authLocalDataSource: serviceLocator<AuthLocalDataSource>(),
+  ));
+  serviceLocator.registerSingleton<DevicesLocalDataSource>(DevicesLocalDataSourceImpl(
+    sqliteService: serviceLocator<SQLiteService>(),
+  ));
+
+  // Repositories
+  serviceLocator.registerSingleton<DevicesRepository>(DevicesRepositoryImpl(
+    remoteDataSource: serviceLocator<DevicesRemoteDataSource>(),
+    localDataSource: serviceLocator<DevicesLocalDataSource>(),
+    networkInfo: serviceLocator<NetworkInfo>(),
+  ));
+
+  // Use cases
+  serviceLocator.registerSingleton<GetDevicesByRoomIdUseCase>(GetDevicesByRoomIdUseCase());
+  serviceLocator.registerSingleton<GetDevicesByNodeIdUseCase>(GetDevicesByNodeIdUseCase());
+  serviceLocator.registerSingleton<CreateDeviceUseCase>(CreateDeviceUseCase());
+  serviceLocator.registerSingleton<DeleteDeviceUseCase>(DeleteDeviceUseCase());
+  serviceLocator.registerSingleton<UpdateDeviceUseCase>(UpdateDeviceUseCase());
+
+  // ---------------------Favorites Devices feature---------------------
+  // Data sources
+  serviceLocator.registerSingleton<FavDevicesRemoteDataSource>(FavDevicesRemoteDataSourceImpl(
+    httpClient: serviceLocator<HttpClient>(),
+    authLocalDataSource: serviceLocator<AuthLocalDataSource>(),
+  ));
+  serviceLocator.registerSingleton<FavDevicesLocalDataSource>(FavDevicesLocalDataSourceImpl(
+    sqliteService: serviceLocator<SQLiteService>(),
+  ));
+
+  // Repositories
+  serviceLocator.registerSingleton<FavDeviceRepository>(FavDeviceRepositoryImpl(
+    remoteDataSource: serviceLocator<FavDevicesRemoteDataSource>(),
+    localDataSource: serviceLocator<FavDevicesLocalDataSource>(),
+    networkInfo: serviceLocator<NetworkInfo>(),
+  ));
+
+  // Use cases
+  serviceLocator.registerSingleton<GetFavDevicesUseCase>(GetFavDevicesUseCase());
+  serviceLocator.registerSingleton<CreateFavDeviceUseCase>(CreateFavDeviceUseCase());
+  serviceLocator.registerSingleton<RemoveFavDeviceUseCase>(RemoveFavDeviceUseCase());
 }
