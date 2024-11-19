@@ -9,7 +9,7 @@ class GetFavDevicesUseCase implements UseCase<GetFavDeviceParams, GetFavDeviceRe
   final FavDeviceRepository repository = serviceLocator<FavDeviceRepository>();
 
   @override
-  Future<Either<Failure, GetFavDeviceResponse>> call(GetFavDeviceParams params) async {
-    return repository.getFavDevices(params);
+  Future<Either<Failure, GetFavDeviceResponse>> call(GetFavDeviceParams params, {bool refresh = false}) async {
+    return repository.getFavDevices(params, refresh: refresh);
   }
 }

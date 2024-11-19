@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class FloorModel {
   final String? id;
   final int level;
@@ -15,13 +13,13 @@ class FloorModel {
     );
   }
 
-  Object toJson() {
-    return jsonEncode({
-      'id': id,
-      'level': level,
-      'alias': alias,
-    });
-  }
+  // Object toJson() {
+  //   return jsonEncode({
+  //     'id': id,
+  //     'level': level,
+  //     'alias': alias,
+  //   });
+  // }
 
   Map<String, dynamic> toMap() {
     return {

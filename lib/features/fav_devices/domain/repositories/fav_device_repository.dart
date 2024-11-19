@@ -4,9 +4,8 @@ import 'package:stapes_home/features/fav_devices/data/models/create_fav_devices_
 import 'package:stapes_home/features/fav_devices/data/models/delete_fav_devices_api_params.dart';
 import 'package:stapes_home/features/fav_devices/data/models/get_fav_devices_api_params.dart';
 
-
 abstract class FavDeviceRepository {
   Future<Either<Failure, CreateFavDeviceResponse>> createFavDevice(CreateFavDeviceParams params);
-  Future<Either<Failure, GetFavDeviceResponse>> getFavDevices(GetFavDeviceParams params);
-  Future<Either<Failure, void>> deleteFavDevice(RemoveFavDeviceParams params);
+  Future<Either<Failure, GetFavDeviceResponse>> getFavDevices(GetFavDeviceParams params, {bool refresh = false});
+  Future<Either<Failure, DeleteFavDeviceResponse>> deleteFavDevice(DeleteFavDeviceParams params);
 }

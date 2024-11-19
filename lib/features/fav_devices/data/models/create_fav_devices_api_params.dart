@@ -1,4 +1,4 @@
-import'dart:convert';
+import 'dart:convert';
 import 'package:stapes_home/core/models/fav_devices_model.dart';
 
 class CreateFavDeviceParams {
@@ -8,7 +8,7 @@ class CreateFavDeviceParams {
 
   Object toJson() {
     return jsonEncode({
-      'entityid': entityId,
+      'entity_id': entityId,
     });
   }
 }

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class NodeModel {
   final String? id;
   final String roomId;
@@ -31,15 +29,15 @@ class NodeModel {
     );
   }
 
-  Object toJson() {
-    return jsonEncode({
-      'id': id,
-      'room_id': roomId,
-      'name': name,
-      'hardware_chip': hardwareChip,
-      'hardware_version': hardwareVersion,
-      'hardware_mac_address': hardwareMacAddress,
-      'firmware_version': firmwareVersion,
-    });
-  }
+  // Object toJson() {
+  //   return jsonEncode({
+  //     'id': id,
+  //     'room_id': roomId,
+  //     'name': name,
+  //     'hardware_chip': hardwareChip,
+  //     'hardware_version': hardwareVersion,
+  //     'hardware_mac_address': hardwareMacAddress,
+  //     'firmware_version': firmwareVersion,
+  //   });
+  // }
 }

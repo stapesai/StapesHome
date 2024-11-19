@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class DeviceModel {
   final String nodeId;
   final String name;
@@ -39,14 +37,14 @@ class DeviceModel {
   //   );
   // }
 
-  Object toJson() {
-    return jsonEncode({
-      'node_id': nodeId,
-      'name': name,
-      'type': type,
-      'channel_id': channelId,
-      'id': id,
-      'state': state,
-    });
-  }
+  // Object toJson() {
+  //   return jsonEncode({
+  //     'node_id': nodeId,
+  //     'name': name,
+  //     'type': type,
+  //     'channel_id': channelId,
+  //     'id': id,
+  //     'state': state,
+  //   });
+  // }
 }

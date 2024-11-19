@@ -7,7 +7,7 @@ import 'package:stapes_home/features/fav_devices/data/models/get_fav_devices_api
 abstract class FavDevicesRemoteDataSource {
   Future<GetFavDeviceResponse> getFavDevices(GetFavDeviceParams params);
   Future<CreateFavDeviceResponse> createFavDevice(CreateFavDeviceParams params);
-  Future<void> deleteFavDevice(RemoveFavDeviceParams params);
+  Future<DeleteFavDeviceResponse> deleteFavDevice(DeleteFavDeviceParams params);
 }
 
 class FavDevicesRemoteDataSourceImpl implements FavDevicesRemoteDataSource {
@@ -42,12 +42,13 @@ class FavDevicesRemoteDataSourceImpl implements FavDevicesRemoteDataSource {
   }
 
   @override
-  Future<void> deleteFavDevice(RemoveFavDeviceParams params) {
+  Future<DeleteFavDeviceResponse> deleteFavDevice(DeleteFavDeviceParams params) {
     return httpClient.handleRequest(() async {
       await httpClient.delete(
         BackendRoutes.removeFavouriteDevice(params.entityId),
         headers: {'accept': 'application/json'},
       );
+      return DeleteFavDeviceResponse();
     });
   }
 }

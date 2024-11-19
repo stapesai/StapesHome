@@ -21,6 +21,7 @@ import 'package:stapes_home/features/floors/domain/usecases/create_floor_usecase
 import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
 import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
 import 'package:stapes_home/features/floors/domain/usecases/update_floor_usecase.dart';
+import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_datasource.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/data/repositories/node_repository_impl.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
@@ -124,14 +125,14 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<NodesRemoteDataSource>(NodesRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
   ));
-  // serviceLocator.registerSingleton<NodesLocalDataSource>(NodesLocalDataSourceImpl(
-  //   sqliteService: serviceLocator<SQLiteService>(),
-  // ));
+  serviceLocator.registerSingleton<NodesLocalDataSource>(NodesLocalDataSourceImpl(
+    sqliteService: serviceLocator<SQLiteService>(),
+  ));
 
   // Repositories
   serviceLocator.registerSingleton<NodeRepository>(NodeRepositoryImpl(
     remoteDataSource: serviceLocator<NodesRemoteDataSource>(),
-    // localDataSource: serviceLocator<NodesLocalDataSource>(),
+    localDataSource: serviceLocator<NodesLocalDataSource>(),
     networkInfo: serviceLocator<NetworkInfo>(),
   ));
 

@@ -1,8 +1,7 @@
-class RemoveFavDeviceParams {
+class DeleteFavDeviceParams {
   final String entityId;
 
-  RemoveFavDeviceParams({required this.entityId});
-
+  DeleteFavDeviceParams({required this.entityId});
 }
 
-class RemoveFavdeviceParams {}
+class DeleteFavDeviceResponse {}

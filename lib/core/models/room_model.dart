@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 class RoomModel {
   final String? id;
   final String floorId;
@@ -17,14 +15,14 @@ class RoomModel {
     );
   }
 
-  Object toJson() {
-    return jsonEncode({
-      'id': id,
-      'floor_id': floorId,
-      'name': name,
-      'type': type,
-    });
-  }
+  // Object toJson() {
+  //   return jsonEncode({
+  //     'id': id,
+  //     'floor_id': floorId,
+  //     'name': name,
+  //     'type': type,
+  //   });
+  // }
 
   Map<String, dynamic> toMap() {
     return {
@@ -34,9 +32,4 @@ class RoomModel {
       'type': type,
     };
   }
-}
-
-void main() {
-  final room = RoomModel(id: null, floorId: '1', name: 'Living Room', type: 'Living Room');
-  print(room.toJson());
 }
