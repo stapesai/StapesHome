@@ -77,7 +77,7 @@ class SQLiteService {
     await db.execute('''
       CREATE TABLE favourite_devices(
         id TEXT PRIMARY KEY,
-        entity_id TEXT PRIMARY KEY,
+        entity_id TEXT,
         FOREIGN KEY (entity_id) REFERENCES devices(id) ON DELETE CASCADE
       )
     ''');
