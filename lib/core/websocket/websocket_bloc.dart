@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/config/config.dart';
 import 'package:stapes_home/core/websocket/websocket_messages_models.dart';
 import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'websocket_event.dart';
@@ -12,17 +13,24 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   // For now, we can solve this issue by keeping the history of the messages and emitting them to all the pages.
   // But, this is not a good solution. We have to find a better solution for this.
   // final List<WebsocketIncommingMessage> messagesHistory = [];
+  Timer? _connectionMonitor;
+  // static const connectionMonitorInterval = Duration(seconds: 10);
   final WebsocketService _webSocketService = WebsocketService();
   StreamSubscription<dynamic>? _messageSubscription;
+  StreamSubscription<WebsocketConnectionState>? _connectionStateSubscription;
 
   WebsocketBloc() : super(WebsocketInitial()) {
     on<ConnectWebsocketEvent>(_onConnect);
     on<DisconnectWebsocketEvent>(_onDisconnect);
     on<WebsocketMessageReceivedEvent>(_onMessageReceived);
-    on<WebsocketErrorOccurredEvent>(_onErrorOccurred);
     on<WebsocketSendDeviceControlRequest>(_onSendDeviceControlRequest);
+    on<WebsocketErrorOccurredEvent>((event, emit) => emit(WebsocketErrorOccurredState(event.error)));
+    on<WebsocketConnectedEvent>((event, emit) => emit(WebsocketConnected()));
+    on<WebsocketConnectingEvent>((event, emit) => emit(WebsocketConnecting()));
+    on<WebsocketDisconnectedEvent>((event, emit) => emit(WebsocketDisconnected()));
     // on<GetWebsocketMessageHistory>(_onGetMessageHistory);
     // TODO: implement a event for user logout so that service can stop reconnecting.
+    _startConnectionMonitoring();
     print('WebsocketBloc created');
   }
 
@@ -30,32 +38,64 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   Future<void> close() {
     print('WebsocketBloc closed');
     _messageSubscription?.cancel();
+    _connectionStateSubscription?.cancel();
+    _connectionMonitor?.cancel();
     _webSocketService.disconnect();
     _webSocketService.closeControllers();
     return super.close();
   }
 
+  void _startConnectionMonitoring() {
+    _connectionMonitor?.cancel();
+    _connectionMonitor = Timer.periodic(Duration(seconds: Config.websocketReconnectInterval), (_) {
+      if (!_webSocketService.isConnected) {
+        add(ConnectWebsocketEvent());
+      }
+    });
+  }
+
   Future<void> _onConnect(ConnectWebsocketEvent event, Emitter<WebsocketState> emit) async {
+    if (state is WebsocketConnecting) return;
+
     emit(WebsocketConnecting());
     try {
-      await _webSocketService.connect();
-      emit(WebsocketConnected());
-
-      _messageSubscription = _webSocketService.messageStream.listen(
-        (message) {
-          add(WebsocketMessageReceivedEvent(message));
+      // Setup connection state subscription
+      _connectionStateSubscription?.cancel();
+      _connectionStateSubscription = _webSocketService.connectionState.listen(
+        (connectionState) {
+          switch (connectionState) {
+            case WebsocketConnectionState.connected:
+              print('WebsocketBloc: Websocket connected');
+              add(WebsocketConnectedEvent());
+              break;
+            case WebsocketConnectionState.connecting:
+              print('WebsocketBloc: Websocket connecting');
+              add(WebsocketConnectingEvent());
+              break;
+            case WebsocketConnectionState.disconnected:
+              print('WebsocketBloc: Websocket disconnected');
+              add(WebsocketDisconnectedEvent());
+              break;
+            case WebsocketConnectionState.error:
+              print('WebsocketBloc: Websocket error');
+              add(WebsocketErrorOccurredEvent("Unable to connect to websocket server"));
+              break;
+          }
         },
-        onError: (error) {
-          add(WebsocketErrorOccurredEvent(error.toString()));
-        },
+        onError: (error) => add(WebsocketErrorOccurredEvent(error.toString())),
       );
 
-      _webSocketService.connectionState.listen((state) {
-        if (state == WebsocketConnectionState.disconnected) {
-          add(DisconnectWebsocketEvent());
-        }
-      });
+      // Connect to websocket server
+      await _webSocketService.connect();
+
+      // Setup message subscription
+      _messageSubscription?.cancel();
+      _messageSubscription = _webSocketService.messageStream.listen(
+        (message) => add(WebsocketMessageReceivedEvent(message)),
+        onError: (error) => add(WebsocketErrorOccurredEvent(error.toString())),
+      );
     } catch (e) {
+      print('Unhandled exception in WebsocketBloc: $e');
       add(WebsocketErrorOccurredEvent(e.toString()));
     }
   }
@@ -96,9 +136,9 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   //   }
   // }
 
-  void _onErrorOccurred(WebsocketErrorOccurredEvent event, Emitter<WebsocketState> emit) {
-    emit(WebsocketErrorOccurredState(event.error));
-  }
+  // void _onErrorOccurred(WebsocketErrorOccurredEvent event, Emitter<WebsocketState> emit) {
+  //   emit(WebsocketErrorOccurredState(event.error));
+  // }
 
   void _onSendDeviceControlRequest(WebsocketSendDeviceControlRequest event, Emitter<WebsocketState> emit) {
     WebsocketOutgoingMessage message = WebsocketOutgoingMessage(

@@ -42,4 +42,10 @@ class WebsocketSendDeviceControlRequest extends WebsocketEvent {
   List<Object> get props => [deviceId, state];
 }
 
+class WebsocketConnectedEvent extends WebsocketEvent {}
+
+class WebsocketConnectingEvent extends WebsocketEvent {}
+
+class WebsocketDisconnectedEvent extends WebsocketEvent {}
+
 // class GetWebsocketMessageHistory extends WebsocketEvent {}

@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
-import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
@@ -82,9 +80,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
     if (_isHandlingTap) return;
 
     final pageIndex = _pageController.page?.round() ?? 0;
-    print('Page Index: $pageIndex');
-    print('Page Controller Page: ${_pageController.page}');
-    print('Page Controller Position: ${_pageController.position}');
+    // print('Page Index: $pageIndex');
+    // print('Page Controller Page: ${_pageController.page}');
+    // print('Page Controller Position: ${_pageController.position}');
 
     // FIXME: this has very bad performance. It is called on every pixel change. See debug console.
     // Ensure updates only happen when the page animation has fully settled

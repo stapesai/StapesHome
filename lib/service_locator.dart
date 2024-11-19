@@ -4,7 +4,6 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/database/sqlite_service.dart';
 import 'package:stapes_home/core/network/http_client.dart';
-import 'package:stapes_home/core/websocket/websocket_service.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/auth/data/repositories/auth_abs_class_impl.dart';
 import 'package:stapes_home/features/auth/data/datasources/remote/auth_remote_datasource.dart';

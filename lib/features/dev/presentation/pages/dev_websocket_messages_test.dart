@@ -100,26 +100,28 @@ class _DevTestMessagesPageState extends State<DevTestWebsocketMessagesPage> {
       ),
       body: BlocBuilder<WebsocketBloc, WebsocketState>(
         builder: (context, state) {
+          // Handle connection states first with early returns
           if (state is WebsocketInitial) {
-            return const Center(child: Text('No messages yet'));
+            return const Center(child: Text('No messages yet', style: TextStyle(color: Colors.white)));
           }
 
           if (state is WebsocketConnecting) {
-            return const Center(child: Text('Connecting...'));
+            return const Center(child: Text('Connecting...', style: TextStyle(color: Colors.white)));
           }
 
           if (state is WebsocketConnected) {
-            return const Center(child: Text('Connected'));
+            return const Center(child: Text('Connected', style: TextStyle(color: Colors.white)));
           }
 
           if (state is WebsocketDisconnected) {
-            return const Center(child: Text('Disconnected'));
+            return const Center(child: Text('Disconnected', style: TextStyle(color: Colors.white)));
           }
 
           if (state is WebsocketErrorOccurredState) {
-            return Center(child: Text('Error: ${state.error}'));
+            return Center(child: Text('Error: ${state.error}', style: TextStyle(color: Colors.white)));
           }
 
+          // Only handle messages if we're in a message state
           if (state is WebsocketDeviceStatusUpdateMessageState ||
               state is WebsocketNodeStatusUpdateMessageState ||
               state is WebsocketErrorMessageState) {

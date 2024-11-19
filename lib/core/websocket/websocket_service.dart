@@ -1,17 +1,17 @@
 import 'dart:async';
 import 'dart:io';
-import 'package:stapes_home/core/config/config.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
 
-enum WebsocketConnectionState { connected, disconnected, error }
+enum WebsocketConnectionState { connected, connecting, disconnected, error }
 
 class WebsocketService {
   // Socket connection
   WebSocket? _socket;
+  bool _isConnecting = false;
   // URL of the Websocket server
   final Uri url = WebsocketRoutes.getWebsocketUrl();
   // User session (can be null), fetched from the local data source later
@@ -31,9 +31,10 @@ class WebsocketService {
   Stream<String> get messageStream => _messageController.stream;
   Stream<WebsocketConnectionState> get connectionState => _connectionStateController.stream;
 
-  bool get isConnected =>
-      _connectionStateController.hasListener &&
-      _connectionStateController.stream.last == WebsocketConnectionState.connected;
+  // bool get isConnected =>
+  //     _connectionStateController.hasListener &&
+  //     _connectionStateController.stream.last == WebsocketConnectionState.connected;
+  bool get isConnected => _socket?.readyState == WebSocket.open;
 
   WebsocketService() {
     print('Websocket service initialized');
@@ -43,9 +44,15 @@ class WebsocketService {
     if (isConnected) {
       print('Already connected to Websocket server');
       return;
+    } else if (_isConnecting) {
+      print('Already connecting to Websocket server');
+      return;
     }
 
     try {
+      _isConnecting = true;
+      _connectionStateController.add(WebsocketConnectionState.connecting);
+
       // Fetch the user session from the local data source
       _userSession = await serviceLocator<AuthLocalDataSource>().getUserSession();
       if (_userSession == null) {
@@ -54,8 +61,8 @@ class WebsocketService {
 
       // Connect to the Websocket server
       print('Connecting to Websocket server at ${url.toString()}');
-      print('User ID: ${_userSession!.userId}');
-      print('Session ID: ${_userSession!.sessionId}');
+      // print('User ID: ${_userSession!.userId}');
+      // print('Session ID: ${_userSession!.sessionId}');
       _socket = await WebSocket.connect(
         url.toString(),
         headers: {
@@ -63,13 +70,23 @@ class WebsocketService {
           'X-Session-Id': _userSession!.userId,
         },
       );
+      _isConnecting = false;
       _connectionStateController.add(WebsocketConnectionState.connected);
+
       _setupSocketListeners();
       print('Connected to Websocket server');
     } on WebSocketException catch (e) {
-      _handleConnectionError(WebsocketConnectionException(e.message));
+      print('Connection Error: ${e.message}');
+      _isConnecting = false;
+      _connectionStateController.add(WebsocketConnectionState.error);
+      // throw WebsocketConnectionException(e.message);
+      // _scheduleReconnection();
     } catch (e) {
-      _handleConnectionError(UnexpectedException(e.toString()));
+      print('Connection Error: ${e.toString()}');
+      _isConnecting = false;
+      _connectionStateController.add(WebsocketConnectionState.error);
+      // throw WebsocketConnectionException(e.toString());
+      // _scheduleReconnection();
     }
   }
 
@@ -107,28 +124,19 @@ class WebsocketService {
   void _handleDisconnection() {
     print('Disconnected from Websocket server');
     _connectionStateController.add(WebsocketConnectionState.disconnected);
-    _scheduleReconnection();
+    // _scheduleReconnection();
   }
 
-  void _handleConnectionError(AppException error) {
-    print('Connection Error: ${error.message}');
-    _connectionStateController.add(WebsocketConnectionState.error);
-    _scheduleReconnection();
-  }
-
-  void _scheduleReconnection() {
-    print('Reconnecting in ${Config.websocketReconnectInterval} seconds');
-    _reconnectTimer?.cancel();
-    _reconnectTimer = Timer(Duration(seconds: Config.websocketReconnectInterval), connect);
-  }
+  // void _scheduleReconnection() {
+  //   print('Reconnecting in ${Config.websocketReconnectInterval} seconds');
+  //   _reconnectTimer?.cancel();
+  //   _reconnectTimer = Timer(Duration(seconds: Config.websocketReconnectInterval), connect);
+  // }
 
   Future<void> disconnect() async {
     print('Disconnecting from Websocket server');
     _reconnectTimer?.cancel();
     await _socket?.close();
-    // Don't dispose the stream controllers here.
-    // await _messageController.close();
-    // await _connectionStateController.close();
   }
 
   void closeControllers() {
