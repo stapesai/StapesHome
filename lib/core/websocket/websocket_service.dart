@@ -5,7 +5,6 @@ import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/service_locator.dart';
-import 'package:uuid/uuid.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
 
 enum WebsocketConnectionState { connected, disconnected, error }
@@ -80,20 +79,13 @@ class WebsocketService {
     }
   }
 
-  // void sendDeviceStateUpdate(String deviceId, bool state) {
-  //   if (!isConnected) {
-  //     throw WebsocketConnectionException('Not connected to server');
-  //   }
+  void sendMessage(Object message) {
+    if (!isConnected) {
+      throw WebsocketConnectionException('Not connected to server');
+    }
 
-  //   final message = json.encode({
-  //     'id': _uuid.v4(),
-  //     'command': 'control_device',
-  //     'entity_id': deviceId,
-  //     'state': state,
-  //   });
-
-  //   _socket?.add(message);
-  // }
+    _socket?.add(message);
+  }
 
   void _setupSocketListeners() {
     _socket?.listen(

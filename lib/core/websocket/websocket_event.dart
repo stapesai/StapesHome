@@ -29,4 +29,17 @@ class WebsocketErrorOccurredEvent extends WebsocketEvent {
   List<Object> get props => [error];
 }
 
+class WebsocketSendDeviceControlRequest extends WebsocketEvent {
+  final String deviceId;
+  final bool state;
+
+  const WebsocketSendDeviceControlRequest({
+    required this.deviceId,
+    required this.state,
+  });
+
+  @override
+  List<Object> get props => [deviceId, state];
+}
+
 // class GetWebsocketMessageHistory extends WebsocketEvent {}

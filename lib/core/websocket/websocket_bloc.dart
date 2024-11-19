@@ -20,6 +20,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
     on<DisconnectWebsocketEvent>(_onDisconnect);
     on<WebsocketMessageReceivedEvent>(_onMessageReceived);
     on<WebsocketErrorOccurredEvent>(_onErrorOccurred);
+    on<WebsocketSendDeviceControlRequest>(_onSendDeviceControlRequest);
     // on<GetWebsocketMessageHistory>(_onGetMessageHistory);
     // TODO: implement a event for user logout so that service can stop reconnecting.
   }
@@ -87,6 +88,18 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
 
   void _onErrorOccurred(WebsocketErrorOccurredEvent event, Emitter<WebsocketState> emit) {
     emit(WebsocketErrorOccurredState(event.error));
+  }
+
+  void _onSendDeviceControlRequest(WebsocketSendDeviceControlRequest event, Emitter<WebsocketState> emit) {
+    WebsocketOutgoingMessage message = WebsocketOutgoingMessage(
+      type: WebsocketOutgoingMessageType.controlDevice,
+      payload: WebsocketDeviceControlMessage(
+        deviceId: event.deviceId,
+        state: event.state,
+      ),
+    );
+
+    _webSocketService.sendMessage(message.toJson());
   }
 
   @override
