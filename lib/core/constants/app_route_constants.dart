@@ -104,25 +104,30 @@ class AppRouteConstants {
     routeName: 'MainPage',
   );
 
-  // static final home = _RouteConfig(
-  //   routePath: '/home',
-  //   routeName: 'HomePage',
-  // );
+  static final home = _RouteConfig(
+    routePath: '/home',
+    routeName: 'HomePage',
+  );
 
-  // static final nodes = _RouteConfig(
-  //   routePath: '/nodes',
-  //   routeName: 'NodesPage',
-  // );
+  static final nodes = _RouteConfig(
+    routePath: '/nodes',
+    routeName: 'NodesPage',
+  );
 
-  // static final devices = _RouteConfig(
-  //   routePath: '/devices',
-  //   routeName: 'DevicesPage',
-  // );
+  static final devices = _RouteConfig(
+    routePath: '/devices',
+    routeName: 'DevicesPage',
+  );
 
-  // static final settings = _RouteConfig(
-  //   routePath: '/settings',
-  //   routeName: 'SettingsPage',
-  // );
+  static final settings = _RouteConfig(
+    routePath: '/settings',
+    routeName: 'SettingsPage',
+  );
+
+  static final createFloorPage = _RouteConfig(
+    routePath: '/floors/create-floor',
+    routeName: 'CreateFloorPage',
+  );
 
   static final devPageUserDetailsShow = _RouteConfig(
     routePath: '/dev-user-details-show',

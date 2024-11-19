@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
-import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
+import 'package:stapes_home/features/floors/presentation/pages/create_floor_page.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
@@ -39,17 +39,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[1],
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
-    KeepAlivePage(
-        child: DevTestWebsocketMessagesPage(
-      page: 'home',
-    )),
-    KeepAlivePage(
-        child: DevTestWebsocketMessagesPage(
-      page: 'devices',
-    )),
+    CreateFloorPage(),
+    KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),
+    KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'devices')),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),
-    DevTestPage(text: 'Nodes Page'),
+    // DevTestPage(text: 'Nodes Page'),
     KeepAlivePage(child: DevUserDetailsScreen()),
     // DevTestPage(text: 'Devices Page'),
     // DevTestPage(text: 'Settings Page'),
