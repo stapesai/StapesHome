@@ -51,13 +51,6 @@ class SQLiteService {
     ''');
 
     await db.execute('''
-      CREATE TABLE favourite_devices(
-        id TEXT PRIMARY KEY,
-        entity_id TEXT PRIMARY KEY,
-      )
-    ''');
-
-    await db.execute('''
       CREATE TABLE nodes(
         id TEXT PRIMARY KEY,
         room_id TEXT NOT NULL,
@@ -66,8 +59,26 @@ class SQLiteService {
         hardware_version TEXT NOT NULL,
         hardware_mac_address TEXT NOT NULL, 
         firmware_version TEXT NOT NULL,
-        num_entities INTEGER NOT NULL,
         FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE devices(
+        id TEXT PRIMARY KEY,
+        node_id TEXT NOT NULL,
+        name TEXT NOT NULL,
+        type TEXT NOT NULL,
+        channel_id INTEGER NOT NULL,
+        FOREIGN KEY (node_id) REFERENCES nodes(id) ON DELETE CASCADE
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE favourite_devices(
+        id TEXT PRIMARY KEY,
+        entity_id TEXT PRIMARY KEY,
+        FOREIGN KEY (entity_id) REFERENCES devices(id) ON DELETE CASCADE
       )
     ''');
   }

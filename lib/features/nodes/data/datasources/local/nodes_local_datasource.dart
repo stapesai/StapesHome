@@ -91,7 +91,6 @@ class NodesLocalDataSourceImpl implements NodesLocalDataSource {
         'hardware_version': node.hardwareVersion,
         'hardware_mac_address': node.hardwareMacAddress,
         'firmware_version': node.firmwareVersion,
-        'num_entities': 0, // Default value
       });
 
       if (result == 0) {
@@ -205,7 +204,6 @@ class NodesLocalDataSourceImpl implements NodesLocalDataSource {
             'hardware_version': node.hardwareVersion,
             'hardware_mac_address': node.hardwareMacAddress,
             'firmware_version': node.firmwareVersion,
-            'num_entities': 0,
           });
         }
       });

@@ -1,28 +1,28 @@
 class DeviceModel {
+  final String? id;
   final String nodeId;
   final String name;
   final String type;
   final int channelId;
-  final String id;
-  bool state;
+  // bool state;
 
   DeviceModel({
+    required this.id,
     required this.nodeId,
     required this.name,
     required this.type,
     required this.channelId,
-    required this.id,
-    this.state = false,
+    // this.state = false,
   });
 
   factory DeviceModel.fromJson(Map<String, dynamic> json) {
     return DeviceModel(
+      id: json['id'],
       nodeId: json['node_id'],
       name: json['name'],
       type: json['type'],
       channelId: json['channel_id'],
-      id: json['id'],
-      state: json['state'] ?? false,
+      // state: json['state'] ?? false,
     );
   }
 

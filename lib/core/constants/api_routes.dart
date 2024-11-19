@@ -110,10 +110,10 @@ class BackendRoutes {
 
   // Entity routes
   static final Uri createEntity = Uri.parse('${BaseUrls.protocol}://$baseUrl/entities');
-  static final Uri getAllEntities = Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/all');
-  static Uri getEntitiesByNodeId(String nodeId) =>
+  static final Uri getAllDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/all');
+  static Uri getDevicesByNodeId(String nodeId) =>
       Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/by_node_id/$nodeId');
-  static Uri getEntitiesByRoomId(String roomId) =>
+  static Uri getDevicesByRoomId(String roomId) =>
       Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/by_room_id/$roomId');
   static Uri updateEntity(String entityId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/$entityId');
   static Uri deleteEntity(String entityId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/$entityId');
