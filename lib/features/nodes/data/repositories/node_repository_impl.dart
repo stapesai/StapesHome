@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:stapes_home/core/error/failures.dart';
 import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
+import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_datasource.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
 import 'package:stapes_home/features/nodes/data/models/create_node_api_param.dart';
@@ -11,35 +12,49 @@ import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dar
 
 class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
   final NodesRemoteDataSource remoteDataSource;
-  // final NodesLocalDataSource localDataSource;
+  final NodesLocalDataSource localDataSource;
   final NetworkInfo networkInfo;
 
   NodeRepositoryImpl({
     required this.remoteDataSource,
-    // required this.localDataSource,
+    required this.localDataSource,
     required this.networkInfo,
   });
 
   @override
   Future<Either<Failure, CreateNodeResponse>> createNode(CreateNodeParams params) {
     return handleEither(() async {
-      final node = await remoteDataSource.createNode(params);
-      return CreateNodeResponse(node: node);
+      final response = await remoteDataSource.createNode(params);
+      await localDataSource.createNode(response.node);
+      return response;
     }, networkInfo);
   }
 
   @override
   Future<Either<Failure, DeleteNodeResponse>> deleteNode(DeleteNodeParams params) {
     return handleEither(() async {
-      await remoteDataSource.deleteNode(params);
-      return DeleteNodeResponse();
+      final response = await remoteDataSource.deleteNode(params);
+      await localDataSource.deleteNode(params.nodeId);
+      return response;
     }, networkInfo);
   }
 
   @override
-  Future<Either<Failure, GetNodesByRoomIdResponse>> getNodesByRoomId(GetNodesByRoomIdParams params) {
-    return handleEither(() async {
-      final nodes = await remoteDataSource.getNodesByRoomId(params);
+  Future<Either<Failure, GetNodesByRoomIdResponse>> getNodesByRoomId(GetNodesByRoomIdParams params,
+      {bool refresh = false}) async {
+    // If refresh requested, fetch from network and cache
+    if (refresh) {
+      return await handleEither(() async {
+        final response = await remoteDataSource.getNodesByRoomId(params);
+        // Cache the fetched nodes
+        await localDataSource.updateCachedNodes(response.nodes);
+        return response;
+      }, networkInfo);
+    }
+
+    // Get nodes from local storage
+    return await handleEither(() async {
+      final nodes = await localDataSource.getNodesByRoomId(params.roomId);
       return GetNodesByRoomIdResponse(nodes: nodes);
     }, networkInfo);
   }
@@ -47,42 +62,9 @@ class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
   @override
   Future<Either<Failure, UpdateNodeResponse>> updateNode(UpdateNodeParams params) {
     return handleEither(() async {
-      final node = await remoteDataSource.updateNode(params);
-      return UpdateNodeResponse(node: node);
+      final response = await remoteDataSource.updateNode(params);
+      await localDataSource.updateNode(params.nodeId, response.node);
+      return response;
     }, networkInfo);
   }
-
-  // @override
-  // Future<Either<Failure, List<NodeModel>>> getCachedNodes() {
-  //   return handleEither(() => localDataSource.getAllNodes());
-  // }
-
-  // @override
-  // Future<Either<Failure, void>> cacheNode(NodeModel node) {
-  // return handleEither(() => localDataSource.saveNode(node));
-  // }
-
-  // @override
-  // Future<Either<Failure, void>> cacheNodes(List<NodeModel> nodes) {
-  //   return handleEither(() async {
-  //     for (var node in nodes) {
-  //       await localDataSource.saveNode(node);
-  //     }
-  //   });
-  // }
-
-  // @override
-  // Future<Either<Failure, void>> deleteCachedNode(String nodeId) {
-  //   return handleEither(() => localDataSource.deleteNode(nodeId));
-  // }
-
-  // @override
-  // Future<Either<Failure, void>> deleteCachedNodes() {
-  //   return handleEither(() async {
-  //     final nodes = await localDataSource.getAllNodes();
-  //     for (var node in nodes) {
-  //       await localDataSource.deleteNode(node.id);
-  //     }
-  //   });
-  // }
 }

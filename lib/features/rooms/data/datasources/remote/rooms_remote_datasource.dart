@@ -1,4 +1,3 @@
-import 'package:stapes_home/core/models/room_model.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/features/rooms/data/models/create_room_api_param.dart';

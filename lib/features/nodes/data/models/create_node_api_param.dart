@@ -2,30 +2,20 @@ import 'dart:convert';
 import 'package:stapes_home/core/models/node_model.dart';
 
 class CreateNodeParams {
-  final String roomId;
-  final String name;
-  final String hardwareChip;
-  final String hardwareVersion;
-  final String hardwareMacAddress;
-  final String firmwareVersion;
+  final NodeModel node;
 
   CreateNodeParams({
-    required this.roomId,
-    required this.name,
-    required this.hardwareChip,
-    required this.hardwareVersion,
-    required this.hardwareMacAddress,
-    required this.firmwareVersion,
+    required this.node,
   });
 
   Object toJson() {
     return jsonEncode({
-      'room_id': roomId,
-      'name': name,
-      'hardware_chip': hardwareChip,
-      'hardware_version': hardwareVersion,
-      'hardware_mac_address': hardwareMacAddress,
-      'firmware_version': firmwareVersion,
+      'room_id': node.roomId,
+      'name': node.name,
+      'hardware_chip': node.hardwareChip,
+      'hardware_version': node.hardwareVersion,
+      'hardware_mac_address': node.hardwareMacAddress,
+      'firmware_version': node.firmwareVersion,
     });
   }
 }

@@ -1,4 +1,3 @@
-import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/features/nodes/data/models/create_node_api_param.dart';
@@ -7,10 +6,10 @@ import 'package:stapes_home/features/nodes/data/models/get_nodes_by_room_id_api_
 import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dart';
 
 abstract class NodesRemoteDataSource {
-  Future<List<NodeModel>> getNodesByRoomId(GetNodesByRoomIdParams params);
-  Future<NodeModel> createNode(CreateNodeParams params);
-  Future<NodeModel> updateNode(UpdateNodeParams params);
-  Future<void> deleteNode(DeleteNodeParams params);
+  Future<GetNodesByRoomIdResponse> getNodesByRoomId(GetNodesByRoomIdParams params);
+  Future<CreateNodeResponse> createNode(CreateNodeParams params);
+  Future<UpdateNodeResponse> updateNode(UpdateNodeParams params);
+  Future<DeleteNodeResponse> deleteNode(DeleteNodeParams params);
 }
 
 class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
@@ -21,7 +20,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
   });
 
   @override
-  Future<List<NodeModel>> getNodesByRoomId(GetNodesByRoomIdParams params) {
+  Future<GetNodesByRoomIdResponse> getNodesByRoomId(GetNodesByRoomIdParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.get(
         BackendRoutes.getNodesByRoomId(params.roomId),
@@ -29,12 +28,12 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
           'accept': 'application/json',
         },
       );
-      return (response as List).map((node) => NodeModel.fromJson(node)).toList();
+      return GetNodesByRoomIdResponse.fromJson(response);
     });
   }
 
   @override
-  Future<NodeModel> createNode(CreateNodeParams params) {
+  Future<CreateNodeResponse> createNode(CreateNodeParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.post(
         BackendRoutes.createNode,
@@ -44,12 +43,12 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
         },
         body: params.toJson(),
       );
-      return CreateNodeResponse.fromJson(response).node;
+      return CreateNodeResponse.fromJson(response);
     });
   }
 
   @override
-  Future<NodeModel> updateNode(UpdateNodeParams params) {
+  Future<UpdateNodeResponse> updateNode(UpdateNodeParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.put(
         BackendRoutes.updateNode(params.nodeId),
@@ -59,12 +58,12 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
         },
         body: params.toJson(),
       );
-      return UpdateNodeResponse.fromJson(response).node;
+      return UpdateNodeResponse.fromJson(response);
     });
   }
 
   @override
-  Future<void> deleteNode(DeleteNodeParams params) {
+  Future<DeleteNodeResponse> deleteNode(DeleteNodeParams params) {
     return httpClient.handleRequest(() async {
       await httpClient.delete(
         BackendRoutes.deleteNode(params.nodeId),
@@ -72,6 +71,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
           'accept': 'application/json',
         },
       );
+      return DeleteNodeResponse();
     });
   }
 }

@@ -9,7 +9,7 @@ abstract class NodeRepository {
   // -------------Remote-------------
   Future<Either<Failure, CreateNodeResponse>> createNode(CreateNodeParams params);
   Future<Either<Failure, DeleteNodeResponse>> deleteNode(DeleteNodeParams params);
-  Future<Either<Failure, GetNodesByRoomIdResponse>> getNodesByRoomId(GetNodesByRoomIdParams params);
+  Future<Either<Failure, GetNodesByRoomIdResponse>> getNodesByRoomId(GetNodesByRoomIdParams params, {bool refresh = false});
   Future<Either<Failure, UpdateNodeResponse>> updateNode(UpdateNodeParams params);
 
   // -------------Local-------------

@@ -2,18 +2,16 @@ import 'dart:convert';
 import 'package:stapes_home/core/models/floor_model.dart';
 
 class CreateFloorParams {
-  final String alias;
-  final int level;
+  final FloorModel floor;
 
   CreateFloorParams({
-    required this.alias,
-    required this.level,
+    required this.floor,
   });
 
   Object toJson() {
     return jsonEncode({
-      'alias': alias,
-      'level': level,
+      'alias': floor.alias,
+      'level': floor.level,
     });
   }
 }

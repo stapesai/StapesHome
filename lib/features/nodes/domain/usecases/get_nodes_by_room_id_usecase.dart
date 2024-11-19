@@ -7,7 +7,7 @@ import 'package:stapes_home/service_locator.dart';
 
 class GetNodesByRoomIdUseCase implements UseCase<GetNodesByRoomIdParams, GetNodesByRoomIdResponse> {
   @override
-  Future<Either<Failure, GetNodesByRoomIdResponse>> call(GetNodesByRoomIdParams params) async {
-    return serviceLocator<NodeRepository>().getNodesByRoomId(params);
+  Future<Either<Failure, GetNodesByRoomIdResponse>> call(GetNodesByRoomIdParams params, {bool refresh = false}) async {
+    return serviceLocator<NodeRepository>().getNodesByRoomId(params, refresh: refresh);
   }
 }
