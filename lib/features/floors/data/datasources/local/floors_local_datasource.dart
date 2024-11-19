@@ -49,7 +49,7 @@ class FloorsLocalDataSourceImpl implements FloorsLocalDataSource {
   @override
   Future<FloorModel> createFloor(FloorModel floor) async {
     try {
-      if (floor.id.isEmpty) {
+      if (floor.id!.isEmpty) {
         throw ValidationException('Floor ID cannot be empty');
       }
 
@@ -64,14 +64,7 @@ class FloorsLocalDataSourceImpl implements FloorsLocalDataSource {
         throw SQLiteException('Floor with ID ${floor.id} already exists');
       }
 
-      final result = await db.insert(
-        'floors',
-        {
-          'id': floor.id,
-          'level': floor.level,
-          'alias': floor.alias,
-        },
-      );
+      final result = await db.insert('floors', floor.toMap());
 
       if (result == 0) {
         throw SQLiteException('Failed to insert floor');
@@ -108,10 +101,7 @@ class FloorsLocalDataSourceImpl implements FloorsLocalDataSource {
 
       final rowsAffected = await db.update(
         'floors',
-        {
-          'level': floor.level,
-          'alias': floor.alias,
-        },
+        floor.toMap(),
         where: 'id = ?',
         whereArgs: [id],
       );
@@ -165,14 +155,10 @@ class FloorsLocalDataSourceImpl implements FloorsLocalDataSource {
       await db.transaction((txn) async {
         await txn.delete('floors');
         for (var floor in floors) {
-          if (floor.id.isEmpty) {
+          if (floor.id!.isEmpty) {
             throw ValidationException('Floor ID cannot be empty');
           }
-          await txn.insert('floors', {
-            'id': floor.id,
-            'level': floor.level,
-            'alias': floor.alias,
-          });
+          await txn.insert('floors', floor.toMap());
         }
       });
     } on StateError catch (e) {

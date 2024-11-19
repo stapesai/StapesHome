@@ -1,20 +1,11 @@
-import 'dart:convert';
-
-import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';
 
 class GetRoomsParams {
-  final FloorModel floor;
+  final String floorId;
 
   GetRoomsParams({
-    required this.floor,
+    required this.floorId,
   });
-
-  Object toJson() {
-    return jsonEncode({
-      'floor': floor.toJson(),
-    });
-  }
 }
 
 class GetRoomsResponse {

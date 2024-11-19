@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 class FloorModel {
-  final String id;
+  final String? id;
   final int level;
   final String alias;
 
@@ -21,5 +21,13 @@ class FloorModel {
       'level': level,
       'alias': alias,
     });
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'level': level,
+      'alias': alias,
+    };
   }
 }

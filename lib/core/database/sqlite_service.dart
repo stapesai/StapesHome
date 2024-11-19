@@ -51,9 +51,19 @@ class SQLiteService {
 
     await db.execute('''
       CREATE TABLE floors(
-        id TEXT PRIMARY KEY,
-        level INTEGER NOT NULL,
-        alias TEXT NOT NULL
+      id TEXT PRIMARY KEY,
+      level INTEGER NOT NULL,
+      alias TEXT NOT NULL
+      )
+    ''');
+
+    await db.execute('''
+      CREATE TABLE rooms(
+      id TEXT PRIMARY KEY,
+      floor_id TEXT NOT NULL,
+      name TEXT NOT NULL,
+      type TEXT NOT NULL,
+      FOREIGN KEY (floor_id) REFERENCES floors(id) ON DELETE CASCADE
       )
     ''');
 

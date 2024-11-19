@@ -1,6 +1,4 @@
 import 'package:hive/hive.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:stapes_home/core/error/exceptions.dart';
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
 

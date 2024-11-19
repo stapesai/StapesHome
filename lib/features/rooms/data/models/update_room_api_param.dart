@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:stapes_home/core/models/room_model.dart';
 
 class UpdateRoomParams {
@@ -10,7 +12,11 @@ class UpdateRoomParams {
   });
 
   Object toJson() {
-    return room.toJson();
+    return jsonEncode({
+      'floor_id': room.floorId,
+      'name': room.name,
+      'type': room.type,
+    });
   }
 }
 

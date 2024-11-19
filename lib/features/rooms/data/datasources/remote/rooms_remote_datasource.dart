@@ -7,10 +7,10 @@ import 'package:stapes_home/features/rooms/data/models/get_rooms_api_param.dart'
 import 'package:stapes_home/features/rooms/data/models/delete_room_api_param.dart';
 
 abstract class RoomsRemoteDataSource {
-  Future<List<RoomModel>> getRooms(GetRoomsParams params);
-  Future<RoomModel> createRoom(CreateRoomParams params);
-  Future<RoomModel> updateRoom(UpdateRoomParams params);
-  Future<void> deleteRoom(DeleteRoomParams params);
+  Future<GetRoomsResponse> getRooms(GetRoomsParams params);
+  Future<CreateRoomResponse> createRoom(CreateRoomParams params);
+  Future<UpdateRoomResponse> updateRoom(UpdateRoomParams params);
+  Future<DeleteRoomResponse> deleteRoom(DeleteRoomParams params);
 }
 
 class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
@@ -19,18 +19,18 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
   RoomsRemoteDataSourceImpl({required this.httpClient});
 
   @override
-  Future<List<RoomModel>> getRooms(GetRoomsParams params) {
+  Future<GetRoomsResponse> getRooms(GetRoomsParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.get(
-        BackendRoutes.getRoomsByFloorId(params.floor.id),
+        BackendRoutes.getRoomsByFloorId(params.floorId),
         headers: {'accept': 'application/json'},
       );
-      return (response as List).map((room) => RoomModel.fromJson(room)).toList();
+      return GetRoomsResponse.fromJson(response);
     });
   }
 
   @override
-  Future<RoomModel> createRoom(CreateRoomParams params) {
+  Future<CreateRoomResponse> createRoom(CreateRoomParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.post(
         BackendRoutes.createRoom,
@@ -40,12 +40,12 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
         },
         body: params.toJson(),
       );
-      return CreateRoomResponse.fromJson(response).room;
+      return CreateRoomResponse.fromJson(response);
     });
   }
 
   @override
-  Future<RoomModel> updateRoom(UpdateRoomParams params) {
+  Future<UpdateRoomResponse> updateRoom(UpdateRoomParams params) {
     return httpClient.handleRequest(() async {
       final response = await httpClient.put(
         BackendRoutes.updateRoom(params.roomId),
@@ -55,17 +55,18 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
         },
         body: params.toJson(),
       );
-      return UpdateRoomResponse.fromJson(response).room;
+      return UpdateRoomResponse.fromJson(response);
     });
   }
 
   @override
-  Future<void> deleteRoom(DeleteRoomParams params) {
+  Future<DeleteRoomResponse> deleteRoom(DeleteRoomParams params) {
     return httpClient.handleRequest(() async {
       await httpClient.delete(
         BackendRoutes.deleteRoom(params.roomId),
         headers: {'accept': 'application/json'},
       );
+      return DeleteRoomResponse();
     });
   }
 }

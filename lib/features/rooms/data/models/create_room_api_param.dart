@@ -4,13 +4,13 @@ import 'package:stapes_home/core/models/room_model.dart';
 class CreateRoomParams {
   final RoomModel room;
 
-  CreateRoomParams({
-    required this.room
-  });
+  CreateRoomParams({required this.room});
 
   Object toJson() {
     return jsonEncode({
-      'room': room.toJson(),
+      'floor_id': room.floorId,
+      'name': room.name,
+      'type': room.type,
     });
   }
 }

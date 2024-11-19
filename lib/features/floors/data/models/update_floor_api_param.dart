@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:stapes_home/core/models/floor_model.dart';
 
 class UpdateFloorParams {
@@ -10,7 +12,10 @@ class UpdateFloorParams {
   });
 
   Object toJson() {
-    return floor.toJson();
+    return jsonEncode({
+      'alias': floor.alias,
+      'level': floor.level,
+    });
   }
 }
 

@@ -28,6 +28,7 @@ import 'package:stapes_home/features/nodes/domain/usecases/create_node_usecase.d
 import 'package:stapes_home/features/nodes/domain/usecases/delete_node_usecase.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/get_nodes_by_room_id_usecase.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/update_node_usecase.dart';
+import 'package:stapes_home/features/rooms/data/datasources/local/rooms_local_datasource.dart';
 import 'package:stapes_home/features/rooms/data/datasources/remote/rooms_remote_datasource.dart';
 import 'package:stapes_home/features/rooms/data/repositories/room_repository_impl.dart';
 import 'package:stapes_home/features/rooms/domain/repository/room_repository.dart';
@@ -79,9 +80,9 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<FloorsRemoteDataSource>(FloorsRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
   ));
-  // serviceLocator.registerSingleton<FloorsLocalDataSource>(FloorsLocalDataSourceImpl(
-  //   sqliteService: serviceLocator<SQLiteService>(),
-  // ));
+  serviceLocator.registerSingleton<FloorsLocalDataSource>(FloorsLocalDataSourceImpl(
+    sqliteService: serviceLocator<SQLiteService>(),
+  ));
 
   // Repositories
   serviceLocator.registerSingleton<FloorRepository>(FloorRepositoryImpl(
@@ -101,14 +102,14 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<RoomsRemoteDataSource>(RoomsRemoteDataSourceImpl(
     httpClient: serviceLocator<HttpClient>(),
   ));
-  // serviceLocator.registerSingleton<RoomsLocalDataSource>(RoomsLocalDataSourceImpl(
-  //   sqliteService: serviceLocator<SQLiteService>(),
-  // ));
+  serviceLocator.registerSingleton<RoomsLocalDataSource>(RoomsLocalDataSourceImpl(
+    sqliteService: serviceLocator<SQLiteService>(),
+  ));
 
   // Repositories
   serviceLocator.registerSingleton<RoomRepository>(RoomRepositoryImpl(
     remoteDataSource: serviceLocator<RoomsRemoteDataSource>(),
-    // localDataSource: serviceLocator<RoomsLocalDataSource>(),
+    localDataSource: serviceLocator<RoomsLocalDataSource>(),
     networkInfo: serviceLocator<NetworkInfo>(),
   ));
 
