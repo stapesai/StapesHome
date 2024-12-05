@@ -8,8 +8,8 @@ import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/screens/views/nodes/wifi_credentials.dart';
-import 'package:stapes_home/screens/views/nodes/name_your_node.dart';
+import 'wifi_credentials.dart';
+import 'name_your_node.dart';
 
 class ProvisioningScreen extends StatefulWidget {
   final String deviceName;

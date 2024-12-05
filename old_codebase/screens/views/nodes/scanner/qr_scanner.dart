@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import 'package:stapes_home/screens/views/nodes/provisioning.dart';
-import 'package:stapes_home/screens/views/nodes/scanner/scanner_overlay.dart';
-import 'package:stapes_home/screens/views/nodes/scanner/scan_instructions.dart';
+import '../provisioning.dart';
+import 'scanner_overlay.dart';
+import 'scan_instructions.dart';
 
 class QrScannerScreen extends StatefulWidget {
   final String roomId;
