@@ -10,6 +10,7 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_st
 import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
+import 'package:stapes_home/features/rooms/presentation/pages/create_room_page.dart';
 
 class NavigationScreen extends StatefulWidget {
   // final StatefulNavigationShell navigationShell;
@@ -39,7 +40,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[1],
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
-    CreateFloorPage(),
+    CreateRoomPage(floorId: 'test'),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'devices')),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),

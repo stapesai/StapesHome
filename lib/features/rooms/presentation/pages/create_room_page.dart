@@ -76,6 +76,16 @@ class _CreateRoomPageState extends State<CreateRoomPage> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             resizeToAvoidBottomInset: true,
+            appBar: AppBar(
+              backgroundColor: Colors.transparent,
+              elevation: 0,
+              title: const Text('Create a new room',
+                  style: TextStyle(color: AppColor.whiteColor), textAlign: TextAlign.right),
+              leading: IconButton(
+                icon: const Icon(Icons.arrow_back, color: AppColor.whiteColor),
+                onPressed: () => Navigator.pop(context),
+              ),
+            ),
             body: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,

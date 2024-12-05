@@ -129,6 +129,11 @@ class AppRouteConstants {
     routeName: 'CreateFloorPage',
   );
 
+  static final createRoomPage = _RouteConfig(
+    routePath: '/rooms/create-room/:floorId',
+    routeName: 'CreateRoomPage',
+  );
+
   static final devPageUserDetailsShow = _RouteConfig(
     routePath: '/dev-user-details-show',
     routeName: 'DevPage-UserDetailsShow',

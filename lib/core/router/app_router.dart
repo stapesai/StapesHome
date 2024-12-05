@@ -12,8 +12,10 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
+import 'package:stapes_home/features/floors/presentation/pages/create_floor_page.dart';
 import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
+import 'package:stapes_home/features/rooms/presentation/pages/create_room_page.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(
@@ -114,9 +116,7 @@ class AppRouter {
       GoRoute(
           name: AppRouteConstants.forgotPassword.routeName,
           path: AppRouteConstants.forgotPassword.routePath,
-          pageBuilder: (context, state) {
-            return MaterialPage(child: const ForgotPasswordEmailInputScreen());
-          }),
+          builder: (context, state) => const ForgotPasswordEmailInputScreen()),
 
       // Forgot Password OTP Verification screen
       GoRoute(
@@ -152,53 +152,32 @@ class AppRouter {
         },
       ),
 
-      // StatefulShellRoute.indexedStack(
-      //   builder: (context, state, navigationShell) {
-      //     return NavigationScreen(
-      //       navigationShell: navigationShell,
-      //     );
-      //   },
-      //   branches: [
-      //     StatefulShellBranch(
-      //       routes: [
-      //         GoRoute(
-      //           path: AppRouteConstants.home.routePath,
-      //           builder: (context, state) => const DevUserDetailsScreen(),
-      //         ),
-      //       ],
-      //     ),
-      //     StatefulShellBranch(
-      //       routes: [
-      //         GoRoute(
-      //           path: AppRouteConstants.devices.routePath,
-      //           builder: (context, state) => const DevTestPage(text: 'Devices Page'),
-      //         ),
-      //       ],
-      //     ),
-      //     StatefulShellBranch(
-      //       routes: [
-      //         GoRoute(
-      //           path: AppRouteConstants.nodes.routePath,
-      //           builder: (context, state) => const DevTestPage(text: 'Nodes Page'),
-      //         ),
-      //       ],
-      //     ),
-      //     StatefulShellBranch(
-      //       routes: [
-      //         GoRoute(
-      //           path: AppRouteConstants.settings.routePath,
-      //           builder: (context, state) => const DevTestPage(text: 'Settings Page'),
-      //         ),
-      //       ],
-      //     ),
-      //   ],
-      // ),
-
-      // Main Page Route - Temporary
+      // Main Page - Navigation Screen
       GoRoute(
         name: AppRouteConstants.main.routeName,
         path: AppRouteConstants.main.routePath,
         builder: (context, state) => const NavigationScreen(),
+      ),
+
+      // Create Floor Page
+      GoRoute(
+        name: AppRouteConstants.createFloorPage.routeName,
+        path: AppRouteConstants.createFloorPage.routePath,
+        builder: (context, state) => const CreateFloorPage(),
+      ),
+
+      // Create Room Page
+      GoRoute(
+        name: AppRouteConstants.createRoomPage.routeName,
+        path: AppRouteConstants.createRoomPage.routePath,
+        pageBuilder: (context, state) {
+          final String floorId = state.pathParameters['floorId']!;
+          return MaterialPage(
+            child: CreateRoomPage(
+              floorId: floorId,
+            ),
+          );
+        },
       ),
 
       // Development Page
