@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -18,12 +19,7 @@ class SignUpDetailsFormScreen extends StatefulWidget {
   final String email;
   final String transactionId;
 
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController dobController = TextEditingController();
-  final TextEditingController genderController = TextEditingController();
-
-  SignUpDetailsFormScreen({
+  const SignUpDetailsFormScreen({
     super.key,
     required this.password,
     required this.transactionId,
@@ -35,6 +31,37 @@ class SignUpDetailsFormScreen extends StatefulWidget {
 }
 
 class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
+  final TextEditingController firstNameController = TextEditingController();
+  final TextEditingController lastNameController = TextEditingController();
+  final TextEditingController dobController = TextEditingController();
+  final TextEditingController genderController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    // Force portrait orientation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+  }
+
+  @override
+  void dispose() {
+    // Reset orientation when disposing
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+    firstNameController.dispose();
+    lastNameController.dispose();
+    dobController.dispose();
+    genderController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
@@ -95,22 +122,22 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
                   SizedBox(height: screenSize.height * 0.04),
                   CustomTextField(
                     hintText: 'First Name',
-                    controller: widget.firstNameController,
+                    controller: firstNameController,
                   ),
                   SizedBox(height: screenSize.height * 0.02),
                   CustomTextField(
                     hintText: 'Last Name',
-                    controller: widget.lastNameController,
+                    controller: lastNameController,
                   ),
                   SizedBox(height: screenSize.height * 0.02),
                   CustomTextField(
                     hintText: 'Date of Birth',
-                    controller: widget.dobController,
+                    controller: dobController,
                   ),
                   SizedBox(height: screenSize.height * 0.02),
                   CustomTextField(
                     hintText: 'Gender',
-                    controller: widget.genderController,
+                    controller: genderController,
                   ),
                   const Spacer(),
                   AnimatedContainer(
@@ -131,10 +158,10 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
                                       transactionId: widget.transactionId,
                                       user: UserModel(
                                           email: widget.email,
-                                          firstName: widget.firstNameController.text,
-                                          lastName: widget.lastNameController.text,
-                                          dob: DateTime.parse(widget.dobController.text),
-                                          gender: widget.genderController.text),
+                                          firstName: firstNameController.text,
+                                          lastName: lastNameController.text,
+                                          dob: DateTime.parse(dobController.text),
+                                          gender: genderController.text),
                                       password: widget.password,
                                     ),
                                   );

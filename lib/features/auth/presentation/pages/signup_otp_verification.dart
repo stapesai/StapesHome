@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -38,8 +39,35 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
   @override
   void initState() {
     super.initState();
+    // Lock to portrait orientation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
     _remainingSeconds = widget.expiryTime.difference(DateTime.now()).inSeconds;
     _startTimer();
+  }
+
+  @override
+  void dispose() {
+    // Reset to all orientations
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
+
+    for (var controller in _controllers) {
+      controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
+    }
+    _timer.cancel();
+
+    super.dispose();
   }
 
   Future<void> _onVerifyButtonPressed(BuildContext context) async {
@@ -76,19 +104,6 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
     String minuteString = minutes > 0 ? '$minutes min' : '';
     String secondString = seconds > 0 ? '$seconds sec' : '';
     return '$minuteString $secondString';
-  }
-
-  @override
-  void dispose() {
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
-    for (var focusNode in _focusNodes) {
-      focusNode.dispose();
-    }
-    _timer.cancel();
-
-    super.dispose();
   }
 
   @override

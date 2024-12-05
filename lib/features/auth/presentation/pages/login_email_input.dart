@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
@@ -36,12 +37,24 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
     // precacheImage(AssetImage('assets/icons/sso/google.png'), context);
     // precacheImage(AssetImage('assets/icons/sso/microsoft.png'), context);
     super.initState();
+    // Lock to portrait orientation
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     _logoWidget = _buildLogo();
     _socialLoginWidget = _buildSocialLogin();
   }
 
   @override
   void dispose() {
+    // Reset to all orientations
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.landscapeRight,
+    ]);
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
