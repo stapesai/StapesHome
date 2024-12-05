@@ -32,6 +32,7 @@ class _CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
   @override
   Widget build(BuildContext context) {
     return TextField(
+      cursorColor: AppColor.whiteColor,
       controller: widget.controller,
       focusNode: widget.focusNode,
       obscureText: _obscureText,

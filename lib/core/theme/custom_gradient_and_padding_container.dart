@@ -10,7 +10,7 @@ class CustomGradientAndPaddingContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Experinted - We can't directly wrap the MaterialApp with this Container because it will cause the app to rebuiid when page is rebuit after any event.
+    // Experimented - We can't directly wrap the MaterialApp with this Container because it will cause the app to rebuiid when page is rebuit after any event.
     return Container(
       clipBehavior: Clip.antiAlias,
       // color: Colors.red,
