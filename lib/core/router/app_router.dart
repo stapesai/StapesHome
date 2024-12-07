@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
+import 'package:stapes_home/core/models/floor_model.dart';
+import 'package:stapes_home/core/models/room_model.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_otp_verification.dart';
 import 'package:stapes_home/features/auth/presentation/pages/login_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
@@ -12,10 +14,12 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
-import 'package:stapes_home/features/floors/presentation/pages/create_floor_page.dart';
+import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
+import 'package:stapes_home/features/floors/presentation/widgets/edit_floor_widget.dart';
 import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
-import 'package:stapes_home/features/rooms/presentation/pages/create_room_page.dart';
+import 'package:stapes_home/features/rooms/presentation/widgets/create_room_widget.dart';
+import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(
@@ -160,21 +164,69 @@ class AppRouter {
       ),
 
       // Create Floor Page
-      GoRoute(
-        name: AppRouteConstants.createFloorPage.routeName,
-        path: AppRouteConstants.createFloorPage.routePath,
-        builder: (context, state) => const CreateFloorPage(),
-      ),
+      // GoRoute(
+      //   name: AppRouteConstants.createFloorPage.routeName,
+      //   path: AppRouteConstants.createFloorPage.routePath,
+      //   builder: (context, state) => const CreateFloorPage(),
+      // ),
 
       // Create Room Page
+      // GoRoute(
+      //   name: AppRouteConstants.createRoomPage.routeName,
+      //   path: AppRouteConstants.createRoomPage.routePath,
+      //   pageBuilder: (context, state) {
+      //     final String floorId = state.pathParameters['floorId']!;
+      //     return MaterialPage(
+      //       child: CreateRoomPage(
+      //         floorId: floorId,
+      //       ),
+      //     );
+      //   },
+      // ),
+
+      // Create Floor Widget
       GoRoute(
-        name: AppRouteConstants.createRoomPage.routeName,
-        path: AppRouteConstants.createRoomPage.routePath,
+          name: AppRouteConstants.createFloorWidget.routeName,
+          path: AppRouteConstants.createFloorWidget.routePath,
+          builder: (context, state) => const CreateFloorWidget()),
+
+      // Create Room Widget
+      GoRoute(
+        name: AppRouteConstants.createRoomWidget.routeName,
+        path: AppRouteConstants.createRoomWidget.routePath,
         pageBuilder: (context, state) {
           final String floorId = state.pathParameters['floorId']!;
           return MaterialPage(
-            child: CreateRoomPage(
+            child: CreateRoomWidget(
               floorId: floorId,
+            ),
+          );
+        },
+      ),
+
+      // Edit Floor Widget
+      GoRoute(
+        name: AppRouteConstants.editFloorWidget.routeName,
+        path: AppRouteConstants.editFloorWidget.routePath,
+        pageBuilder: (context, state) {
+          final FloorModel floor = state.extra! as FloorModel;
+          return MaterialPage(
+            child: EditFloorWidget(
+              floor: floor,
+            ),
+          );
+        },
+      ),
+
+      // Edit Room Widget
+      GoRoute(
+        name: AppRouteConstants.editRoomWidget.routeName,
+        path: AppRouteConstants.editRoomWidget.routePath,
+        pageBuilder: (context, state) {
+          final RoomModel room = state.extra! as RoomModel;
+          return MaterialPage(
+            child: EditRoomWidget(
+              room: room,
             ),
           );
         },

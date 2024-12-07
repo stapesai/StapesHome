@@ -24,6 +24,20 @@ class RoomModel {
   //   });
   // }
 
+  RoomModel copyWith({
+    String? id,
+    String? floorId,
+    String? name,
+    String? type,
+  }) {
+    return RoomModel(
+      id: id ?? this.id,
+      floorId: floorId ?? this.floorId,
+      name: name ?? this.name,
+      type: type ?? this.type,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,

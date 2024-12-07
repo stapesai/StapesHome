@@ -124,14 +124,34 @@ class AppRouteConstants {
     routeName: 'SettingsPage',
   );
 
-  static final createFloorPage = _RouteConfig(
-    routePath: '/floors/create-floor',
-    routeName: 'CreateFloorPage',
+  // static final createFloorPage = _RouteConfig(
+  //   routePath: '/floors/create-floor',
+  //   routeName: 'CreateFloorPage',
+  // );
+
+  // static final createRoomPage = _RouteConfig(
+  //   routePath: '/rooms/create-room/:floorId',
+  //   routeName: 'CreateRoomPage',
+  // );
+
+  static final createFloorWidget = _RouteConfig(
+    routePath: '/floors/create-floor-widget',
+    routeName: 'CreateFloorWidget',
   );
 
-  static final createRoomPage = _RouteConfig(
-    routePath: '/rooms/create-room/:floorId',
-    routeName: 'CreateRoomPage',
+  static final editFloorWidget = _RouteConfig(
+    routePath: '/floors/edit-floor-widget/:floorId',
+    routeName: 'EditFloorWidget',
+  );
+
+  static final createRoomWidget = _RouteConfig(
+    routePath: '/rooms/create-room-widget/:floorId',
+    routeName: 'CreateRoomWidget',
+  );
+
+  static final editRoomWidget = _RouteConfig(
+    routePath: '/rooms/edit-room-widget/:roomId',
+    routeName: 'EditRoomWidget',
   );
 
   static final devPageUserDetailsShow = _RouteConfig(

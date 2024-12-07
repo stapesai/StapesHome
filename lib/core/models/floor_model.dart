@@ -21,6 +21,18 @@ class FloorModel {
   //   });
   // }
 
+  FloorModel copyWith({
+    String? id,
+    int? level,
+    String? alias,
+  }) {
+    return FloorModel(
+      id: id ?? this.id,
+      level: level ?? this.level,
+      alias: alias ?? this.alias,
+    );
+  }
+
   Map<String, dynamic> toMap() {
     return {
       'id': id,
