@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_bloc.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_event.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart';
+import 'package:stapes_home/features/floor_room_sel/presentation/skeletons/floor_room_name_skel.dart';
 import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
 import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
@@ -58,62 +59,62 @@ class FloorRoomSelector extends StatelessWidget {
       )..add(LoadFloors()),
       child: BlocBuilder<FloorRoomSelBloc, FloorRoomSelState>(
         builder: (context, state) {
-          if (state is FloorRoomSelLoading) {
-            return const CircularProgressIndicator();
+          if (state is FloorRoomSelError) {
+            return Text('Error: ${state.message}');
           } else if (state is FloorRoomSelLoaded) {
             return Column(
               children: [
                 // Floors List
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: state.floors.length,
-                    itemBuilder: (context, index) {
-                      final floor = state.floors[index];
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!));
-                          onFloorSelected(floor.id!);
-                        },
-                        onLongPress: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (_) => HoldBottomSheetWidget(
-                              options: [
-                                BottomSheetOption(
-                                  label: 'Edit Floor',
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) => EditFloorWidget(floor: floor),
-                                    );
-                                  },
-                                ),
-                                BottomSheetOption(
-                                  label: 'Delete Floor',
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    _showDeleteConfirmation(
-                                      context,
-                                      'floor',
-                                      () {
-                                        context.read<FloorRoomSelBloc>().add(
-                                              DeleteFloor(floorId: floor.id!),
-                                            );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: ListTile(
-                          title: Text(floor.alias),
+                  child: state.isLoadingFloors
+                      ? ListView.builder(
+                          itemCount: 5,
+                          itemBuilder: (context, index) => const FloorRoomNameSkeleton(),
+                        )
+                      : ListView.builder(
+                          itemCount: state.floors.length,
+                          itemBuilder: (context, index) {
+                            final floor = state.floors[index];
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!));
+                                onFloorSelected(floor.id!);
+                              },
+                              onLongPress: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (_) => HoldBottomSheetWidget(
+                                    options: [
+                                      BottomSheetOption(
+                                        label: 'Edit Floor',
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => EditFloorWidget(floor: floor),
+                                          );
+                                        },
+                                      ),
+                                      BottomSheetOption(
+                                        label: 'Delete Floor',
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          _showDeleteConfirmation(context, 'floor', () {
+                                            context.read<FloorRoomSelBloc>().add(DeleteFloor(floorId: floor.id!));
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text(floor.alias),
+                                selected: state.activeFloorId == floor.id,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
                 // Add Floor Button
                 IconButton(
@@ -127,72 +128,90 @@ class FloorRoomSelector extends StatelessWidget {
                 ),
                 // Rooms List
                 Expanded(
-                  child: ListView.builder(
-                    itemCount: state.rooms.length,
-                    itemBuilder: (context, index) {
-                      final room = state.rooms[index];
-                      return GestureDetector(
-                        onTap: () {
-                          context.read<FloorRoomSelBloc>().add(SelectRoom(roomId: room.id!));
-                          onRoomSelected(room.id!);
-                        },
-                        onLongPress: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (_) => HoldBottomSheetWidget(
-                              options: [
-                                BottomSheetOption(
-                                  label: 'Edit Room',
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (_) => EditRoomWidget(room: room),
-                                    );
-                                  },
-                                ),
-                                BottomSheetOption(
-                                  label: 'Delete Room',
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    _showDeleteConfirmation(
-                                      context,
-                                      'room',
-                                      () {
-                                        context.read<FloorRoomSelBloc>().add(
-                                              DeleteRoom(roomId: room.id!),
-                                            );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                        child: ListTile(
-                          title: Text(room.name),
+                  child: state.isLoadingRooms
+                      ? ListView.builder(
+                          itemCount: 5,
+                          itemBuilder: (context, index) => const FloorRoomNameSkeleton(),
+                        )
+                      : ListView.builder(
+                          itemCount: state.rooms.length,
+                          itemBuilder: (context, index) {
+                            final room = state.rooms[index];
+                            return GestureDetector(
+                              onTap: () {
+                                context.read<FloorRoomSelBloc>().add(SelectRoom(roomId: room.id!));
+                                onRoomSelected(room.id!);
+                              },
+                              onLongPress: () {
+                                showModalBottomSheet(
+                                  context: context,
+                                  builder: (_) => HoldBottomSheetWidget(
+                                    options: [
+                                      BottomSheetOption(
+                                        label: 'Edit Room',
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          showDialog(
+                                            context: context,
+                                            builder: (_) => EditRoomWidget(room: room),
+                                          );
+                                        },
+                                      ),
+                                      BottomSheetOption(
+                                        label: 'Delete Room',
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                          _showDeleteConfirmation(context, 'room', () {
+                                            context.read<FloorRoomSelBloc>().add(DeleteRoom(roomId: room.id!));
+                                          });
+                                        },
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                              child: ListTile(
+                                title: Text(room.name),
+                                selected: state.activeRoomId == room.id,
+                              ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
                 ),
                 // Add Room Button
                 IconButton(
                   icon: const Icon(Icons.add),
                   onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (_) => CreateRoomWidget(floorId: state.activeFloorId),
-                    );
+                    if (state.activeFloorId != '') {
+                      showDialog(
+                        context: context,
+                        builder: (_) => CreateRoomWidget(floorId: state.activeFloorId),
+                      );
+                    } else {
+                      // Show a message that a floor must be selected first
+                    }
                   },
                 ),
               ],
             );
-          } else if (state is FloorRoomSelError) {
-            return Text('Error: ${state.message}');
           } else {
-            return Container();
+            // Initial state or other state
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index) => const FloorRoomNameSkeleton(),
+                  ),
+                ),
+                Expanded(
+                  child: ListView.builder(
+                    itemCount: 5,
+                    itemBuilder: (context, index) => const FloorRoomNameSkeleton(),
+                  ),
+                ),
+              ],
+            );
           }
         },
       ),

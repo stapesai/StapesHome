@@ -34,15 +34,28 @@ class FloorRoomSelBloc extends Bloc<FloorRoomSelEvent, FloorRoomSelState> {
   }
 
   Future<void> _onLoadFloors(LoadFloors event, Emitter<FloorRoomSelState> emit) async {
-    emit(FloorRoomSelLoading());
+    emit(FloorRoomSelLoaded(
+      floors: const [],
+      rooms: const [],
+      activeFloorId: '',
+      activeRoomId: '',
+      isLoadingFloors: true,
+      isLoadingRooms: false,
+    ));
     try {
       List<FloorModel> floors = await fetchFloors();
+      String newActiveFloorId = floors.isNotEmpty ? floors[0].id! : '';
       emit(FloorRoomSelLoaded(
         floors: floors,
         rooms: const [],
-        activeFloorId: '',
+        activeFloorId: newActiveFloorId,
         activeRoomId: '',
+        isLoadingFloors: false,
+        isLoadingRooms: false,
       ));
+      if (newActiveFloorId.isNotEmpty) {
+        add(LoadRooms(floorId: newActiveFloorId));
+      }
     } catch (e) {
       emit(FloorRoomSelError(e.toString()));
     }
@@ -51,15 +64,15 @@ class FloorRoomSelBloc extends Bloc<FloorRoomSelEvent, FloorRoomSelState> {
   Future<void> _onLoadRooms(LoadRooms event, Emitter<FloorRoomSelState> emit) async {
     final currentState = state;
     if (currentState is FloorRoomSelLoaded) {
-      emit(FloorRoomSelLoading());
+      emit(currentState.copyWith(isLoadingRooms: true));
       try {
-        // Fetch rooms logic
         List<RoomModel> rooms = await fetchRooms(event.floorId);
-        emit(FloorRoomSelLoaded(
-          floors: currentState.floors,
+        String newActiveRoomId = rooms.isNotEmpty ? rooms[0].id! : '';
+        emit(currentState.copyWith(
           rooms: rooms,
           activeFloorId: event.floorId,
-          activeRoomId: '',
+          activeRoomId: newActiveRoomId,
+          isLoadingRooms: false,
         ));
       } catch (e) {
         emit(FloorRoomSelError(e.toString()));
@@ -74,12 +87,7 @@ class FloorRoomSelBloc extends Bloc<FloorRoomSelEvent, FloorRoomSelState> {
   void _onSelectRoom(SelectRoom event, Emitter<FloorRoomSelState> emit) {
     final currentState = state;
     if (currentState is FloorRoomSelLoaded) {
-      emit(FloorRoomSelLoaded(
-        floors: currentState.floors,
-        rooms: currentState.rooms,
-        activeFloorId: currentState.activeFloorId,
-        activeRoomId: event.roomId,
-      ));
+      emit(currentState.copyWith(activeRoomId: event.roomId));
     }
   }
 
@@ -110,7 +118,7 @@ class FloorRoomSelBloc extends Bloc<FloorRoomSelEvent, FloorRoomSelState> {
   Future<void> _onDeleteFloor(DeleteFloor event, Emitter<FloorRoomSelState> emit) async {
     final currentState = state;
     if (currentState is FloorRoomSelLoaded) {
-      emit(FloorRoomSelLoading());
+      emit(currentState.copyWith(isLoadingFloors: true));
       try {
         final result = await deleteFloorUseCase(DeleteFloorParams(floorId: event.floorId));
         result.fold(
@@ -126,7 +134,7 @@ class FloorRoomSelBloc extends Bloc<FloorRoomSelEvent, FloorRoomSelState> {
   Future<void> _onDeleteRoom(DeleteRoom event, Emitter<FloorRoomSelState> emit) async {
     final currentState = state;
     if (currentState is FloorRoomSelLoaded) {
-      emit(FloorRoomSelLoading());
+      emit(currentState.copyWith(isLoadingRooms: true));
       try {
         final result = await deleteRoomUseCase(DeleteRoomParams(roomId: event.roomId));
         result.fold(

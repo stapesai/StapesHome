@@ -18,16 +18,45 @@ class FloorRoomSelLoaded extends FloorRoomSelState {
   final List<RoomModel> rooms;
   final String activeFloorId;
   final String activeRoomId;
+  final bool isLoadingFloors;
+  final bool isLoadingRooms;
 
   const FloorRoomSelLoaded({
     required this.floors,
     required this.rooms,
     required this.activeFloorId,
     required this.activeRoomId,
+    this.isLoadingFloors = false,
+    this.isLoadingRooms = false,
   });
 
+  FloorRoomSelLoaded copyWith({
+    List<FloorModel>? floors,
+    List<RoomModel>? rooms,
+    String? activeFloorId,
+    String? activeRoomId,
+    bool? isLoadingFloors,
+    bool? isLoadingRooms,
+  }) {
+    return FloorRoomSelLoaded(
+      floors: floors ?? this.floors,
+      rooms: rooms ?? this.rooms,
+      activeFloorId: activeFloorId ?? this.activeFloorId,
+      activeRoomId: activeRoomId ?? this.activeRoomId,
+      isLoadingFloors: isLoadingFloors ?? this.isLoadingFloors,
+      isLoadingRooms: isLoadingRooms ?? this.isLoadingRooms,
+    );
+  }
+
   @override
-  List<Object> get props => [floors, rooms, activeFloorId, activeRoomId];
+  List<Object> get props => [
+        floors,
+        rooms,
+        activeFloorId,
+        activeRoomId,
+        isLoadingFloors,
+        isLoadingRooms,
+      ];
 }
 
 class FloorRoomSelError extends FloorRoomSelState {
