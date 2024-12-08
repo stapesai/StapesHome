@@ -39,7 +39,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[1],
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
-    CreateRoomPage(floorId: 'test'),
+    // CreateRoomPage(floorId: 'test'),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'devices')),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),

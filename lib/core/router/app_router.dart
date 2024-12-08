@@ -12,6 +12,7 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_create_new_p
 import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_Floor_room_sel.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
@@ -23,7 +24,7 @@ import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget
 
 class AppRouter {
   GoRouter route = GoRouter(
-    initialLocation: AppRouteConstants.splash.routePath,
+    initialLocation: AppRouteConstants.splash.routePath,  
     routes: [
       // Splash screen
       GoRoute(
@@ -233,24 +234,30 @@ class AppRouter {
       ),
 
       // Development Page
-      GoRoute(
-        name: AppRouteConstants.devPageUserDetailsShow.routeName,
-        path: AppRouteConstants.devPageUserDetailsShow.routePath,
-        builder: (context, state) => const DevUserDetailsScreen(),
-      ),
+    //   GoRoute(
+    //     name: AppRouteConstants.devPageUserDetailsShow.routeName,
+    //     path: AppRouteConstants.devPageUserDetailsShow.routePath,
+    //     builder: (context, state) => const DevUserDetailsScreen(),
+    //   ),
 
-      // Dev Test Page (just shows given text)
-      GoRoute(
-        name: AppRouteConstants.devPageTest.routeName,
-        path: AppRouteConstants.devPageTest.routePath,
-        pageBuilder: (context, state) {
-          return MaterialPage(
-            child: DevTestPage(
-              text: state.pathParameters['text']!,
-            ),
-          );
-        },
-      ),
+    //   // Dev Test Page (just shows given text)
+    //   GoRoute(
+    //     name: AppRouteConstants.devPageTest.routeName,
+    //     path: AppRouteConstants.devPageTest.routePath,
+    //     pageBuilder: (context, state) {
+    //       return MaterialPage(
+    //         child: DevTestPage(
+    //           text: state.pathParameters['text']!,
+    //         ),
+    //       );
+    //     },
+    //   ),
+    // // Dev Test page (Floor Room Selector)
+    //   GoRoute(
+    //     path: AppRouteConstants.devFloorRoomSelectorWidget.routePath,
+    //     name: AppRouteConstants.devFloorRoomSelectorWidget.routeName,
+    //     builder: (context, state) => const DevFloorRoomSelPage(),
+    //   ),
     ],
   );
 }

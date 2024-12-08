@@ -26,17 +26,31 @@ class _FloorRoomNameSkeletonState extends State<FloorRoomNameSkeleton> with Sing
       duration: const Duration(milliseconds: 1000),
     )..repeat();
 
-    _gradientAnimation = Tween<Gradient>(
-      begin: LinearGradient(
-        colors: [Colors.grey.shade300, Colors.grey.shade100, Colors.grey.shade300],
-        stops: const [0.0, 0.5, 1.0],
+ _gradientAnimation = TweenSequence<Gradient>([
+      TweenSequenceItem(
+        weight: 1.0,
+        tween: Tween<Gradient>(
+          begin: LinearGradient(
+            colors: [
+              Colors.grey.shade300,
+              Colors.grey.shade100,
+              Colors.grey.shade300
+            ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+          end: LinearGradient(
+            colors: [
+              Colors.grey.shade100,
+              Colors.grey.shade300,
+              Colors.grey.shade100
+            ],
+            stops: const [0.0, 0.5, 1.0],
+          ),
+        ),
       ),
-      end: LinearGradient(
-        colors: [Colors.grey.shade100, Colors.grey.shade300, Colors.grey.shade100],
-        stops: const [0.0, 0.5, 1.0],
-      ),
-    ).animate(_controller);
+    ]).animate(_controller);
   }
+  
 
   @override
   void dispose() {

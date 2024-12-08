@@ -168,4 +168,9 @@ class AppRouteConstants {
   }) {
     return '/dev-test/$text';
   }
+
+  static final devFloorRoomSelectorWidget = _RouteConfig(
+    routePath: '/dev',
+    routeName: 'DevFloorRoomSelectorWidget',
+  );
 }
