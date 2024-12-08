@@ -53,6 +53,7 @@ import 'package:stapes_home/features/rooms/domain/usecases/delete_room_usecase.d
 import 'package:stapes_home/features/rooms/domain/usecases/get_rooms_usecase.dart';
 import 'package:stapes_home/features/rooms/domain/usecases/update_room_usecase.dart';
 
+
 final GetIt serviceLocator = GetIt.instance;
 
 void setupServiceLocator() {

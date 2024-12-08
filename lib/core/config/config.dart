@@ -7,10 +7,15 @@ enum Environment { development, production }
 /// Provides configuration settings for the application
 class Config {
   /// The current environment of the application
-  static const Environment environment = Environment.production; // Works in production when server is working and works in development only when pi is working.
+  static const Environment environment = Environment.development; // Works in production when server is working and works in development only when pi is working.
 
   /// The current version of the application
   static const String appVersion = '1.0.0';
+
+
+
+
+
 
   /// The maximum number of retry attempts for network requests
   static const int maxRetryAttempts = 3;
