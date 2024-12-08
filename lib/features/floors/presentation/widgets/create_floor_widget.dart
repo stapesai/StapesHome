@@ -59,6 +59,8 @@ class _CreateFloorWidgetState extends State<CreateFloorWidget> {
             builder: (context, state) {
               if (state is CreateFloorLoading) {
                 return CircularProgressIndicator();
+              } else if (state is CreateFloorError) {
+                return Text(state.message);
               }
               return TextButton(
                 onPressed: () {
