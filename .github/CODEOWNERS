@@ -1,0 +1,211 @@
+lib/core/common/widgets/button.dart 70677881+Debasish616@users.noreply.github.com devasheeshmishra4@gmail.com
+lib/core/common/widgets/input/dropdown.dart devasheeshmishra4@gmail.com
+lib/core/common/widgets/input/password.dart devasheeshmishra4@gmail.com
+lib/core/common/widgets/input/text_field.dart devasheeshmishra4@gmail.com 70677881+Debasish616@users.noreply.github.com
+lib/core/common/widgets/popup.dart devasheeshmishra4@gmail.com
+lib/core/common/widgets/snackbar.dart devasheeshmishra4@gmail.com
+lib/core/common/widgets/text_hyperlink.dart devasheeshmishra4@gmail.com
+lib/core/config/config.dart devasheeshmishra4@gmail.com
+lib/core/constants/api_routes.dart devasheeshmishra4@gmail.com
+lib/core/constants/app_route_constants.dart devasheeshmishra4@gmail.com
+lib/core/constants/logging_constants.dart devasheeshmishra4@gmail.com
+lib/core/database/sqlite_service.dart devasheeshmishra4@gmail.com
+lib/core/error/exceptions.dart devasheeshmishra4@gmail.com
+lib/core/error/failures.dart devasheeshmishra4@gmail.com
+lib/core/logging/custom_logger.dart devasheeshmishra4@gmail.com
+lib/core/logging/logging_config.dart devasheeshmishra4@gmail.com
+lib/core/models/device_model.dart devasheeshmishra4@gmail.com
+lib/core/models/fav_devices_model.dart gs7148@srmist.edu.in devasheeshmishra4@gmail.com
+lib/core/models/floor_model.dart devasheeshmishra4@gmail.com
+lib/core/models/node_model.dart devasheeshmishra4@gmail.com
+lib/core/models/room_model.dart devasheeshmishra4@gmail.com
+lib/core/models/user_model.dart devasheeshmishra4@gmail.com gs7148@srmist.edu.in
+lib/core/models/user_model.g.dart devasheeshmishra4@gmail.com
+lib/core/models/user_session_model.dart devasheeshmishra4@gmail.com gs7148@srmist.edu.in
+lib/core/models/user_session_model.g.dart 70677881+Debasish616@users.noreply.github.com devasheeshmishra4@gmail.com
+lib/core/network/dio_client.dart devasheeshmishra4@gmail.com
+lib/core/network/dio_interceptors.dart devasheeshmishra4@gmail.com
+lib/core/network/http_client.dart devasheeshmishra4@gmail.com
+lib/core/network/network_info.dart devasheeshmishra4@gmail.com
+lib/core/router/app_router.dart devasheeshmishra4@gmail.com
+lib/core/theme/app_colors.dart devasheeshmishra4@gmail.com 98446769+SWARNIM-BURNWAL@users.noreply.github.com
+lib/core/theme/app_font_sizes.dart devasheeshmishra4@gmail.com
+lib/core/theme/app_padding.dart devasheeshmishra4@gmail.com
+lib/core/theme/custom_gradient_and_padding_container.dart devasheeshmishra4@gmail.com
+lib/core/usecase/usecase.dart devasheeshmishra4@gmail.com
+lib/core/utils/repository_exceptions_helper.dart devasheeshmishra4@gmail.com
+lib/core/validators/date_validator.dart 
+lib/core/validators/email_regex_validator.dart devasheeshmishra4@gmail.com
+lib/core/websocket/websocket_bloc.dart devasheeshmishra4@gmail.com
+lib/core/websocket/websocket_event.dart devasheeshmishra4@gmail.com
+lib/core/websocket/websocket_messages_models.dart devasheeshmishra4@gmail.com
+lib/core/websocket/websocket_service.dart devasheeshmishra4@gmail.com
+lib/core/websocket/websocket_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/data/datasources/local/auth_local_datasource.dart devasheeshmishra4@gmail.com
+lib/features/auth/data/datasources/remote/auth_remote_datasource.dart devasheeshmishra4@gmail.com
+lib/features/auth/data/models/forgot_password_api_parms.dart devasheeshmishra4@gmail.com
+lib/features/auth/data/models/login_api_parms.dart devasheeshmishra4@gmail.com
+lib/features/auth/data/models/otp_verification_api_parms.dart devasheeshmishra4@gmail.com
+lib/features/auth/data/models/signup_api_parms.dart gs7148@srmist.edu.in
+lib/features/auth/data/repositories/auth_abs_class_impl.dart devasheeshmishra4@gmail.com
+lib/features/auth/domain/repository/auth_abs_class.dart devasheeshmishra4@gmail.com
+lib/features/auth/domain/usecases/forgot_password_usecase.dart devasheeshmishra4@gmail.com
+lib/features/auth/domain/usecases/login_usecase.dart devasheeshmishra4@gmail.com
+lib/features/auth/domain/usecases/otp_verification_usecase.dart devasheeshmishra4@gmail.com
+lib/features/auth/domain/usecases/signup_usecase.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_otp_verification_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_otp_verification_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_otp_verification_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_reset_password_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_reset_password_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/forgot_password/forgot_password_reset_password_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/login/login_email_input_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/login/login_email_input_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/login/login_email_input_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/login/login_otp_verification_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/login/login_otp_verification_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/sign_up_email_input_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/sign_up_email_input_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/sign_up_email_input_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_create_new_password_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_create_new_password_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_create_new_password_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_details_form_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_details_form_event.dart devasheeshmishra4@gmail.com gs7148@srmist.edu.in
+lib/features/auth/presentation/blocs/signup/signup_details_form_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_otp_verification_bloc.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_otp_verification_event.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/blocs/signup/signup_otp_verification_state.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/forgot_password_email_input.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/forgot_password_otp_verification.dart devasheeshmishra4@gmail.com 98446769+SWARNIM-BURNWAL@users.noreply.github.com
+lib/features/auth/presentation/pages/forgot_password_reset_password.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/login_email_input.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/login_otp_verification.dart devasheeshmishra4@gmail.com 98446769+SWARNIM-BURNWAL@users.noreply.github.com
+lib/features/auth/presentation/pages/signup_create_new_password.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/signup_details_form.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/signup_email_input.dart devasheeshmishra4@gmail.com
+lib/features/auth/presentation/pages/signup_otp_verification.dart devasheeshmishra4@gmail.com 98446769+SWARNIM-BURNWAL@users.noreply.github.com
+lib/features/auth/presentation/widgets/otp_input_widget.dart gs7148@srmist.edu.in
+lib/features/common/presentation/widgets/hold_bottom_sheet_widget.dart devasheeshmishra4@gmail.com
+lib/features/dev/presentation/pages/dev_floor_room_sel.dart devasheeshmishra4@gmail.com gs7148@srmist.edu.in
+lib/features/dev/presentation/pages/dev_test_page.dart devasheeshmishra4@gmail.com
+lib/features/dev/presentation/pages/dev_user_details_show.dart devasheeshmishra4@gmail.com
+lib/features/dev/presentation/pages/dev_websocket_messages_test.dart devasheeshmishra4@gmail.com
+lib/features/dev/presentation/widgets/websocket_message.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/datasources/local/devices_local_datasource.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/datasources/remote/devices_remote_datasource.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/models/create_device_api_param.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/models/delete_device_api_param.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/models/get_devices_api_param.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/models/update_device_api_param.dart devasheeshmishra4@gmail.com
+lib/features/devices/data/repositories/devices_repository_impl.dart devasheeshmishra4@gmail.com
+lib/features/devices/domain/repositories/devices_repository.dart devasheeshmishra4@gmail.com
+lib/features/devices/domain/usecases/create_device_usecase.dart devasheeshmishra4@gmail.com
+lib/features/devices/domain/usecases/delete_device_usecase.dart devasheeshmishra4@gmail.com
+lib/features/devices/domain/usecases/get_devices_by_node_id_usecase.dart devasheeshmishra4@gmail.com
+lib/features/devices/domain/usecases/get_devices_by_room_id_usecase.dart devasheeshmishra4@gmail.com
+lib/features/devices/domain/usecases/update_device_usecase.dart devasheeshmishra4@gmail.com
+lib/features/fav_devices/data/datasources/local/fav_device_local_datasource.dart devasheeshmishra4@gmail.com
+lib/features/fav_devices/data/datasources/remote/fav_device_remote_datasource.dart gs7148@srmist.edu.in devasheeshmishra4@gmail.com
+lib/features/fav_devices/data/models/create_fav_devices_api_params.dart gs7148@srmist.edu.in
+lib/features/fav_devices/data/models/delete_fav_devices_api_params.dart gs7148@srmist.edu.in devasheeshmishra4@gmail.com
+lib/features/fav_devices/data/models/get_fav_devices_api_params.dart gs7148@srmist.edu.in
+lib/features/fav_devices/data/repositories/fav_device_repository_impl.dart devasheeshmishra4@gmail.com gs7148@srmist.edu.in
+lib/features/fav_devices/domain/repositories/fav_device_repository.dart gs7148@srmist.edu.in devasheeshmishra4@gmail.com
+lib/features/fav_devices/domain/usecases/create_fav_devices.dart gs7148@srmist.edu.in
+lib/features/fav_devices/domain/usecases/get_fav_devices.dart gs7148@srmist.edu.in devasheeshmishra4@gmail.com
+lib/features/fav_devices/domain/usecases/remove_fav_devices.dart gs7148@srmist.edu.in devasheeshmishra4@gmail.com
+lib/features/floor_room_sel/presentation/bloc/floor_room_sel_bloc.dart devasheeshmishra4@gmail.com
+lib/features/floor_room_sel/presentation/bloc/floor_room_sel_event.dart devasheeshmishra4@gmail.com
+lib/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart devasheeshmishra4@gmail.com
+lib/features/floor_room_sel/presentation/skeletons/floor_room_name_skel.dart devasheeshmishra4@gmail.com
+lib/features/floor_room_sel/presentation/widgets/floor_room_sel_widget.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/datasources/local/floors_local_datasource.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/datasources/remote/floors_remote_datasource.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/models/create_floor_api_param.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/models/delete_floor_api_param.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/models/get_floors_api_param.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/models/update_floor_api_param.dart devasheeshmishra4@gmail.com
+lib/features/floors/data/repositories/floor_repository_impl.dart devasheeshmishra4@gmail.com
+lib/features/floors/domain/repository/floor_repository.dart devasheeshmishra4@gmail.com
+lib/features/floors/domain/usecases/create_floor_usecase.dart devasheeshmishra4@gmail.com
+lib/features/floors/domain/usecases/delete_floor_usecase.dart devasheeshmishra4@gmail.com
+lib/features/floors/domain/usecases/get_floors_usecase.dart devasheeshmishra4@gmail.com
+lib/features/floors/domain/usecases/update_floor_usecase.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/bloc/create_floor_bloc.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/bloc/create_floor_event.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/bloc/create_floor_state.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/bloc/edit_floor_bloc.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/bloc/edit_floor_event.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/bloc/edit_floor_state.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/pages/create_floor_page.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/widgets/create_floor_widget.dart devasheeshmishra4@gmail.com
+lib/features/floors/presentation/widgets/edit_floor_widget.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/blocs/navigation_bloc.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/blocs/navigation_event.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/blocs/navigation_state.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/mixin/keep_alive_mixin.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/mixin/preload_page_view_mixin.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/pages/navigation_screen.dart devasheeshmishra4@gmail.com
+lib/features/navigation/presentation/widgets/custom_navigation_bar.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/datasources/local/nodes_local_datasource.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/datasources/remote/nodes_remote_datasource.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/models/create_node_api_param.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/models/delete_node_api_param.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/models/get_nodes_by_room_id_api_param.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/models/update_node_api_param.dart devasheeshmishra4@gmail.com
+lib/features/nodes/data/repositories/node_repository_impl.dart devasheeshmishra4@gmail.com
+lib/features/nodes/domain/repository/node_repository.dart devasheeshmishra4@gmail.com
+lib/features/nodes/domain/usecases/create_node_usecase.dart devasheeshmishra4@gmail.com
+lib/features/nodes/domain/usecases/delete_node_usecase.dart devasheeshmishra4@gmail.com
+lib/features/nodes/domain/usecases/get_nodes_by_room_id_usecase.dart devasheeshmishra4@gmail.com
+lib/features/nodes/domain/usecases/update_node_usecase.dart devasheeshmishra4@gmail.com
+lib/features/onboarding/presentation/pages/splash_screen.dart 70677881+Debasish616@users.noreply.github.com devasheeshmishra4@gmail.com
+lib/features/rooms/data/datasources/local/rooms_local_datasource.dart devasheeshmishra4@gmail.com
+lib/features/rooms/data/datasources/remote/rooms_remote_datasource.dart devasheeshmishra4@gmail.com
+lib/features/rooms/data/models/create_room_api_param.dart devasheeshmishra4@gmail.com
+lib/features/rooms/data/models/delete_room_api_param.dart devasheeshmishra4@gmail.com
+lib/features/rooms/data/models/get_rooms_api_param.dart devasheeshmishra4@gmail.com
+lib/features/rooms/data/models/update_room_api_param.dart devasheeshmishra4@gmail.com
+lib/features/rooms/data/repositories/room_repository_impl.dart devasheeshmishra4@gmail.com
+lib/features/rooms/domain/repository/room_repository.dart devasheeshmishra4@gmail.com
+lib/features/rooms/domain/usecases/create_room_usecase.dart devasheeshmishra4@gmail.com
+lib/features/rooms/domain/usecases/delete_room_usecase.dart devasheeshmishra4@gmail.com
+lib/features/rooms/domain/usecases/get_rooms_usecase.dart devasheeshmishra4@gmail.com
+lib/features/rooms/domain/usecases/update_room_usecase.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/bloc/create_room_bloc.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/bloc/create_room_event.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/bloc/create_room_state.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/bloc/edit_room_bloc.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/bloc/edit_room_event.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/bloc/edit_room_state.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/pages/create_room_page.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/widgets/create_room_widget.dart devasheeshmishra4@gmail.com
+lib/features/rooms/presentation/widgets/edit_room_widget.dart devasheeshmishra4@gmail.com
+lib/main.dart devasheeshmishra4@gmail.com
+lib/service_locator.dart devasheeshmishra4@gmail.com
+
+
+# owners(){
+#   for f in $(git ls-files "lib/*"); do
+#     # filename
+#     echo -n "$f "
+#     # author emails if loc distribution >= 30%
+#     git fame -esnwMC --incl "$f" | tr '/' '|' \
+#       | awk -F '|' '(NR>6 && $6>=30) {print $2}' \
+#       | xargs echo
+#   done
+# }
+
+# # Print to screen and file for the lib folder
+# owners | tee .github/CODEOWNERS
+
+# # Same with `tqdm` for large repos, restricted to lib folder
+# owners \
+#   | tqdm --total $(git ls-files "lib/*" | wc -l) \
+#     --unit file --desc "Generating CODEOWNERS for lib folder" \
+#   > .github/CODEOWNERS
