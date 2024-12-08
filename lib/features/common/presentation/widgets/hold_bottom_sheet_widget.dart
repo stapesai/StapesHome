@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class HoldBottomSheetWidget extends StatelessWidget {
   final List<BottomSheetOption> options;
 
-  const HoldBottomSheetWidget({Key? key, required this.options}) : super(key: key);
+  const HoldBottomSheetWidget({super.key, required this.options});
 
   @override
   Widget build(BuildContext context) {

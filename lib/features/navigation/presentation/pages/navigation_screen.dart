@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
+import 'package:stapes_home/features/dev/presentation/pages/dev_floor_room_sel.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_user_details_show.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
@@ -9,7 +10,6 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_st
 import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
-import 'package:stapes_home/features/rooms/presentation/pages/create_room_page.dart';
 
 class NavigationScreen extends StatefulWidget {
   // final StatefulNavigationShell navigationShell;
@@ -40,6 +40,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
     // CreateRoomPage(floorId: 'test'),
+    KeepAlivePage(child: DevFloorRoomSelPage()),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'devices')),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage()),

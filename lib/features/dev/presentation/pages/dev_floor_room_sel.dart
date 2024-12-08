@@ -1,124 +1,92 @@
-// lib/features/dev/presentation/pages/dev_floor_room_sel.dart
-
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/widgets/floor_room_sel_widget.dart';
-import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_bloc.dart';
-import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_event.dart';
-import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart';
-import 'package:stapes_home/service_locator.dart';
-import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
-import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
-import 'package:stapes_home/features/rooms/domain/usecases/delete_room_usecase.dart';
-import 'package:stapes_home/features/rooms/domain/usecases/get_rooms_usecase.dart';
 
-class DevFloorRoomSelPage extends StatelessWidget {
-  const DevFloorRoomSelPage({Key? key}) : super(key: key);
+class DevFloorRoomSelPage extends StatefulWidget {
+  const DevFloorRoomSelPage({super.key});
 
-  static final ValueNotifier<String> _debugInfo =
-      ValueNotifier<String>('Debug Output:\n');
+  @override
+  State<DevFloorRoomSelPage> createState() => _DevFloorRoomSelPageState();
+}
 
-  void _updateDebugInfo(String message) {
-    final timestamp = DateTime.now().toString().split(' ')[1].split('.')[0];
-    _debugInfo.value = '${_debugInfo.value}[$timestamp] $message\n';
-  }
+class _DevFloorRoomSelPageState extends State<DevFloorRoomSelPage> {
+  final List<String> _logs = [];
 
-  void _clearDebugInfo() {
-    _debugInfo.value = 'Debug Output:\n';
+  void _addLog(String message) {
+    setState(() {
+      _logs.add('${DateTime.now().toString()}: $message');
+      if (_logs.length > 10) {
+        _logs.removeAt(0); // Keep only last 10 logs
+      }
+    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => FloorRoomSelBloc(
-        deleteFloorUseCase: serviceLocator<DeleteFloorUseCase>(),
-        deleteRoomUseCase: serviceLocator<DeleteRoomUseCase>(),
-        getFloorsUseCase: serviceLocator<GetFloorsUseCase>(),
-        getRoomsUseCase: serviceLocator<GetRoomsUseCase>(),
-      )..add(LoadFloors()),
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Floor Room Selector Test'),
-          backgroundColor: Colors.blueAccent,
-        ),
-        body: Container(
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [Colors.blue.shade900, Colors.black],
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                children: [
-                  // Debug Info Section
-                  Container(
-                    padding: const EdgeInsets.all(8),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ValueListenableBuilder<String>(
-                      valueListenable: _debugInfo,
-                      builder: (context, value, child) {
-                        return Text(
-                          value,
-                          style: const TextStyle(
-                            color: Colors.white70,
-                            fontFamily: 'Courier',
-                          ),
-                        );
-                      },
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-
-                  // Floor Room Selector
-                  Expanded(
-                    child: Container(
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.05),
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      padding: const EdgeInsets.all(16),
-                      child: FloorRoomSelector(
-                        onFloorSelected: (floorId) {
-                          _updateDebugInfo('Floor selected: $floorId');
-                        },
-                        onRoomSelected: (roomId) {
-                          _updateDebugInfo('Room selected: $roomId');
-                        },
-                      ),
-                    ),
-                  ),
-                ],
+    return Scaffold(
+      backgroundColor: Colors.transparent,
+      appBar: AppBar(
+        title: const Text('Dev Floor Room Selector', style: TextStyle(color: Colors.white)),
+        backgroundColor: Colors.transparent,
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            const SizedBox(height: 40),
+            SizedBox(
+              height: 100, // Adjust height as needed
+              child: FloorRoomSelector(
+                onFloorSelected: (floorId) {
+                  _addLog('Floor selected: $floorId');
+                },
+                onRoomSelected: (roomId) {
+                  _addLog('Room selected: $roomId');
+                },
               ),
             ),
-          ),
-        ),
-
-        // Floating Action Buttons
-        floatingActionButton: Column(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            FloatingActionButton(
-              heroTag: 'clear',
-              onPressed: _clearDebugInfo,
-              child: const Icon(Icons.clear_all),
+            const SizedBox(height: 40),
+            // Debug Area
+            Expanded(
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.white30),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Debug Log:',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: _logs.length,
+                        itemBuilder: (context, index) {
+                          return Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 4),
+                            child: Text(
+                              _logs[index],
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 14,
+                              ),
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(height: 8),
-            FloatingActionButton(
-              heroTag: 'refresh',
-              onPressed: () {
-                _updateDebugInfo('Refreshing...');
-                // Refresh logic
-                context.read<FloorRoomSelBloc>().add(RefreshData());
-              },
-              child: const Icon(Icons.refresh),
-            ),
+            const SizedBox(height: 20),
           ],
         ),
       ),
