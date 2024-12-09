@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_bloc.dart';
@@ -60,12 +61,7 @@ class _ForgotPasswordEmailInputScreenState extends State<ForgotPasswordEmailInpu
         child: BlocListener<ForgotPasswordEmailInputBloc, ForgotPasswordEmailInputState>(
           listener: (context, state) {
             if (state is ForgotPasswordErrorInSendingOtp) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColor.errorColor,
-                ),
-              );
+              CustomSnackbar(context, state.message, type: SnackbarType.error);
             } else if (state is ForgotPasswordEmailInputOtpSent) {
               GoRouter.of(context).push(
                 AppRouteConstants.getForgotPasswordOtpVerificationPagePath(

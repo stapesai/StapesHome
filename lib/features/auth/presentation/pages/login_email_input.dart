@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/service_locator.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/common/widgets/button.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
+import 'package:stapes_home/core/common/widgets/input/password.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
+import 'package:stapes_home/core/common/widgets/input/text_field.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
+import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_email_input_state.dart';
-import 'package:stapes_home/service_locator.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/common/widgets/input/password.dart';
-import 'package:stapes_home/core/common/widgets/input/text_field.dart';
-import 'package:stapes_home/core/common/widgets/button.dart';
-import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 
 class LoginEmailInputScreen extends StatefulWidget {
   const LoginEmailInputScreen({super.key});
@@ -68,11 +69,8 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
       ),
       child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
         listener: (context, state) {
-          // Show error message if login fails
           if (state is LoginEmailInputError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(backgroundColor: AppColor.errorColor, content: Text(state.message)),
-            );
+            CustomSnackbar(context, state.message, type: SnackbarType.error);
           }
           // Navigate to OTP verification screen if OTP is required
           else if (state is LoginEmailInputOtpRequired) {
@@ -89,33 +87,35 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
           child: Scaffold(
             backgroundColor: Colors.transparent,
             resizeToAvoidBottomInset: true,
-            body: SafeArea(
-              // child: GestureDetector(
-              // onTap: () => FocusScope.of(context).unfocus(),
-              child: LayoutBuilder(
-                builder: (context, constraints) {
-                  return SingleChildScrollView(
-                    physics: const AlwaysScrollableScrollPhysics(),
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(minHeight: constraints.maxHeight),
-                      child: IntrinsicHeight(
-                        child: Column(
-                          children: [
-                            SizedBox(height: constraints.maxHeight * 0.1),
-                            RepaintBoundary(child: _logoWidget),
-                            SizedBox(height: constraints.maxHeight * 0.05),
-                            _buildLoginForm(),
-                            const Spacer(),
-                            RepaintBoundary(child: _socialLoginWidget),
-                            const SizedBox(height: 20),
-                          ],
+            body: RepaintBoundary(
+              child: SafeArea(
+                // child: GestureDetector(
+                // onTap: () => FocusScope.of(context).unfocus(),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            children: [
+                              SizedBox(height: constraints.maxHeight * 0.1),
+                              RepaintBoundary(child: _logoWidget),
+                              SizedBox(height: constraints.maxHeight * 0.05),
+                              _buildLoginForm(),
+                              const Spacer(),
+                              RepaintBoundary(child: _socialLoginWidget),
+                              const SizedBox(height: 20),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                },
+                    );
+                  },
+                ),
+                // ),
               ),
-              // ),
             ),
           ),
         ),
@@ -149,87 +149,89 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
   }
 
   Widget _buildLoginForm() {
-    return Column(
-      children: [
-        CustomTextField(
-          hintText: 'Email',
-          controller: emailController,
-          icon: Icons.email_rounded,
-        ),
-        const SizedBox(height: 20),
-        CustomPasswordTextField(
-          hintText: 'Password',
-          controller: passwordController,
-          icon: Icons.remove_red_eye_rounded,
-        ),
-        Align(
-          alignment: Alignment.centerLeft,
-          child: TextButton(
-            onPressed: () {
-              GoRouter.of(context).push(AppRouteConstants.forgotPassword.routePath);
-            },
-            child: const Text(
-              'Forgot Password?',
-              style: TextStyle(
-                color: AppColor.textHyperlinkColor,
-                fontSize: 15,
-                fontFamily: 'Ubuntu',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
+    return RepaintBoundary(
+      child: Column(
+        children: [
+          CustomTextField(
+            hintText: 'Email',
+            controller: emailController,
+            icon: Icons.email_rounded,
           ),
-        ),
-        const SizedBox(height: 20),
-        BlocBuilder<LoginEmailInputBloc, LoginEmailInputState>(
-          builder: (context, state) {
-            return CustomButton(
-              text: 'Log In',
-              isLoading: state is LoginEmailInputLoading,
+          const SizedBox(height: 20),
+          CustomPasswordTextField(
+            hintText: 'Password',
+            controller: passwordController,
+            icon: Icons.remove_red_eye_rounded,
+          ),
+          Align(
+            alignment: Alignment.centerLeft,
+            child: TextButton(
               onPressed: () {
-                // Add LoginEmailInputBloc event to request login
-                context.read<LoginEmailInputBloc>().add(
-                      RequestLoginEvent(
-                        email: emailController.text,
-                        password: passwordController.text,
-                      ),
-                    );
-              },
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Text(
-              'Don\'t have an account?',
-              style: TextStyle(
-                color: AppColor.whiteColor,
-                fontSize: 16,
-                fontFamily: 'Ubuntu',
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const SignUpEmailInputScreen()),
-                );
+                GoRouter.of(context).push(AppRouteConstants.forgotPassword.routePath);
               },
               child: const Text(
-                'Sign Up',
+                'Forgot Password?',
                 style: TextStyle(
                   color: AppColor.textHyperlinkColor,
-                  fontSize: 16,
+                  fontSize: 15,
                   fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.w400,
                 ),
               ),
             ),
-          ],
-        ),
-      ],
+          ),
+          const SizedBox(height: 20),
+          BlocBuilder<LoginEmailInputBloc, LoginEmailInputState>(
+            builder: (context, state) {
+              return CustomButton(
+                text: 'Log In',
+                isLoading: state is LoginEmailInputLoading,
+                onPressed: () {
+                  // Add LoginEmailInputBloc event to request login
+                  context.read<LoginEmailInputBloc>().add(
+                        RequestLoginEvent(
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ),
+                      );
+                },
+              );
+            },
+          ),
+          const SizedBox(height: 20),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Don\'t have an account?',
+                style: TextStyle(
+                  color: AppColor.whiteColor,
+                  fontSize: 16,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const SignUpEmailInputScreen()),
+                  );
+                },
+                child: const Text(
+                  'Sign Up',
+                  style: TextStyle(
+                    color: AppColor.textHyperlinkColor,
+                    fontSize: 16,
+                    fontFamily: 'Ubuntu',
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
     );
   }
 

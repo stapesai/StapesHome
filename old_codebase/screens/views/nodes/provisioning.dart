@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:lottie/lottie.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
@@ -363,9 +364,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
   // Helper method to show error snackbar
   void _showErrorSnackBar(String message) {
     if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
-      );
+      CustomSnackbar(context, message, type: SnackbarType.error);
     }
   }
 

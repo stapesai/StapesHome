@@ -6,14 +6,12 @@ class CustomPasswordTextField extends StatefulWidget {
   final String hintText;
   final TextEditingController? controller;
   final IconData? icon;
-  final FocusNode? focusNode;
 
   const CustomPasswordTextField({
     super.key,
     required this.hintText,
     this.controller,
     this.icon,
-    this.focusNode,
   });
 
   @override
@@ -34,7 +32,6 @@ class _CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
     return TextField(
       cursorColor: AppColor.whiteColor,
       controller: widget.controller,
-      focusNode: widget.focusNode,
       obscureText: _obscureText,
       inputFormatters: [
         FilteringTextInputFormatter.deny(RegExp(r"\s")),
