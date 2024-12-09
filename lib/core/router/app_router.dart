@@ -12,6 +12,7 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_create_new_p
 import 'package:stapes_home/features/auth/presentation/pages/signup_details_form.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
+import 'package:stapes_home/features/devices/presentation/pages/devices.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/edit_floor_widget.dart';
 import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
@@ -21,7 +22,7 @@ import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget
 
 class AppRouter {
   GoRouter route = GoRouter(
-    initialLocation: AppRouteConstants.splash.routePath,  
+    initialLocation: AppRouteConstants.devices.routePath,  
     routes: [
       // Splash screen
       GoRoute(
@@ -229,6 +230,12 @@ class AppRouter {
           );
         },
       ),
+
+      GoRoute(
+        name: AppRouteConstants.devices.routeName,
+        path: AppRouteConstants.devices.routePath,
+        builder: (context, state) => const DevicesScreen(),
+      )
 
       // Development Page
     //   GoRoute(
