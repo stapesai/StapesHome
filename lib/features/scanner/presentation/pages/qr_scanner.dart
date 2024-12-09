@@ -74,7 +74,13 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
                 );
                 break;
             }
+          } else if (state is QrScannerError) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
           }
+
+          // TODO: add loading overlay for QrScannerProcessing state
         },
         child: Scaffold(
           body: Stack(
