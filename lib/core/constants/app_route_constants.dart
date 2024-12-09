@@ -140,7 +140,7 @@ class AppRouteConstants {
   );
 
   static final editFloorWidget = _RouteConfig(
-    routePath: '/floors/edit-floor-widget/:floorId',
+    routePath: '/floors/edit-floor-widget',
     routeName: 'EditFloorWidget',
   );
 
@@ -150,8 +150,23 @@ class AppRouteConstants {
   );
 
   static final editRoomWidget = _RouteConfig(
-    routePath: '/rooms/edit-room-widget/:roomId',
+    routePath: '/rooms/edit-room-widget',
     routeName: 'EditRoomWidget',
+  );
+
+  static final qrScanner = _RouteConfig(
+    routePath: '/scanner',
+    routeName: 'QrScannerScreen',
+  );
+
+  static final iotProvisioning = _RouteConfig(
+    routePath: '/provisioning/iot',
+    routeName: 'IotProvisioningScreen',
+  );
+
+  static final tvProvisioning = _RouteConfig(
+    routePath: '/provisioning/tv',
+    routeName: 'TvProvisioningScreen',
   );
 
   static final devPageUserDetailsShow = _RouteConfig(

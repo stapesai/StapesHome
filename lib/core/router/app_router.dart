@@ -14,14 +14,18 @@ import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.
 import 'package:stapes_home/features/auth/presentation/pages/signup_otp_verification.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/edit_floor_widget.dart';
+import 'package:stapes_home/features/iot_provisioning/presentation/pages/iot_provisioning.dart';
 import 'package:stapes_home/features/navigation/presentation/pages/navigation_screen.dart';
 import 'package:stapes_home/features/onboarding/presentation/pages/splash_screen.dart';
 import 'package:stapes_home/features/rooms/presentation/widgets/create_room_widget.dart';
 import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget.dart';
+import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
+import 'package:stapes_home/features/scanner/presentation/pages/qr_scanner.dart';
+import 'package:stapes_home/features/tv_provisioning/presentation/pages/tv_provisioning.dart';
 
 class AppRouter {
   GoRouter route = GoRouter(
-    initialLocation: AppRouteConstants.splash.routePath,  
+    initialLocation: AppRouteConstants.splash.routePath,
     routes: [
       // Splash screen
       GoRoute(
@@ -230,31 +234,54 @@ class AppRouter {
         },
       ),
 
-      // Development Page
-    //   GoRoute(
-    //     name: AppRouteConstants.devPageUserDetailsShow.routeName,
-    //     path: AppRouteConstants.devPageUserDetailsShow.routePath,
-    //     builder: (context, state) => const DevUserDetailsScreen(),
-    //   ),
+      // QR Scanner Screen
+      GoRoute(
+        name: AppRouteConstants.qrScanner.routeName,
+        path: AppRouteConstants.qrScanner.routePath,
+        builder: (context, state) => const QrScannerScreen(),
+      ),
 
-    //   // Dev Test Page (just shows given text)
-    //   GoRoute(
-    //     name: AppRouteConstants.devPageTest.routeName,
-    //     path: AppRouteConstants.devPageTest.routePath,
-    //     pageBuilder: (context, state) {
-    //       return MaterialPage(
-    //         child: DevTestPage(
-    //           text: state.pathParameters['text']!,
-    //         ),
-    //       );
-    //     },
-    //   ),
-    // // Dev Test page (Floor Room Selector)
-    //   GoRoute(
-    //     path: AppRouteConstants.devFloorRoomSelectorWidget.routePath,
-    //     name: AppRouteConstants.devFloorRoomSelectorWidget.routeName,
-    //     builder: (context, state) => const DevFloorRoomSelPage(),
-    //   ),
+      // IoT Provisioning Screen
+      GoRoute(
+        name: AppRouteConstants.iotProvisioning.routeName,
+        path: AppRouteConstants.iotProvisioning.routePath,
+        builder: (context, state) => IotProvisioningScreen(
+          deviceData: state.extra as IotQrModel,
+        ),
+      ),
+
+      // TV Provisioning Screen
+      GoRoute(
+        name: AppRouteConstants.tvProvisioning.routeName,
+        path: AppRouteConstants.tvProvisioning.routePath,
+        builder: (context, state) => const TvProvisioningScreen(),
+      ),
+
+      // Development Page
+      //   GoRoute(
+      //     name: AppRouteConstants.devPageUserDetailsShow.routeName,
+      //     path: AppRouteConstants.devPageUserDetailsShow.routePath,
+      //     builder: (context, state) => const DevUserDetailsScreen(),
+      //   ),
+
+      // Dev Test Page (just shows given text)
+      //   GoRoute(
+      //     name: AppRouteConstants.devPageTest.routeName,
+      //     path: AppRouteConstants.devPageTest.routePath,
+      //     pageBuilder: (context, state) {
+      //       return MaterialPage(
+      //         child: DevTestPage(
+      //           text: state.pathParameters['text']!,
+      //         ),
+      //       );
+      //     },
+      //   ),
+      // Dev Test page (Floor Room Selector)
+      //   GoRoute(
+      //     path: AppRouteConstants.devFloorRoomSelectorWidget.routePath,
+      //     name: AppRouteConstants.devFloorRoomSelectorWidget.routeName,
+      //     builder: (context, state) => const DevFloorRoomSelPage(),
+      //   ),
     ],
   );
 }
