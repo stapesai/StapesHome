@@ -33,7 +33,7 @@ class _DevFloorRoomSelPageState extends State<DevFloorRoomSelPage> {
           children: [
             const SizedBox(height: 40),
             SizedBox(
-              height: 100, // Adjust height as needed
+              // height: 100, // Adjust height as needed
               child: FloorRoomSelector(
                 onFloorSelected: (floorId) {
                   _addLog('Floor selected: $floorId');
