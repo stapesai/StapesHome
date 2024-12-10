@@ -1,15 +1,17 @@
 class NodeModel {
   final String? id;
-  final String roomId;
   final String name;
+  final int? numEntities;
+  final String roomId;
   final String hardwareChip;
   final String hardwareVersion;
   final String firmwareVersion;
 
   NodeModel({
     required this.id,
-    required this.roomId,
     required this.name,
+    this.numEntities,
+    required this.roomId,
     required this.hardwareChip,
     required this.hardwareVersion,
     required this.firmwareVersion,
