@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
@@ -127,10 +126,11 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           }),
     ];
 
-    if (context.mounted) {
-      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: 2);
-    }
-    // showCustomBottomSheet(context, options);
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => HoldBottomSheetWidget(options: options),
+    );
   }
 
   Widget _buildRoomList(BuildContext context, FloorRoomSelLoaded state, double maxWidth) {
@@ -185,10 +185,11 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           }),
     ];
 
-    if (context.mounted) {
-      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: 2);
-    }
-    // showCustomBottomSheet(context, options);
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => HoldBottomSheetWidget(options: options),
+    );
   }
 
   @override
