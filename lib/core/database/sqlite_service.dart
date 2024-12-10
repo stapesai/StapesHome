@@ -57,7 +57,6 @@ class SQLiteService {
         name TEXT NOT NULL,
         hardware_chip TEXT NOT NULL,
         hardware_version TEXT NOT NULL,
-        hardware_mac_address TEXT NOT NULL, 
         firmware_version TEXT NOT NULL,
         FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE
       )

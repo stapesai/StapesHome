@@ -4,19 +4,26 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
-import 'package:stapes_home/features/iot_provisioning/data/datasources/local/ble_local_datasource.dart';
-import 'package:stapes_home/features/iot_provisioning/data/datasources/local/wifi_local_datasource.dart';
 import 'package:stapes_home/features/iot_provisioning/data/models/node_hw_info.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_check_wifi_credentials.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_get_hw_info.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_pair_node.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_upload_config.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_wifi_get_available_nwtworks.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart';
 import 'package:stapes_home/features/nodes/data/models/complete_node_pairing_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/request_node_pairing_api_param.dart';
-import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
 
 class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningState> {
-  final BleLocalDataSource bleDataSource;
-  final WifiLocalDataSource wifiDataSource;
-  final NodeRepository nodeRepository;
+  final PairBleNodeUseCase pairBleNodeUseCase;
+  final GetAvailableWifiNetworksUseCase getAvailableWifiNetworksUseCase;
+  final CheckWifiCredentialsUseCase checkWifiCredentialsUseCase;
+  final GetHwInfoUseCase getHwInfoUseCase;
+  final SendConfigToNodeUseCase sendConfigToNodeUseCase;
+  final RequestNodePairingUseCase requestNodePairingUseCase;
+  final CompleteNodePairingUseCase completeNodePairingUseCase;
   final AuthLocalDataSource authLocalDataSource;
 
   // BLE Related variables are stored in Bloc instead of UI
@@ -26,9 +33,13 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
   BluetoothCharacteristic? checkWiFiCredentialsChar;
 
   IotProvisioningBloc({
-    required this.bleDataSource,
-    required this.wifiDataSource,
-    required this.nodeRepository,
+    required this.pairBleNodeUseCase,
+    required this.getAvailableWifiNetworksUseCase,
+    required this.checkWifiCredentialsUseCase,
+    required this.getHwInfoUseCase,
+    required this.sendConfigToNodeUseCase,
+    required this.requestNodePairingUseCase,
+    required this.completeNodePairingUseCase,
     required this.authLocalDataSource,
   }) : super(IotProvisioningInitial()) {
     // BLE Pairing
@@ -49,7 +60,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     emit(BlePairingInProgress());
     try {
       final (success, failureReason, device, configCharResult, hwVersionCharResult, checkWiFiCredentialsCharResult) =
-          await bleDataSource.pairBleNode(event.qrData);
+          await pairBleNodeUseCase(event.qrData);
 
       configChar = configCharResult;
       hwVersionChar = hwVersionCharResult;
@@ -71,7 +82,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
   ) async {
     emit(LoadingWifiNetworks());
     try {
-      final networks = await wifiDataSource.getAvailableWifiNetworks();
+      final networks = await getAvailableWifiNetworksUseCase();
       emit(WifiNetworksLoaded(networks));
     } catch (e) {
       emit(WifiNetworksError(e.toString()));
@@ -84,7 +95,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
   ) async {
     emit(CheckingWifiCredentials());
     try {
-      final isValid = await bleDataSource.checkWiFiCredentialsOnNode(
+      final isValid = await checkWifiCredentialsUseCase(
         checkWiFiCredentialsChar!,
         event.ssid,
         event.password,
@@ -112,20 +123,20 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     emit(RequestingNodePairing());
     try {
       // 1. Get HW Info from the Node
-      final NodeHwInfo hwInfo = await bleDataSource.getHwInfo(hwVersionChar!);
+      final NodeHwInfo hwInfo = await getHwInfoUseCase(hwVersionChar!);
 
       // 2. Request Node Pairing from backend
-      final response = await nodeRepository.requestNodePairing(
+      final response = await requestNodePairingUseCase(
         RequestNodePairingParams(
           node: NodeModel(
             id: null,
             roomId: event.roomId,
             name: event.nodeName,
+            hardwareChip: hwInfo.hardwareChip,
+            hardwareVersion: hwInfo.hardwareChip,
+            firmwareVersion: hwInfo.hardwareChip,
           ),
-          hardwareChip: hwInfo.hardwareChip,
-          hardwareVersion: hwInfo.hardwareChip,
           manifactureId: hwInfo.hardwareChip,
-          firmwareVersion: hwInfo.hardwareChip,
         ),
       );
 
@@ -158,7 +169,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
         mqttUsername: responseMqttUsername,
         mqttPassword: responseMqttPassword,
       );
-      final success = await bleDataSource.sendConfigToNode(configData);
+      final success = await sendConfigToNodeUseCase(configData);
 
       if (success) {
         emit(UploadConfigToNodeSuccess());
@@ -169,7 +180,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
       // 4. Confirming Node Pairing
       emit(CompletingNodePairing());
 
-      final responseComplete = await nodeRepository.completeNodePairing(
+      final responseComplete = await completeNodePairingUseCase(
         CompleteNodePairingParams(transactionId: nodePairingRequestTransactionId),
       );
 

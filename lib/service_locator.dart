@@ -36,6 +36,15 @@ import 'package:stapes_home/features/floors/domain/usecases/create_floor_usecase
 import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
 import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
 import 'package:stapes_home/features/floors/domain/usecases/update_floor_usecase.dart';
+import 'package:stapes_home/features/iot_provisioning/data/datasources/local/ble_local_datasource.dart';
+import 'package:stapes_home/features/iot_provisioning/data/datasources/local/wifi_local_datasource.dart';
+import 'package:stapes_home/features/iot_provisioning/data/repository/iot_provisioning_repo_imp.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/repository/iot_provisioning_repo.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_check_wifi_credentials.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_get_hw_info.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_pair_node.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_upload_config.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_wifi_get_available_nwtworks.dart';
 import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_datasource.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/data/repositories/node_repository_impl.dart';
@@ -160,6 +169,44 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<CompleteNodePairingUseCase>(CompleteNodePairingUseCase());
   serviceLocator.registerSingleton<DeleteNodeUseCase>(DeleteNodeUseCase());
   serviceLocator.registerSingleton<UpdateNodeUseCase>(UpdateNodeUseCase());
+
+  // ---------------------IoT Provisioning feature---------------------
+  // Data sources
+  serviceLocator.registerSingleton<BleLocalDataSource>(
+    BleLocalDataSourceImpl(),
+  );
+  serviceLocator.registerSingleton<WifiLocalDataSource>(
+    WifiLocalDataSourceImpl(),
+  );
+
+  // Repository
+  serviceLocator.registerSingleton<IotProvisioningRepository>(
+    IotProvisioningRepositoryImpl(
+      bleDataSource: serviceLocator<BleLocalDataSource>(),
+      wifiDataSource: serviceLocator<WifiLocalDataSource>(),
+    ),
+  );
+
+  // Use cases
+  serviceLocator.registerSingleton<PairBleNodeUseCase>(
+    PairBleNodeUseCase(serviceLocator<IotProvisioningRepository>()),
+  );
+
+  serviceLocator.registerSingleton<GetAvailableWifiNetworksUseCase>(
+    GetAvailableWifiNetworksUseCase(serviceLocator<IotProvisioningRepository>()),
+  );
+
+  serviceLocator.registerSingleton<CheckWifiCredentialsUseCase>(
+    CheckWifiCredentialsUseCase(serviceLocator<IotProvisioningRepository>()),
+  );
+
+  serviceLocator.registerSingleton<GetHwInfoUseCase>(
+    GetHwInfoUseCase(serviceLocator<IotProvisioningRepository>()),
+  );
+
+  serviceLocator.registerSingleton<SendConfigToNodeUseCase>(
+    SendConfigToNodeUseCase(serviceLocator<IotProvisioningRepository>()),
+  );
 
   // ---------------------Devices feature---------------------
   // Data sources

@@ -5,27 +5,21 @@ import 'package:stapes_home/core/models/node_model.dart';
 
 class RequestNodePairingParams {
   final NodeModel node;
-  final String hardwareChip;
-  final String hardwareVersion;
   final String manifactureId;
-  final String firmwareVersion;
 
   RequestNodePairingParams({
     required this.node,
-    required this.hardwareChip,
-    required this.hardwareVersion,
     required this.manifactureId,
-    required this.firmwareVersion,
   });
 
   Object toJson() {
     return jsonEncode({
       'room_id': node.roomId,
       'name': node.name,
-      'hardware_chip': hardwareChip,
-      'hardware_version': hardwareVersion,
+      'hardware_chip': node.hardwareChip,
+      'hardware_version': node.hardwareVersion,
       'hardware_manifacture_id': manifactureId,
-      'firmware_version': firmwareVersion,
+      'firmware_version': node.firmwareVersion,
     });
   }
 }
