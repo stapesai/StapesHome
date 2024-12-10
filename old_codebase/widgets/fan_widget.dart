@@ -1,9 +1,8 @@
 // import 'package:flutter/material.dart';
-// import 'package:stapes_home/constants/models.dart';
 // import 'package:flutter_svg/flutter_svg.dart';
 
 // class FanComponent extends StatefulWidget {
-//   final Device device;
+//   final DeviceModel device;
 
 //   const FanComponent({super.key, required this.device});
 

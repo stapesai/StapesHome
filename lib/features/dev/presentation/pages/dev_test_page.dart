@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:stapes_home/core/models/device_model.dart';
+import 'package:stapes_home/features/common/presentation/widgets/iot/light_widget.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/iot_device_skel.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/node_skel.dart';
 
@@ -26,7 +28,7 @@ class DevTestPage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: const [
+            children: [
               //   Text(
               //     'This page is under development.',
               //     style: TextStyle(color: Colors.white, fontSize: 24),
@@ -36,9 +38,18 @@ class DevTestPage extends StatelessWidget {
               //     style: TextStyle(color: Colors.white, fontSize: 16),
               //   ),
               NodeComponentSkeleton(),
-              NodeComponentSkeleton(),
               IotDevicesSkeleton(),
-              IotDevicesSkeleton(),
+              LightComponentWidget(
+                device: DeviceModel(
+                  id: 'test_id',
+                  nodeId: 'test_node_id',
+                  name: 'Test Light',
+                  type: 'light',
+                  channelId: 1,
+                ),
+                onToggle: () {},
+                isActivated: true,
+              ),
             ],
           ),
         ),
