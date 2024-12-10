@@ -1,4 +1,4 @@
-// lib/features/rooms/presentation/bloc/delete_room_bloc.dart
+// File: lib/features/rooms/presentation/bloc/delete_room_bloc.dart
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/features/rooms/data/models/delete_room_api_param.dart';

@@ -1,4 +1,4 @@
-// lib/features/rooms/presentation/bloc/delete_room_event.dart
+// File: lib/features/rooms/presentation/bloc/delete_room_event.dart
 
 import 'package:equatable/equatable.dart';
 import 'package:stapes_home/core/models/room_model.dart';

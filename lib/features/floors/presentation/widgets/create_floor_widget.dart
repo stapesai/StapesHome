@@ -48,6 +48,10 @@ class _CreateFloorWidgetState extends State<CreateFloorWidget> {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
           BlocConsumer<CreateFloorBloc, CreateFloorState>(
             listener: (context, state) {
               if (state is CreateFloorSuccess) {

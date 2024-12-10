@@ -1,3 +1,4 @@
+// File: lib/features/rooms/presentation/widgets/create_room_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/features/rooms/domain/usecases/create_room_usecase.dart';
@@ -49,6 +50,10 @@ class _CreateRoomWidgetState extends State<CreateRoomWidget> {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
           BlocConsumer<CreateRoomBloc, CreateRoomState>(
             listener: (context, state) {
               if (state is CreateRoomSuccess) {

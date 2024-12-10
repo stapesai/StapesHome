@@ -1,3 +1,4 @@
+// File: lib\features\rooms\presentation\bloc\edit_room_state.dart
 import 'package:equatable/equatable.dart';
 
 abstract class EditRoomState extends Equatable {

@@ -1,3 +1,4 @@
+// File: lib/features/floors/presentation/bloc/edit_floor_state.dart
 import 'package:equatable/equatable.dart';
 
 abstract class EditFloorState extends Equatable {

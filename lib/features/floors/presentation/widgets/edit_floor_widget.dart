@@ -58,6 +58,10 @@ class _EditFloorWidgetState extends State<EditFloorWidget> {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
           BlocConsumer<EditFloorBloc, EditFloorState>(
             listener: (context, state) {
               if (state is EditFloorSuccess) {

@@ -1,4 +1,4 @@
-// lib/features/rooms/presentation/widgets/delete_room_widget.dart
+// File: lib/features/rooms/presentation/widgets/delete_room_widget.dart
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

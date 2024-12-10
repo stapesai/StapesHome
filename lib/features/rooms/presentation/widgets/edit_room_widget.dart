@@ -1,4 +1,4 @@
-// Dart
+// File: lib/features/rooms/presentation/widgets/edit_room_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/models/room_model.dart';
@@ -58,6 +58,10 @@ class _EditRoomWidgetState extends State<EditRoomWidget> {
           ),
         ),
         actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
           BlocConsumer<EditRoomBloc, EditRoomState>(
             listener: (context, state) {
               if (state is EditRoomSuccess) {

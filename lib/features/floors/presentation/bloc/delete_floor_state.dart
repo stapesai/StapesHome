@@ -1,3 +1,5 @@
+// File: lib\features\floors\presentation\bloc\delete_floor_state.dart
+
 import 'package:equatable/equatable.dart';
 
 abstract class DeleteFloorState extends Equatable {

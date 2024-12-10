@@ -1,4 +1,4 @@
-// lib/features/rooms/presentation/bloc/delete_room_state.dart
+// File: lib/features/rooms/presentation/bloc/delete_room_state.dart
 
 import 'package:equatable/equatable.dart';
 

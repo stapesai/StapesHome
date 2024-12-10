@@ -1,3 +1,4 @@
+// File: lib/features/rooms/presentation/bloc/create_room_event.dart
 import 'package:equatable/equatable.dart';
 
 abstract class CreateRoomEvent extends Equatable {
