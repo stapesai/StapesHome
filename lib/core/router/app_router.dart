@@ -22,7 +22,7 @@ import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget
 
 class AppRouter {
   GoRouter route = GoRouter(
-    initialLocation: AppRouteConstants.devices.routePath,  
+    initialLocation: AppRouteConstants.splash.routePath,  
     routes: [
       // Splash screen
       GoRoute(
