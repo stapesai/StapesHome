@@ -18,6 +18,7 @@ import 'package:stapes_home/features/floors/presentation/widgets/delete_floor_wi
 import 'package:stapes_home/features/floors/presentation/widgets/edit_floor_widget.dart';
 import 'package:stapes_home/features/rooms/domain/usecases/get_rooms_usecase.dart';
 import 'package:stapes_home/features/rooms/presentation/widgets/create_room_widget.dart';
+import 'package:stapes_home/features/rooms/presentation/widgets/delete_room_widget.dart';
 import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget.dart';
 import 'package:stapes_home/service_locator.dart';
 
@@ -113,16 +114,20 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
         icon: Icons.edit,
         label: 'Edit Floor',
         onTap: () => {
-          EditFloorWidget(floor: floor),
-          // Navigator.of(context).pop(),
+          showDialog(
+            context: context,
+            builder: (_) => EditFloorWidget(floor: floor),
+          ),
         },
       ),
       BottomSheetOption(
           icon: Icons.delete,
           label: 'Delete Floor',
           onTap: () {
-            DeleteFloorWidget(floor: floor);
-            Navigator.of(context).pop();
+            showDialog(
+              context: context,
+              builder: (_) => DeleteFloorWidget(floor: floor),
+            );
           }),
     ];
 
@@ -173,15 +178,20 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
         icon: Icons.edit,
         label: 'Edit Room',
         onTap: () => {
-          EditRoomWidget(room: room),
-          Navigator.of(context).pop(),
+          showDialog(
+            context: context,
+            builder: (_) => EditRoomWidget(room: room),
+          ),
         },
       ),
       BottomSheetOption(
           icon: Icons.delete,
           label: 'Delete Room',
           onTap: () {
-            // TODO: redirect to delete room widget
+            showDialog(
+              context: context,
+              builder: (_) => DeleteRoomWidget(room: room),
+            );
           }),
     ];
 
