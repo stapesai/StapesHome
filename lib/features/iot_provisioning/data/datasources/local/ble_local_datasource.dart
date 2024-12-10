@@ -4,29 +4,43 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:stapes_home/features/iot_provisioning/data/datasources/models/node_hw_info.dart';
+import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 
 abstract class BleLocalDataSource {
-  Future<bool> pairBleNode(
-      String deviceName, String serviceUuid, String configUuid, String hwVersionUuid, String checkWiFiCredentialsUuid);
+  Future<
+      (
+        bool success,
+        BluetoothCharacteristic? configChar,
+        BluetoothCharacteristic? hwVersionChar,
+        BluetoothCharacteristic? checkWiFiCredentialsChar
+      )> pairBleNode(IotQrModel qrData);
   Future<bool> checkWiFiCredentialsOnNode(BluetoothCharacteristic char, String ssid, String password);
   Future<NodeHwInfo> getHwInfo(BluetoothCharacteristic hwVersionChar);
-  Future<bool> sendConfigToNode(BluetoothCharacteristic configChar, String wifiSSID, String wifiPassword, String userId,
-      String mqttHost, String mqttPort, String mqttUsername, String mqttPassword);
+  Future<bool> sendConfigToNode(SendConfigToNode configData);
 }
 
 class BleLocalDataSourceImpl implements BleLocalDataSource {
   @override
-  Future<bool> pairBleNode(String deviceName, String serviceUuid, String configUuid, String hwVersionUuid,
-      String checkWiFiCredentialsUuid) async {
+  Future<
+      (
+        bool success,
+        BluetoothCharacteristic? configChar,
+        BluetoothCharacteristic? hwVersionChar,
+        BluetoothCharacteristic? checkWiFiCredentialsChar
+      )> pairBleNode(IotQrModel qrData) async {
     // Start scanning
     await FlutterBluePlus.startScan(timeout: Duration(seconds: 10));
 
     try {
       // Wait for device discovery
       final results = await FlutterBluePlus.scanResults
-          .firstWhere((results) => results.any((r) => r.device.platformName == deviceName));
+          .firstWhere((results) => results.any((r) => r.device.platformName == qrData.deviceName), orElse: () => []);
 
-      final device = results.firstWhere((r) => r.device.platformName == deviceName).device;
+      if (results.isEmpty) {
+        return (false, null, null, null);
+      }
+
+      final device = results.firstWhere((r) => r.device.platformName == qrData.deviceName).device;
 
       // Connect to device
       await device.connect();
@@ -40,13 +54,13 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
       BluetoothCharacteristic? checkWiFiCredentialsChar;
 
       for (var service in services) {
-        if (service.uuid.toString() == serviceUuid) {
+        if (service.uuid.toString() == qrData.serviceUuid) {
           for (var char in service.characteristics) {
-            if (char.uuid.toString() == configUuid) {
+            if (char.uuid.toString() == qrData.configCharacteristicUuid) {
               configChar = char;
-            } else if (char.uuid.toString() == hwVersionUuid) {
+            } else if (char.uuid.toString() == qrData.versionCharacteristicUuid) {
               hwVersionChar = char;
-            } else if (char.uuid.toString() == checkWiFiCredentialsUuid) {
+            } else if (char.uuid.toString() == qrData.checkWiFiCredentialsCharacteristicUuid) {
               checkWiFiCredentialsChar = char;
             }
           }
@@ -54,11 +68,10 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
       }
 
       if (configChar == null || hwVersionChar == null || checkWiFiCredentialsChar == null) {
-        print('Required characteristics not found - Invaild QR code');
-        return false;
+        return (false, null, null, null);
       }
 
-      return true;
+      return (true, configChar, hwVersionChar, checkWiFiCredentialsChar);
     } finally {
       await FlutterBluePlus.stopScan();
     }
@@ -86,23 +99,14 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
   }
 
   @override
-  Future<bool> sendConfigToNode(BluetoothCharacteristic configChar, String ssid, String password, String userId,
-      String mqttHost, String mqttPort, String mqttUsername, String mqttPassword) async {
+  Future<bool> sendConfigToNode(SendConfigToNode configData) async {
     try {
-      // Format config data
-      final configData = 'WIFI_SSID=$ssid;'
-          'WIFI_PASSWORD=$password;'
-          'MQTT_BROKER=$mqttHost;'
-          'MQTT_PORT=$mqttPort;'
-          'MQTT_USERNAME=$mqttUsername;'
-          'MQTT_PASSWORD=$mqttPassword;'
-          'USER_ID=$userId';
-
       // Send config
-      await configChar.write(utf8.encode(configData));
+      await configData.configCharacteristicUuid.write(utf8.encode(configData.toBleString()));
 
       // Wait for notification response
-      final response = await configChar.lastValueStream.firstWhere((value) => value.isNotEmpty);
+      final response =
+          await configData.configCharacteristicUuid.lastValueStream.firstWhere((value) => value.isNotEmpty);
       return response[0] == 1; // 1 = success, 0 = failure
     } catch (e) {
       return false;

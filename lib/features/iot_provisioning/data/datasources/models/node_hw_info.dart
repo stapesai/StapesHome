@@ -1,5 +1,7 @@
 // lib/features/iot_provisioning/data/datasources/models/node_hw_info.dart
 
+import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+
 class NodeHwInfo {
   final String hardwareChip;
   final String hardwareVersion;
@@ -24,5 +26,37 @@ class NodeHwInfo {
       hardwareVersion: parts[1],
       firmwareVersion: parts[2],
     );
+  }
+}
+
+class SendConfigToNode {
+  BluetoothCharacteristic configCharacteristicUuid;
+  String wifiSSID;
+  String wifiPassword;
+  String userId;
+  String mqttHost;
+  String mqttPort;
+  String mqttUsername;
+  String mqttPassword;
+
+  SendConfigToNode({
+    required this.configCharacteristicUuid,
+    required this.wifiSSID,
+    required this.wifiPassword,
+    required this.userId,
+    required this.mqttHost,
+    required this.mqttPort,
+    required this.mqttUsername,
+    required this.mqttPassword,
+  });
+
+  String toBleString() {
+    return 'WIFI_SSID=$wifiSSID;'
+        'WIFI_PASSWORD=$wifiPassword;'
+        'MQTT_BROKER=$mqttHost;'
+        'MQTT_PORT=$mqttPort;'
+        'MQTT_USERNAME=$mqttUsername;'
+        'MQTT_PASSWORD=$mqttPassword;'
+        'USER_ID=$userId';
   }
 }
