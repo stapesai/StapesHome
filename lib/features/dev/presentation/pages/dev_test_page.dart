@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stapes_home/features/common/presentation/widgets/skeletons/node_skel.dart';
 
 class DevTestPage extends StatelessWidget {
   final String text;
@@ -23,16 +24,20 @@ class DevTestPage extends StatelessWidget {
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            // crossAxisAlignment: CrossAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: const [
-              Text(
-                'This page is under development.',
-                style: TextStyle(color: Colors.white, fontSize: 24),
-              ),
-              Text(
-                'This is a temporary page to test the navigation.',
-                style: TextStyle(color: Colors.white, fontSize: 16),
-              ),
+              //   Text(
+              //     'This page is under development.',
+              //     style: TextStyle(color: Colors.white, fontSize: 24),
+              //   ),
+              //   Text(
+              //     'This is a temporary page to test the navigation.',
+              //     style: TextStyle(color: Colors.white, fontSize: 16),
+              //   ),
+              NodeComponentSkeleton(),
+              NodeComponentSkeleton(),
+              NodeComponentSkeleton(),
+              NodeComponentSkeleton(),
             ],
           ),
         ),

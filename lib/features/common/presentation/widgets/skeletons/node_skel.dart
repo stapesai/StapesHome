@@ -1,3 +1,5 @@
+// File: lib/features/common/presentation/widgets/skeletons/node_skel.dart
+
 import 'package:flutter/material.dart';
 
 class NodeComponentSkeleton extends StatefulWidget {
@@ -6,7 +8,6 @@ class NodeComponentSkeleton extends StatefulWidget {
   @override
   createState() => _NodeComponentSkeletonState();
 }
-
 
 class _NodeComponentSkeletonState extends State<NodeComponentSkeleton> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
