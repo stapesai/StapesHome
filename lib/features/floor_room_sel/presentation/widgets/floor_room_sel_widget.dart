@@ -19,16 +19,12 @@ class FloorRoomSelector extends StatelessWidget {
   final BuildContext context;
   final Function(String) onFloorSelected;
   final Function(String) onRoomSelected;
-  final String sessionId;
-  final String userId;
 
   const FloorRoomSelector({
     super.key,
     required this.context,
     required this.onFloorSelected,
     required this.onRoomSelected,
-    required this.sessionId,
-    required this.userId,
   });
 
   @override
@@ -72,7 +68,6 @@ class _FloorRoomSelectorView extends StatelessWidget {
             TextButton(
               child: const Text('Delete'),
               onPressed: () {
-                Navigator.of(context).pop();
                 if (itemType == ItemType.floor) {
                   context.read<FloorRoomSelBloc>().add(DeleteFloor(floorId: id));
                 } else if (itemType == ItemType.room) {
