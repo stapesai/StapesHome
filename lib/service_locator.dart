@@ -40,7 +40,7 @@ import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_da
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
 import 'package:stapes_home/features/nodes/data/repositories/node_repository_impl.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
-import 'package:stapes_home/features/nodes/domain/usecases/create_node_usecase.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/delete_node_usecase.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/get_nodes_by_room_id_usecase.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/update_node_usecase.dart';

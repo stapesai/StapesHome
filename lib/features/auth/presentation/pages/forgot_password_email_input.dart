@@ -8,7 +8,7 @@ import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/for
 import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/forgot_password/forgot_password_email_input_state.dart';
 import 'package:stapes_home/service_locator.dart';
-import 'package:stapes_home/core/common/widgets/input/text_field.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';

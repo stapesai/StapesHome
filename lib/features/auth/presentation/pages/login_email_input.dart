@@ -9,7 +9,7 @@ import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/common/widgets/input/password.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/core/common/widgets/input/text_field.dart';
+import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/presentation/pages/signup_email_input.dart';
