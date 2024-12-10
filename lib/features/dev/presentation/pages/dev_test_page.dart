@@ -25,58 +25,20 @@ class DevTestPage extends StatelessWidget {
         title: Text('Dev Page - $text', style: TextStyle(color: Colors.white)),
         backgroundColor: Colors.transparent,
       ),
-      body: SafeArea(
-        child: LayoutBuilder(
-          builder: (BuildContext context, BoxConstraints constraints) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  NodeComponentSkeleton(),
-                  NodeComponentWidget(
-                    node: NodeModel(
-                      id: 'test_id',
-                      name: 'Test Node',
-                      numEntities: 3,
-                      roomId: 'test_room_id',
-                      hardwareChip: 'TEST_CHIP',
-                      hardwareVersion: 'TEST_VERSION',
-                      firmwareVersion: 'TEST_FIRMWARE',
-                    ),
-                  ),
-                  IotDevicesSkeleton(),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      LightComponentWidget(
-                        device: DeviceModel(
-                          id: 'test_id',
-                          nodeId: 'test_node_id',
-                          name: 'Test Light',
-                          type: 'light',
-                          channelId: 1,
-                        ),
-                        onToggle: () {},
-                        isActivated: true,
-                      ),
-                      LightComponentWidget(
-                        device: DeviceModel(
-                          id: 'test_id',
-                          nodeId: 'test_node_id',
-                          name: 'Test Light',
-                          type: 'light',
-                          channelId: 1,
-                        ),
-                        onToggle: () {},
-                        isActivated: false,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: const [
+            Text(
+              'This page is under development.',
+              style: TextStyle(color: Colors.white, fontSize: 24),
+            ),
+            Text(
+              'This is a temporary page to test the navigation.',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ],
         ),
       ),
     );
