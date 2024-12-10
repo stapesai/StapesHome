@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
@@ -82,11 +83,8 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                   ),
                 );
               } else if (state is SignUpEmailInputError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(backgroundColor: Colors.red, content: Text(state.message)),
-                );
-              }
-            },
+                CustomSnackbar(context, state.message, type: SnackbarType.error);
+            }
             child: SafeArea(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -146,8 +144,10 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                   ),
                 ],
               ),
-            ),
+            );
+            },
           ),
+        
         ),
       ),
     );

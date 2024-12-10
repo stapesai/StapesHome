@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
@@ -120,21 +121,13 @@ class _SignUpOtpVerificationScreenState extends State<SignUpOtpVerificationScree
         child: BlocListener<SignUpOtpVerificationBloc, SignUpOtpVerificationState>(
           listener: (context, state) {
             if (state is SignUpOtpVerificationSuccess) {
-              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                content: Text('OTP Verified Successfully'),
-                backgroundColor: AppColor.successColor,
-              ));
+              CustomSnackbar(context, 'OTP Verified Successfully' , type: SnackbarType.success);
               GoRouter.of(context).push(AppRouteConstants.getSignUpCreatePasswordPagePath(
                 email: state.email,
                 transactionId: state.transactionId,
               ));
             } else if (state is SignUpOtpVerificationError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColor.errorColor,
-                ),
-              );
+              CustomSnackbar(context, state.message, type: SnackbarType.error);
             }
           },
           child: Scaffold(

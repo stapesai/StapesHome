@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
 import 'package:stapes_home/features/floors/presentation/bloc/delete_floor_bloc.dart';
@@ -34,9 +35,7 @@ class DeleteFloorWidget extends StatelessWidget {
               if (state is DeleteFloorSuccess) {
                 Navigator.pop(context, true);
               } else if (state is DeleteFloorError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
+               CustomSnackbar(context, state.message);
               }
             },
             builder: (context, state) {

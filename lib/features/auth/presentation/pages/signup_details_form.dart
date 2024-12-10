@@ -1,6 +1,7 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
@@ -78,12 +79,7 @@ class _SignUpDetailsFormScreenState extends State<SignUpDetailsFormScreen> {
             if (state is SignUpDetailsFormSuccess) {
               GoRouter.of(context).go(AppRouteConstants.main.routePath);
             } else if (state is SignUpDetailsFormError) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(state.message),
-                  backgroundColor: AppColor.errorColor,
-                ),
-              );
+              CustomSnackbar(context, state.message, type: SnackbarType.error);
             }
           },
           child: Scaffold(

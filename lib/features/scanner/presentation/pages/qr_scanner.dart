@@ -90,15 +90,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
                 GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
                 break;
               case QrCodeType.unknown:
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Invalid QR code')),
-                );
+                CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
                 break;
             }
           } else if (state is QrScannerError) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            CustomSnackbar(context, state.message, type: SnackbarType.error);
           }
 
           // TODO: add loading overlay for QrScannerProcessing state

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/room_model.dart';
 import 'package:stapes_home/features/rooms/domain/usecases/delete_room_usecase.dart';
 import 'package:stapes_home/features/rooms/presentation/bloc/delete_room_bloc.dart';
@@ -36,9 +37,7 @@ class DeleteRoomWidget extends StatelessWidget {
               if (state is DeleteRoomSuccess) {
                 Navigator.pop(context, true);
               } else if (state is DeleteRoomError) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text(state.message)),
-                );
+                CustomSnackbar(context, state.message);
               }
             },
             builder: (context, state) {
