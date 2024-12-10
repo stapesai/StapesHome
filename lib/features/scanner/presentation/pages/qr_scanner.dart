@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/features/scanner/data/models/parse_qr_data_model.dart';
 import 'package:stapes_home/features/scanner/presentation/bloc/qr_scanner_bloc.dart';
@@ -27,7 +28,25 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-    _controller = MobileScannerController();
+    _controller = MobileScannerController(
+      detectionSpeed: DetectionSpeed.normal,
+      facing: CameraFacing.back,
+      torchEnabled: false,
+    );
+
+    // Initialize camera
+    _initializeCamera();
+  }
+
+  Future<void> _initializeCamera() async {
+    try {
+      await _controller.start();
+    } catch (e) {
+      print('Failed to initialize camera: $e');
+      if (mounted) {
+        CustomSnackbar(context, 'Failed to initialize camera');
+      }
+    }
   }
 
   @override
@@ -42,6 +61,8 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
       setState(() {
         _torchOn = !_torchOn;
       });
+
+      // TODO: Check if torch is toggled successfully
     } catch (e) {
       // If an error occurs (torch not available), we can assume there's no torch
       print('Torch is not available: $e');

@@ -10,21 +10,15 @@ class CustomSnackbar {
   };
 
   // Constructor that directly shows the Snackbar
-  CustomSnackbar(
-    BuildContext context,
-    String message, {
-    SnackbarType type = SnackbarType.info,
-    Duration? duration,
-  }) {
+  CustomSnackbar(BuildContext context, String message, {SnackbarType type = SnackbarType.info, int? duration = 2}) {
     showSnackBar(context, message, type: type, duration: duration);
   }
 
-  static void showSnackBar(BuildContext context, String message,
-      {SnackbarType type = SnackbarType.info, Duration? duration}) {
+  static void showSnackBar(BuildContext context, String message, {SnackbarType? type, int? duration}) {
     final snackBar = SnackBar(
       content: Text(message),
       backgroundColor: snackbarColors[type],
-      duration: duration ?? const Duration(seconds: 2),
+      duration: Duration(seconds: duration!),
       behavior: SnackBarBehavior.floating,
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
