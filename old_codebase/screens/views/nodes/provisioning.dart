@@ -333,7 +333,7 @@ class ProvisioningScreenState extends State<ProvisioningScreen> {
   Future<void> _createNodeInBackend(Map<String, String> hardwareData) async {
     try {
       final response = await http.post(
-        BackendRoutes.createNode,
+        BackendRoutes.requestNodePairing,
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
