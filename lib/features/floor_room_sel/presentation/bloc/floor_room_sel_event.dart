@@ -38,4 +38,22 @@ class SelectRoom extends FloorRoomSelEvent {
   List<Object> get props => [roomId];
 }
 
+class DeleteFloor extends FloorRoomSelEvent {
+  final String floorId;
+
+  const DeleteFloor({required this.floorId});
+
+  @override
+  List<Object> get props => [floorId];
+}
+
+class DeleteRoom extends FloorRoomSelEvent {
+  final String floorId;
+
+  const DeleteRoom({required this.floorId});
+
+  @override
+  List<Object> get props => [floorId];
+}
+
 class RefreshData extends FloorRoomSelEvent {}

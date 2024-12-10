@@ -4,7 +4,9 @@ import 'package:equatable/equatable.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';
 
-abstract class FloorRoomSelState extends Equatable {
+enum ItemType { floor, room }
+
+class FloorRoomSelState extends Equatable {
   const FloorRoomSelState();
 
   @override
@@ -15,58 +17,51 @@ class FloorRoomSelInitial extends FloorRoomSelState {}
 
 class FloorsLoading extends FloorRoomSelState {}
 
-class RoomsLoading extends FloorRoomSelState {}
+class FloorsLoadedEmpty extends FloorRoomSelState {}
 
-class FloorRoomSelLoaded extends FloorRoomSelState {
+class FloorsLoaded extends FloorRoomSelState {
   final List<FloorModel> floors;
-  final List<RoomModel> rooms;
   final String activeFloorId;
-  final String activeRoomId;
-  final bool isLoadingFloors;
-  final bool isLoadingRooms;
 
-  const FloorRoomSelLoaded({
+  const FloorsLoaded({
     required this.floors,
-    required this.rooms,
     required this.activeFloorId,
-    required this.activeRoomId,
-    this.isLoadingFloors = false,
-    this.isLoadingRooms = false,
   });
 
-  FloorRoomSelLoaded copyWith({
-    List<FloorModel>? floors,
-    List<RoomModel>? rooms,
-    String? activeFloorId,
-    String? activeRoomId,
-    bool? isLoadingFloors,
-    bool? isLoadingRooms,
-  }) {
-    return FloorRoomSelLoaded(
-      floors: floors ?? this.floors,
-      rooms: rooms ?? this.rooms,
-      activeFloorId: activeFloorId ?? this.activeFloorId,
-      activeRoomId: activeRoomId ?? this.activeRoomId,
-      isLoadingFloors: isLoadingFloors ?? this.isLoadingFloors,
-      isLoadingRooms: isLoadingRooms ?? this.isLoadingRooms,
-    );
-  }
-
   @override
-  List<Object> get props => [
-        floors,
-        rooms,
-        activeFloorId,
-        activeRoomId,
-        isLoadingFloors,
-        isLoadingRooms,
-      ];
+  List<Object> get props => [floors, activeFloorId];
 }
 
-class FloorRoomSelError extends FloorRoomSelState {
+class FloorsLoadingError extends FloorRoomSelState {
   final String message;
 
-  const FloorRoomSelError(this.message);
+  const FloorsLoadingError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
+class RoomsLoading extends FloorRoomSelState {}
+
+class RoomsLoadedEmpty extends FloorRoomSelState {}
+
+class RoomsLoaded extends FloorRoomSelState {
+  final List<RoomModel> rooms;
+  final String activeRoomId;
+
+  const RoomsLoaded({
+    required this.rooms,
+    required this.activeRoomId,
+  });
+
+  @override
+  List<Object> get props => [rooms, activeRoomId];
+}
+
+class RoomsLoadingError extends FloorRoomSelState {
+  final String message;
+
+  const RoomsLoadingError(this.message);
 
   @override
   List<Object> get props => [message];

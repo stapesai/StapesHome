@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
@@ -22,8 +23,6 @@ import 'package:stapes_home/features/rooms/presentation/widgets/delete_room_widg
 import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget.dart';
 import 'package:stapes_home/service_locator.dart';
 
-enum ItemType { floor, room }
-
 class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;
   final Function(String) onRoomSelected;
@@ -39,7 +38,7 @@ class FloorRoomSelector extends StatefulWidget {
 }
 
 class _FloorRoomSelectorState extends State<FloorRoomSelector> {
-  Widget _buildSectionHeader(BuildContext context, ItemType itemType) {
+  Widget _buildSectionHeader(BuildContext context, ItemType itemType, FloorRoomSelState state) {
     String title = itemType == ItemType.floor ? 'Floors' : 'Rooms';
     return Row(
       children: [
@@ -62,11 +61,15 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
                 builder: (_) => const CreateFloorWidget(),
               );
             } else if (itemType == ItemType.room) {
-              // Show create room dialog
-              showDialog(
-                context: context,
-                builder: (_) => const CreateRoomWidget(floorId: '36c3116b-a9c6-4cfa-96c3-a2fed3135d25'),
-              );
+              if (state is FloorsLoaded) {
+                // Show create room dialog
+                showDialog(
+                  context: context,
+                  builder: (_) => CreateRoomWidget(floorId: state.activeFloorId),
+                );
+              } else {
+                CustomSnackbar(context, 'Please select a floor first', type: SnackbarType.error);
+              }
             }
           },
         ),
@@ -74,8 +77,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     );
   }
 
-  Widget _buildFloorList(BuildContext context, FloorRoomSelLoaded state, double maxWidth) {
-    if (state.isLoadingFloors) {
+  Widget _buildFloorList(BuildContext context, FloorRoomSelState state, double maxWidth) {
+    if (state is FloorsLoading) {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -90,22 +93,41 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       );
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: state.floors.map((floor) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: FloorRoomNameButton(
-              label: floor.alias,
-              isActive: state.activeFloorId == floor.id,
-              onTap: () => context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!)),
-              onLongPress: () => _showFloorOptions(context, floor),
-            ),
-          );
-        }).toList(),
-      ),
-    );
+    if (state is FloorsLoaded) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: state.floors.map((floor) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: FloorRoomNameButton(
+                label: floor.alias,
+                isActive: state.activeFloorId == floor.id,
+                onTap: () {
+                  context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!));
+                },
+                onLongPress: () => _showFloorOptions(context, floor),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
+
+    if (state is FloorsLoadedEmpty) {
+      return const Center(
+        child: Text(
+          'No floors available',
+          style: TextStyle(
+            color: AppColor.whiteColor,
+            fontSize: 16,
+            fontFamily: 'Ubuntu',
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
   void _showFloorOptions(BuildContext context, FloorModel floor) {
@@ -138,8 +160,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     );
   }
 
-  Widget _buildRoomList(BuildContext context, FloorRoomSelLoaded state, double maxWidth) {
-    if (state.isLoadingRooms) {
+  Widget _buildRoomList(BuildContext context, FloorRoomSelState state, double maxWidth) {
+    if (state is RoomsLoading) {
       return SingleChildScrollView(
         scrollDirection: Axis.horizontal,
         child: Row(
@@ -154,22 +176,41 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       );
     }
 
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: state.rooms.map((room) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 15),
-            child: FloorRoomNameButton(
-              label: room.name,
-              isActive: state.activeRoomId == room.id,
-              onTap: () => context.read<FloorRoomSelBloc>().add(SelectRoom(roomId: room.id!)),
-              onLongPress: () => _showRoomOptions(context, room),
-            ),
-          );
-        }).toList(),
-      ),
-    );
+    if (state is RoomsLoaded) {
+      return SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: Row(
+          children: state.rooms.map((room) {
+            return Padding(
+              padding: const EdgeInsets.only(right: 15),
+              child: FloorRoomNameButton(
+                label: room.name,
+                isActive: state.activeRoomId == room.id,
+                onTap: () {
+                  context.read<FloorRoomSelBloc>().add(SelectRoom(roomId: room.id!));
+                },
+                onLongPress: () => _showRoomOptions(context, room),
+              ),
+            );
+          }).toList(),
+        ),
+      );
+    }
+
+    if (state is RoomsLoadedEmpty) {
+      return const Center(
+        child: Text(
+          'No rooms available',
+          style: TextStyle(
+            color: AppColor.whiteColor,
+            fontSize: 16,
+            fontFamily: 'Ubuntu',
+          ),
+        ),
+      );
+    }
+
+    return const SizedBox.shrink();
   }
 
   void _showRoomOptions(BuildContext context, RoomModel room) {
@@ -208,34 +249,27 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
       create: (context) => FloorRoomSelBloc(
         getFloorsUseCase: serviceLocator<GetFloorsUseCase>(),
         getRoomsUseCase: serviceLocator<GetRoomsUseCase>(),
+        onFloorSelected: (floorId) => widget.onFloorSelected(floorId),
+        onRoomSelected: (roomId) => widget.onRoomSelected(roomId),
       )..add(LoadFloors()),
-      child: BlocConsumer<FloorRoomSelBloc, FloorRoomSelState>(
-        listener: (context, state) {
-          if (state is FloorRoomSelLoaded) {
-            widget.onFloorSelected(state.activeFloorId);
-            widget.onRoomSelected(state.activeRoomId);
-          }
-        },
+      child: BlocBuilder<FloorRoomSelBloc, FloorRoomSelState>(
         builder: (context, state) {
-          if (state is FloorRoomSelLoaded) {
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    _buildSectionHeader(context, ItemType.floor),
-                    const SizedBox(height: 8),
-                    _buildFloorList(context, state, constraints.maxWidth),
-                    const SizedBox(height: 24),
-                    _buildSectionHeader(context, ItemType.room),
-                    const SizedBox(height: 8),
-                    _buildRoomList(context, state, constraints.maxWidth),
-                  ],
-                );
-              },
-            );
-          }
-          return const Center(child: CircularProgressIndicator());
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildSectionHeader(context, ItemType.floor, state),
+                  const SizedBox(height: 8),
+                  _buildFloorList(context, state, constraints.maxWidth),
+                  const SizedBox(height: 24),
+                  _buildSectionHeader(context, ItemType.room, state),
+                  const SizedBox(height: 8),
+                  _buildRoomList(context, state, constraints.maxWidth),
+                ],
+              );
+            },
+          );
         },
       ),
     );

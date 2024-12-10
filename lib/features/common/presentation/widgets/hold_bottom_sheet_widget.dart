@@ -11,7 +11,6 @@ class HoldBottomSheetWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       // TODO: fix this, but dont apply anything here this should be done in the parent widget
-      // width: double.infinity,
       decoration: const BoxDecoration(
         color: Colors.red,
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
