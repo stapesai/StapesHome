@@ -35,55 +35,20 @@ class CheckWifiCredentialsEvent extends IotProvisioningEvent {
   List<Object?> get props => [ssid, password];
 }
 
-// Node configuration events
-// class GetNodeHwInfoEvent extends IotProvisioningEvent {
-//   final BluetoothCharacteristic characteristic;
+// Provision Node Event
+class ProvisionNodeEvent extends IotProvisioningEvent {
+  final String roomId;
+  final String nodeName;
+  final String wifiSSID;
+  final String wifiPassword;
 
-//   GetNodeHwInfoEvent(this.characteristic);
+  ProvisionNodeEvent({
+    required this.roomId,
+    required this.nodeName,
+    required this.wifiSSID,
+    required this.wifiPassword,
+  });
 
-//   @override
-//   List<Object?> get props => [characteristic];
-// }
-
-// class RequestNodePairingEvent extends IotProvisioningEvent {
-//   final String roomId;
-//   final String nodeName;
-//   final Map<String, String> hwInfo;
-
-//   RequestNodePairingEvent({
-//     required this.roomId,
-//     required this.nodeName,
-//     required this.hwInfo,
-//   });
-
-//   @override
-//   List<Object?> get props => [roomId, nodeName, hwInfo];
-// }
-
-// class SendNodeConfigEvent extends IotProvisioningEvent {
-//   final BluetoothCharacteristic configChar;
-//   final String ssid;
-//   final String password;
-//   final String userId;
-//   final Map<String, String> mqttDetails;
-
-//   SendNodeConfigEvent({
-//     required this.configChar,
-//     required this.ssid,
-//     required this.password,
-//     required this.userId,
-//     required this.mqttDetails,
-//   });
-
-//   @override
-//   List<Object?> get props => [configChar, ssid, password, userId, mqttDetails];
-// }
-
-// class CompleteNodePairingEvent extends IotProvisioningEvent {
-//   final String transactionId;
-
-//   CompleteNodePairingEvent(this.transactionId);
-
-//   @override
-//   List<Object?> get props => [transactionId];
-// }
+  @override
+  List<Object?> get props => [roomId, nodeName, wifiSSID, wifiPassword];
+}

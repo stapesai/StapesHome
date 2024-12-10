@@ -56,63 +56,52 @@ class WifiCredentialsInvalid extends IotProvisioningState {
   List<Object?> get props => [error];
 }
 
-// Node Configuration States
-// class LoadingNodeHwInfo extends IotProvisioningState {}
+// Provision Node States
+// 1. Request Node Pairing from backend
+class RequestingNodePairing extends IotProvisioningState {}
 
-// class NodeHwInfoLoaded extends IotProvisioningState {
-//   final Map<String, String> hwInfo;
-//   NodeHwInfoLoaded(this.hwInfo);
+class NodePairingRequestSuccess extends IotProvisioningState {}
 
-//   @override
-//   List<Object?> get props => [hwInfo];
-// }
+class NodePairingRequestFailure extends IotProvisioningState {
+  final String error;
+  NodePairingRequestFailure(this.error);
 
-// class NodeHwInfoError extends IotProvisioningState {
-//   final String error;
-//   NodeHwInfoError(this.error);
+  @override
+  List<Object?> get props => [error];
+}
 
-//   @override
-//   List<Object?> get props => [error];
-// }
+// 2. Send Config to Node
+class UploadConfigToNode extends IotProvisioningState {}
 
-// class RequestingNodePairing extends IotProvisioningState {}
+class UploadConfigToNodeSuccess extends IotProvisioningState {}
 
-// class NodePairingRequestSuccess extends IotProvisioningState {
-//   final String transactionId;
-//   NodePairingRequestSuccess(this.transactionId);
+class UploadConfigToNodeFailure extends IotProvisioningState {
+  final String error;
+  UploadConfigToNodeFailure(this.error);
 
-//   @override
-//   List<Object?> get props => [transactionId];
-// }
+  @override
+  List<Object?> get props => [error];
+}
 
-// class NodePairingRequestFailure extends IotProvisioningState {
-//   final String error;
-//   NodePairingRequestFailure(this.error);
+// 3. Confirming Node Pairing
+class CompletingNodePairing extends IotProvisioningState {}
 
-//   @override
-//   List<Object?> get props => [error];
-// }
+class CompleteNodePairingSuccess extends IotProvisioningState {}
 
-// class SendingNodeConfig extends IotProvisioningState {}
+class CompleteNodePairingFailure extends IotProvisioningState {
+  final String error;
+  CompleteNodePairingFailure(this.error);
 
-// class NodeConfigSent extends IotProvisioningState {}
+  @override
+  List<Object?> get props => [error];
+}
 
-// class NodeConfigError extends IotProvisioningState {
-//   final String error;
-//   NodeConfigError(this.error);
+class NodeProvisioned extends IotProvisioningState {}
 
-//   @override
-//   List<Object?> get props => [error];
-// }
+class NodeProvisioningError extends IotProvisioningState {
+  final String error;
+  NodeProvisioningError(this.error);
 
-// class CompletingNodePairing extends IotProvisioningState {}
-
-// class NodePairingComplete extends IotProvisioningState {}
-
-// class NodePairingError extends IotProvisioningState {
-//   final String error;
-//   NodePairingError(this.error);
-
-//   @override
-//   List<Object?> get props => [error];
-// }
+  @override
+  List<Object?> get props => [error];
+}

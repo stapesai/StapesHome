@@ -164,6 +164,16 @@ class AppRouteConstants {
     routeName: 'IotProvisioningScreen',
   );
 
+  static final iotProvisioningEnterWifiCredentials = _RouteConfig(
+    routePath: '/provisioning/iot/enter-wifi-credentials',
+    routeName: 'IoTProvisioningEnterWifiCredentialsScreen',
+  );
+
+  static final iotProvisioningSelectNodeOptions = _RouteConfig(
+    routePath: '/provisioning/iot/select-node-options',
+    routeName: 'IoTProvisioningSelectNodeOptionsScreen',
+  );
+
   static final tvProvisioning = _RouteConfig(
     routePath: '/provisioning/tv',
     routeName: 'TvProvisioningScreen',

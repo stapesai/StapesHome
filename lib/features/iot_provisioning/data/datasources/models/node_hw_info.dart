@@ -3,11 +3,13 @@
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 
 class NodeHwInfo {
+  final String manifactureId;
   final String hardwareChip;
   final String hardwareVersion;
   final String firmwareVersion;
 
   NodeHwInfo({
+    required this.manifactureId,
     required this.hardwareChip,
     required this.hardwareVersion,
     required this.firmwareVersion,
@@ -17,14 +19,15 @@ class NodeHwInfo {
     // Format: <hardware_chip>;<hardware_version>;<firmware_version>
     final parts = bleData.split(';');
 
-    if (parts.length != 3) {
+    if (parts.length != 4) {
       throw Exception('Invalid BLE data');
     }
 
     return NodeHwInfo(
-      hardwareChip: parts[0],
-      hardwareVersion: parts[1],
-      firmwareVersion: parts[2],
+      manifactureId: parts[0],
+      hardwareChip: parts[1],
+      hardwareVersion: parts[2],
+      firmwareVersion: parts[3],
     );
   }
 }

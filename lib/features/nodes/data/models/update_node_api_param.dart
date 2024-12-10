@@ -15,10 +15,10 @@ class UpdateNodeParams {
     return jsonEncode({
       'room_id': node.roomId,
       'name': node.name,
-      'hardware_chip': node.hardwareChip,
-      'hardware_version': node.hardwareVersion,
-      'hardware_mac_address': node.hardwareMacAddress,
-      'firmware_version': node.firmwareVersion,
+      // 'hardware_chip': node.hardwareChip,
+      // 'hardware_version': node.hardwareVersion,
+      // 'hardware_mac_address': node.hardwareMacAddress,
+      // 'firmware_version': node.firmwareVersion,
     });
   }
 }

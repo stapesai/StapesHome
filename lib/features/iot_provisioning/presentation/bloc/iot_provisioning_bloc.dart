@@ -2,16 +2,22 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
+import 'package:stapes_home/core/models/node_model.dart';
+import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/iot_provisioning/data/datasources/local/ble_local_datasource.dart';
 import 'package:stapes_home/features/iot_provisioning/data/datasources/local/wifi_local_datasource.dart';
+import 'package:stapes_home/features/iot_provisioning/data/datasources/models/node_hw_info.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart';
-import 'package:stapes_home/service_locator.dart';
+import 'package:stapes_home/features/nodes/data/models/complete_node_pairing_api_param.dart';
+import 'package:stapes_home/features/nodes/data/models/request_node_pairing_api_param.dart';
+import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
 
 class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningState> {
-  final BleLocalDataSource _bleDataSource = serviceLocator<BleLocalDataSource>();
-  final WifiLocalDataSource _wifiDataSource = serviceLocator<WifiLocalDataSource>();
-  // final NodeRepository _nodeRepository = serviceLocator<NodeRepository>();
+  final BleLocalDataSource bleDataSource;
+  final WifiLocalDataSource wifiDataSource;
+  final NodeRepository nodeRepository;
+  final AuthLocalDataSource authLocalDataSource;
 
   // BLE Related variables are stored in Bloc instead of UI
   BluetoothDevice? device;
@@ -19,7 +25,12 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
   BluetoothCharacteristic? hwVersionChar;
   BluetoothCharacteristic? checkWiFiCredentialsChar;
 
-  IotProvisioningBloc() : super(IotProvisioningInitial()) {
+  IotProvisioningBloc({
+    required this.bleDataSource,
+    required this.wifiDataSource,
+    required this.nodeRepository,
+    required this.authLocalDataSource,
+  }) : super(IotProvisioningInitial()) {
     // BLE Pairing
     on<PairBleDeviceEvent>(_onPairBleDevice);
 
@@ -28,10 +39,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     on<CheckWifiCredentialsEvent>(_onCheckWifiCredentials);
 
     // Node Configuration
-    // on<GetNodeHwInfoEvent>(_onGetNodeHwInfo);
-    // on<RequestNodePairingEvent>(_onRequestNodePairing);
-    // on<SendNodeConfigEvent>(_onSendNodeConfig);
-    // on<CompleteNodePairingEvent>(_onCompleteNodePairing);
+    on<ProvisionNodeEvent>(_provisionNode);
   }
 
   Future<void> _onPairBleDevice(
@@ -41,7 +49,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     emit(BlePairingInProgress());
     try {
       final (success, failureReason, device, configCharResult, hwVersionCharResult, checkWiFiCredentialsCharResult) =
-          await _bleDataSource.pairBleNode(event.qrData);
+          await bleDataSource.pairBleNode(event.qrData);
 
       configChar = configCharResult;
       hwVersionChar = hwVersionCharResult;
@@ -63,7 +71,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
   ) async {
     emit(LoadingWifiNetworks());
     try {
-      final networks = await _wifiDataSource.getAvailableWifiNetworks();
+      final networks = await wifiDataSource.getAvailableWifiNetworks();
       emit(WifiNetworksLoaded(networks));
     } catch (e) {
       emit(WifiNetworksError(e.toString()));
@@ -76,7 +84,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
   ) async {
     emit(CheckingWifiCredentials());
     try {
-      final isValid = await _bleDataSource.checkWiFiCredentialsOnNode(
+      final isValid = await bleDataSource.checkWiFiCredentialsOnNode(
         checkWiFiCredentialsChar!,
         event.ssid,
         event.password,
@@ -91,85 +99,89 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     }
   }
 
-  // Future<void> _onGetNodeHwInfo(
-  //   GetNodeHwInfoEvent event,
-  //   Emitter<IotProvisioningState> emit,
-  // ) async {
-  //   emit(LoadingNodeHwInfo());
-  //   try {
-  //     final hwInfo = await _bleDataSource.getHwInfo(event.characteristic);
-  //     emit(NodeHwInfoLoaded(hwInfo.toJson()));
-  //   } catch (e) {
-  //     emit(NodeHwInfoError(e.toString()));
-  //   }
-  // }
+  Future<void> _provisionNode(
+    ProvisionNodeEvent event,
+    Emitter<IotProvisioningState> emit,
+  ) async {
+    late final String nodePairingRequestTransactionId;
+    late final String responseMqttHost;
+    late final String responseMqttPort;
+    late final String responseMqttUsername;
+    late final String responseMqttPassword;
 
-  // Future<void> _onRequestNodePairing(
-  //   RequestNodePairingEvent event,
-  //   Emitter<IotProvisioningState> emit,
-  // ) async {
-  //   emit(RequestingNodePairing());
-  //   try {
-  //     final response = await _nodeRepository.requestNodePairing(
-  //       RequestNodePairingParams(
-  //         roomId: event.roomId,
-  //         name: event.nodeName,
-  //         hardwareInfo: event.hwInfo,
-  //       ),
-  //     );
+    emit(RequestingNodePairing());
+    try {
+      // 1. Get HW Info from the Node
+      final NodeHwInfo hwInfo = await bleDataSource.getHwInfo(hwVersionChar!);
 
-  //     response.fold(
-  //       (failure) => emit(NodePairingRequestFailure(failure.toString())),
-  //       (success) => emit(NodePairingRequestSuccess(success.transactionId)),
-  //     );
-  //   } catch (e) {
-  //     emit(NodePairingRequestFailure(e.toString()));
-  //   }
-  // }
+      // 2. Request Node Pairing from backend
+      final response = await nodeRepository.requestNodePairing(
+        RequestNodePairingParams(
+          node: NodeModel(
+            id: null,
+            roomId: event.roomId,
+            name: event.nodeName,
+          ),
+          hardwareChip: hwInfo.hardwareChip,
+          hardwareVersion: hwInfo.hardwareChip,
+          manifactureId: hwInfo.hardwareChip,
+          firmwareVersion: hwInfo.hardwareChip,
+        ),
+      );
 
-  // Future<void> _onSendNodeConfig(
-  //   SendNodeConfigEvent event,
-  //   Emitter<IotProvisioningState> emit,
-  // ) async {
-  //   emit(SendingNodeConfig());
-  //   try {
-  //     final success = await _bleDataSource.sendConfigToNode(
-  //       event.configChar,
-  //       event.ssid,
-  //       event.password,
-  //       event.userId,
-  //       event.mqttDetails['host']!,
-  //       event.mqttDetails['port']!,
-  //       event.mqttDetails['username']!,
-  //       event.mqttDetails['password']!,
-  //     );
+      response.fold(
+        (failure) => emit(NodePairingRequestFailure(failure.toString())),
+        (success) {
+          nodePairingRequestTransactionId = success.transactionId;
+          responseMqttHost = success.mqttHost;
+          responseMqttPort = success.mqttPort;
+          responseMqttUsername = success.mqttUsername;
+          responseMqttPassword = success.mqttPassword;
+          emit(NodePairingRequestSuccess());
+        },
+      );
 
-  //     if (success) {
-  //       emit(NodeConfigSent());
-  //     } else {
-  //       emit(NodeConfigError('Failed to send configuration'));
-  //     }
-  //   } catch (e) {
-  //     emit(NodeConfigError(e.toString()));
-  //   }
-  // }
+      // 3. Send Config to Node
+      emit(UploadConfigToNode());
 
-  // Future<void> _onCompleteNodePairing(
-  //   CompleteNodePairingEvent event,
-  //   Emitter<IotProvisioningState> emit,
-  // ) async {
-  //   emit(CompletingNodePairing());
-  //   try {
-  //     final response = await _nodeRepository.completeNodePairing(
-  //       CompleteNodePairingParams(transactionId: event.transactionId),
-  //     );
+      // 3.1 Get UserId from local storage
+      final userSession = await authLocalDataSource.getUserSession();
+      final userId = userSession?.userId;
 
-  //     response.fold(
-  //       (failure) => emit(NodePairingError(failure.toString())),
-  //       (success) => emit(NodePairingComplete()),
-  //     );
-  //   } catch (e) {
-  //     emit(NodePairingError(e.toString()));
-  //   }
-  // }
+      final configData = SendConfigToNode(
+        configCharacteristicUuid: configChar!,
+        wifiSSID: event.wifiSSID,
+        wifiPassword: event.wifiPassword,
+        userId: userId!,
+        mqttHost: responseMqttHost,
+        mqttPort: responseMqttPort,
+        mqttUsername: responseMqttUsername,
+        mqttPassword: responseMqttPassword,
+      );
+      final success = await bleDataSource.sendConfigToNode(configData);
+
+      if (success) {
+        emit(UploadConfigToNodeSuccess());
+      } else {
+        emit(UploadConfigToNodeFailure('Failed to send configuration'));
+      }
+
+      // 4. Confirming Node Pairing
+      emit(CompletingNodePairing());
+
+      final responseComplete = await nodeRepository.completeNodePairing(
+        CompleteNodePairingParams(transactionId: nodePairingRequestTransactionId),
+      );
+
+      responseComplete.fold(
+        (failure) => emit(CompleteNodePairingFailure(failure.toString())),
+        (success) => emit(CompleteNodePairingSuccess()),
+      );
+
+      // 5. Node Provisioned
+      emit(NodeProvisioned());
+    } catch (e) {
+      emit(NodeProvisioningError(e.toString()));
+    }
+  }
 }

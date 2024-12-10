@@ -242,20 +242,20 @@ class AppRouter {
       ),
 
       // IoT Provisioning Screens
-      GoRoute(
-        name: AppRouteConstants.iotProvisioning.routeName,
-        path: AppRouteConstants.iotProvisioning.routePath,
-        builder: (context, state) => IotProvisioningScreen(
-          qrData: state.extra as IotQrModel,
-        ),
-      ),
+      // GoRoute(
+      //   name: AppRouteConstants.iotProvisioning.routeName,
+      //   path: AppRouteConstants.iotProvisioning.routePath,
+      //   builder: (context, state) => IotProvisioningScreen(
+      //     qrData: state.extra as IotQrModel,
+      //   ),
+      // ),
 
       // TV Provisioning Screen
-      GoRoute(
-        name: AppRouteConstants.tvProvisioning.routeName,
-        path: AppRouteConstants.tvProvisioning.routePath,
-        builder: (context, state) => const TvProvisioningScreen(),
-      ),
+      // GoRoute(
+      //   name: AppRouteConstants.tvProvisioning.routeName,
+      //   path: AppRouteConstants.tvProvisioning.routePath,
+      //   builder: (context, state) => const TvProvisioningScreen(),
+      // ),
 
       // Development Page
       //   GoRoute(

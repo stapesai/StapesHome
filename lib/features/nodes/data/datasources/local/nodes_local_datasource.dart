@@ -1,4 +1,4 @@
-// nodes_local_datasource.dart
+// lib/features/nodes/data/datasources/local/nodes_local_datasource.dart
 
 import 'package:sqflite/sqflite.dart';
 import 'package:stapes_home/core/database/sqlite_service.dart';
@@ -87,10 +87,10 @@ class NodesLocalDataSourceImpl implements NodesLocalDataSource {
         'id': node.id,
         'room_id': node.roomId,
         'name': node.name,
-        'hardware_chip': node.hardwareChip,
-        'hardware_version': node.hardwareVersion,
-        'hardware_mac_address': node.hardwareMacAddress,
-        'firmware_version': node.firmwareVersion,
+        // 'hardware_chip': node.hardwareChip,
+        // 'hardware_version': node.hardwareVersion,
+        // 'hardware_mac_address': node.hardwareMacAddress,
+        // 'firmware_version': node.firmwareVersion,
       });
 
       if (result == 0) {
@@ -131,10 +131,10 @@ class NodesLocalDataSourceImpl implements NodesLocalDataSource {
         {
           'room_id': node.roomId,
           'name': node.name,
-          'hardware_chip': node.hardwareChip,
-          'hardware_version': node.hardwareVersion,
-          'hardware_mac_address': node.hardwareMacAddress,
-          'firmware_version': node.firmwareVersion,
+          // 'hardware_chip': node.hardwareChip,
+          // 'hardware_version': node.hardwareVersion,
+          // 'hardware_mac_address': node.hardwareMacAddress,
+          // 'firmware_version': node.firmwareVersion,
         },
         where: 'id = ?',
         whereArgs: [id],
@@ -200,10 +200,10 @@ class NodesLocalDataSourceImpl implements NodesLocalDataSource {
             'id': node.id,
             'room_id': node.roomId,
             'name': node.name,
-            'hardware_chip': node.hardwareChip,
-            'hardware_version': node.hardwareVersion,
-            'hardware_mac_address': node.hardwareMacAddress,
-            'firmware_version': node.firmwareVersion,
+            // 'hardware_chip': node.hardwareChip,
+            // 'hardware_version': node.hardwareVersion,
+            // 'hardware_mac_address': node.hardwareMacAddress,
+            // 'firmware_version': node.firmwareVersion,
           });
         }
       });
