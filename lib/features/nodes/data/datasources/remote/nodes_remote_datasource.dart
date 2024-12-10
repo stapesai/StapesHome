@@ -2,14 +2,16 @@ import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/core/constants/api_routes.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
-import 'package:stapes_home/features/nodes/data/models/create_node_api_param.dart';
+import 'package:stapes_home/features/nodes/data/models/complete_node_pairing_api_param.dart';
+import 'package:stapes_home/features/nodes/data/models/request_node_pairing_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/update_node_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/get_nodes_by_room_id_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dart';
 
 abstract class NodesRemoteDataSource {
   Future<GetNodesByRoomIdResponse> getNodesByRoomId(GetNodesByRoomIdParams params);
-  Future<CreateNodeResponse> createNode(CreateNodeParams params);
+  Future<RequestNodePairingResponse> requestNodePairing(RequestNodePairingParams params);
+  Future<CompleteNodePairingResponse> completeNodePairing(CompleteNodePairingParams params);
   Future<UpdateNodeResponse> updateNode(UpdateNodeParams params);
   Future<DeleteNodeResponse> deleteNode(DeleteNodeParams params);
 }
@@ -40,11 +42,11 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
   }
 
   @override
-  Future<CreateNodeResponse> createNode(CreateNodeParams params) {
+  Future<RequestNodePairingResponse> requestNodePairing(RequestNodePairingParams params) {
     return httpClient.handleRequest(() async {
       UserSessionModel? session = await authLocalDataSource.getUserSession();
       final response = await httpClient.post(
-        BackendRoutes.createNode,
+        BackendRoutes.requestNodePairing,
         headers: {
           'accept': 'application/json',
           'Content-Type': 'application/json',
@@ -53,7 +55,25 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
         },
         body: params.toJson(),
       );
-      return CreateNodeResponse.fromJson(response);
+      return RequestNodePairingResponse.fromJson(response);
+    });
+  }
+
+  @override
+  Future<CompleteNodePairingResponse> completeNodePairing(CompleteNodePairingParams params) {
+    return httpClient.handleRequest(() async {
+      UserSessionModel? session = await authLocalDataSource.getUserSession();
+      final response = await httpClient.post(
+        BackendRoutes.completeNodePairing,
+        headers: {
+          'accept': 'application/json',
+          'Content-Type': 'application/json',
+          'X-User-Id': session?.userId ?? 'not_found',
+          'X-Session-Id': session?.sessionId ?? 'not_found',
+        },
+        body: params.toJson(),
+      );
+      return CompleteNodePairingResponse.fromJson(response);
     });
   }
 

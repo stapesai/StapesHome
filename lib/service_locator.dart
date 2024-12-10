@@ -156,7 +156,8 @@ void setupServiceLocator() {
 
   // Use cases
   serviceLocator.registerSingleton<GetNodesByRoomIdUseCase>(GetNodesByRoomIdUseCase());
-  serviceLocator.registerSingleton<CreateNodeUseCase>(CreateNodeUseCase());
+  serviceLocator.registerSingleton<RequestNodePairingUseCase>(RequestNodePairingUseCase());
+  serviceLocator.registerSingleton<CompleteNodePairingUseCase>(CompleteNodePairingUseCase());
   serviceLocator.registerSingleton<DeleteNodeUseCase>(DeleteNodeUseCase());
   serviceLocator.registerSingleton<UpdateNodeUseCase>(UpdateNodeUseCase());
 

@@ -4,8 +4,9 @@ import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/utils/repository_exceptions_helper.dart';
 import 'package:stapes_home/features/nodes/data/datasources/local/nodes_local_datasource.dart';
 import 'package:stapes_home/features/nodes/data/datasources/remote/nodes_remote_datasource.dart';
+import 'package:stapes_home/features/nodes/data/models/complete_node_pairing_api_param.dart';
+import 'package:stapes_home/features/nodes/data/models/request_node_pairing_api_param.dart';
 import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
-import 'package:stapes_home/features/nodes/data/models/create_node_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/update_node_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/get_nodes_by_room_id_api_param.dart';
 import 'package:stapes_home/features/nodes/data/models/delete_node_api_param.dart';
@@ -22,9 +23,16 @@ class NodeRepositoryImpl with RepositoryHelper implements NodeRepository {
   });
 
   @override
-  Future<Either<Failure, CreateNodeResponse>> createNode(CreateNodeParams params) {
+  Future<Either<Failure, RequestNodePairingResponse>> requestNodePairing(RequestNodePairingParams params) {
     return handleEither(() async {
-      final response = await remoteDataSource.createNode(params);
+      return await remoteDataSource.requestNodePairing(params);
+    }, networkInfo);
+  }
+
+  @override
+  Future<Either<Failure, CompleteNodePairingResponse>> completeNodePairing(CompleteNodePairingParams params) {
+    return handleEither(() async {
+      final response = await remoteDataSource.completeNodePairing(params);
       await localDataSource.createNode(response.node);
       return response;
     }, networkInfo);

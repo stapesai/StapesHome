@@ -103,7 +103,8 @@ class BackendRoutes {
   static Uri deleteRoom(String roomId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/rooms/$roomId');
 
   // Node routes
-  static final Uri createNode = Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes');
+  static final Uri requestNodePairing = Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/request-pairing');
+  static final Uri completeNodePairing = Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/complete-pairing');
   static Uri getNodesByRoomId(String roomId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/$roomId');
   static Uri updateNode(String nodeId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/$nodeId');
   static Uri deleteNode(String nodeId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/$nodeId');
