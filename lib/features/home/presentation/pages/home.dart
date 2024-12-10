@@ -3,15 +3,9 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
-class HomeScreen extends StatefulWidget {
-  // final String sessionId;
-  // final String userId;
 
-  const HomeScreen({
-    super.key,
-    // required this.sessionId,
-    // required this.userId,
-  });
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
   createState() => _HomeScreenState();
@@ -88,10 +82,19 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       SizedBox(height: screenSize.height * 0.03),
                       Row(
                         children: [
-                          _buildQuickAccessButton('Favourites', isFavouritesSelected, 'heart-active.svg', 'heart.svg'),
+                          _buildQuickAccessButton(
+                            'Favourites',
+                            isFavouritesSelected,
+                            'heart-active.svg',
+                            'heart.svg',
+                          ),
                           SizedBox(width: 24),
                           _buildQuickAccessButton(
-                              'Active', !isFavouritesSelected, 'lightning-active.svg', 'lightning.svg'),
+                            'Active',
+                            !isFavouritesSelected,
+                            'lightning-active.svg',
+                            'lightning.svg',
+                          ),
                         ],
                       ),
                     ],
