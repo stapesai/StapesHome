@@ -3,7 +3,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:flutter_blue_plus/flutter_blue_plus.dart';
-import 'package:stapes_home/features/iot_provisioning/data/datasources/models/node_hw_info.dart';
+import 'package:stapes_home/features/iot_provisioning/data/models/node_hw_info.dart';
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 
 abstract class BleLocalDataSource {

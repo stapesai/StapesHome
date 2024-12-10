@@ -6,7 +6,7 @@ import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/iot_provisioning/data/datasources/local/ble_local_datasource.dart';
 import 'package:stapes_home/features/iot_provisioning/data/datasources/local/wifi_local_datasource.dart';
-import 'package:stapes_home/features/iot_provisioning/data/datasources/models/node_hw_info.dart';
+import 'package:stapes_home/features/iot_provisioning/data/models/node_hw_info.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart';
 import 'package:stapes_home/features/nodes/data/models/complete_node_pairing_api_param.dart';
