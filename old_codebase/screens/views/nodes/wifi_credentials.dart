@@ -7,7 +7,6 @@ import 'package:stapes_home/core/common/widgets/button.dart';
 import 'package:stapes_home/core/common/widgets/input/dropdown.dart';
 import 'package:stapes_home/core/common/widgets/input/password.dart';
 import 'package:wifi_scan/wifi_scan.dart';
-// import 'package:wifi_iot/wifi_iot.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class WifiCredentials extends StatefulWidget {
