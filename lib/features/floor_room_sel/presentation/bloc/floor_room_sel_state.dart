@@ -1,4 +1,4 @@
-// lib/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart
+// File: lib/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart
 
 import 'package:equatable/equatable.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
@@ -13,7 +13,9 @@ abstract class FloorRoomSelState extends Equatable {
 
 class FloorRoomSelInitial extends FloorRoomSelState {}
 
-class FloorRoomSelLoading extends FloorRoomSelState {}
+class FloorsLoading extends FloorRoomSelState {}
+
+class RoomsLoading extends FloorRoomSelState {}
 
 class FloorRoomSelLoaded extends FloorRoomSelState {
   final List<FloorModel> floors;
