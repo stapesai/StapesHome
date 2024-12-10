@@ -1,3 +1,5 @@
+// lib/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart
+
 import 'package:equatable/equatable.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';

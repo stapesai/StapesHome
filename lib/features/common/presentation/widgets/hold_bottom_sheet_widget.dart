@@ -12,6 +12,7 @@ class HoldBottomSheetWidget extends StatelessWidget {
       child: Wrap(
         children: options
             .map((option) => ListTile(
+                  leading: Icon(option.icon),
                   title: Text(option.label),
                   onTap: option.onTap,
                 ))
@@ -24,6 +25,11 @@ class HoldBottomSheetWidget extends StatelessWidget {
 class BottomSheetOption {
   final String label;
   final VoidCallback onTap;
+  final IconData icon;
 
-  BottomSheetOption({required this.label, required this.onTap});
+  BottomSheetOption({
+    required this.label,
+    required this.onTap,
+    required this.icon,
+  });
 }

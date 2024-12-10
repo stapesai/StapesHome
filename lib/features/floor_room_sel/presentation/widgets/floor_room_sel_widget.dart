@@ -2,86 +2,44 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
+import 'package:stapes_home/core/models/floor_model.dart';
+import 'package:stapes_home/core/models/room_model.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_sheet_widget.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_bloc.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_event.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/bloc/floor_room_sel_state.dart';
-import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/skeletons/floor_room_name_skel.dart';
-import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
+import 'package:stapes_home/features/floor_room_sel/presentation/widgets/floor_room_name_button.dart';
+import 'package:stapes_home/features/floor_room_sel/presentation/widgets/plus_button.dart';
 import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
-import 'package:stapes_home/features/rooms/domain/usecases/delete_room_usecase.dart';
+import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
+import 'package:stapes_home/features/floors/presentation/widgets/edit_floor_widget.dart';
 import 'package:stapes_home/features/rooms/domain/usecases/get_rooms_usecase.dart';
+import 'package:stapes_home/features/rooms/presentation/widgets/create_room_widget.dart';
+import 'package:stapes_home/features/rooms/presentation/widgets/edit_room_widget.dart';
 import 'package:stapes_home/service_locator.dart';
 
 enum ItemType { floor, room }
 
-class FloorRoomSelector extends StatelessWidget {
-  final BuildContext context;
+class FloorRoomSelector extends StatefulWidget {
   final Function(String) onFloorSelected;
   final Function(String) onRoomSelected;
 
   const FloorRoomSelector({
     super.key,
-    required this.context,
     required this.onFloorSelected,
     required this.onRoomSelected,
   });
 
   @override
-  Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => FloorRoomSelBloc(
-        deleteFloorUseCase: serviceLocator<DeleteFloorUseCase>(),
-        deleteRoomUseCase: serviceLocator<DeleteRoomUseCase>(),
-        getFloorsUseCase: serviceLocator<GetFloorsUseCase>(),
-        getRoomsUseCase: serviceLocator<GetRoomsUseCase>(),
-      )..add(LoadFloors()),
-      child: _FloorRoomSelectorView(
-        onFloorSelected: onFloorSelected,
-        onRoomSelected: onRoomSelected,
-      ),
-    );
-  }
+  State<FloorRoomSelector> createState() => _FloorRoomSelectorState();
 }
 
-class _FloorRoomSelectorView extends StatelessWidget {
-  final Function(String) onFloorSelected;
-  final Function(String) onRoomSelected;
-
-  const _FloorRoomSelectorView({
-    required this.onFloorSelected,
-    required this.onRoomSelected,
-  });
-
-  void _showDeleteConfirmationDialog(BuildContext context, ItemType itemType, String id, String itemName) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text('Delete $itemType'),
-          content: Text('Are you sure you want to delete $itemName?'),
-          actions: [
-            TextButton(
-              child: const Text('Cancel'),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            TextButton(
-              child: const Text('Delete'),
-              onPressed: () {
-                if (itemType == ItemType.floor) {
-                  context.read<FloorRoomSelBloc>().add(DeleteFloor(floorId: id));
-                } else if (itemType == ItemType.room) {
-                  context.read<FloorRoomSelBloc>().add(DeleteRoom(roomId: id));
-                }
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  Widget _buildSectionHeader(BuildContext context, String title) {
+class _FloorRoomSelectorState extends State<FloorRoomSelector> {
+  Widget _buildSectionHeader(BuildContext context, ItemType itemType) {
+    String title = itemType == ItemType.floor ? 'Floors' : 'Rooms';
     return Row(
       children: [
         Text(
@@ -96,68 +54,23 @@ class _FloorRoomSelectorView extends StatelessWidget {
         const SizedBox(width: 30),
         PlusButton(
           onPressed: () {
-            if (title == 'Floors') {
-              // context.read<FloorRoomSelBloc>().add(const CreateFloor(name: 'New Floor'));
-            } else {
-              // context.read<FloorRoomSelBloc>().add(const CreateRoom(name: 'New Room'));
+            if (itemType == ItemType.floor) {
+              // Show create floor dialog
+              showDialog(
+                context: context,
+                builder: (_) => const CreateFloorWidget(),
+              );
+            } else if (itemType == ItemType.room) {
+              // Show create room dialog
+              showDialog(
+                context: context,
+                builder: (_) => const CreateRoomWidget(floorId: '36c3116b-a9c6-4cfa-96c3-a2fed3135d25'),
+              );
             }
           },
         ),
       ],
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BlocConsumer<FloorRoomSelBloc, FloorRoomSelState>(
-      listener: (context, state) {
-        if (state is FloorRoomSelLoaded) {
-          onFloorSelected(state.activeFloorId);
-          onRoomSelected(state.activeRoomId);
-        }
-      },
-      builder: (context, state) {
-        if (state is FloorRoomSelLoaded) {
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  _buildSectionHeader(context, 'Floors'),
-                  const SizedBox(height: 8),
-                  _buildFloorList(context, state, constraints.maxWidth),
-                  const SizedBox(height: 24),
-                  _buildSectionHeader(context, 'Rooms'),
-                  const SizedBox(height: 8),
-                  _buildRoomList(context, state, constraints.maxWidth),
-                ],
-              );
-            },
-          );
-        }
-        return const Center(child: CircularProgressIndicator());
-      },
-    );
-  }
-
-  void _showFloorOptions(BuildContext context, Floor floor) {
-    List<HoldBottomSheet> options = [
-      HoldBottomSheet(
-        icon: Icons.edit,
-        text: 'Edit Floor',
-        onTap: () => context.read<FloorRoomSelBloc>().add(UpdateFloor(
-              floorId: floor.id,
-              name: floor.alias,
-            )),
-      ),
-      HoldBottomSheet(
-        icon: Icons.delete,
-        text: 'Delete Floor',
-        onTap: () => _showDeleteConfirmationDialog(context, 'Floor', floor.id, floor.alias),
-      ),
-    ];
-
-    showCustomBottomSheet(context, options);
   }
 
   Widget _buildFloorList(BuildContext context, FloorRoomSelLoaded state, double maxWidth) {
@@ -185,7 +98,7 @@ class _FloorRoomSelectorView extends StatelessWidget {
             child: FloorRoomNameButton(
               label: floor.alias,
               isActive: state.activeFloorId == floor.id,
-              onTap: () => context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id)),
+              onTap: () => context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!)),
               onLongPress: () => _showFloorOptions(context, floor),
             ),
           );
@@ -194,24 +107,28 @@ class _FloorRoomSelectorView extends StatelessWidget {
     );
   }
 
-  void _showRoomOptions(BuildContext context, Room room) {
-    List<HoldBottomSheet> options = [
-      HoldBottomSheet(
+  void _showFloorOptions(BuildContext context, FloorModel floor) {
+    List<BottomSheetOption> options = [
+      BottomSheetOption(
         icon: Icons.edit,
-        text: 'Edit Room',
-        onTap: () => context.read<FloorRoomSelBloc>().add(UpdateRoom(
-              roomId: room.id,
-              name: room.name,
-            )),
+        label: 'Edit Floor',
+        onTap: () => {
+          EditFloorWidget(floor: floor),
+          Navigator.of(context).pop(),
+        },
       ),
-      HoldBottomSheet(
-        icon: Icons.delete,
-        text: 'Delete Room',
-        onTap: () => _showDeleteConfirmationDialog(context, 'Room', room.id, room.name),
-      ),
+      BottomSheetOption(
+          icon: Icons.delete,
+          label: 'Delete Floor',
+          onTap: () {
+            // TODO: redirect to delete floor widget
+          }),
     ];
 
-    showCustomBottomSheet(context, options);
+    if (context.mounted) {
+      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: const Duration(seconds: 2));
+    }
+    // showCustomBottomSheet(context, options);
   }
 
   Widget _buildRoomList(BuildContext context, FloorRoomSelLoaded state, double maxWidth) {
@@ -239,7 +156,7 @@ class _FloorRoomSelectorView extends StatelessWidget {
             child: FloorRoomNameButton(
               label: room.name,
               isActive: state.activeRoomId == room.id,
-              onTap: () => context.read<FloorRoomSelBloc>().add(SelectRoom(roomId: room.id)),
+              onTap: () => context.read<FloorRoomSelBloc>().add(SelectRoom(roomId: room.id!)),
               onLongPress: () => _showRoomOptions(context, room),
             ),
           );
@@ -247,75 +164,66 @@ class _FloorRoomSelectorView extends StatelessWidget {
       ),
     );
   }
-}
 
-class PlusButton extends StatelessWidget {
-  final VoidCallback onPressed;
-  const PlusButton({super.key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onPressed,
-      behavior: HitTestBehavior.opaque,
-      child: Container(
-        width: 44,
-        height: 44,
-        padding: const EdgeInsets.all(12),
-        child: Container(
-          width: 25,
-          height: 25,
-          decoration: const BoxDecoration(
-            shape: BoxShape.circle,
-            color: Color(0xFF3E3E62),
-          ),
-          child: const Icon(Icons.add, color: AppColor.whiteColor, size: 14),
-        ),
+  void _showRoomOptions(BuildContext context, RoomModel room) {
+    List<BottomSheetOption> options = [
+      BottomSheetOption(
+        icon: Icons.edit,
+        label: 'Edit Room',
+        onTap: () => {
+          EditRoomWidget(room: room),
+          Navigator.of(context).pop(),
+        },
       ),
-    );
+      BottomSheetOption(
+          icon: Icons.delete,
+          label: 'Delete Room',
+          onTap: () {
+            // TODO: redirect to delete room widget
+          }),
+    ];
+
+    if (context.mounted) {
+      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: const Duration(seconds: 2));
+    }
+    // showCustomBottomSheet(context, options);
   }
-}
-
-class FloorRoomNameButton extends StatelessWidget {
-  final String label;
-  final bool isActive;
-  final VoidCallback onTap;
-  final VoidCallback onLongPress;
-
-  const FloorRoomNameButton({
-    super.key,
-    required this.label,
-    required this.isActive,
-    required this.onTap,
-    required this.onLongPress,
-  });
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: onTap,
-      onLongPress: onLongPress,
-      child: Column(
-        children: [
-          Text(
-            label,
-            style: TextStyle(
-              color: isActive ? AppColor.whiteColor : AppColor.whiteColor50,
-              fontSize: 16,
-              fontFamily: 'Ubuntu',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          if (isActive)
-            Container(
-              width: 6,
-              height: 6,
-              decoration: const BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColor.whiteColor,
-              ),
-            ),
-        ],
+    return BlocProvider(
+      create: (context) => FloorRoomSelBloc(
+        getFloorsUseCase: serviceLocator<GetFloorsUseCase>(),
+        getRoomsUseCase: serviceLocator<GetRoomsUseCase>(),
+      )..add(LoadFloors()),
+      child: BlocConsumer<FloorRoomSelBloc, FloorRoomSelState>(
+        listener: (context, state) {
+          if (state is FloorRoomSelLoaded) {
+            widget.onFloorSelected(state.activeFloorId);
+            widget.onRoomSelected(state.activeRoomId);
+          }
+        },
+        builder: (context, state) {
+          if (state is FloorRoomSelLoaded) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    _buildSectionHeader(context, ItemType.floor),
+                    const SizedBox(height: 8),
+                    _buildFloorList(context, state, constraints.maxWidth),
+                    const SizedBox(height: 24),
+                    _buildSectionHeader(context, ItemType.room),
+                    const SizedBox(height: 8),
+                    _buildRoomList(context, state, constraints.maxWidth),
+                  ],
+                );
+              },
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
