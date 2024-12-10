@@ -3,7 +3,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/service_locator.dart';
 class HomeScreen extends StatefulWidget {
   // final String sessionId;
   // final String userId;
