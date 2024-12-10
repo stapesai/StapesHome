@@ -26,23 +26,23 @@ class BlePairingFailure extends IotProvisioningState {
 }
 
 // WiFi States
-// class LoadingWifiNetworks extends IotProvisioningState {}
+class LoadingWifiNetworks extends IotProvisioningState {}
 
-// class WifiNetworksLoaded extends IotProvisioningState {
-//   final List<WiFiAccessPoint> networks;
-//   WifiNetworksLoaded(this.networks);
+class WifiNetworksLoaded extends IotProvisioningState {
+  final List<WiFiAccessPoint> networks;
+  WifiNetworksLoaded(this.networks);
 
-//   @override
-//   List<Object?> get props => [networks];
-// }
+  @override
+  List<Object?> get props => [networks];
+}
 
-// class WifiNetworksError extends IotProvisioningState {
-//   final String error;
-//   WifiNetworksError(this.error);
+class WifiNetworksError extends IotProvisioningState {
+  final String error;
+  WifiNetworksError(this.error);
 
-//   @override
-//   List<Object?> get props => [error];
-// }
+  @override
+  List<Object?> get props => [error];
+}
 
 // class CheckingWifiCredentials extends IotProvisioningState {}
 

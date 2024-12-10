@@ -13,7 +13,7 @@ import 'package:stapes_home/service_locator.dart';
 
 class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningState> {
   final BleLocalDataSource _bleDataSource = serviceLocator<BleLocalDataSource>();
-  // final WifiLocalDataSource _wifiDataSource = serviceLocator<WifiLocalDataSource>();
+  final WifiLocalDataSource _wifiDataSource = serviceLocator<WifiLocalDataSource>();
   // final NodeRepository _nodeRepository = serviceLocator<NodeRepository>();
 
   // BLE Related variables are stored in Bloc instead of UI
@@ -27,7 +27,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     on<PairBleDeviceEvent>(_onPairBleDevice);
 
     // WiFi Operations
-    // on<GetAvailableWifiNetworksEvent>(_onGetAvailableWifiNetworks);
+    on<GetAvailableWifiNetworksEvent>(_onGetAvailableWifiNetworks);
     // on<CheckWifiCredentialsEvent>(_onCheckWifiCredentials);
 
     // Node Configuration
@@ -60,18 +60,18 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     }
   }
 
-  // Future<void> _onGetAvailableWifiNetworks(
-  //   GetAvailableWifiNetworksEvent event,
-  //   Emitter<IotProvisioningState> emit,
-  // ) async {
-  //   emit(LoadingWifiNetworks());
-  //   try {
-  //     final networks = await _wifiDataSource.getAvailableWifiNetworks();
-  //     emit(WifiNetworksLoaded(networks));
-  //   } catch (e) {
-  //     emit(WifiNetworksError(e.toString()));
-  //   }
-  // }
+  Future<void> _onGetAvailableWifiNetworks(
+    GetAvailableWifiNetworksEvent event,
+    Emitter<IotProvisioningState> emit,
+  ) async {
+    emit(LoadingWifiNetworks());
+    try {
+      final networks = await _wifiDataSource.getAvailableWifiNetworks();
+      emit(WifiNetworksLoaded(networks));
+    } catch (e) {
+      emit(WifiNetworksError(e.toString()));
+    }
+  }
 
   // Future<void> _onCheckWifiCredentials(
   //   CheckWifiCredentialsEvent event,

@@ -20,7 +20,7 @@ class PairBleDeviceEvent extends IotProvisioningEvent {
 }
 
 // WiFi related events
-// class GetAvailableWifiNetworksEvent extends IotProvisioningEvent {}
+class GetAvailableWifiNetworksEvent extends IotProvisioningEvent {}
 
 // class CheckWifiCredentialsEvent extends IotProvisioningEvent {
 //   final String ssid;
