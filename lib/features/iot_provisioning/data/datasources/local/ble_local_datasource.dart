@@ -10,6 +10,8 @@ abstract class BleLocalDataSource {
   Future<
       (
         bool success,
+        String? failureReason,
+        BluetoothDevice? device,
         BluetoothCharacteristic? configChar,
         BluetoothCharacteristic? hwVersionChar,
         BluetoothCharacteristic? checkWiFiCredentialsChar
@@ -24,6 +26,8 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
   Future<
       (
         bool success,
+        String? failureReason,
+        BluetoothDevice? device,
         BluetoothCharacteristic? configChar,
         BluetoothCharacteristic? hwVersionChar,
         BluetoothCharacteristic? checkWiFiCredentialsChar
@@ -37,7 +41,7 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
           .firstWhere((results) => results.any((r) => r.device.platformName == qrData.deviceName), orElse: () => []);
 
       if (results.isEmpty) {
-        return (false, null, null, null);
+        return (false, 'Device not found', null, null, null, null);
       }
 
       final device = results.firstWhere((r) => r.device.platformName == qrData.deviceName).device;
@@ -68,10 +72,10 @@ class BleLocalDataSourceImpl implements BleLocalDataSource {
       }
 
       if (configChar == null || hwVersionChar == null || checkWiFiCredentialsChar == null) {
-        return (false, null, null, null);
+        return (false, 'Required characteristics not found', null, null, null, null);
       }
 
-      return (true, configChar, hwVersionChar, checkWiFiCredentialsChar);
+      return (true, null, device, configChar, hwVersionChar, checkWiFiCredentialsChar);
     } finally {
       await FlutterBluePlus.stopScan();
     }

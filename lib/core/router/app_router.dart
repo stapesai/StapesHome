@@ -241,12 +241,12 @@ class AppRouter {
         builder: (context, state) => const QrScannerScreen(),
       ),
 
-      // IoT Provisioning Screen
+      // IoT Provisioning Screens
       GoRoute(
         name: AppRouteConstants.iotProvisioning.routeName,
         path: AppRouteConstants.iotProvisioning.routePath,
         builder: (context, state) => IotProvisioningScreen(
-          deviceData: state.extra as IotQrModel,
+          qrData: state.extra as IotQrModel,
         ),
       ),
 
