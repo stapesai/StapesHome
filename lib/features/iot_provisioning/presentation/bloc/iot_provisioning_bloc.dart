@@ -6,9 +6,6 @@ import 'package:stapes_home/features/iot_provisioning/data/datasources/local/ble
 import 'package:stapes_home/features/iot_provisioning/data/datasources/local/wifi_local_datasource.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart';
-import 'package:stapes_home/features/nodes/data/models/complete_node_pairing_api_param.dart';
-import 'package:stapes_home/features/nodes/data/models/request_node_pairing_api_param.dart';
-import 'package:stapes_home/features/nodes/domain/repository/node_repository.dart';
 import 'package:stapes_home/service_locator.dart';
 
 class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningState> {
@@ -28,7 +25,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
 
     // WiFi Operations
     on<GetAvailableWifiNetworksEvent>(_onGetAvailableWifiNetworks);
-    // on<CheckWifiCredentialsEvent>(_onCheckWifiCredentials);
+    on<CheckWifiCredentialsEvent>(_onCheckWifiCredentials);
 
     // Node Configuration
     // on<GetNodeHwInfoEvent>(_onGetNodeHwInfo);
@@ -73,26 +70,26 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     }
   }
 
-  // Future<void> _onCheckWifiCredentials(
-  //   CheckWifiCredentialsEvent event,
-  //   Emitter<IotProvisioningState> emit,
-  // ) async {
-  //   emit(CheckingWifiCredentials());
-  //   try {
-  //     final isValid = await _bleDataSource.checkWiFiCredentialsOnNode(
-  //       event.characteristic,
-  //       event.ssid,
-  //       event.password,
-  //     );
-  //     if (isValid) {
-  //       emit(WifiCredentialsValid());
-  //     } else {
-  //       emit(WifiCredentialsInvalid('Invalid WiFi credentials'));
-  //     }
-  //   } catch (e) {
-  //     emit(WifiCredentialsInvalid(e.toString()));
-  //   }
-  // }
+  Future<void> _onCheckWifiCredentials(
+    CheckWifiCredentialsEvent event,
+    Emitter<IotProvisioningState> emit,
+  ) async {
+    emit(CheckingWifiCredentials());
+    try {
+      final isValid = await _bleDataSource.checkWiFiCredentialsOnNode(
+        checkWiFiCredentialsChar!,
+        event.ssid,
+        event.password,
+      );
+      if (isValid) {
+        emit(WifiCredentialsValid());
+      } else {
+        emit(WifiCredentialsInvalid('Invalid WiFi credentials'));
+      }
+    } catch (e) {
+      emit(WifiCredentialsInvalid(e.toString()));
+    }
+  }
 
   // Future<void> _onGetNodeHwInfo(
   //   GetNodeHwInfoEvent event,

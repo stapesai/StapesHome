@@ -1,7 +1,6 @@
 // lib/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 
 abstract class IotProvisioningEvent extends Equatable {
@@ -9,7 +8,7 @@ abstract class IotProvisioningEvent extends Equatable {
   List<Object?> get props => [];
 }
 
-// Initial setup event with QR data
+// BLE Pairing Event
 class PairBleDeviceEvent extends IotProvisioningEvent {
   final IotQrModel qrData;
 
@@ -19,23 +18,22 @@ class PairBleDeviceEvent extends IotProvisioningEvent {
   List<Object?> get props => [qrData];
 }
 
-// WiFi related events
+// Load WiFi Networks Event
 class GetAvailableWifiNetworksEvent extends IotProvisioningEvent {}
 
-// class CheckWifiCredentialsEvent extends IotProvisioningEvent {
-//   final String ssid;
-//   final String password;
-//   final BluetoothCharacteristic characteristic;
+// Check WiFi Credentials using BLE Event
+class CheckWifiCredentialsEvent extends IotProvisioningEvent {
+  final String ssid;
+  final String password;
 
-//   CheckWifiCredentialsEvent({
-//     required this.ssid,
-//     required this.password,
-//     required this.characteristic,
-//   });
+  CheckWifiCredentialsEvent({
+    required this.ssid,
+    required this.password,
+  });
 
-//   @override
-//   List<Object?> get props => [ssid, password, characteristic];
-// }
+  @override
+  List<Object?> get props => [ssid, password];
+}
 
 // Node configuration events
 // class GetNodeHwInfoEvent extends IotProvisioningEvent {

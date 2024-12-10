@@ -1,7 +1,6 @@
 // lib/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart
 
 import 'package:equatable/equatable.dart';
-import 'package:flutter_blue_plus/flutter_blue_plus.dart';
 import 'package:wifi_scan/wifi_scan.dart';
 
 abstract class IotProvisioningState extends Equatable {
@@ -12,7 +11,7 @@ abstract class IotProvisioningState extends Equatable {
 // Initial State - when the screen is loaded
 class IotProvisioningInitial extends IotProvisioningState {}
 
-// BLE
+// BLE Pairing States
 class BlePairingInProgress extends IotProvisioningState {}
 
 class BlePairingSuccess extends IotProvisioningState {}
@@ -25,7 +24,7 @@ class BlePairingFailure extends IotProvisioningState {
   List<Object?> get props => [error];
 }
 
-// WiFi States
+// Load WiFi Networks States
 class LoadingWifiNetworks extends IotProvisioningState {}
 
 class WifiNetworksLoaded extends IotProvisioningState {
@@ -44,17 +43,18 @@ class WifiNetworksError extends IotProvisioningState {
   List<Object?> get props => [error];
 }
 
-// class CheckingWifiCredentials extends IotProvisioningState {}
+// Check WiFi Credentials using BLE States
+class CheckingWifiCredentials extends IotProvisioningState {}
 
-// class WifiCredentialsValid extends IotProvisioningState {}
+class WifiCredentialsValid extends IotProvisioningState {}
 
-// class WifiCredentialsInvalid extends IotProvisioningState {
-//   final String error;
-//   WifiCredentialsInvalid(this.error);
+class WifiCredentialsInvalid extends IotProvisioningState {
+  final String error;
+  WifiCredentialsInvalid(this.error);
 
-//   @override
-//   List<Object?> get props => [error];
-// }
+  @override
+  List<Object?> get props => [error];
+}
 
 // Node Configuration States
 // class LoadingNodeHwInfo extends IotProvisioningState {}
