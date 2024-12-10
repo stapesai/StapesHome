@@ -126,7 +126,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     ];
 
     if (context.mounted) {
-      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: const Duration(seconds: 2));
+      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: 2);
     }
     // showCustomBottomSheet(context, options);
   }
@@ -184,7 +184,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
     ];
 
     if (context.mounted) {
-      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: const Duration(seconds: 2));
+      CustomSnackbar(context, 'Bottom Sheet not implemented', duration: 2);
     }
     // showCustomBottomSheet(context, options);
   }
