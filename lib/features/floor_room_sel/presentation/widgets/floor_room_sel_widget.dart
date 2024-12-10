@@ -15,6 +15,7 @@ import 'package:stapes_home/features/floor_room_sel/presentation/widgets/floor_r
 import 'package:stapes_home/features/floor_room_sel/presentation/widgets/plus_button.dart';
 import 'package:stapes_home/features/floors/domain/usecases/get_floors_usecase.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/create_floor_widget.dart';
+import 'package:stapes_home/features/floors/presentation/widgets/delete_floor_widget.dart';
 import 'package:stapes_home/features/floors/presentation/widgets/edit_floor_widget.dart';
 import 'package:stapes_home/features/rooms/domain/usecases/get_rooms_usecase.dart';
 import 'package:stapes_home/features/rooms/presentation/widgets/create_room_widget.dart';
@@ -121,7 +122,8 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
           icon: Icons.delete,
           label: 'Delete Floor',
           onTap: () {
-            // TODO: redirect to delete floor widget
+            DeleteFloorWidget(floor: floor);
+            Navigator.of(context).pop();
           }),
     ];
 
