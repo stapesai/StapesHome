@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
@@ -137,7 +136,7 @@ class _DevUserDetailsScreenState extends State<DevUserDetailsScreen> {
       }
     } catch (e) {
       if (context.mounted) {
-       CustomSnackbar(context, 'Error logging out', type: SnackbarType.error);
+        CustomSnackbar(context, 'Error logging out', type: SnackbarType.error);
       }
     }
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:stapes_home/features/common/presentation/widgets/skeletons/iot_device_skel.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/node_skel.dart';
 
 class DevTestPage extends StatelessWidget {
@@ -36,8 +37,8 @@ class DevTestPage extends StatelessWidget {
               //   ),
               NodeComponentSkeleton(),
               NodeComponentSkeleton(),
-              NodeComponentSkeleton(),
-              NodeComponentSkeleton(),
+              IotDevicesSkeleton(),
+              IotDevicesSkeleton(),
             ],
           ),
         ),

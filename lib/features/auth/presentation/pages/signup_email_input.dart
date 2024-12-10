@@ -84,70 +84,71 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                 );
               } else if (state is SignUpEmailInputError) {
                 CustomSnackbar(context, state.message, type: SnackbarType.error);
-            }
-            child: SafeArea(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(height: screenSize.height * 0.05),
-                  SizedBox(
-                    width: double.infinity,
-                    child: Text(
-                      'Sign Up',
-                      style: TextStyle(
-                        color: AppColor.whiteColor,
-                        // fontSize: screenSize.width * 0.1,
-                        fontSize: AppFontSizes.pageHeading,
-                        fontFamily: 'Ubuntu',
-                        fontWeight: FontWeight.w700,
+              }
+
+              SafeArea(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    SizedBox(height: screenSize.height * 0.05),
+                    SizedBox(
+                      width: double.infinity,
+                      child: Text(
+                        'Sign Up',
+                        style: TextStyle(
+                          color: AppColor.whiteColor,
+                          // fontSize: screenSize.width * 0.1,
+                          fontSize: AppFontSizes.pageHeading,
+                          fontFamily: 'Ubuntu',
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: screenSize.height * 0.02),
-                  SizedBox(
-                    child: Text(
-                      'Enter your email to receive verification code.',
-                      style: TextStyle(
-                        color: AppColor.whiteColor,
-                        fontSize: AppFontSizes.pageSubHeading,
-                        fontFamily: 'Ubuntu',
-                        fontWeight: FontWeight.w400,
+                    SizedBox(height: screenSize.height * 0.02),
+                    SizedBox(
+                      child: Text(
+                        'Enter your email to receive verification code.',
+                        style: TextStyle(
+                          color: AppColor.whiteColor,
+                          fontSize: AppFontSizes.pageSubHeading,
+                          fontFamily: 'Ubuntu',
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
-                  ),
-                  SizedBox(height: screenSize.height * 0.04),
-                  SizedBox(
-                    child: CustomTextField(
-                      hintText: 'Enter your email',
-                      controller: emailController,
-                      icon: Icons.email_rounded,
-                    ),
-                  ),
-                  const Spacer(),
-                  AnimatedContainer(
-                    duration: const Duration(milliseconds: 300),
-                    curve: Curves.easeOut,
-                    margin: EdgeInsets.only(
-                      bottom: keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
-                    ),
-                    child: Center(
-                      child: BlocBuilder<SignUpEmailInputBloc, SignUpEmailInputState>(
-                        builder: (context, state) {
-                          return CustomButton(
-                            text: "Send Code",
-                            isLoading: state is SignUpEmailInputLoading,
-                            onPressed: () => _onSignUpButtonPressed(context),
-                          );
-                        },
+                    SizedBox(height: screenSize.height * 0.04),
+                    SizedBox(
+                      child: CustomTextField(
+                        hintText: 'Enter your email',
+                        controller: emailController,
+                        icon: Icons.email_rounded,
                       ),
                     ),
-                  ),
-                ],
-              ),
-            );
+                    const Spacer(),
+                    AnimatedContainer(
+                      duration: const Duration(milliseconds: 300),
+                      curve: Curves.easeOut,
+                      margin: EdgeInsets.only(
+                        bottom:
+                            keyboardHeight > 0 ? keyboardHeight + screenSize.height * 0.02 : screenSize.height * 0.1,
+                      ),
+                      child: Center(
+                        child: BlocBuilder<SignUpEmailInputBloc, SignUpEmailInputState>(
+                          builder: (context, state) {
+                            return CustomButton(
+                              text: "Send Code",
+                              isLoading: state is SignUpEmailInputLoading,
+                              onPressed: () => _onSignUpButtonPressed(context),
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
             },
           ),
-        
         ),
       ),
     );

@@ -7,7 +7,6 @@ import 'package:stapes_home/core/common/widgets/input/textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
-import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/signup/signup_details_form_bloc.dart';
