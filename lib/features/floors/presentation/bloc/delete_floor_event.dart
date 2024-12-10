@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:stapes_home/core/models/floor_model.dart';
 
 abstract class DeleteFloorEvent extends Equatable {
   const DeleteFloorEvent();

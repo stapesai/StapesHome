@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/features/floors/data/models/delete_floor_api_param.dart';
 import 'package:stapes_home/features/floors/domain/usecases/delete_floor_usecase.dart';
-import 'delete_floor_event.dart';
-import 'delete_floor_state.dart';
+import 'package:stapes_home/features/floors/presentation/bloc/delete_floor_event.dart';
+import 'package:stapes_home/features/floors/presentation/bloc/delete_floor_state.dart';
 
 class DeleteFloorBloc extends Bloc<DeleteFloorEvent, DeleteFloorState> {
   final DeleteFloorUseCase deleteFloorUseCase;

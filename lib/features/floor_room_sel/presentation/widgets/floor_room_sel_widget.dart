@@ -114,7 +114,7 @@ class _FloorRoomSelectorState extends State<FloorRoomSelector> {
         label: 'Edit Floor',
         onTap: () => {
           EditFloorWidget(floor: floor),
-          Navigator.of(context).pop(),
+          // Navigator.of(context).pop(),
         },
       ),
       BottomSheetOption(
