@@ -107,17 +107,17 @@ class FloorRoomSelectorContent extends StatelessWidget {
 
     if (state.error != null) {
       // Show snackbar with error message
-      CustomSnackbar(context, state.error!, type: SnackbarType.error);
+      // CustomSnackbar(context, state.error!, type: SnackbarType.error);
 
       return Center(
-        // child: Text(
-        //   state.error!,
-        //   style: const TextStyle(color: AppColor.errorColor),
-        // ),
         child: Text(
-          'Failed to load floors',
+          state.error!,
           style: const TextStyle(color: AppColor.errorColor),
         ),
+        // child: Text(
+        //   'Failed to load floors',
+        //   style: const TextStyle(color: AppColor.errorColor),
+        // ),
       );
     }
 
@@ -232,17 +232,17 @@ class FloorRoomSelectorContent extends StatelessWidget {
 
     if (state.error != null) {
       // Show snackbar with error message
-      CustomSnackbar(context, state.error!, type: SnackbarType.error);
+      // CustomSnackbar(context, state.error!, type: SnackbarType.error);
 
       return Center(
-        // child: Text(
-        //   state.error!,
-        //   style: const TextStyle(color: AppColor.errorColor),
-        // ),
         child: Text(
-          'Failed to load rooms',
+          state.error!,
           style: const TextStyle(color: AppColor.errorColor),
         ),
+        // child: Text(
+        //   'Failed to load rooms',
+        //   style: const TextStyle(color: AppColor.errorColor),
+        // ),
       );
     }
 

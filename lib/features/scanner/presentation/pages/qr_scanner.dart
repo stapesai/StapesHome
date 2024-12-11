@@ -21,6 +21,7 @@ class QrScannerScreen extends StatefulWidget {
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
+  late final QrScannerBloc _qrScannerBloc;
   late MobileScannerController _controller;
   bool _torchOn = false;
   bool _hasTorch = true; // Assume torch is available until proven otherwise
@@ -28,6 +29,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
+    _qrScannerBloc = QrScannerBloc();
     _controller = MobileScannerController(
       detectionSpeed: DetectionSpeed.normal,
       facing: CameraFacing.back,
@@ -74,66 +76,72 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => QrScannerBloc(),
-      child: BlocListener<QrScannerBloc, QrScannerState>(
-        listener: (context, state) {
-          if (state is QrScannerSuccess) {
-            switch (state.data.type) {
-              case QrCodeType.iotNode:
-                GoRouter.of(context).push(
-                  AppRouteConstants.iotProvisioning.routeName,
-                  extra: state.data.payload,
-                );
-                break;
-              case QrCodeType.tvPairing:
-                GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
-                break;
-              case QrCodeType.unknown:
-                CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
-                break;
+    return BlocProvider.value(
+      value: _qrScannerBloc,
+      // TODO: why the fuck we have to use this builder
+      // In navigation screen or floor room sel widget, we don't have to but we are doing the same thing??
+      child: Builder(builder: (context) {
+        return BlocListener<QrScannerBloc, QrScannerState>(
+          listener: (context, state) {
+            if (state is QrScannerSuccess) {
+              switch (state.data.type) {
+                case QrCodeType.iotNode:
+                  print('IoT Node QR code detected');
+                  GoRouter.of(context).push(
+                    AppRouteConstants.iotProvisioning.routePath,
+                    extra: state.data.payload,
+                  );
+                  break;
+                case QrCodeType.tvPairing:
+                  GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
+                  break;
+                case QrCodeType.unknown:
+                  CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
+                  break;
+              }
+            } else if (state is QrScannerError) {
+              CustomSnackbar(context, state.message, type: SnackbarType.error);
+            } else if (state is QrScannerProcessing) {
+              CustomSnackbar(context, 'Processing QR code...', type: SnackbarType.info);
             }
-          } else if (state is QrScannerError) {
-            CustomSnackbar(context, state.message, type: SnackbarType.error);
-          }
-
-          // TODO: add loading overlay for QrScannerProcessing state
-        },
-        child: Scaffold(
-          body: Stack(
-            children: [
-              MobileScanner(
-                controller: _controller,
-                onDetect: (capture) {
-                  final List<Barcode> barcodes = capture.barcodes;
-                  if (barcodes.isNotEmpty) {
-                    context.read<QrScannerBloc>().add(
-                          ProcessQrCode(barcodes.first.rawValue ?? ''),
-                        );
-                  }
-                },
-              ),
-              QRScannerOverlay(),
-              if (_hasTorch)
-                Positioned(
-                  top: 45,
-                  right: 20,
-                  child: IconButton(
-                    onPressed: _toggleTorch,
-                    icon: Icon(
-                      _torchOn ? Icons.flashlight_on : Icons.flashlight_off,
-                      color: Colors.white,
+          },
+          child: Scaffold(
+            body: Stack(
+              children: [
+                MobileScanner(
+                  controller: _controller,
+                  onDetect: (capture) {
+                    final List<Barcode> barcodes = capture.barcodes;
+                    if (barcodes.isNotEmpty) {
+                      print('Barcode detected: ${barcodes.first.rawValue}');
+                      context.read<QrScannerBloc>().add(
+                            ProcessQrCode(barcodes.first.rawValue ?? ''),
+                          );
+                    }
+                  },
+                ),
+                QRScannerOverlay(),
+                if (_hasTorch)
+                  Positioned(
+                    top: 45,
+                    right: 20,
+                    child: IconButton(
+                      onPressed: _toggleTorch,
+                      icon: Icon(
+                        _torchOn ? Icons.flashlight_on : Icons.flashlight_off,
+                        color: Colors.white,
+                      ),
                     ),
                   ),
+                const Align(
+                  alignment: Alignment.bottomCenter,
+                  child: QrScanInstructionPanel(),
                 ),
-              const Align(
-                alignment: Alignment.bottomCenter,
-                child: QrScanInstructionPanel(),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ),
+        );
+      }),
     );
   }
 }

@@ -189,7 +189,7 @@ void setupServiceLocator() {
 
   // Use cases
   serviceLocator.registerSingleton<PairBleNodeUseCase>(
-    PairBleNodeUseCase(serviceLocator<IotProvisioningRepository>()),
+    PairBleNodeUseCase(iotProvisioningRepository: serviceLocator<IotProvisioningRepository>()),
   );
 
   serviceLocator.registerSingleton<GetAvailableWifiNetworksUseCase>(

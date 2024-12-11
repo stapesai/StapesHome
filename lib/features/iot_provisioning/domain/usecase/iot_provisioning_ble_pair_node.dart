@@ -4,9 +4,9 @@ import 'package:stapes_home/features/iot_provisioning/domain/repository/iot_prov
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 
 class PairBleNodeUseCase {
-  final IotProvisioningRepository repository;
+  final IotProvisioningRepository iotProvisioningRepository;
 
-  PairBleNodeUseCase(this.repository);
+  PairBleNodeUseCase({required this.iotProvisioningRepository});
 
   Future<
       (
@@ -17,6 +17,6 @@ class PairBleNodeUseCase {
         BluetoothCharacteristic? hwVersionChar,
         BluetoothCharacteristic? checkWiFiCredentialsChar
       )> call(IotQrModel qrData) {
-    return repository.pairBleNode(qrData);
+    return iotProvisioningRepository.pairBleNode(qrData);
   }
 }
