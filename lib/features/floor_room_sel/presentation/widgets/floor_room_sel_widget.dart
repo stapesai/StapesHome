@@ -41,6 +41,12 @@ class FloorRoomSelector extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
+          create: (context) => RoomBloc(
+            getRoomsUseCase: serviceLocator<GetRoomsUseCase>(),
+            onRoomSelected: onRoomSelected,
+          ),
+        ),
+        BlocProvider(
           create: (context) => FloorBloc(
             getFloorsUseCase: serviceLocator<GetFloorsUseCase>(),
             onFloorSelected: (floorId) {
@@ -48,12 +54,6 @@ class FloorRoomSelector extends StatelessWidget {
               context.read<RoomBloc>().add(LoadRooms(floorId));
             },
           )..add(LoadFloors()),
-        ),
-        BlocProvider(
-          create: (context) => RoomBloc(
-            getRoomsUseCase: serviceLocator<GetRoomsUseCase>(),
-            onRoomSelected: onRoomSelected,
-          ),
         ),
       ],
       child: const FloorRoomSelectorContent(),
@@ -106,9 +106,16 @@ class FloorRoomSelectorContent extends StatelessWidget {
     }
 
     if (state.error != null) {
+      // Show snackbar with error message
+      CustomSnackbar(context, state.error!, type: SnackbarType.error);
+
       return Center(
+        // child: Text(
+        //   state.error!,
+        //   style: const TextStyle(color: AppColor.errorColor),
+        // ),
         child: Text(
-          state.error!,
+          'Failed to load floors',
           style: const TextStyle(color: AppColor.errorColor),
         ),
       );
@@ -224,9 +231,16 @@ class FloorRoomSelectorContent extends StatelessWidget {
     }
 
     if (state.error != null) {
+      // Show snackbar with error message
+      CustomSnackbar(context, state.error!, type: SnackbarType.error);
+
       return Center(
+        // child: Text(
+        //   state.error!,
+        //   style: const TextStyle(color: AppColor.errorColor),
+        // ),
         child: Text(
-          state.error!,
+          'Failed to load rooms',
           style: const TextStyle(color: AppColor.errorColor),
         ),
       );

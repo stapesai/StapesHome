@@ -22,33 +22,45 @@ class FloorBloc extends Bloc<FloorEvent, FloorState> {
   Future<void> _onLoadFloors(LoadFloors event, Emitter<FloorState> emit) async {
     emit(state.copyWith(isLoading: true));
     try {
-      final floors = await _fetchFloors();
-      final newActiveFloorId = floors.isNotEmpty ? floors[0].id : null;
+      final floors = await _fetchFloors(refresh: true);
+      if (floors.isEmpty) {
+        emit(state.copyWith(
+          isLoading: false,
+          floors: [],
+          activeFloorId: null,
+        ));
+        return;
+      }
+
+      // Select first floor by default
+      final defaultFloorId = floors[0].id!;
       emit(state.copyWith(
         isLoading: false,
         floors: floors,
-        activeFloorId: newActiveFloorId,
+        activeFloorId: defaultFloorId,
       ));
-      if (newActiveFloorId != null) {
-        add(SelectFloor(newActiveFloorId));
-      }
+
+      // Notify floor selection
+      add(SelectFloor(defaultFloorId));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 
   void _onSelectFloor(SelectFloor event, Emitter<FloorState> emit) {
-    emit(state.copyWith(activeFloorId: event.floorId));
-    onFloorSelected(event.floorId);
+    if (event.floorId != state.activeFloorId) {
+      emit(state.copyWith(activeFloorId: event.floorId));
+      onFloorSelected(event.floorId);
+    }
   }
 
   Future<void> _onDeleteFloor(DeleteFloor event, Emitter<FloorState> emit) async {
     add(LoadFloors());
   }
 
-  Future<List<FloorModel>> _fetchFloors() async {
+  Future<List<FloorModel>> _fetchFloors({bool refresh = false}) async {
     final List<FloorModel> floors = [];
-    final result = await getFloorsUseCase(GetFloorsParams());
+    final result = await getFloorsUseCase(GetFloorsParams(), refresh: refresh);
     result.fold(
       (failure) => throw Exception(failure.message),
       (floorsData) => floors.addAll(floorsData.floors),

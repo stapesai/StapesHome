@@ -10,7 +10,7 @@ class FloorState extends Equatable {
   final String? error;
 
   const FloorState({
-    this.isLoading = false,
+    this.isLoading = true,
     this.floors = const [],
     this.activeFloorId,
     this.error,

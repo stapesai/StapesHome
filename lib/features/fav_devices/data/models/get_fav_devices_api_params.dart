@@ -2,7 +2,6 @@ import 'package:stapes_home/core/models/fav_devices_model.dart';
 
 class GetFavDeviceParams {}
 
-
 class GetFavDeviceResponse {
   final List<FavDevicesModel> favouriteDevices;
 

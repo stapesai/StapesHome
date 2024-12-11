@@ -20,26 +20,40 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   }
 
   Future<void> _onLoadRooms(LoadRooms event, Emitter<RoomState> emit) async {
+    // Clear previous rooms immediately
     emit(state.copyWith(isLoading: true));
+
     try {
-      final rooms = await _fetchRooms(event.floorId);
-      final newActiveRoomId = rooms.isNotEmpty ? rooms[0].id : null;
+      final rooms = await _fetchRooms(event.floorId, refresh: true);
+      if (rooms.isEmpty) {
+        emit(state.copyWith(
+          isLoading: false,
+          rooms: [],
+          activeRoomId: null,
+        ));
+        return;
+      }
+
+      // Select first room by default
+      final defaultRoomId = rooms[0].id!;
       emit(state.copyWith(
         isLoading: false,
         rooms: rooms,
-        activeRoomId: newActiveRoomId,
+        activeRoomId: defaultRoomId,
       ));
-      if (newActiveRoomId != null) {
-        add(SelectRoom(newActiveRoomId));
-      }
+
+      // Notify room selection
+      add(SelectRoom(defaultRoomId));
     } catch (e) {
       emit(state.copyWith(isLoading: false, error: e.toString()));
     }
   }
 
   void _onSelectRoom(SelectRoom event, Emitter<RoomState> emit) {
-    emit(state.copyWith(activeRoomId: event.roomId));
-    onRoomSelected(event.roomId);
+    if (event.roomId != state.activeRoomId) {
+      emit(state.copyWith(activeRoomId: event.roomId));
+      onRoomSelected(event.roomId);
+    }
   }
 
   Future<void> _onDeleteRoom(DeleteRoom event, Emitter<RoomState> emit) async {
@@ -49,9 +63,9 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
     }
   }
 
-  Future<List<RoomModel>> _fetchRooms(String floorId) async {
+  Future<List<RoomModel>> _fetchRooms(String floorId, {bool refresh = false}) async {
     final List<RoomModel> rooms = [];
-    final result = await getRoomsUseCase(GetRoomsParams(floorId: floorId));
+    final result = await getRoomsUseCase(GetRoomsParams(floorId: floorId), refresh: refresh);
     result.fold(
       (failure) => throw Exception(failure.message),
       (roomsData) => rooms.addAll(roomsData.rooms),

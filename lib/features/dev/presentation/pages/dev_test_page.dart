@@ -1,10 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:stapes_home/core/models/device_model.dart';
-import 'package:stapes_home/core/models/node_model.dart';
-import 'package:stapes_home/features/common/presentation/widgets/iot/light_widget.dart';
-import 'package:stapes_home/features/common/presentation/widgets/iot/node_widget.dart';
-import 'package:stapes_home/features/common/presentation/widgets/skeletons/iot_device_skel.dart';
-import 'package:stapes_home/features/common/presentation/widgets/skeletons/node_skel.dart';
 
 class DevTestPage extends StatelessWidget {
   final String text;
