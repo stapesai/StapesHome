@@ -13,6 +13,8 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_st
 import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
+import 'package:stapes_home/features/scanner/presentation/bloc/qr_scanner_bloc.dart';
+import 'package:stapes_home/features/scanner/presentation/pages/qr_scanner.dart';
 
 class NavigationScreen extends StatefulWidget {
   // final StatefulNavigationShell navigationShell;
@@ -43,7 +45,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
     // CreateRoomPage(floorId: 'test'),
-    // QrScannerScreen(),
+    QrScannerScreen(),
     DevFloorRoomSelPage(),
     DevComponentsTestPage(),
     KeepAlivePage(child: HomeScreen()),
@@ -87,7 +89,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // print('Page Controller Page: ${_pageController.page}');
     // print('Page Controller Position: ${_pageController.position}');
 
-    // FIXME: this has very bad performance. It is called on every pixel change. See debug console.
+    // FIXME: this has very bad performance. It is called on every pixel change. See debug console.Mai to nahi dekhra.
     // Ensure updates only happen when the page animation has fully settled
     if (pageIndex == _pageController.page) {
       final selectedItem = NavigationTab.values[pageIndex];
@@ -107,6 +109,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
       providers: [
         BlocProvider.value(value: _navigationBloc),
         BlocProvider.value(value: _websocketBloc),
+        // BlocProvider(
+        //   create: (context) => QrScannerBloc(),
+        // )
       ],
       // value: _navigationBloc,
       // return BlocProvider(
