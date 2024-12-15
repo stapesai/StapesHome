@@ -1,0 +1,22 @@
+{
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "stapeshome-d113d",
+          "appId": "1:977103763608:android:6610e2a9f120268e9878ed",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/firebase_options.dart": {
+          "projectId": "stapeshome-d113d",
+          "configurations": {
+            "android": "1:977103763608:android:6610e2a9f120268e9878ed",
+            "ios": "1:977103763608:ios:6ef969dcaf39907d9878ed"
+          }
+        }
+      }
+    }
+  }
+}
