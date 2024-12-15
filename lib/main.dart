@@ -68,35 +68,5 @@ class MyApp extends StatelessWidget {
         // ),
       ),
     );
-
-    // return FutureBuilder<SessionsModel?>(
-    //   future: HiveService().getSessionData().then((sessions) => sessions.isNotEmpty ? sessions.first : null),
-    //   builder: (context, snapshot) {
-    //     if (snapshot.connectionState == ConnectionState.done) {
-    //       final session = snapshot.data;
-    //       final webSocketService = session != null
-    //           ? WebsocketService(WebsocketRoutes.getWebsocketUrl(), session.userId, session.sessionId)
-    //           : null;
-
-    //       if (webSocketService != null) {
-    //         webSocketService.connect();
-    //       }
-
-    // return Provider<WebsocketService?>.value(
-    //   value: webSocketService,
-    //   child: MaterialApp.router(
-    //     routeInformationParser: AppRouter.returnRouter().routeInformationParser,
-    //     routerDelegate: AppRouter.returnRouter().routerDelegate,
-    //     debugShowCheckedModeBanner: false,
-    //     theme: ThemeData(
-    //       splashColor: Colors.transparent,
-    //       highlightColor: Colors.transparent,
-    //     ),
-    //   ),
-    // );
-    // }
-    // return CircularProgressIndicator();
-    // },
-    // );
   }
 }
