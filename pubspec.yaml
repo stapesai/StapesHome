@@ -47,6 +47,7 @@ dependencies:
   device_user_agent:
   firebase_core: ^3.8.1
   firebase_messaging: ^15.1.6
+  device_info_plus: ^10.1.2
 
 dev_dependencies:
   flutter_test:

@@ -5,20 +5,26 @@ import 'dart:convert';
 
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
+import 'package:stapes_home/features/auth/data/models/device_info_model.dart';
 
 class RequestLoginParams {
   final String email;
   final String password;
+  final DeviceInfoModel deviceInfo;
 
   RequestLoginParams({
     required this.email,
     required this.password,
+    required this.deviceInfo,
   });
 
   Object toJson() {
     return jsonEncode({
       'email': email,
       'password': password,
+      'device_name': deviceInfo.deviceName,
+      'device_type': deviceInfo.deviceType,
+      'device_manufacturer': deviceInfo.manufacturer,
     });
   }
 }

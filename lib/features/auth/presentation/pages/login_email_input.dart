@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/features/auth/domain/usecases/get_device_info_usecase.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/common/widgets/button.dart';
@@ -66,6 +67,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
     return BlocProvider(
       create: (context) => LoginEmailInputBloc(
         requestLoginUseCase: serviceLocator<RequestLoginUseCase>(),
+        getDeviceInfoUseCase: serviceLocator<GetDeviceInfoUseCase>(),
       ),
       child: BlocListener<LoginEmailInputBloc, LoginEmailInputState>(
         listener: (context, state) {

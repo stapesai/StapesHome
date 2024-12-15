@@ -49,15 +49,21 @@ class UnexpectedException extends AppException {
 }
 
 class WebsocketConnectionException extends AppException {
-  WebsocketConnectionException(
-      [super.message = 'Failed to connect to Websocket server']);
+  WebsocketConnectionException([super.message = 'Failed to connect to Websocket server']);
 }
 
 class WebsocketMessageException extends AppException {
-  WebsocketMessageException(
-      [super.message = 'Failed to process Websocket message']);
+  WebsocketMessageException([super.message = 'Failed to process Websocket message']);
 }
 
 class SQLiteException extends AppException {
   SQLiteException([super.message = 'A database error occurred']);
+}
+
+// class NoInternetException extends AppException {
+//   NoInternetException([super.message = 'No internet connection']);
+// }
+
+class PlatformException extends AppException {
+  PlatformException([super.message = 'Platform error']);
 }

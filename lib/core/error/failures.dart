@@ -61,3 +61,13 @@ class UnexpectedFailure extends Failure {
 class SQLiteFailure extends Failure {
   const SQLiteFailure({required message}) : super(message);
 }
+
+/// Represents a failure due to no internet connection
+/// class NoInternetFailure extends Failure {
+///  const NoInternetFailure({required message}) : super(message);
+/// }
+
+/// Represents a failure due to a platform specific error
+class PlatformFailure extends Failure {
+  const PlatformFailure({required message}) : super(message);
+}

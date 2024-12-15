@@ -1,3 +1,4 @@
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:get_it/get_it.dart';
 import 'package:hive/hive.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
@@ -5,10 +6,14 @@ import 'package:stapes_home/core/network/network_info.dart';
 import 'package:stapes_home/core/database/sqlite_service.dart';
 import 'package:stapes_home/core/network/http_client.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
+import 'package:stapes_home/features/auth/data/datasources/local/device_info_data_source.dart';
 import 'package:stapes_home/features/auth/data/repositories/auth_abs_class_impl.dart';
 import 'package:stapes_home/features/auth/data/datasources/remote/auth_remote_datasource.dart';
+import 'package:stapes_home/features/auth/data/repositories/device_info_abs_class_impl.dart';
 import 'package:stapes_home/features/auth/domain/repository/auth_abs_class.dart';
+import 'package:stapes_home/features/auth/domain/repository/device_info_abs_class.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
+import 'package:stapes_home/features/auth/domain/usecases/get_device_info_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
@@ -66,6 +71,31 @@ final GetIt serviceLocator = GetIt.instance;
 
 void setupServiceLocator() {
   // TODO: difference between registerSingleton and registerLazySingleton.
+  /**
+   * Analysis of registerSingleton vs registerLazySingleton
+      Key Differences:
+        registerSingleton: Creates instance immediately at registration
+        registerLazySingleton: Creates instance only when first requested
+      Benefits of registerLazySingleton:
+        Improved app startup time
+        Lower initial memory usage
+        Better for dependencies not needed immediately
+      Drawbacks of registerLazySingleton:
+        Slight delay on first access
+        Not ideal for services needed immediately at startup
+        Could cause timing issues if initialization order matters
+      Recommendation:
+        Keep registerSingleton for Core services needed at startup:
+          NetworkInfo
+          HttpClient
+          SQLiteService
+          HiveInterface
+
+        Convert to registerLazySingleton for Feature-specific services:
+          Use cases
+          Repositories
+          Data sources
+   */
   // Optimize the registration of services and use cases.
   // ---------------------Common services---------------------
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
@@ -99,6 +129,25 @@ void setupServiceLocator() {
   serviceLocator.registerSingleton<CompletePasswordResetUseCase>(CompletePasswordResetUseCase());
   serviceLocator.registerSingleton<RequestSignUpUseCase>(RequestSignUpUseCase());
   serviceLocator.registerSingleton<CompleteSignUpUseCase>(CompleteSignUpUseCase());
+
+  // ---------------------DeviceInfo feature---------------------
+  // Data sources
+  serviceLocator.registerSingleton<DeviceInfoPlugin>(
+    DeviceInfoPlugin(),
+  );
+  serviceLocator.registerSingleton<DeviceInfoDataSource>(
+    DeviceInfoDataSourceImpl(deviceInfo: serviceLocator<DeviceInfoPlugin>()),
+  );
+
+  // Repositories
+  serviceLocator.registerSingleton<DeviceInfoRepository>(
+    DeviceInfoRepositoryImpl(dataSource: serviceLocator<DeviceInfoDataSource>()),
+  );
+
+  // Use cases
+  serviceLocator.registerSingleton<GetDeviceInfoUseCase>(
+    GetDeviceInfoUseCase(serviceLocator<DeviceInfoRepository>()),
+  );
 
   // ---------------------Floors feature---------------------
   // Data sources
