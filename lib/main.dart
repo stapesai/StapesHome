@@ -32,6 +32,7 @@ void main() async {
     debugPrint('Failed to initialize database: $e');
     rethrow;
   }
+  
   // debugPaintSizeEnabled = true;
   // runApp(const MyApp());
   runApp(
