@@ -110,7 +110,7 @@
 //                             onPressed: () {
 //                               context.read<CreateFloorBloc>().add(
 //                                     CreateFloorSubmitted(
-//                                       alias: aliasController.text,
+//                                       name: aliasController.text,
 //                                       level: levelController.text,
 //                                     ),
 //                                   );

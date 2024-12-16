@@ -1,15 +1,15 @@
 class FloorModel {
   final String? id;
   final int level;
-  final String alias;
+  final String name;
 
-  FloorModel({required this.id, required this.level, required this.alias});
+  FloorModel({required this.id, required this.level, required this.name});
 
   factory FloorModel.fromJson(Map<String, dynamic> json) {
     return FloorModel(
       id: json['id'],
       level: json['level'],
-      alias: json['alias'],
+      name: json['name'],
     );
   }
 
@@ -17,19 +17,19 @@ class FloorModel {
   //   return jsonEncode({
   //     'id': id,
   //     'level': level,
-  //     'alias': alias,
+  //     'name': name,
   //   });
   // }
 
   FloorModel copyWith({
     String? id,
     int? level,
-    String? alias,
+    String? name,
   }) {
     return FloorModel(
       id: id ?? this.id,
       level: level ?? this.level,
-      alias: alias ?? this.alias,
+      name: name ?? this.name,
     );
   }
 
@@ -37,7 +37,7 @@ class FloorModel {
     return {
       'id': id,
       'level': level,
-      'alias': alias,
+      'name': name,
     };
   }
 }

@@ -22,7 +22,7 @@ class CreateFloorBloc extends Bloc<CreateFloorEvent, CreateFloorState> {
     final params = CreateFloorParams(
       floor: FloorModel(
         id: null,
-        alias: event.alias,
+        name: event.name,
         level: int.tryParse(event.level) ?? 0,
       ),
     );

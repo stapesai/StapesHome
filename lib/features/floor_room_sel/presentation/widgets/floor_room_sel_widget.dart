@@ -141,7 +141,7 @@ class FloorRoomSelectorContent extends StatelessWidget {
           return Padding(
             padding: const EdgeInsets.only(right: 15),
             child: FloorRoomNameButton(
-              label: floor.alias,
+              label: floor.name,
               isActive: state.activeFloorId == floor.id,
               onTap: () {
                 context.read<FloorBloc>().add(SelectFloor(floor.id!));
@@ -425,7 +425,7 @@ class FloorRoomSelectorContent extends StatelessWidget {
 //             return Padding(
 //               padding: const EdgeInsets.only(right: 15),
 //               child: FloorRoomNameButton(
-//                 label: floor.alias,
+//                 label: floor.name,
 //                 isActive: state.activeFloorId == floor.id,
 //                 onTap: () {
 //                   context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!));

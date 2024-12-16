@@ -9,14 +9,14 @@ abstract class CreateFloorEvent extends Equatable {
 }
 
 class CreateFloorSubmitted extends CreateFloorEvent {
-  final String alias;
+  final String name;
   final String level;
 
   const CreateFloorSubmitted({
-    required this.alias,
+    required this.name,
     required this.level,
   });
 
   @override
-  List<Object> get props => [alias, level];
+  List<Object> get props => [name, level];
 }

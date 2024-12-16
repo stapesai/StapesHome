@@ -24,7 +24,7 @@ class DeleteFloorWidget extends StatelessWidget {
       ),
       child: AlertDialog(
         title: const Text('Delete Floor'),
-        content: Text('Are you sure you want to delete ${floor.alias}?'),
+        content: Text('Are you sure you want to delete ${floor.name}?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
@@ -35,7 +35,7 @@ class DeleteFloorWidget extends StatelessWidget {
               if (state is DeleteFloorSuccess) {
                 Navigator.pop(context, true);
               } else if (state is DeleteFloorError) {
-               CustomSnackbar(context, state.message);
+                CustomSnackbar(context, state.message);
               }
             },
             builder: (context, state) {

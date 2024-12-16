@@ -23,7 +23,7 @@ class _EditFloorWidgetState extends State<EditFloorWidget> {
   @override
   void initState() {
     super.initState();
-    aliasController = TextEditingController(text: widget.floor.alias);
+    aliasController = TextEditingController(text: widget.floor.name);
     levelController = TextEditingController(text: widget.floor.level.toString());
   }
 
@@ -47,7 +47,7 @@ class _EditFloorWidgetState extends State<EditFloorWidget> {
             children: [
               TextField(
                 controller: aliasController,
-                decoration: InputDecoration(labelText: 'Alias'),
+                decoration: InputDecoration(labelText: 'Name'),
               ),
               TextField(
                 controller: levelController,
@@ -78,7 +78,7 @@ class _EditFloorWidgetState extends State<EditFloorWidget> {
                 onPressed: () {
                   context.read<EditFloorBloc>().add(EditFloorSubmitted(
                         floor: widget.floor.copyWith(
-                          alias: aliasController.text,
+                          name: aliasController.text,
                           level: int.tryParse(levelController.text) ?? widget.floor.level,
                         ),
                       ));

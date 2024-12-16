@@ -242,7 +242,7 @@
 //                             items: floors.map((floor) {
 //                               return DropdownMenuItem<String>(
 //                                 value: floor.id,
-//                                 child: Text(floor.alias),
+//                                 child: Text(floor.name),
 //                               );
 //                             }).toList(),
 //                             onChanged: (String? newValue) {

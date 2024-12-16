@@ -37,7 +37,7 @@ class _CreateFloorWidgetState extends State<CreateFloorWidget> {
             children: [
               TextField(
                 controller: aliasController,
-                decoration: InputDecoration(labelText: 'Alias'),
+                decoration: InputDecoration(labelText: 'Name'),
               ),
               TextField(
                 controller: levelController,
@@ -69,7 +69,7 @@ class _CreateFloorWidgetState extends State<CreateFloorWidget> {
               return TextButton(
                 onPressed: () {
                   context.read<CreateFloorBloc>().add(CreateFloorSubmitted(
-                        alias: aliasController.text,
+                        name: aliasController.text,
                         level: levelController.text,
                       ));
                 },

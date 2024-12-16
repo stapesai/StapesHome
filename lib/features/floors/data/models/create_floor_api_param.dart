@@ -10,7 +10,7 @@ class CreateFloorParams {
 
   Object toJson() {
     return jsonEncode({
-      'alias': floor.alias,
+      'name': floor.name,
       'level': floor.level,
     });
   }

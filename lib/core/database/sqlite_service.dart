@@ -36,7 +36,7 @@ class SQLiteService {
       CREATE TABLE floors(
       id TEXT PRIMARY KEY,
       level INTEGER NOT NULL,
-      alias TEXT NOT NULL
+      name TEXT NOT NULL
       )
     ''');
 
