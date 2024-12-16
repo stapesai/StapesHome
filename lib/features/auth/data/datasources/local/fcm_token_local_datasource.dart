@@ -21,7 +21,7 @@ class FCMTokenLocalDatasourceImpl implements FCMTokenLocalDatasource {
     try {
       return await firebaseMessaging.getToken();
     } catch (e) {
-      throw FCMTokenException();
+      throw FCMTokenException(e.toString());
     }
   }
 
@@ -35,7 +35,7 @@ class FCMTokenLocalDatasourceImpl implements FCMTokenLocalDatasource {
     try {
       await firebaseMessaging.deleteToken();
     } catch (e) {
-      throw FCMTokenException();
+      throw FCMTokenException(e.toString());
     }
   }
 }

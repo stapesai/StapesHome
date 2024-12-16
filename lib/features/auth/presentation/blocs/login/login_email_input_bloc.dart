@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/core/models/no_params.dart';
-import 'package:stapes_home/features/auth/domain/usecases/get_device_info_usecase.dart';
+import 'package:stapes_home/features/auth/domain/usecases/device_info_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/data/models/login_api_parms.dart';
 import 'login_email_input_event.dart';

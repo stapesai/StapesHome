@@ -17,8 +17,9 @@ import 'package:stapes_home/features/auth/data/repositories/fcm_token_repo_abs_c
 import 'package:stapes_home/features/auth/domain/repository/auth_abs_class.dart';
 import 'package:stapes_home/features/auth/domain/repository/device_info_abs_class.dart';
 import 'package:stapes_home/features/auth/domain/repository/fcm_token_repo_abs_class.dart';
+import 'package:stapes_home/features/auth/domain/usecases/fcm_token_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/forgot_password_usecase.dart';
-import 'package:stapes_home/features/auth/domain/usecases/get_device_info_usecase.dart';
+import 'package:stapes_home/features/auth/domain/usecases/device_info_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/domain/usecases/signup_usecase.dart';
@@ -150,9 +151,7 @@ void setupServiceLocator() {
   );
 
   // Use cases
-  serviceLocator.registerSingleton<GetDeviceInfoUseCase>(
-    GetDeviceInfoUseCase(serviceLocator<DeviceInfoRepository>()),
-  );
+  serviceLocator.registerSingleton<GetDeviceInfoUseCase>(GetDeviceInfoUseCase());
 
   // ---------------------FCMToken feature---------------------
   // Data sources
@@ -166,11 +165,17 @@ void setupServiceLocator() {
   ));
 
   // Repositories
-  // serviceLocator.registerSingleton<FCMTokenRepository>(
-  //   FCMTokenRepositoryImpl(
-  //     dataSource: serviceLocator<FCMTokenDatasource>(),
-  //   ),
-  // );
+  serviceLocator.registerSingleton<FCMTokenRepository>(
+    FCMTokenRepositoryImpl(
+      localDatasource: serviceLocator<FCMTokenLocalDatasource>(),
+      networkInfo: serviceLocator<NetworkInfo>(),
+      remoteDatasource: serviceLocator<FCMTokenRemoteDatasource>(),
+    ),
+  );
+
+  // Use cases
+  serviceLocator.registerSingleton<UpdateFCMTokenUseCase>(UpdateFCMTokenUseCase());
+  serviceLocator.registerSingleton<DeleteFCMTokenUseCase>(DeleteFCMTokenUseCase());
 
   // ---------------------Floors feature---------------------
   // Data sources
