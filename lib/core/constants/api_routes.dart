@@ -72,6 +72,9 @@ class AuthRoutes {
   static final Uri verifyOtp = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/otp/verify');
   static final Uri resendOtp = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/otp/resend');
 
+  // FCM Token
+  static final Uri updateFCMToken = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/update-fcm-token');
+
   // Logout
   static final Uri logoutUser = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/logout');
 

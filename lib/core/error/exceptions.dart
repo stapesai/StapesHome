@@ -67,3 +67,8 @@ class SQLiteException extends AppException {
 class PlatformException extends AppException {
   PlatformException([super.message = 'Platform error']);
 }
+
+/// FCm token exception
+class FCMTokenException extends AppException {
+  FCMTokenException([super.message = 'Failed to get FCM token']);
+}

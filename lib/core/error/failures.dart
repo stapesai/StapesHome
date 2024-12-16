@@ -71,3 +71,8 @@ class SQLiteFailure extends Failure {
 class PlatformFailure extends Failure {
   const PlatformFailure({required message}) : super(message);
 }
+
+/// FCm token related failures
+class FCMTokenFailure extends Failure {
+  const FCMTokenFailure({required message}) : super(message);
+}
