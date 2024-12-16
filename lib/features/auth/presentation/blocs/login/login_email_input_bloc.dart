@@ -18,36 +18,46 @@ class LoginEmailInputBloc extends Bloc<LoginEmailInputEvent, LoginEmailInputStat
     on<RequestLoginEvent>(_onRequestLogin);
   }
 
+  // TODO: ye sab backchodi ky krni pad rhi h mughe
+
   Future<void> _onRequestLogin(RequestLoginEvent event, Emitter<LoginEmailInputState> emit) async {
-    // Sets state to loading - CustomButton listens to this state and shows loading spinner
-    emit(LoginEmailInputLoading());
+    try {
+      // Sets state to loading - CustomButton listens to this state and shows loading spinner
+      emit(LoginEmailInputLoading());
 
-    // Fetches device info
-    final deviceInfoResult = await getDeviceInfoUseCase(NoParams());
+      // Fetches device info
+      final deviceInfoResult = await getDeviceInfoUseCase(NoParams());
 
-    // If device info fetch fails, emits error state
-    deviceInfoResult.fold(
-      (failure) => emit(LoginEmailInputError(failure.message)),
-      (deviceInfo) async {
-        final result = await requestLoginUseCase(
-          RequestLoginParams(
-            email: event.email,
-            password: event.password,
-            deviceInfo: deviceInfo,
-          ),
-        );
-
-        result.fold(
-          (failure) => emit(LoginEmailInputError(failure.message)),
-          (response) => emit(
-            LoginEmailInputOtpRequired(
+      // If device info fetch fails, emits error state
+      await deviceInfoResult.fold(
+        (failure) async => emit(LoginEmailInputError(failure.message)),
+        (deviceInfo) async {
+          final result = await requestLoginUseCase(
+            RequestLoginParams(
               email: event.email,
-              transactionId: response.transactionId,
-              expiryTime: response.otpExpiresAt,
+              password: event.password,
+              deviceInfo: deviceInfo,
             ),
-          ),
-        );
-      },
-    );
+          );
+
+          if (!emit.isDone) {
+            await result.fold(
+              (failure) async => emit(LoginEmailInputError(failure.message)),
+              (response) async => emit(
+                LoginEmailInputOtpRequired(
+                  email: event.email,
+                  transactionId: response.transactionId,
+                  expiryTime: response.otpExpiresAt,
+                ),
+              ),
+            );
+          }
+        },
+      );
+    } catch (e) {
+      if (!emit.isDone) {
+        emit(LoginEmailInputError(e.toString()));
+      }
+    }
   }
 }
