@@ -51,5 +51,5 @@ pubspec.lock
 contributions.csv
 contributions-2.csv
 openapi.json
-lib/firebase_options.dart
-android/app/google-services.json
+# lib/firebase_options.dart
+# android/app/google-services.json

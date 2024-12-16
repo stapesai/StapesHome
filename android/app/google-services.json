@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "977103763608",
+    "project_id": "stapeshome-d113d",
+    "storage_bucket": "stapeshome-d113d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:977103763608:android:6610e2a9f120268e9878ed",
+        "android_client_info": {
+          "package_name": "com.stapesai.home"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKjot0Pjmjbpa934KUFjU3NbpMo24ITl4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
