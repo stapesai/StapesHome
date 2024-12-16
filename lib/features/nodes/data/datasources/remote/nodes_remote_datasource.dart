@@ -32,7 +32,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
       final response = await httpClient.get(
         BackendRoutes.getNodesByRoomId(params.roomId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },
@@ -48,7 +48,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
       final response = await httpClient.post(
         BackendRoutes.requestNodePairing,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -66,7 +66,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
       final response = await httpClient.post(
         BackendRoutes.completeNodePairing,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -84,7 +84,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
       final response = await httpClient.put(
         BackendRoutes.updateNode(params.nodeId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -102,7 +102,7 @@ class NodesRemoteDataSourceImpl implements NodesRemoteDataSource {
       await httpClient.delete(
         BackendRoutes.deleteNode(params.nodeId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },

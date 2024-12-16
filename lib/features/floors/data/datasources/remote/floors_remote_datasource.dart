@@ -27,7 +27,7 @@ class FloorsRemoteDataSourceImpl implements FloorsRemoteDataSource {
       final response = await httpClient.get(
         BackendRoutes.getFloors,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },
@@ -43,7 +43,7 @@ class FloorsRemoteDataSourceImpl implements FloorsRemoteDataSource {
       final response = await httpClient.post(
         BackendRoutes.createFloor,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -61,7 +61,7 @@ class FloorsRemoteDataSourceImpl implements FloorsRemoteDataSource {
       final response = await httpClient.put(
         BackendRoutes.updateFloor(params.floorId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -79,7 +79,7 @@ class FloorsRemoteDataSourceImpl implements FloorsRemoteDataSource {
       await httpClient.delete(
         BackendRoutes.deleteFloor(params.floorId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },

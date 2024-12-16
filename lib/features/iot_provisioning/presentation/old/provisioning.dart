@@ -311,7 +311,7 @@
 //       final response = await http.get(
 //         BackendRoutes.mqttInfo,
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,
 //         },
@@ -335,7 +335,7 @@
 //       final response = await http.post(
 //         BackendRoutes.requestNodePairing,
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'Content-Type': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,

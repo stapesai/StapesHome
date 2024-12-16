@@ -27,7 +27,7 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
       final response = await httpClient.get(
         BackendRoutes.getRoomsByFloorId(params.floorId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },
@@ -43,7 +43,7 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
       final response = await httpClient.post(
         BackendRoutes.createRoom,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -61,7 +61,7 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
       final response = await httpClient.put(
         BackendRoutes.updateRoom(params.roomId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -79,7 +79,7 @@ class RoomsRemoteDataSourceImpl implements RoomsRemoteDataSource {
       await httpClient.delete(
         BackendRoutes.deleteRoom(params.roomId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },

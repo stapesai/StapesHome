@@ -93,7 +93,7 @@
 //       final response = await http.get(
 //         BackendRoutes.getEntitiesByRoomId(roomId),
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,
 //         },

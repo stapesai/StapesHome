@@ -59,7 +59,7 @@
 //       final response = await http.get(
 //         BackendRoutes.getFloors,
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,
 //         },
@@ -94,7 +94,7 @@
 //       final response = await http.get(
 //         BackendRoutes.getRoomsByFloorId(floorId),
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,
 //         },
@@ -127,7 +127,7 @@
 //       final response = await http.get(
 //         BackendRoutes.getNodesByRoomId(roomId),
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,
 //         },
@@ -160,7 +160,7 @@
 //       final response = await http.post(
 //         BackendRoutes.createEntity,
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'content-type': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,

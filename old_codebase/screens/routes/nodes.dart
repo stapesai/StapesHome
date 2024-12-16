@@ -96,7 +96,7 @@
 //       final response = await http.get(
 //         BackendRoutes.getNodesByRoomId(roomId),
 //         headers: {
-//           'accept': 'application/json',
+//           'Accept': 'application/json',
 //           'X-User-Id': widget.userId,
 //           'X-Session-Id': widget.sessionId,
 //         },

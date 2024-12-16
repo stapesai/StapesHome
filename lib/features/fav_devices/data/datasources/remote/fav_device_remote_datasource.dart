@@ -25,7 +25,7 @@ class FavDevicesRemoteDataSourceImpl implements FavDevicesRemoteDataSource {
       final response = await httpClient.get(
         BackendRoutes.getFavouriteDevices,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },
@@ -41,7 +41,7 @@ class FavDevicesRemoteDataSourceImpl implements FavDevicesRemoteDataSource {
       final response = await httpClient.post(
         BackendRoutes.addFavouriteDevice,
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'Content-Type': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
@@ -59,7 +59,7 @@ class FavDevicesRemoteDataSourceImpl implements FavDevicesRemoteDataSource {
       await httpClient.delete(
         BackendRoutes.removeFavouriteDevice(params.entityId),
         headers: {
-          'accept': 'application/json',
+          'Accept': 'application/json',
           'X-User-Id': session?.userId ?? 'not_found',
           'X-Session-Id': session?.sessionId ?? 'not_found',
         },
