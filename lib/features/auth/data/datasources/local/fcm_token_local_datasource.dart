@@ -12,7 +12,9 @@ abstract class FCMTokenDatasource {
 class FCMTokenDatasourceImpl implements FCMTokenDatasource {
   final FirebaseMessaging firebaseMessaging;
 
-  FCMTokenDatasourceImpl(this.firebaseMessaging);
+  FCMTokenDatasourceImpl({
+    required this.firebaseMessaging,
+  });
 
   @override
   Future<String?> getFCMToken() async {

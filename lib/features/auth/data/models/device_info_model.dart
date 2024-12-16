@@ -14,14 +14,4 @@ class DeviceInfoModel {
     required this.version,
     required this.model,
   });
-
-  factory DeviceInfoModel.fromMap(Map<String, dynamic> map) {
-    return DeviceInfoModel(
-      deviceName: map['deviceName'],
-      deviceType: map['deviceType'],
-      manufacturer: map['manufacturer'],
-      version: map['version'],
-      model: map['model'],
-    );
-  }
 }
