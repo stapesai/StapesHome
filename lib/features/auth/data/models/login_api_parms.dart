@@ -22,9 +22,7 @@ class RequestLoginParams {
     return jsonEncode({
       'email': email,
       'password': password,
-      'device_name': deviceInfo.deviceName,
-      'device_type': deviceInfo.deviceType,
-      'device_manufacturer': deviceInfo.manufacturer,
+      'device_info': deviceInfo.toJson(),
     });
   }
 }

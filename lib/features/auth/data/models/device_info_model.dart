@@ -14,4 +14,14 @@ class DeviceInfoModel {
     required this.version,
     required this.model,
   });
+
+  Object toJson() {
+    return {
+      'device_name': deviceName,
+      'device_type': deviceType,
+      'device_manufacturer': manufacturer,
+      'device_model': model,
+      'device_system_version': version,
+    };
+  }
 }
