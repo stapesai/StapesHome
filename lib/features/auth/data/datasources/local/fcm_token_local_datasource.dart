@@ -3,16 +3,16 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:stapes_home/core/error/exceptions.dart';
 
-abstract class FCMTokenDatasource {
+abstract class FCMTokenLocalDatasource {
   Future<String?> getFCMToken();
   Stream<String> onTokenRefresh();
   Future<void> deleteToken();
 }
 
-class FCMTokenDatasourceImpl implements FCMTokenDatasource {
+class FCMTokenLocalDatasourceImpl implements FCMTokenLocalDatasource {
   final FirebaseMessaging firebaseMessaging;
 
-  FCMTokenDatasourceImpl({
+  FCMTokenLocalDatasourceImpl({
     required this.firebaseMessaging,
   });
 

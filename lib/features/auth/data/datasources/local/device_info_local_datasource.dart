@@ -26,7 +26,7 @@ class DeviceInfoDataSourceImpl implements DeviceInfoDataSource {
           version: androidInfo.version.release,
           model: androidInfo.model,
         );
-            } else if (Platform.isIOS) {
+      } else if (Platform.isIOS) {
         IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
         return DeviceInfoModel(
           deviceName: iosInfo.name,
@@ -35,7 +35,7 @@ class DeviceInfoDataSourceImpl implements DeviceInfoDataSource {
           version: iosInfo.systemVersion,
           model: iosInfo.model,
         );
-            }
+      }
       throw UnsupportedError('Unsupported platform');
     } catch (e) {
       throw PlatformException('Error getting device info: $e');
