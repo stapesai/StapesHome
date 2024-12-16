@@ -1,11 +1,16 @@
 import 'dart:async';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:go_router/go_router.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
+import 'package:stapes_home/features/auth/data/datasources/local/fcm_token_local_datasource.dart';
+import 'package:stapes_home/features/auth/data/datasources/remote/fcm_token_remote_datasource.dart';
+import 'package:stapes_home/features/auth/data/models/fcm_token_api_params.dart';
 import 'package:stapes_home/service_locator.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -22,6 +27,28 @@ class SplashScreenState extends State<SplashScreen> {
     _checkLoginStatus();
   }
 
+  void _setupFirebase(BuildContext context) async {
+    // Request for notification permissions
+    await serviceLocator<FirebaseMessaging>().requestPermission();
+
+    // To handle apple devices
+    await serviceLocator<FirebaseMessaging>().getAPNSToken();
+
+    // Get FCM token
+    String? fcmToken = await serviceLocator<FCMTokenLocalDatasource>().getFCMToken();
+    if (fcmToken == null && context.mounted) {
+      CustomSnackbar(context, 'Failed to get FCM token', type: SnackbarType.error);
+    }
+
+    // Send request to backend to update FCM token
+    await serviceLocator<FCMTokenRemoteDatasource>().updateFCMToken(UpdateFCMTokenParams(fcmToken: fcmToken!));
+
+    // Set up listener for FCM token refresh
+    serviceLocator<FCMTokenLocalDatasource>().onTokenRefresh().listen((String newToken) async {
+      await serviceLocator<FCMTokenRemoteDatasource>().updateFCMToken(UpdateFCMTokenParams(fcmToken: newToken));
+    });
+  }
+
   Future<void> _checkLoginStatus() async {
     UserModel? userBox = await serviceLocator<AuthLocalDataSource>().getUser();
     UserSessionModel? sessionBox = await serviceLocator<AuthLocalDataSource>().getUserSession();
@@ -30,6 +57,7 @@ class SplashScreenState extends State<SplashScreen> {
 
     if (mounted) {
       if (isLoggedIn) {
+        _setupFirebase(context);
         GoRouter.of(context).go(AppRouteConstants.main.routePath);
       } else {
         GoRouter.of(context).go(AppRouteConstants.login.routePath);

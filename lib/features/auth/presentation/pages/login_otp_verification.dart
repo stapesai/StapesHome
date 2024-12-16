@@ -121,8 +121,9 @@ class _LoginOtpVerificationScreenState extends State<LoginOtpVerificationScreen>
           listener: (context, state) {
             // OTP Verification success
             if (state is LoginOtpVerificationSuccess) {
-             CustomSnackbar(context, 'OTP verification successful', type: SnackbarType.success);
-              GoRouter.of(context).go(AppRouteConstants.main.routePath);
+              CustomSnackbar(context, 'OTP verification successful', type: SnackbarType.success);
+              // GoRouter.of(context).go(AppRouteConstants.main.routePath);
+              GoRouter.of(context).go(AppRouteConstants.splash.routePath);
             }
             // OTP Verification error
             else if (state is LoginOtpVerificationError) {
