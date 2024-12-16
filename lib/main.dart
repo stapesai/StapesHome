@@ -19,6 +19,11 @@ void main() async {
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
   // Setup GetIt service locator
   setupServiceLocator();
 
@@ -34,11 +39,6 @@ void main() async {
     debugPrint('Failed to initialize database: $e');
     rethrow;
   }
-
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
 
   // debugPaintSizeEnabled = true;
   // runApp(const MyApp());
