@@ -23,7 +23,7 @@ class FCMTokenRemoteDatasourceImpl implements FCMTokenRemoteDatasource {
   Future<UpdateFCMTokenResponse> updateFCMToken(UpdateFCMTokenParams params) {
     return httpClient.handleRequest(() async {
       UserSessionModel? session = await authLocalDataSource.getUserSession();
-      final response = await httpClient.put(
+      final response = await httpClient.post(
         AuthRoutes.updateFCMToken,
         headers: {
           'Content-Type': 'application/json',

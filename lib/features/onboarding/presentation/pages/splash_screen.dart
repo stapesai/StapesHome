@@ -45,7 +45,12 @@ class SplashScreenState extends State<SplashScreen> {
 
     // Set up listener for FCM token refresh
     serviceLocator<FCMTokenLocalDatasource>().onTokenRefresh().listen((String newToken) async {
-      await serviceLocator<FCMTokenRemoteDatasource>().updateFCMToken(UpdateFCMTokenParams(fcmToken: newToken));
+      final response = await serviceLocator<FCMTokenRemoteDatasource>().updateFCMToken(
+        UpdateFCMTokenParams(fcmToken: newToken),
+      );
+      if (!response.success && context.mounted) {
+        CustomSnackbar(context, 'Failed to update FCM token', type: SnackbarType.error);
+      }
     });
   }
 
