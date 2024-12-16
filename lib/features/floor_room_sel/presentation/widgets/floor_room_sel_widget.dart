@@ -425,7 +425,7 @@ class FloorRoomSelectorContent extends StatelessWidget {
 //             return Padding(
 //               padding: const EdgeInsets.only(right: 15),
 //               child: FloorRoomNameButton(
-//                 label: floor.name,
+//                 label: floor.alias,
 //                 isActive: state.activeFloorId == floor.id,
 //                 onTap: () {
 //                   context.read<FloorRoomSelBloc>().add(SelectFloor(floorId: floor.id!));

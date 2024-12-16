@@ -8,9 +8,11 @@ class CreateRoomParams {
 
   Object toJson() {
     return jsonEncode({
-      'floor_id': room.floorId,
-      'name': room.name,
-      'type': room.type,
+      'room': {
+        'floor_id': room.floorId,
+        'name': room.name,
+        'type': room.type,
+      }
     });
   }
 }

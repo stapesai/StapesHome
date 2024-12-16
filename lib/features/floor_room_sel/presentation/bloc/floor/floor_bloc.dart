@@ -48,10 +48,14 @@ class FloorBloc extends Bloc<FloorEvent, FloorState> {
   }
 
   void _onSelectFloor(SelectFloor event, Emitter<FloorState> emit) {
-    if (event.floorId != state.activeFloorId) {
-      emit(state.copyWith(activeFloorId: event.floorId));
-      onFloorSelected(event.floorId);
-    }
+    // TODO: currently we have commented out the if-check but it is needed
+    // else if user will click on the same floor again, the rooms will be reloaded
+    // if (event.floorId != state.activeFloorId) {
+    //   emit(state.copyWith(activeFloorId: event.floorId));
+    //   onFloorSelected(event.floorId);
+    // }
+    emit(state.copyWith(activeFloorId: event.floorId));
+    onFloorSelected(event.floorId);
   }
 
   Future<void> _onDeleteFloor(DeleteFloor event, Emitter<FloorState> emit) async {
