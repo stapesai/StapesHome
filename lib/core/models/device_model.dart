@@ -26,6 +26,8 @@ class DeviceModel {
     );
   }
 
+  get state => null;
+
   // DeviceModel copyWith({bool? state}) {
   //   return DeviceModel(
   //     nodeId: nodeId,
