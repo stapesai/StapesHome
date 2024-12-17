@@ -1,12 +1,16 @@
-import 'package:stapes_home/core/constants/api_routes.dart';
-import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:hive/hive.dart';
+import 'package:flutter/material.dart';
+import 'package:stapes_home/firebase_options.dart';
+import 'package:stapes_home/service_locator.dart';
+import 'package:device_preview/device_preview.dart';
+import 'package:stapes_home/core/router/app_router.dart';
+import 'package:stapes_home/core/models/user_model.dart';
+import 'package:stapes_home/core/database/sqlite_service.dart';
+import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:stapes_home/utils/sessions_model.dart';
-import 'package:stapes_home/screens/splash_screen.dart';
-import 'package:provider/provider.dart';
-import 'package:stapes_home/services/websocket_service.dart';
-import 'package:stapes_home/utils/hive.dart';
+import 'package:stapes_home/core/theme/custom_gradient_and_padding_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -15,11 +19,36 @@ void main() async {
   final appDocumentDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocumentDirectory.path);
 
+  // Initialize Firebase
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
+  // Setup GetIt service locator
+  setupServiceLocator();
+
   // Register Hive adapters
-  Hive.registerAdapter(SessionsModelAdapter());
+  Hive.registerAdapter(UserModelAdapter());
+  Hive.registerAdapter(UserSessionModelAdapter());
+
+  // Initialize SQLite database
+  try {
+    final sqliteService = serviceLocator<SQLiteService>();
+    await sqliteService.initializeDatabase();
+  } catch (e) {
+    debugPrint('Failed to initialize database: $e');
+    rethrow;
+  }
 
   // debugPaintSizeEnabled = true;
-  runApp(const MyApp());
+  // runApp(const MyApp());
+  runApp(
+    DevicePreview(
+      enabled: !kReleaseMode,
+      // enabled: false,
+      builder: (context) => const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -27,33 +56,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<SessionsModel?>(
-      future: HiveService().getSessionData().then((sessions) => sessions.isNotEmpty ? sessions.first : null),
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.done) {
-          final session = snapshot.data;
-          final webSocketService = session != null
-              ? WebSocketService(WebSocketRoutes.getWebSocketUrl(), session.userId, session.sessionId)
-              : null;
+    return CustomGradientAndPaddingContainer(
+      child: MaterialApp.router(
+        debugShowCheckedModeBanner: false,
+        // showPerformanceOverlay: true,
 
-          if (webSocketService != null) {
-            webSocketService.connect();
-          }
+        // DevicePreview
+        locale: DevicePreview.locale(context),
+        builder: DevicePreview.appBuilder,
 
-          return Provider<WebSocketService?>.value(
-            value: webSocketService,
-            child: MaterialApp(
-              home: const SplashScreen(),
-              debugShowCheckedModeBanner: false,
-              theme: ThemeData(
-                splashColor: Colors.transparent,
-                highlightColor: Colors.transparent,
-              ),
-            ),
-          );
-        }
-        return CircularProgressIndicator();
-      },
+        // App Router
+        routerConfig: AppRouter().route,
+
+        // Theme
+        themeMode: ThemeMode.dark,
+        // theme: ThemeData(
+        //   splashColor: Colors.transparent,
+        //   highlightColor: Colors.transparent,
+        // ),
+      ),
     );
   }
 }

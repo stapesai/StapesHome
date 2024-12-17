@@ -10,7 +10,7 @@ class BaseUrls {
       case Environment.development:
         return '192.168.0.253:8000';
       case Environment.production:
-        return 'auth.stapesai.in';
+        return 'auth.stapesai.com';
       default:
         throw UnsupportedError('Environment not supported');
     }
@@ -21,7 +21,7 @@ class BaseUrls {
       case Environment.development:
         return '192.168.0.253:8001';
       case Environment.production:
-        return 'backend.stapesai.in';
+        return 'backend.stapesai.com';
       default:
         throw UnsupportedError('Environment not supported');
     }
@@ -43,7 +43,7 @@ class BaseUrls {
       case Environment.development:
         return 'ws://192.168.0.253:8002/ws';
       case Environment.production:
-        throw UnsupportedError('WebSocket not supported in production');
+        return 'ws://23.ip.gl.ply.gg:2876/ws';
       default:
         throw UnsupportedError('Environment not supported');
     }
@@ -55,17 +55,17 @@ class AuthRoutes {
   static final String baseUrl = BaseUrls.authBaseUrl;
 
   // Signup
-  static final Uri requestSignup = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/request-signup');
-  static final Uri completeSignup = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/complete-signup');
+  static final Uri requestSignUp = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/request-signup');
+  static final Uri completeSignUp = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/signup/complete-signup');
 
   // Login
   static final Uri requestLogin = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/login/request-login');
   static final Uri completeLogin = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/login/complete-login');
 
   // Reset Password
-  static final Uri requestResetPassword =
+  static final Uri requestPasswordReset =
       Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/reset-password/request-reset');
-  static final Uri completeResetPassword =
+  static final Uri completePasswordReset =
       Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/reset-password/complete-reset');
 
   // OTP
@@ -74,6 +74,9 @@ class AuthRoutes {
 
   // Logout
   static final Uri logoutUser = Uri.parse('${BaseUrls.protocol}://$baseUrl/auth/logout');
+
+  // FCM Token
+  static final Uri updateFCMToken = Uri.parse('${BaseUrls.protocol}://$baseUrl/update-fcm-token');
 
   // Session Management
   static final Uri getCurrentSession = Uri.parse('${BaseUrls.protocol}://$baseUrl/sessions/current');
@@ -103,17 +106,18 @@ class BackendRoutes {
   static Uri deleteRoom(String roomId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/rooms/$roomId');
 
   // Node routes
-  static final Uri createNode = Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes');
+  static final Uri requestNodePairing = Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/request-pairing');
+  static final Uri completeNodePairing = Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/complete-pairing');
   static Uri getNodesByRoomId(String roomId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/$roomId');
   static Uri updateNode(String nodeId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/$nodeId');
   static Uri deleteNode(String nodeId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/nodes/$nodeId');
 
   // Entity routes
   static final Uri createEntity = Uri.parse('${BaseUrls.protocol}://$baseUrl/entities');
-  static final Uri getAllEntities = Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/all');
-  static Uri getEntitiesByNodeId(String nodeId) =>
+  static final Uri getAllDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/all');
+  static Uri getDevicesByNodeId(String nodeId) =>
       Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/by_node_id/$nodeId');
-  static Uri getEntitiesByRoomId(String roomId) =>
+  static Uri getDevicesByRoomId(String roomId) =>
       Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/by_room_id/$roomId');
   static Uri updateEntity(String entityId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/$entityId');
   static Uri deleteEntity(String entityId) => Uri.parse('${BaseUrls.protocol}://$baseUrl/entities/$entityId');
@@ -122,13 +126,13 @@ class BackendRoutes {
   static final Uri mqttInfo = Uri.parse('${BaseUrls.protocol}://$baseUrl/mqtt/info');
 
   // Favorite Device routes
-  static final Uri addFavoriteDevice = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
-  static final Uri getFavoriteDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
-  static Uri removeFavoriteDevice(String favoriteDeviceId) =>
+  static final Uri addFavouriteDevice = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
+  static final Uri getFavouriteDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
+  static Uri removeFavouriteDevice(String favoriteDeviceId) =>
       Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev/$favoriteDeviceId');
 }
 
-/// Defines WebSocket-related routes
-class WebSocketRoutes {
-  static Uri getWebSocketUrl() => Uri.parse(BaseUrls.webSocketUrl);
+/// Defines Websocket-related routes
+class WebsocketRoutes {
+  static Uri getWebsocketUrl() => Uri.parse(BaseUrls.webSocketUrl);
 }

@@ -23,26 +23,33 @@ def select_files(files):
     selected_files = set()
     bindings = KeyBindings()
     cursor_position = 0
+    scroll_position = 0
+    window_height = 40  # Number of lines visible in the window
 
     def update_prompt_text():
+        # Display only the lines within the scrollable window range
         return '\n'.join(
             f"{'>' if i == cursor_position else ' '} [{'x' if i in selected_files else ' '}] {i + 1}: {file}"
-            for i, file in enumerate(files)
+            for i, file in enumerate(files[scroll_position:scroll_position + window_height], start=scroll_position)
         )
 
     @bindings.add('up')
     def move_up(event):
-        nonlocal cursor_position
+        nonlocal cursor_position, scroll_position
         if cursor_position > 0:
             cursor_position -= 1
+        if cursor_position < scroll_position:
+            scroll_position -= 1
         # Update buffer content
         buffer.text = update_prompt_text()
 
     @bindings.add('down')
     def move_down(event):
-        nonlocal cursor_position
+        nonlocal cursor_position, scroll_position
         if cursor_position < len(files) - 1:
             cursor_position += 1
+        if cursor_position >= scroll_position + window_height:
+            scroll_position += 1
         # Update buffer content
         buffer.text = update_prompt_text()
 
@@ -54,6 +61,20 @@ def select_files(files):
         else:
             selected_files.add(cursor_position)
         # Update prompt text
+        buffer.text = update_prompt_text()
+
+    @bindings.add('pageup')
+    def page_up(event):
+        nonlocal scroll_position, cursor_position
+        scroll_position = max(0, scroll_position - window_height)
+        cursor_position = max(0, cursor_position - window_height)
+        buffer.text = update_prompt_text()
+
+    @bindings.add('pagedown')
+    def page_down(event):
+        nonlocal scroll_position, cursor_position
+        scroll_position = min(len(files) - window_height, scroll_position + window_height)
+        cursor_position = min(len(files) - 1, cursor_position + window_height)
         buffer.text = update_prompt_text()
 
     @bindings.add('enter')
@@ -70,7 +91,7 @@ def select_files(files):
 
     # Create layout with a window that adjusts to the terminal size
     root_container = HSplit([Window(content=BufferControl(buffer=buffer), wrap_lines=True, height=Dimension())])
-    
+
     # Create the application with the key bindings and layout
     app = Application(
         layout=Layout(root_container),

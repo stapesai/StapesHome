@@ -46,6 +46,10 @@ app.*.map.json
 error.txt
 pubspec.lock
 
-prompt.txt
+*prompt*.txt
 
 contributions.csv
+contributions-2.csv
+openapi.json
+# lib/firebase_options.dart
+# android/app/google-services.json

@@ -1,73 +1,78 @@
-// File: lib/core/error/failures.dart
-// Description: This file contains the definition of various failure types that can occur in the application.
-
 import 'package:equatable/equatable.dart';
 
 /// Base class for all failures in the application
 abstract class Failure extends Equatable {
-  /// Creates a new [Failure] instance
-  const Failure([List properties = const <dynamic>[]]);
+  final String message;
+
+  const Failure(this.message);
 
   @override
-  List<Object> get props => [];
+  List<Object> get props => [message];
 }
 
 /// Represents a failure due to a server error
 class ServerFailure extends Failure {
-  /// Creates a new [ServerFailure] instance
-  const ServerFailure();
-}
-
-/// Represents a failure due to a cache error
-class CacheFailure extends Failure {
-  /// Creates a new [CacheFailure] instance
-  const CacheFailure();
+  const ServerFailure({required String message}) : super(message);
 }
 
 /// Represents a failure due to a network error
 class NetworkFailure extends Failure {
-  /// Creates a new [NetworkFailure] instance
-  const NetworkFailure();
+  const NetworkFailure({required message}) : super(message);
 }
+
+/// Represents a failure due to a cache error
+// class CacheFailure extends Failure {
+//   const CacheFailure({required message}) : super(message);
+// }
 
 /// Represents a failure due to invalid input or data
 class ValidationFailure extends Failure {
-  /// The error message associated with the validation failure
-  final String message;
-
-  /// Creates a new [ValidationFailure] instance
-  const ValidationFailure(this.message);
-
-  @override
-  List<Object> get props => [message];
+  const ValidationFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to authentication issues
-class AuthenticationFailure extends Failure {
-  /// Creates a new [AuthenticationFailure] instance
-  const AuthenticationFailure();
-}
+// class AuthenticationFailure extends Failure {
+//   const AuthenticationFailure({required message}) : super(message);
+// }
 
 /// Represents a failure due to unauthorized access
 class UnauthorizedFailure extends Failure {
-  /// Creates a new [UnauthorizedFailure] instance
-  const UnauthorizedFailure();
+  const UnauthorizedFailure({required message}) : super(message);
 }
 
 /// Represents a failure due to a not found error
 class NotFoundFailure extends Failure {
-  /// Creates a new [NotFoundFailure] instance
-  const NotFoundFailure();
+  const NotFoundFailure({required message}) : super(message);
+}
+
+/// Represents a failure due to a timeout error
+class TimeoutFailure extends Failure {
+  const TimeoutFailure({required message}) : super(message);
 }
 
 /// Represents an unexpected failure
 class UnexpectedFailure extends Failure {
-  /// The error message associated with the unexpected failure
-  final String message;
+  const UnexpectedFailure({required message}) : super(message);
+}
 
-  /// Creates a new [UnexpectedFailure] instance
-  const UnexpectedFailure(this.message);
+/// No websocket related failures are required yet.
 
-  @override
-  List<Object> get props => [message];
+/// Represents a sqlite database failure
+class SQLiteFailure extends Failure {
+  const SQLiteFailure({required message}) : super(message);
+}
+
+/// Represents a failure due to no internet connection
+/// class NoInternetFailure extends Failure {
+///  const NoInternetFailure({required message}) : super(message);
+/// }
+
+/// Represents a failure due to a platform specific error
+class PlatformFailure extends Failure {
+  const PlatformFailure({required message}) : super(message);
+}
+
+/// FCm token related failures
+class FCMTokenFailure extends Failure {
+  const FCMTokenFailure({required message}) : super(message);
 }
