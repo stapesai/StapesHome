@@ -19,13 +19,37 @@ import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dar
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 import 'package:stapes_home/service_locator.dart';
 
+class ProvisioningStep {
+  final String title;
+  bool isCompleted;
+  bool isCurrent;
+
+  ProvisioningStep({
+    required this.title,
+    this.isCompleted = false,
+    this.isCurrent = false,
+  });
+}
+
 class IoTProvisioningScreen extends StatelessWidget {
   final IotQrModel qrData;
 
-  const IoTProvisioningScreen({
+  IoTProvisioningScreen({
     super.key,
     required this.qrData,
   });
+  // Stream<int> _widgetSequence() async* {
+  //   for (int i = 0; i < 4; i++) {
+  //     await Future.delayed(const Duration(seconds: 2));
+  //     yield i;
+  //   }
+  // }
+  List<ProvisioningStep> steps = [
+    ProvisioningStep(title: 'Pairing Bluetooth', isCurrent: true),
+    ProvisioningStep(title: 'Enter Wi-Fi Credentials'),
+    ProvisioningStep(title: 'Name your node'),
+    ProvisioningStep(title: 'Sending Wi-Fi credentials'),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -88,9 +112,20 @@ class IoTProvisioningScreen extends StatelessWidget {
                         ),
                       ),
                       SizedBox(height: screenSize.height * 0.04),
-                      Expanded(
-                        child: _buildCurrentStep(context, state),
-                      ),
+                      ...steps.map((step) => _buildStepIndicator(step)),
+                      Spacer(),
+
+                      // child: StreamBuilder<int>(
+                      //   stream: _widgetSequence(),
+                      //   initialData: 0,
+                      //   builder: (context, snapshot) {
+                      //     if (snapshot.hasData) {
+                      //       return Center(child: _buildCurrentStep(snapshot.data!));
+                      //     } else {
+                      //       return Center(child: _buildStepIndicator());
+                      //     }
+                      //   },
+                      // ),
                     ],
                   );
                 },
@@ -102,86 +137,77 @@ class IoTProvisioningScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildCurrentStep(BuildContext context, IotProvisioningState state) {
-    if (state is BlePairingInProgress) {
-      return _buildStepIndicator('Pairing Bluetooth', true);
-    } else if (state is BlePairingFailure) {
-      return _buildErrorState(state.error);
-    } else if (state is BlePairingSuccess || state is LoadingWifiNetworks || state is WifiNetworksLoaded) {
-      return EnterWifiCredWidget();
-    } else if (state is CheckingWifiCredentials) {
-      return _buildStepIndicator('Checking WiFi Credentials', true);
-    } else if (state is WifiCredentialsInvalid) {
-      return _buildErrorState(state.error);
-    } else if (state is WifiCredentialsValid) {
-      return Text('Wifi Credentials Valid');
-      // return NameYourNodeWidget();
-    } else if (state is NodePairingRequestSuccess) {
-      return Text('Node Pairing Request Success');
-      // return SelectNodeLocationWidget();
-    } else if (state is RequestingNodePairing) {
-      return _buildStepIndicator('Requesting Server', true);
-    } else if (state is UploadConfigToNode) {
-      return _buildStepIndicator('Uploading Configuration', true);
-    } else if (state is CompletingNodePairing) {
-      return _buildStepIndicator('Completing Setup', true);
-    } else if (state is NodeProvisioned) {
-      return _buildSuccessState();
-    } else {
-      return _buildStepIndicator('Initializing...', true);
-    }
-  }
+  // Widget _buildCurrentStep(BuildContext context, IotProvisioningState state) {
+  //   if (state is BlePairingInProgress) {
+  //     return _buildStepIndicator('Pairing Bluetooth', true);
+  //   } else if (state is BlePairingFailure) {
+  //     return _buildErrorState(state.error);
+  //   } else if (state is BlePairingSuccess || state is LoadingWifiNetworks || state is WifiNetworksLoaded) {
+  //     return EnterWifiCredWidget();
+  //   } else if (state is CheckingWifiCredentials) {
+  //     return _buildStepIndicator('Checking WiFi Credentials', true);
+  //   } else if (state is WifiCredentialsInvalid) {
+  //     return _buildErrorState(state.error);
+  //   } else if (state is WifiCredentialsValid) {
+  //     return Text('Wifi Credentials Valid');
+  //     // return NameYourNodeWidget();
+  //   } else if (state is NodePairingRequestSuccess) {
+  //     return Text('Node Pairing Request Success');
+  //     // return SelectNodeLocationWidget();
+  //   } else if (state is RequestingNodePairing) {
+  //     return _buildStepIndicator('Requesting Server', true);
+  //   } else if (state is UploadConfigToNode) {
+  //     return _buildStepIndicator('Uploading Configuration', true);
+  //   } else if (state is CompletingNodePairing) {
+  //     return _buildStepIndicator('Completing Setup', true);
+  //   } else if (state is NodeProvisioned) {
+  //     return _buildSuccessState();
+  //   } else {
+  //     return _buildStepIndicator('Initializing...', true);
+  //   }
+  // }
 
-  Widget _buildStepIndicator(String title, bool isLoading) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+
+  Widget _buildStepIndicator(ProvisioningStep step) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
         children: [
-          if (isLoading) const CircularProgressIndicator(color: Colors.white),
-          const SizedBox(height: 16),
+          Container(
+            width: 44,
+            height: 44,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: step.isCompleted
+                  ? Color(0xFFFF9F1C)
+                  : step.isCurrent
+                      ? Color(0xFFFF9F1C)
+                      : Color(0x7FFF9F1C),
+            ),
+            child: step.isCompleted
+                ? Icon(Icons.check_circle, color: Colors.greenAccent[400])
+                : step.isCurrent
+                    ? CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeAlign: BorderSide.strokeAlignOutside,
+                        strokeWidth: 2,
+                      )
+                    : null,
+          ),
+          SizedBox(width: 10),
           Text(
-            title,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
+            step.title,
+            style: TextStyle(
+              color: step.isCompleted || step.isCurrent ? Colors.white : Colors.white.withOpacity(0.5),
+              fontSize: 20,
               fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.w400,
             ),
           ),
         ],
       ),
     );
   }
-
-  Widget _buildErrorState(String error) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 48),
-          const SizedBox(height: 16),
-          Text(
-            'Error: $error',
-            style: const TextStyle(color: Colors.red),
-            textAlign: TextAlign.center,
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildSuccessState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: const [
-          Icon(Icons.check_circle_outline, color: Colors.green, size: 48),
-          SizedBox(height: 16),
-          Text(
-            'Device Successfully Provisioned!',
-            style: TextStyle(color: Colors.white),
-          ),
-        ],
-      ),
-    );
-  }
 }
+
+

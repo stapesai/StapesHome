@@ -1,5 +1,5 @@
 // lib/features/provisioning/presentation/pages/scanner/qr_scanner.dart
-
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
@@ -21,127 +21,149 @@ class QrScannerScreen extends StatefulWidget {
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
-  late final QrScannerBloc _qrScannerBloc;
-  late MobileScannerController _controller;
+  final MobileScannerController controller = MobileScannerController(
+      autoStart: false, torchEnabled: false, useNewCameraSelector: true, detectionSpeed: DetectionSpeed.noDuplicates);
+
+  Barcode? _barcode;
+  StreamSubscription<Object?>? _subscription;
+  late QrScannerBloc _qrScannerBloc;
+  late TorchState torchState;
   bool _torchOn = false;
-  bool _hasTorch = true; // Assume torch is available until proven otherwise
 
   @override
   void initState() {
     super.initState();
+    // Initialize the bloc here
     _qrScannerBloc = QrScannerBloc();
-    _controller = MobileScannerController(
-      detectionSpeed: DetectionSpeed.normal,
-      facing: CameraFacing.back,
-      torchEnabled: false,
-    );
 
-    // Initialize camera
-    _initializeCamera();
-  }
+    WidgetsBinding.instance.addObserver(this);
 
-  Future<void> _initializeCamera() async {
-    try {
-      await _controller.start();
-    } catch (e) {
-      print('Failed to initialize camera: $e');
-      if (mounted) {
-        CustomSnackbar(context, 'Failed to initialize camera');
-      }
-    }
-  }
+    _subscription = controller.barcodes.listen(_handleBarcode);
 
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
+    unawaited(controller.start());
   }
 
   void _toggleTorch() async {
     try {
-      await _controller.toggleTorch();
+      await controller.toggleTorch();
       setState(() {
         _torchOn = !_torchOn;
       });
-
-      // TODO: Check if torch is toggled successfully
     } catch (e) {
-      // If an error occurs (torch not available), we can assume there's no torch
-      print('Torch is not available: $e');
+      if (mounted) {
+        switch (torchState) {
+          case TorchState.unavailable:
+            CustomSnackbar(context, "Flashlight is not availabel", type: SnackbarType.info);
+            break;
+          default:
+            break;
+        }
+      }
+    }
+  }
+
+  void _handleBarcode(BarcodeCapture barcodes) {
+    if (mounted) {
       setState(() {
-        _hasTorch = false; // Hide the torch toggle button if not available
+        _barcode = barcodes.barcodes.firstOrNull;
+
+        if (_barcode != null) {
+          _qrScannerBloc.add(
+            ProcessQrCode(_barcode!.rawValue.toString()),
+          );
+        }
       });
+    }
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    switch (state) {
+      case AppLifecycleState.detached:
+      case AppLifecycleState.hidden:
+      case AppLifecycleState.paused:
+        return;
+      case AppLifecycleState.resumed:
+        _subscription = controller.barcodes.listen(_handleBarcode);
+        unawaited(controller.start());
+      case AppLifecycleState.inactive:
+        unawaited(_subscription?.cancel());
+        _subscription = null;
+        unawaited(controller.stop());
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    
     return BlocProvider.value(
       value: _qrScannerBloc,
-      // TODO: why the fuck we have to use this builder
-      // In navigation screen or floor room sel widget, we don't have to but we are doing the same thing??
-      child: Builder(builder: (context) {
-        return BlocListener<QrScannerBloc, QrScannerState>(
-          listener: (context, state) {
-            if (state is QrScannerSuccess) {
-              switch (state.data.type) {
-                case QrCodeType.iotNode:
-                  print('IoT Node QR code detected');
-                  GoRouter.of(context).push(
-                    AppRouteConstants.iotProvisioning.routePath,
-                    extra: state.data.payload,
-                  );
-                  break;
-                case QrCodeType.tvPairing:
-                  GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
-                  break;
-                case QrCodeType.unknown:
-                  CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
-                  break;
-              }
-            } else if (state is QrScannerError) {
-              CustomSnackbar(context, state.message, type: SnackbarType.error);
-            } else if (state is QrScannerProcessing) {
-              CustomSnackbar(context, 'Processing QR code...', type: SnackbarType.info);
+      child: BlocListener<QrScannerBloc, QrScannerState>(
+        listener: (context, state) {
+          debugPrint('BlocListener received state: $state');
+          if (state is QrScannerSuccess) {
+            debugPrint('Navigating with parsed data: ${state.data}');
+            switch (state.data.type) {
+              case QrCodeType.iotNode:
+                debugPrint('Navigating to IoT Provisioning');
+                GoRouter.of(context).push(
+                  AppRouteConstants.iotProvisioning.routePath,
+                  extra: state.data.payload,
+                );
+                break;
+              case QrCodeType.tvPairing:
+                debugPrint('Navigating to TV Provisioning');
+                GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
+                break;
+              case QrCodeType.unknown:
+                CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
+                break;
             }
-          },
-          child: Scaffold(
-            body: Stack(
-              children: [
-                MobileScanner(
-                  controller: _controller,
-                  onDetect: (capture) {
-                    final List<Barcode> barcodes = capture.barcodes;
-                    if (barcodes.isNotEmpty) {
-                      print('Barcode detected: ${barcodes.first.rawValue}');
-                      context.read<QrScannerBloc>().add(
-                            ProcessQrCode(barcodes.first.rawValue ?? ''),
-                          );
-                    }
-                  },
-                ),
-                QRScannerOverlay(),
-                if (_hasTorch)
-                  Positioned(
-                    top: 45,
-                    right: 20,
-                    child: IconButton(
-                      onPressed: _toggleTorch,
-                      icon: Icon(
-                        _torchOn ? Icons.flashlight_on : Icons.flashlight_off,
-                        color: Colors.white,
-                      ),
-                    ),
+          } else if (state is QrScannerError) {
+            debugPrint('Error: ${state.message}');
+            CustomSnackbar(context, state.message, type: SnackbarType.error);
+          } else if (state is QrScannerProcessing) {
+            debugPrint('Processing QR code...');
+            CustomSnackbar(context, 'Initialising pairing process', type: SnackbarType.info);
+          }
+        },
+        child: Scaffold(
+          body: Stack(
+            children: [
+              MobileScanner(
+                controller: controller,
+                // Remove the onDetect here as we're handling it in _handleBarcode
+              ),
+              QRScannerOverlay(),
+              const Align(
+                alignment: Alignment.bottomCenter,
+                child: QrScanInstructionPanel(),
+              ),
+              Positioned(
+                top: 45,
+                right: 20,
+                child: IconButton(
+                  onPressed: _toggleTorch,
+                  icon: Icon(
+                    _torchOn ? Icons.flashlight_on : Icons.flashlight_off,
+                    color: Colors.white,
                   ),
-                const Align(
-                  alignment: Alignment.bottomCenter,
-                  child: QrScanInstructionPanel(),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      }),
+        ),
+      ),
     );
+  }
+
+  @override
+  Future<void> dispose() async {
+    WidgetsBinding.instance.removeObserver(this);
+    unawaited(_subscription?.cancel());
+    _subscription = null;
+    _qrScannerBloc.close();
+    await controller.dispose();
+    super.dispose();
   }
 }
