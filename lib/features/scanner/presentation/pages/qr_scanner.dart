@@ -22,7 +22,7 @@ class QrScannerScreen extends StatefulWidget {
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
   final MobileScannerController controller = MobileScannerController(
-      autoStart: false, torchEnabled: false, useNewCameraSelector: true, detectionSpeed: DetectionSpeed.noDuplicates);
+      autoStart: false, torchEnabled: false, useNewCameraSelector: true, detectionSpeed: DetectionSpeed.normal);
 
   Barcode? _barcode;
   StreamSubscription<Object?>? _subscription;
@@ -106,14 +106,14 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
             switch (state.data.type) {
               case QrCodeType.iotNode:
                 debugPrint('Navigating to IoT Provisioning');
-                GoRouter.of(context).push(
+                GoRouter.of(context).pushReplacement(
                   AppRouteConstants.iotProvisioning.routePath,
                   extra: state.data.payload,
                 );
                 break;
               case QrCodeType.tvPairing:
                 debugPrint('Navigating to TV Provisioning');
-                GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
+                GoRouter.of(context).pushReplacement(AppRouteConstants.tvProvisioning.routeName);
                 break;
               case QrCodeType.unknown:
                 CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
