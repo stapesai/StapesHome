@@ -44,7 +44,12 @@ class AppRouter {
       GoRoute(
         name: AppRouteConstants.login.routeName,
         path: AppRouteConstants.login.routePath,
-        builder: (context, state) => const LoginEmailInputScreen(),
+        // builder: (context, state) => const LoginEmailInputScreen(),
+        pageBuilder: (context, state) => MaterialPage(
+          child: CustomGradientAndPaddingContainer(
+            child: const LoginEmailInputScreen(),
+          ),
+        ),
       ),
 
       // Login OTP Verification screen
@@ -56,12 +61,13 @@ class AppRouter {
           final String transactionId = state.pathParameters['transactionId']!;
           final DateTime expiryTime = DateTime.parse(state.pathParameters['expiryTime']!);
           return MaterialPage(
+              child: CustomGradientAndPaddingContainer(
             child: LoginOtpVerificationScreen(
               email: email,
               transactionId: transactionId,
               expiryTime: expiryTime,
             ),
-          );
+          ));
         },
       ),
 
@@ -69,7 +75,12 @@ class AppRouter {
       GoRoute(
         name: AppRouteConstants.signUpEmailInput.routeName,
         path: AppRouteConstants.signUpEmailInput.routePath,
-        builder: (context, state) => const SignUpEmailInputScreen(),
+        // builder: (context, state) => const SignUpEmailInputScreen(),
+        pageBuilder: (context, state) => MaterialPage(
+          child: CustomGradientAndPaddingContainer(
+            child: const SignUpEmailInputScreen(),
+          ),
+        ),
       ),
 
       // SignUp OTP Verification screen
