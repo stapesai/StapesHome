@@ -1,4 +1,5 @@
 // lib/features/provisioning/presentation/pages/scanner/qr_scanner.dart
+
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,10 +22,13 @@ class QrScannerScreen extends StatefulWidget {
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
-  final MobileScannerController controller = MobileScannerController(
-      autoStart: false, torchEnabled: false, useNewCameraSelector: true, detectionSpeed: DetectionSpeed.normal);
-
-  Barcode? _barcode;
+  // late MobileScannerController controller;
+  final controller = MobileScannerController(
+    autoStart: false,
+    torchEnabled: false,
+    facing: CameraFacing.back,
+    detectionSpeed: DetectionSpeed.normal,
+  );
   StreamSubscription<Object?>? _subscription;
   late QrScannerBloc _qrScannerBloc;
   late TorchState torchState;
@@ -33,7 +37,13 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-    // Initialize the bloc here
+    // Initialize the controller
+    // controller = MobileScannerController(
+    //   autoStart: false,
+    //   torchEnabled: false,
+    //   facing: CameraFacing.back,
+    //   detectionSpeed: DetectionSpeed.normal,
+    // );
     _qrScannerBloc = QrScannerBloc();
 
     WidgetsBinding.instance.addObserver(this);
@@ -63,16 +73,11 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   }
 
   void _handleBarcode(BarcodeCapture barcodes) {
-    if (mounted) {
-      setState(() {
-        _barcode = barcodes.barcodes.firstOrNull;
-
-        if (_barcode != null) {
-          _qrScannerBloc.add(
-            ProcessQrCode(_barcode!.rawValue.toString()),
-          );
-        }
-      });
+    Barcode? barcode = barcodes.barcodes.firstOrNull;
+    if (barcode != null) {
+      _qrScannerBloc.add(
+        ProcessQrCode(barcode.rawValue.toString()),
+      );
     }
   }
 
@@ -80,7 +85,9 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   void didChangeAppLifecycleState(AppLifecycleState state) {
     switch (state) {
       case AppLifecycleState.detached:
+        return;
       case AppLifecycleState.hidden:
+        return;
       case AppLifecycleState.paused:
         return;
       case AppLifecycleState.resumed:
@@ -90,12 +97,13 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
         unawaited(_subscription?.cancel());
         _subscription = null;
         unawaited(controller.stop());
+      default:
+        return;
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return BlocProvider.value(
       value: _qrScannerBloc,
       child: BlocListener<QrScannerBloc, QrScannerState>(
@@ -106,14 +114,14 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
             switch (state.data.type) {
               case QrCodeType.iotNode:
                 debugPrint('Navigating to IoT Provisioning');
-                GoRouter.of(context).pushReplacement(
+                GoRouter.of(context).push(
                   AppRouteConstants.iotProvisioning.routePath,
                   extra: state.data.payload,
                 );
                 break;
               case QrCodeType.tvPairing:
                 debugPrint('Navigating to TV Provisioning');
-                GoRouter.of(context).pushReplacement(AppRouteConstants.tvProvisioning.routeName);
+                GoRouter.of(context).push(AppRouteConstants.tvProvisioning.routeName);
                 break;
               case QrCodeType.unknown:
                 CustomSnackbar(context, 'Unknown QR code type', type: SnackbarType.error);
@@ -132,7 +140,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
             children: [
               MobileScanner(
                 controller: controller,
-                // Remove the onDetect here as we're handling it in _handleBarcode
               ),
               QRScannerOverlay(),
               const Align(
@@ -158,12 +165,16 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   }
 
   @override
-  Future<void> dispose() async {
+  void dispose() {
+    // Future<void> dispose() async {
     WidgetsBinding.instance.removeObserver(this);
-    unawaited(_subscription?.cancel());
+    // unawaited(_subscription?.cancel());
+    _subscription?.cancel();
     _subscription = null;
     _qrScannerBloc.close();
-    await controller.dispose();
+    // TODO: god knows if i don't await this, why does it work?
+    controller.dispose();
+    // await controller.dispose();
     super.dispose();
   }
 }
