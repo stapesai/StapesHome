@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';
+import 'package:stapes_home/core/theme/custom_gradient_and_padding_container.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_otp_verification.dart';
 import 'package:stapes_home/features/auth/presentation/pages/login_email_input.dart';
 import 'package:stapes_home/features/auth/presentation/pages/forgot_password_reset_password.dart';
@@ -31,7 +32,12 @@ class AppRouter {
       GoRoute(
         name: AppRouteConstants.splash.routeName,
         path: AppRouteConstants.splash.routePath,
-        builder: (context, state) => const SplashScreen(),
+        // builder: (context, state) => const SplashScreen(),
+        pageBuilder: (context, state) => MaterialPage(
+          child: CustomGradientAndPaddingContainer(
+            child: const SplashScreen(),
+          ),
+        ),
       ),
 
       // Login screen

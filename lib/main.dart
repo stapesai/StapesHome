@@ -10,7 +10,6 @@ import 'package:stapes_home/core/models/user_model.dart';
 import 'package:stapes_home/core/database/sqlite_service.dart';
 import 'package:stapes_home/core/models/user_session_model.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
-import 'package:stapes_home/core/theme/custom_gradient_and_padding_container.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -56,25 +55,25 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomGradientAndPaddingContainer(
-      child: MaterialApp.router(
-        debugShowCheckedModeBanner: false,
-        // showPerformanceOverlay: true,
+    // return CustomGradientAndPaddingContainer(
+    return MaterialApp.router(
+      debugShowCheckedModeBanner: false,
+      // showPerformanceOverlay: true,
 
-        // DevicePreview
-        locale: DevicePreview.locale(context),
-        builder: DevicePreview.appBuilder,
+      // DevicePreview
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
 
-        // App Router
-        routerConfig: AppRouter().route,
+      // App Router
+      routerConfig: AppRouter().route,
 
-        // Theme
-        themeMode: ThemeMode.dark,
-        // theme: ThemeData(
-        //   splashColor: Colors.transparent,
-        //   highlightColor: Colors.transparent,
-        // ),
-      ),
+      // Theme
+      themeMode: ThemeMode.dark,
+      // theme: ThemeData(
+      //   splashColor: Colors.transparent,
+      //   highlightColor: Colors.transparent,
+      // ),
     );
+    // );
   }
 }
