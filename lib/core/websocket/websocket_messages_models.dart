@@ -51,6 +51,8 @@ class WebsocketDeviceStatusUpdate {
     );
   }
 
+  get devices => null;
+
   @override
   String toString() {
     return 'WebsocketDeviceStatusUpdate{deviceId: $deviceId, state: $state}';
