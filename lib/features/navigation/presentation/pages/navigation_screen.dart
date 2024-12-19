@@ -50,6 +50,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     DeviceScreen(),
     // DevFloorRoomSelPage(),
     NodesScreen(),
+    DevComponentsTestPage(),
     // QrScannerScreen(),
     // KeepAlivePage(child: HomeScreen()),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),

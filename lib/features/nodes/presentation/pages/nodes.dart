@@ -16,7 +16,6 @@ class NodesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-
     return BlocProvider<WebsocketBloc>(
       create: (context) => WebsocketBloc()..add(ConnectWebsocketEvent()),
       child: Scaffold(
@@ -32,8 +31,7 @@ class NodesScreen extends StatelessWidget {
           child: SafeArea(
             child: Column(
               children: [
-                const SizedBox(height: 40),
-                // Heading "Linked Nodes"
+                SizedBox(height: screenSize.height * 0.05),
                 Padding(
                   padding: AppPadding.pagePadding(context),
                   child: Column(
@@ -48,7 +46,8 @@ class NodesScreen extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      const SizedBox(height: 20),
+                      // Replaced const SizedBox with dynamic height
+                      SizedBox(height: screenSize.height * 0.05),
                       // Floor Room Selector
                       FloorRoomSelector(
                         onFloorSelected: (floorId) {},
@@ -59,7 +58,8 @@ class NodesScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-                const SizedBox(height: 20),
+                // Replaced const SizedBox with dynamic height
+                SizedBox(height: screenSize.height * 0.05),
                 // Node Components
                 Expanded(
                   child: BlocBuilder<WebsocketBloc, WebsocketState>(
@@ -74,7 +74,7 @@ class NodesScreen extends StatelessWidget {
                             );
                           },
                         );
-                      } else if (state is WebsocketConnecting || state is WebsocketConnected) {
+                      } else if (state is WebsocketConnecting) {
                         // Show skeletons while loading
                         return ListView.builder(
                           itemCount: 3,
@@ -85,7 +85,7 @@ class NodesScreen extends StatelessWidget {
                       } else {
                         return const Center(
                           child: Text(
-                            'Error occurred while fetching nodes',
+                            'No nodes available',
                             style: TextStyle(color: AppColor.whiteColor),
                           ),
                         );
