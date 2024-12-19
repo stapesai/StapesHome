@@ -29,6 +29,8 @@ class WebsocketNodeStatusUpdate {
     );
   }
 
+  get nodes => null;
+
   @override
   String toString() {
     return 'WebsocketNodeStatusUpdate{nodeId: $nodeId, isOnline: $isOnline, lastSeen: $lastSeen}';

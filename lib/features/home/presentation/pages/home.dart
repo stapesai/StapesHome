@@ -34,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       child: Container(
         clipBehavior: Clip.antiAlias,
         decoration: ShapeDecoration(
-          gradient: AppColor.backgroundColorgradient,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),
           ),
@@ -48,7 +47,6 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header section (greeting and quick access buttons)
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -68,7 +66,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               ),
                             ),
                             Text(
-                              'Devasheesh',
+                              'Bhenchalauti',
                               style: TextStyle(
                                 color: AppColor.whiteColor,
                                 fontSize: AppFontSizes.pageHeading,
