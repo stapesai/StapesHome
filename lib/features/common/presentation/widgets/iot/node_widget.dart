@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/node_model.dart';
 
 class NodeComponentWidget extends StatelessWidget {
@@ -32,7 +33,7 @@ class NodeComponentWidget extends StatelessWidget {
                 height: 39.27,
                 padding: EdgeInsets.all(6.87),
                 decoration: ShapeDecoration(
-                    color: isOnline ? Color(0x33FF9F1C) : Color.fromARGB(68, 236, 50, 50),
+                  color: isOnline ? Color(0x33FF9F1C) : Color.fromARGB(68, 236, 50, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(29.45),
                   ),
@@ -73,7 +74,10 @@ class NodeComponentWidget extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {
-              // TODO: Implement node options menu (use common bottom sheet here)
+              CustomSnackbar(
+                context,
+                'Long Press implement karde @gauransh',
+              );
             },
           ),
         ],
