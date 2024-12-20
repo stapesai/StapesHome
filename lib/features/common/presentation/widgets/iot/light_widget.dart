@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 
 class LightComponentWidget extends StatelessWidget {
@@ -11,10 +12,20 @@ class LightComponentWidget extends StatelessWidget {
 
   const LightComponentWidget({super.key, required this.device, required this.onToggle, required this.isActivated});
 
+  void onLongPress(BuildContext context) {
+    if (context.mounted) {
+      CustomSnackbar(
+        context,
+        'Long Press implement karde @gauransh',
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () => onToggle,
+      onLongPress: () => onLongPress(context),
       child: Container(
         width: 150,
         height: 150,
