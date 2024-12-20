@@ -29,6 +29,7 @@ import 'package:stapes_home/features/devices/data/repositories/devices_repositor
 import 'package:stapes_home/features/devices/domain/repositories/devices_repository.dart';
 import 'package:stapes_home/features/devices/domain/usecases/create_device_usecase.dart';
 import 'package:stapes_home/features/devices/domain/usecases/delete_device_usecase.dart';
+import 'package:stapes_home/features/devices/domain/usecases/get_all_devices_usecase.dart';
 import 'package:stapes_home/features/devices/domain/usecases/get_devices_by_node_id_usecase.dart';
 import 'package:stapes_home/features/devices/domain/usecases/get_devices_by_room_id_usecase.dart';
 import 'package:stapes_home/features/devices/domain/usecases/update_device_usecase.dart';
@@ -303,6 +304,7 @@ void setupServiceLocator() {
   ));
 
   // Use cases
+  serviceLocator.registerSingleton<GetAllDevicesUseCase>(GetAllDevicesUseCase());
   serviceLocator.registerSingleton<GetDevicesByRoomIdUseCase>(GetDevicesByRoomIdUseCase());
   serviceLocator.registerSingleton<GetDevicesByNodeIdUseCase>(GetDevicesByNodeIdUseCase());
   serviceLocator.registerSingleton<CreateDeviceUseCase>(CreateDeviceUseCase());

@@ -8,9 +8,12 @@ import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
+import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_sheet_widget.dart';
 import 'package:stapes_home/features/common/presentation/widgets/iot/light_widget.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/iot_device_skel.dart';
 import 'package:stapes_home/features/devices/data/models/get_devices_api_param.dart';
+import 'package:stapes_home/features/fav_devices/data/models/create_fav_devices_api_params.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/create_fav_devices.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/widgets/floor_room_sel_widget.dart';
 import 'package:stapes_home/features/devices/domain/usecases/get_devices_by_room_id_usecase.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
@@ -135,6 +138,39 @@ class _DevicesPageState extends State<DevicesPage> {
       );
     }
 
+    void showDeviceOptions(BuildContext context, DeviceModel device) {
+      showModalBottomSheet(
+        context: context,
+        backgroundColor: Colors.transparent,
+        builder: (context) => HoldBottomSheetWidget(
+          options: [
+            BottomSheetOption(
+              icon: Icons.favorite_border,
+              label: 'Add to Favorites',
+              onTap: () async {
+                final result = await serviceLocator<CreateFavDeviceUseCase>()(
+                  CreateFavDeviceParams(entityId: device.id!),
+                );
+
+                result.fold(
+                  (failure) {
+                    if (context.mounted) {
+                      CustomSnackbar(context, failure.message, type: SnackbarType.error);
+                    }
+                  },
+                  (success) {
+                    if (context.mounted) {
+                      CustomSnackbar(context, 'Added to favorites');
+                    }
+                  },
+                );
+              },
+            ),
+          ],
+        ),
+      );
+    }
+
     return GridView.builder(
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -153,15 +189,20 @@ class _DevicesPageState extends State<DevicesPage> {
             device: device,
             isActivated: isDeviceActive,
             isEnabled: isNodeOnline,
+            isFavorite: false, // TODO: Implement favorite devices
             // Only allow control if node is online
             onToggle: isNodeOnline
                 ? () {
                     print('Toggling device: ${device.id}');
                     context.read<WebsocketBloc>().add(
-                          WebsocketSendDeviceControlRequest(deviceId: device.id!, state: !isDeviceActive),
+                          WebsocketSendDeviceControlRequest(
+                            deviceId: device.id!,
+                            state: !isDeviceActive,
+                          ),
                         );
                   }
                 : null,
+            onLongPress: () => showDeviceOptions(context, device),
           );
         } else {
           return const SizedBox();

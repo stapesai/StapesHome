@@ -10,6 +10,8 @@ class LightComponentWidget extends StatelessWidget {
   final bool isActivated;
   final bool isEnabled;
   final Function()? onToggle;
+  final Function()? onLongPress;
+  final bool isFavorite;
 
   const LightComponentWidget({
     super.key,
@@ -17,6 +19,8 @@ class LightComponentWidget extends StatelessWidget {
     required this.isActivated,
     required this.isEnabled,
     this.onToggle,
+    this.onLongPress,
+    required this.isFavorite,
   });
 
   @override
@@ -91,6 +95,16 @@ class LightComponentWidget extends StatelessWidget {
                   fontWeight: FontWeight.w700,
                 ),
               ),
+              if (isFavorite)
+                Positioned(
+                  top: 8,
+                  right: 8,
+                  child: Icon(
+                    Icons.favorite,
+                    color: Colors.red,
+                    size: 20,
+                  ),
+                ),
             ],
           ),
         ),

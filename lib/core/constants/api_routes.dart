@@ -126,10 +126,10 @@ class BackendRoutes {
   static final Uri mqttInfo = Uri.parse('${BaseUrls.protocol}://$baseUrl/mqtt/info');
 
   // Favorite Device routes
-  static final Uri addFavouriteDevice = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
-  static final Uri getFavouriteDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev');
+  static final Uri addFavouriteDevice = Uri.parse('${BaseUrls.protocol}://$baseUrl/fav_devices');
+  static final Uri getFavouriteDevices = Uri.parse('${BaseUrls.protocol}://$baseUrl/fav_devices');
   static Uri removeFavouriteDevice(String favoriteDeviceId) =>
-      Uri.parse('${BaseUrls.protocol}://$baseUrl/favdev/$favoriteDeviceId');
+      Uri.parse('${BaseUrls.protocol}://$baseUrl/fav_devices/$favoriteDeviceId');
 }
 
 /// Defines Websocket-related routes
