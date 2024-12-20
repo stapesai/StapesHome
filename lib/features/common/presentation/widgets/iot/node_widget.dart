@@ -1,12 +1,46 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/models/node_model.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_sheet_widget.dart';
 
 class NodeComponentWidget extends StatelessWidget {
   final NodeModel node;
   final bool isOnline;
+  final Function(NodeModel)? onNodeOptionsPressed;
 
-  const NodeComponentWidget({super.key, required this.node, required this.isOnline});
+  const NodeComponentWidget({super.key, required this.node, required this.isOnline, this.onNodeOptionsPressed});
+
+  void _showNodeOptions(BuildContext context) {
+    List<BottomSheetOption> options = [
+      BottomSheetOption(
+        icon: Icons.edit,
+        label: 'Edit Node',
+        onTap: () {
+          // Handle edit
+        },
+      ),
+      BottomSheetOption(
+        icon: Icons.delete,
+        label: 'Delete Node',
+        onTap: () {
+          // Handle delete
+        },
+      ),
+    ];
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (context) => Container(
+        decoration: BoxDecoration(
+          color: AppColor.textFieldbgColor,
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        child: HoldBottomSheetWidget(options: options),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -37,9 +71,7 @@ class NodeComponentWidget extends StatelessWidget {
                       borderRadius: BorderRadius.circular(29.45),
                     )),
                 child: SvgPicture.asset(
-                  isOnline
-                     ? 'assets/icons/nodes/node_active.svg'
-                     : 'assets/icons/nodes/node_inactive.svg',
+                  isOnline ? 'assets/icons/nodes/node_active.svg' : 'assets/icons/nodes/node_inactive.svg',
                   width: 25.53,
                   height: 25.53,
                 ),
@@ -74,7 +106,7 @@ class NodeComponentWidget extends StatelessWidget {
           IconButton(
             icon: Icon(Icons.more_vert, color: Colors.white),
             onPressed: () {
-              // TODO: Implement node options menu (use common bottom sheet here)
+              _showNodeOptions(context);
             },
           ),
         ],
