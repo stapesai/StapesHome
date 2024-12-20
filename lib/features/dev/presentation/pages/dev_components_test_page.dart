@@ -34,6 +34,7 @@ class DevComponentsTestPage extends StatelessWidget {
                       hardwareVersion: 'TEST_VERSION',
                       firmwareVersion: 'TEST_FIRMWARE',
                     ),
+                    isOnline: true,
                   ),
                   IotDevicesSkeleton(),
                   Row(
