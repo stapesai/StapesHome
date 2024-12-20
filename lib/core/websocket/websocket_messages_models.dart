@@ -127,10 +127,10 @@ class WebsocketDeviceControlMessage {
   });
 
   Object toJson() {
-    return jsonEncode({
+    return {
       'entity_id': deviceId,
       'state': state,
-    });
+    };
   }
 
   @override
