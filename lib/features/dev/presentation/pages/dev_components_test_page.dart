@@ -49,6 +49,7 @@ class DevComponentsTestPage extends StatelessWidget {
                         ),
                         onToggle: () {},
                         isActivated: true,
+                        isEnabled: true,
                       ),
                       LightComponentWidget(
                         device: DeviceModel(
@@ -60,6 +61,7 @@ class DevComponentsTestPage extends StatelessWidget {
                         ),
                         onToggle: () {},
                         isActivated: false,
+                        isEnabled: true,
                       ),
                     ],
                   ),

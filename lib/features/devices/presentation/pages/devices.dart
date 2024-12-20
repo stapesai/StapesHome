@@ -25,6 +25,7 @@ class DevicesPage extends StatefulWidget {
 
 class _DevicesPageState extends State<DevicesPage> {
   final Map<String, bool> _deviceOnlineStatus = {};
+  final Map<String, bool> _nodeOnlineStatus = {};
   List<DeviceModel> _devices = [];
   bool _isLoading = false;
 
@@ -43,6 +44,11 @@ class _DevicesPageState extends State<DevicesPage> {
       final deviceId = state.update.deviceId;
       setState(() {
         _deviceOnlineStatus[deviceId] = state.update.isOnline;
+      });
+    } else if (state is WebsocketNodeStatusUpdateMessageState) {
+      final nodeId = state.update.nodeId;
+      setState(() {
+        _nodeOnlineStatus[nodeId] = state.update.isOnline;
       });
     } else if (state is WebsocketConnecting) {
       // Reset online status when websocket reconnects
@@ -138,17 +144,23 @@ class _DevicesPageState extends State<DevicesPage> {
       itemCount: _devices.length,
       itemBuilder: (context, index) {
         final device = _devices[index];
-        final isActive = _deviceOnlineStatus[device.id] ?? false;
+        final isDeviceActive = _deviceOnlineStatus[device.id] ?? false;
+        final isNodeOnline = _nodeOnlineStatus[device.nodeId] ?? false;
+
         return LightComponentWidget(
           key: ValueKey(device.id),
           device: device,
-          isActivated: isActive,
-          onToggle: () {
-            print('Toggling device: ${device.id}');
-            context.read<WebsocketBloc>().add(
-                  WebsocketSendDeviceControlRequest(deviceId: device.id!, state: !isActive),
-                );
-          },
+          isActivated: isDeviceActive,
+          isEnabled: isNodeOnline,
+          // Only allow control if node is online
+          onToggle: isNodeOnline
+              ? () {
+                  print('Toggling device: ${device.id}');
+                  context.read<WebsocketBloc>().add(
+                        WebsocketSendDeviceControlRequest(deviceId: device.id!, state: !isDeviceActive),
+                      );
+                }
+              : null,
         );
       },
     );
