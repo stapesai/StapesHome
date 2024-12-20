@@ -147,21 +147,25 @@ class _DevicesPageState extends State<DevicesPage> {
         final isDeviceActive = _deviceOnlineStatus[device.id] ?? false;
         final isNodeOnline = _nodeOnlineStatus[device.nodeId] ?? false;
 
-        return LightComponentWidget(
-          key: ValueKey(device.id),
-          device: device,
-          isActivated: isDeviceActive,
-          isEnabled: isNodeOnline,
-          // Only allow control if node is online
-          onToggle: isNodeOnline
-              ? () {
-                  print('Toggling device: ${device.id}');
-                  context.read<WebsocketBloc>().add(
-                        WebsocketSendDeviceControlRequest(deviceId: device.id!, state: !isDeviceActive),
-                      );
-                }
-              : null,
-        );
+        if (device.type == 'light') {
+          return LightComponentWidget(
+            key: ValueKey(device.id),
+            device: device,
+            isActivated: isDeviceActive,
+            isEnabled: isNodeOnline,
+            // Only allow control if node is online
+            onToggle: isNodeOnline
+                ? () {
+                    print('Toggling device: ${device.id}');
+                    context.read<WebsocketBloc>().add(
+                          WebsocketSendDeviceControlRequest(deviceId: device.id!, state: !isDeviceActive),
+                        );
+                  }
+                : null,
+          );
+        } else {
+          return const SizedBox();
+        }
       },
     );
   }

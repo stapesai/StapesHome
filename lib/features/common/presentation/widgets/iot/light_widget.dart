@@ -19,15 +19,6 @@ class LightComponentWidget extends StatelessWidget {
     this.onToggle,
   });
 
-  void onLongPress(BuildContext context) {
-    if (context.mounted) {
-      CustomSnackbar(
-        context,
-        'Long Press implement karde @gauransh',
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -41,7 +32,6 @@ class LightComponentWidget extends StatelessWidget {
                 type: SnackbarType.error,
               );
             },
-      onLongPress: isEnabled ? () => onLongPress(context) : null,
       child: Container(
         width: 150,
         height: 150,
