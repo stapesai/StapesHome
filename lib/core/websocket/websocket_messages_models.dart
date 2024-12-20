@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-enum WebsocketIncommingMessageType {
+enum WebsocketIncomingMessageType {
   nodeStatusUpdate,
   deviceStatusUpdate,
   error,
@@ -79,7 +79,7 @@ class WebsocketErrorMessage {
 }
 
 class WebsocketIncomingMessage {
-  final WebsocketIncommingMessageType type;
+  final WebsocketIncomingMessageType type;
   final dynamic payload;
 
   WebsocketIncomingMessage({
@@ -94,22 +94,22 @@ class WebsocketIncomingMessage {
     switch (type) {
       case 'node_status_update':
         return WebsocketIncomingMessage(
-          type: WebsocketIncommingMessageType.nodeStatusUpdate,
+          type: WebsocketIncomingMessageType.nodeStatusUpdate,
           payload: WebsocketNodeStatusUpdate.fromJson(payload),
         );
       case 'entity_status_update':
         return WebsocketIncomingMessage(
-          type: WebsocketIncommingMessageType.deviceStatusUpdate,
+          type: WebsocketIncomingMessageType.deviceStatusUpdate,
           payload: WebsocketDeviceStatusUpdate.fromJson(payload),
         );
       case 'error':
         return WebsocketIncomingMessage(
-          type: WebsocketIncommingMessageType.error,
+          type: WebsocketIncomingMessageType.error,
           payload: WebsocketErrorMessage.fromJson(payload),
         );
       default:
         return WebsocketIncomingMessage(
-          type: WebsocketIncommingMessageType.error,
+          type: WebsocketIncomingMessageType.error,
           payload: WebsocketErrorMessage(details: 'Unknown message type - $type'),
         );
     }

@@ -109,13 +109,13 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   void _emitProperStateForIncommingWebsocketMessage(
       WebsocketIncomingMessage websocketMessage, Emitter<WebsocketState> emit) {
     switch (websocketMessage.type) {
-      case WebsocketIncommingMessageType.nodeStatusUpdate:
+      case WebsocketIncomingMessageType.nodeStatusUpdate:
         emit(WebsocketNodeStatusUpdateMessageState(websocketMessage.payload));
         break;
-      case WebsocketIncommingMessageType.deviceStatusUpdate:
+      case WebsocketIncomingMessageType.deviceStatusUpdate:
         emit(WebsocketDeviceStatusUpdateMessageState(websocketMessage.payload));
         break;
-      case WebsocketIncommingMessageType.error:
+      case WebsocketIncomingMessageType.error:
         emit(WebsocketErrorMessageState(websocketMessage.payload));
         break;
     }
