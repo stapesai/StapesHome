@@ -89,10 +89,10 @@ class _NodesPageState extends State<NodesPage> {
 
   void _onFloorSelected(String floorId) {
     // Clear nodes when floor changes
-    // setState(() {
-    //   _nodes = [];
-    //   _nodeOnlineStatus.clear();
-    // });
+    setState(() {
+      _nodes = [];
+      // _nodeOnlineStatus.clear();
+    });
   }
 
   void _onRoomSelected(String roomId) {
