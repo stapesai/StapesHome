@@ -13,7 +13,9 @@ import 'package:stapes_home/features/common/presentation/widgets/iot/light_widge
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/iot_device_skel.dart';
 import 'package:stapes_home/features/devices/data/models/get_devices_api_param.dart';
 import 'package:stapes_home/features/fav_devices/data/models/create_fav_devices_api_params.dart';
+import 'package:stapes_home/features/fav_devices/data/models/get_fav_devices_api_params.dart';
 import 'package:stapes_home/features/fav_devices/domain/usecases/create_fav_devices.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/get_fav_devices.dart';
 import 'package:stapes_home/features/floor_room_sel/presentation/widgets/floor_room_sel_widget.dart';
 import 'package:stapes_home/features/devices/domain/usecases/get_devices_by_room_id_usecase.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
@@ -27,6 +29,7 @@ class DevicesPage extends StatefulWidget {
 }
 
 class _DevicesPageState extends State<DevicesPage> {
+  List<String> _favoriteEntityIds = [];
   final Map<String, bool> _deviceOnlineStatus = {};
   final Map<String, bool> _nodeOnlineStatus = {};
   List<DeviceModel> _devices = [];
@@ -35,6 +38,7 @@ class _DevicesPageState extends State<DevicesPage> {
   @override
   void initState() {
     super.initState();
+    _loadAllFavorites();
     // Listen to websocket updates
     context.read<WebsocketBloc>().stream.listen((state) {
       _handleDeviceStatusUpdate(state);
@@ -91,6 +95,28 @@ class _DevicesPageState extends State<DevicesPage> {
           }
           _isLoading = false;
         });
+      },
+    );
+  }
+
+  Future<void> _loadAllFavorites() async {
+    final result = await serviceLocator<GetFavDevicesUseCase>()(
+      GetFavDeviceParams(),
+      refresh: true,
+    );
+
+    result.fold(
+      (failure) {
+        if (mounted) {
+          CustomSnackbar(context, failure.message, type: SnackbarType.error);
+        }
+      },
+      (response) {
+        if (mounted) {
+          setState(() {
+            _favoriteEntityIds = response.favouriteDevices.map((fav) => fav.entityId).toList();
+          });
+        }
       },
     );
   }
@@ -189,7 +215,7 @@ class _DevicesPageState extends State<DevicesPage> {
             device: device,
             isActivated: isDeviceActive,
             isEnabled: isNodeOnline,
-            isFavorite: false, // TODO: Implement favorite devices
+            isFavorite: _favoriteEntityIds.contains(device.id),
             // Only allow control if node is online
             onToggle: isNodeOnline
                 ? () {
