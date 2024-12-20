@@ -1,33 +1,152 @@
+// File: lib/features/home/presentation/pages/home.dart
+
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:stapes_home/core/common/widgets/snackbar.dart';
+import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
+import 'package:stapes_home/core/websocket/websocket_bloc.dart';
+import 'package:stapes_home/core/websocket/websocket_state.dart';
+import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
+import 'package:stapes_home/features/common/presentation/widgets/iot/light_widget.dart';
+import 'package:stapes_home/features/devices/data/models/get_devices_api_param.dart';
+import 'package:stapes_home/features/devices/domain/usecases/get_all_devices_usecase.dart';
+import 'package:stapes_home/features/fav_devices/data/models/delete_fav_devices_api_params.dart';
+import 'package:stapes_home/features/fav_devices/data/models/get_fav_devices_api_params.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/get_fav_devices.dart';
+import 'package:stapes_home/features/fav_devices/domain/usecases/remove_fav_devices.dart';
+import 'package:stapes_home/service_locator.dart';
 
-class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+class HomePage extends StatefulWidget {
+  const HomePage({super.key});
 
   @override
-  createState() => _HomeScreenState();
+  createState() => _HomePageState();
 }
 
-class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMixin {
+class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
+  // State management
   bool isFavouritesSelected = true;
+  String? _userName;
+  final Map<String, bool> _deviceOnlineStatus = {};
+  List<DeviceModel> _allDevices = [];
+  List<String> _favoriteEntityIds = [];
+  List<DeviceModel> _activeDevices = [];
 
   @override
   bool get wantKeepAlive => true;
 
-  Future<void> _refreshData() async {
-    await Future.delayed(Duration(seconds: 2));
+  @override
+  void initState() {
+    super.initState();
+    _loadUserName();
+    _loadDevices();
+    // Listen to websocket updates
+    context.read<WebsocketBloc>().stream.listen(_handleDeviceStatusUpdate);
+  }
+
+  // Load user name from local storage
+  Future<void> _loadUserName() async {
+    final user = await serviceLocator<AuthLocalDataSource>().getUser();
+    if (mounted) setState(() => _userName = user?.firstName);
+  }
+
+  // Load devices and favorites
+  Future<void> _loadDevices() async {
+    final devicesResult = await serviceLocator<GetAllDevicesUseCase>()(
+      GetAllDevicesParams(),
+      refresh: true,
+    );
+
+    devicesResult.fold(
+      (failure) {
+        if (mounted) {
+          CustomSnackbar(context, failure.message, type: SnackbarType.error);
+        }
+      },
+      (response) async {
+        _allDevices = response.entities;
+        await _loadFavorites();
+      },
+    );
+  }
+
+  // Load favorite devices
+  Future<void> _loadFavorites() async {
+    final favResult = await serviceLocator<GetFavDevicesUseCase>()(
+      GetFavDeviceParams(),
+      refresh: true,
+    );
+
+    favResult.fold(
+      (failure) {
+        if (mounted) {
+          CustomSnackbar(context, failure.message, type: SnackbarType.error);
+        }
+      },
+      (response) {
+        if (mounted) {
+          setState(() {
+            _favoriteEntityIds = response.favouriteDevices.map((fav) => fav.entityId).toList();
+          });
+        }
+      },
+    );
+  }
+
+  // Get favorite devices by mapping IDs to full device objects
+  List<DeviceModel> get _favoriteDevices {
+    return _allDevices.where((device) => _favoriteEntityIds.contains(device.id)).toList();
+  }
+
+  // Handle websocket device status updates
+  void _handleDeviceStatusUpdate(WebsocketState state) {
+    if (state is WebsocketDeviceStatusUpdateMessageState) {
+      setState(() {
+        _deviceOnlineStatus[state.update.deviceId] = state.update.isOnline;
+        _updateActiveDevices();
+      });
+    }
+  }
+
+  // Update list of active devices based on online status
+  void _updateActiveDevices() {
     setState(() {
-      // Update your state with the new data
+      _activeDevices = _allDevices.where((device) => _deviceOnlineStatus[device.id] == true).toList();
     });
+  }
+
+  // Remove device from favorites
+  Future<void> _removeFavorite(String deviceId) async {
+    final result = await serviceLocator<RemoveFavDeviceUseCase>()(
+      DeleteFavDeviceParams(entityId: deviceId),
+    );
+
+    result.fold(
+      (failure) {
+        if (mounted) {
+          CustomSnackbar(context, failure.message, type: SnackbarType.error);
+        }
+      },
+      (success) {
+        if (mounted) {
+          setState(() {
+            _favoriteEntityIds.remove(deviceId);
+          });
+          CustomSnackbar(context, 'Removed from favorites');
+        }
+      },
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
     final screenSize = MediaQuery.of(context).size;
+    final devices = isFavouritesSelected ? _favoriteDevices : _activeDevices;
 
     return GestureDetector(
       onTap: () => FocusScope.of(context).unfocus(),
@@ -48,7 +167,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header section (greeting and quick access buttons)
+                  // Header section
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -57,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                         width: double.infinity,
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          children: const [
+                          children: [
                             Text(
                               'Good morning,',
                               style: TextStyle(
@@ -68,7 +187,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                               ),
                             ),
                             Text(
-                              'Devasheesh',
+                              _userName ?? 'User',
                               style: TextStyle(
                                 color: AppColor.whiteColor,
                                 fontSize: AppFontSizes.pageHeading,
@@ -99,40 +218,63 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
                       ),
                     ],
                   ),
-
-                  // Main content section
+                  SizedBox(height: screenSize.height * 0.05),
+                  // Devices grid section
                   Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        RefreshIndicator(
-                          onRefresh: _refreshData,
-                          color: AppColor.whiteColor,
-                          backgroundColor: Colors.transparent,
-                          child: SingleChildScrollView(
-                            physics: AlwaysScrollableScrollPhysics(),
-                            child: Center(
-                              child: SizedBox(
-                                child: Center(
-                                  child: Text(
-                                    isFavouritesSelected
-                                        ? "Nothing to show here.\nGo to Devices or Nodes page and add a device to favorites list."
-                                        : "No currently active devices",
-                                    style: TextStyle(
-                                      color: AppColor.whiteColor.withOpacity(0.8),
-                                      fontSize: AppFontSizes.bodyText,
-                                      fontFamily: 'Ubuntu',
-                                      fontWeight: FontWeight.w400,
+                    child: RefreshIndicator(
+                      onRefresh: _loadDevices,
+                      color: AppColor.whiteColor,
+                      backgroundColor: Colors.transparent,
+                      child: devices.isEmpty
+                          ? SingleChildScrollView(
+                              physics: AlwaysScrollableScrollPhysics(),
+                              child: Center(
+                                child: SizedBox(
+                                  child: Center(
+                                    child: Text(
+                                      isFavouritesSelected
+                                          ? "Nothing to show here.\nGo to Devices page and add a device to favorites list."
+                                          : "No currently active devices",
+                                      style: TextStyle(
+                                        color: AppColor.whiteColor.withOpacity(0.8),
+                                        fontSize: AppFontSizes.bodyText,
+                                        fontFamily: 'Ubuntu',
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
-                                    textAlign: TextAlign.center,
                                   ),
                                 ),
                               ),
+                            )
+                          : GridView.builder(
+                              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 2,
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                              ),
+                              itemCount: devices.length,
+                              itemBuilder: (context, index) {
+                                final device = devices[index];
+                                return LightComponentWidget(
+                                  device: device,
+                                  isActivated: _deviceOnlineStatus[device.id] ?? false,
+                                  isEnabled: true,
+                                  isFavorite: _favoriteEntityIds.contains(device.id),
+                                  // onToggle: isNodeOnline
+                                  //     ? () {
+                                  //         context.read<WebsocketBloc>().add(
+                                  //               WebsocketSendDeviceControlRequest(
+                                  //                 deviceId: device.id!,
+                                  //                 state: !isDeviceActive,
+                                  //               ),
+                                  //             );
+                                  //       }
+                                  //     : null,
+                                  onLongPress: isFavouritesSelected ? () => _removeFavorite(device.id!) : null,
+                                );
+                              },
                             ),
-                          ),
-                        ),
-                      ],
                     ),
                   ),
                 ],
@@ -144,6 +286,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     );
   }
 
+  // Build quick access toggle button
   Widget _buildQuickAccessButton(String label, bool isActive, String activeIcon, String inactiveIcon) {
     return GestureDetector(
       onTap: () {
