@@ -4,8 +4,9 @@ import 'package:stapes_home/core/models/node_model.dart';
 
 class NodeComponentWidget extends StatelessWidget {
   final NodeModel node;
+  final bool isOnline;
 
-  const NodeComponentWidget({super.key, required this.node});
+  const NodeComponentWidget({super.key, required this.node, required this.isOnline});
 
   @override
   Widget build(BuildContext context) {
