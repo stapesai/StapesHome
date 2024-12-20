@@ -107,7 +107,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   }
 
   void _emitProperStateForIncommingWebsocketMessage(
-      WebsocketIncommingMessage websocketMessage, Emitter<WebsocketState> emit) {
+      WebsocketIncomingMessage websocketMessage, Emitter<WebsocketState> emit) {
     switch (websocketMessage.type) {
       case WebsocketIncommingMessageType.nodeStatusUpdate:
         emit(WebsocketNodeStatusUpdateMessageState(websocketMessage.payload));
@@ -123,7 +123,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
 
   void _onMessageReceived(WebsocketMessageReceivedEvent event, Emitter<WebsocketState> emit) {
     Map<String, dynamic> messageMap = json.decode(json.decode(event.message));
-    WebsocketIncommingMessage websocketMessage = WebsocketIncommingMessage.fromJson(messageMap);
+    WebsocketIncomingMessage websocketMessage = WebsocketIncomingMessage.fromJson(messageMap);
     // messagesHistory.add(websocketMessage);
     print('Received message in WS bloc: ${websocketMessage.toString()}');
 

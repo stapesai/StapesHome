@@ -78,37 +78,37 @@ class WebsocketErrorMessage {
   }
 }
 
-class WebsocketIncommingMessage {
+class WebsocketIncomingMessage {
   final WebsocketIncommingMessageType type;
   final dynamic payload;
 
-  WebsocketIncommingMessage({
+  WebsocketIncomingMessage({
     required this.type,
     required this.payload,
   });
 
-  factory WebsocketIncommingMessage.fromJson(Map<String, dynamic> json) {
+  factory WebsocketIncomingMessage.fromJson(Map<String, dynamic> json) {
     final type = json['type'];
     final payload = json['payload'];
 
     switch (type) {
       case 'node_status_update':
-        return WebsocketIncommingMessage(
+        return WebsocketIncomingMessage(
           type: WebsocketIncommingMessageType.nodeStatusUpdate,
           payload: WebsocketNodeStatusUpdate.fromJson(payload),
         );
       case 'entity_status_update':
-        return WebsocketIncommingMessage(
+        return WebsocketIncomingMessage(
           type: WebsocketIncommingMessageType.deviceStatusUpdate,
           payload: WebsocketDeviceStatusUpdate.fromJson(payload),
         );
       case 'error':
-        return WebsocketIncommingMessage(
+        return WebsocketIncomingMessage(
           type: WebsocketIncommingMessageType.error,
           payload: WebsocketErrorMessage.fromJson(payload),
         );
       default:
-        return WebsocketIncommingMessage(
+        return WebsocketIncomingMessage(
           type: WebsocketIncommingMessageType.error,
           payload: WebsocketErrorMessage(details: 'Unknown message type - $type'),
         );
@@ -117,7 +117,7 @@ class WebsocketIncommingMessage {
 
   @override
   String toString() {
-    return 'WebsocketIncommingMessage{type: $type, payload: $payload}';
+    return 'WebsocketIncomingMessage{type: $type, payload: $payload}';
   }
 }
 
