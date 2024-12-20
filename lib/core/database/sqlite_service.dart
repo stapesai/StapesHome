@@ -55,7 +55,6 @@ class SQLiteService {
         id TEXT PRIMARY KEY,
         room_id TEXT NOT NULL,
         name TEXT NOT NULL,
-        hardware_chip TEXT NOT NULL,
         hardware_version TEXT NOT NULL,
         firmware_version TEXT NOT NULL,
         FOREIGN KEY (room_id) REFERENCES rooms(id) ON DELETE CASCADE

@@ -37,18 +37,18 @@ class _NodesPageState extends State<NodesPage> {
   }
 
   void _handleNodeStatusUpdate(WebsocketState state) {
+    print('Node status update: $state');
     if (state is WebsocketNodeStatusUpdateMessageState) {
       final nodeId = state.update.nodeId;
-      if (_nodeOnlineStatus.containsKey(nodeId)) {
-        setState(() {
-          _nodeOnlineStatus[nodeId] = state.update.isOnline;
-        });
-      }
+      // if (_nodeOnlineStatus.containsKey(nodeId)) {
+      setState(() {
+        _nodeOnlineStatus[nodeId] = state.update.isOnline;
+      });
+      // }
     } else if (state is WebsocketConnecting) {
       // Reset online status when websocket reconnects
       setState(() {
         _nodeOnlineStatus.clear();
-        _isLoading = true;
       });
     }
   }
@@ -62,6 +62,7 @@ class _NodesPageState extends State<NodesPage> {
 
     final result = await serviceLocator<GetNodesByRoomIdUseCase>()(
       GetNodesByRoomIdParams(roomId: roomId),
+      refresh: true,
     );
 
     result.fold(
@@ -99,7 +100,7 @@ class _NodesPageState extends State<NodesPage> {
     // This is handled in floor_room_sel_widget.dart
     setState(() {
       _nodes = [];
-      _nodeOnlineStatus.clear();
+      // _nodeOnlineStatus.clear();
     });
     _fetchNodes(roomId);
   }
@@ -162,7 +163,7 @@ class _NodesPageState extends State<NodesPage> {
           onFloorSelected: _onFloorSelected,
           onRoomSelected: _onRoomSelected,
         ),
-        SizedBox(height: screenSize.height * 0.03),
+        // SizedBox(height: screenSize.height * 0.03),
         Expanded(
           child: _buildNodesList(),
         ),

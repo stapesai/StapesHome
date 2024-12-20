@@ -32,7 +32,7 @@ class NodeComponentWidget extends StatelessWidget {
                 height: 39.27,
                 padding: EdgeInsets.all(6.87),
                 decoration: ShapeDecoration(
-                  color: Color(0x33FF9F1C),
+                    color: isOnline ? Color(0x33FF9F1C) : Color.fromARGB(68, 236, 50, 50),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(29.45),
                   ),

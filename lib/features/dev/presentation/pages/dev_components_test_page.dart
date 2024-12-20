@@ -30,7 +30,6 @@ class DevComponentsTestPage extends StatelessWidget {
                       name: 'Test Node',
                       numEntities: 3,
                       roomId: 'test_room_id',
-                      hardwareChip: 'TEST_CHIP',
                       hardwareVersion: 'TEST_VERSION',
                       firmwareVersion: 'TEST_FIRMWARE',
                     ),
