@@ -51,9 +51,7 @@ class NodesScreen extends StatelessWidget {
                       // Floor Room Selector
                       FloorRoomSelector(
                         onFloorSelected: (floorId) {},
-                        onRoomSelected: (roomId) {
-                          // Handle room selection
-                        },
+                        onRoomSelected: (roomId) {},
                       ),
                     ],
                   ),

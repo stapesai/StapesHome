@@ -53,7 +53,6 @@ class WebsocketDeviceStatusUpdate {
     );
   }
 
-  get devices => null;
 
   @override
   String toString() {
