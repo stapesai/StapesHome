@@ -76,7 +76,7 @@ class NodeComponentWidget extends StatelessWidget {
             onPressed: () {
               CustomSnackbar(
                 context,
-                'Long Press implement karde @gauransh',
+                '3 dots implement karde @gauransh',
               );
             },
           ),

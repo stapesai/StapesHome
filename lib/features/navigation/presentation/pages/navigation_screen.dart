@@ -6,6 +6,7 @@ import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_components_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_floor_room_sel.dart';
+import 'package:stapes_home/features/devices/presentation/pages/devices.dart';
 import 'package:stapes_home/features/home/presentation/pages/home.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
@@ -45,6 +46,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
     // CreateRoomPage(floorId: 'test'),
+    KeepAlivePage(child: DevicesPage()),
     KeepAlivePage(child: NodesPage()),
     DevFloorRoomSelPage(),
     QrScannerScreen(),

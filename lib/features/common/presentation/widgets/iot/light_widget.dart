@@ -24,7 +24,7 @@ class LightComponentWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => onToggle,
+      onTap: () => onToggle(),
       onLongPress: () => onLongPress(context),
       child: Container(
         width: 150,
