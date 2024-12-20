@@ -2,8 +2,8 @@
 
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -27,7 +27,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
     autoStart: false,
     torchEnabled: false,
     facing: CameraFacing.back,
-    detectionSpeed: DetectionSpeed.normal,
+    detectionSpeed: DetectionSpeed.noDuplicates,
   );
   StreamSubscription<Object?>? _subscription;
   late QrScannerBloc _qrScannerBloc;
@@ -37,13 +37,6 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   @override
   void initState() {
     super.initState();
-    // Initialize the controller
-    // controller = MobileScannerController(
-    //   autoStart: false,
-    //   torchEnabled: false,
-    //   facing: CameraFacing.back,
-    //   detectionSpeed: DetectionSpeed.normal,
-    // );
     _qrScannerBloc = QrScannerBloc();
 
     WidgetsBinding.instance.addObserver(this);
@@ -75,6 +68,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
   void _handleBarcode(BarcodeCapture barcodes) {
     Barcode? barcode = barcodes.barcodes.firstOrNull;
     if (barcode != null) {
+      unawaited(controller.stop());
       _qrScannerBloc.add(
         ProcessQrCode(barcode.rawValue.toString()),
       );
@@ -114,10 +108,14 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
             switch (state.data.type) {
               case QrCodeType.iotNode:
                 debugPrint('Navigating to IoT Provisioning');
-                GoRouter.of(context).push(
+                GoRouter.of(context)
+                    .push(
                   AppRouteConstants.iotProvisioning.routePath,
                   extra: state.data.payload,
-                );
+                )
+                    .then((_) {
+                  if (mounted) unawaited(controller.start());
+                });
                 break;
               case QrCodeType.tvPairing:
                 debugPrint('Navigating to TV Provisioning');
@@ -172,7 +170,7 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
     _subscription?.cancel();
     _subscription = null;
     _qrScannerBloc.close();
-    // TODO: god knows if i don't await this, why does it work?
+    //*: god knows if i don't await this, why does it work?
     controller.dispose();
     // await controller.dispose();
     super.dispose();

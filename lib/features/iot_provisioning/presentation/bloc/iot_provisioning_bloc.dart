@@ -58,6 +58,9 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     Emitter<IotProvisioningState> emit,
   ) async {
     emit(BlePairingInProgress());
+    // Future.delayed(Duration(seconds: 2));
+    // emit(BlePairingSuccess());
+    // Future.delayed(Duration(seconds: 2));
     try {
       final (success, failureReason, device, configCharResult, hwVersionCharResult, checkWiFiCredentialsCharResult) =
           await pairBleNodeUseCase(event.qrData);
