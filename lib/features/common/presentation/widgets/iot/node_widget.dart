@@ -32,13 +32,14 @@ class NodeComponentWidget extends StatelessWidget {
                 height: 39.27,
                 padding: EdgeInsets.all(6.87),
                 decoration: ShapeDecoration(
-                    color: isOnline ? Color(0x33FF9F1C) : Color.fromARGB(68, 236, 50, 50),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(29.45),
-                  ),
-                ),
+                    color: isOnline ? Color(0x33FF9F1C) : Color(0xFF808080),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(29.45),
+                    )),
                 child: SvgPicture.asset(
-                  'assets/icons/nodes/node.svg',
+                  isOnline
+                     ? 'assets/icons/nodes/node_active.svg'
+                     : 'assets/icons/nodes/node_inactive.svg',
                   width: 25.53,
                   height: 25.53,
                 ),
