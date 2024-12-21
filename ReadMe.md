@@ -3,166 +3,433 @@
 ## Folder Structure
 
 ```text
-lib/
-├── core/
-│   ├── config/
-│   │   └── app_config.dart
-│   ├── constants/
-│   │   └── api_routes.dart
-│   ├── errors/
+lib
+├── core
+│   ├── common
+│   │   ├── bloc
+│   │   ├── skeletons
+│   │   └── widgets
+│   │       ├── button.dart
+│   │       ├── input
+│   │       │   ├── dropdown.dart
+│   │       │   ├── password.dart
+│   │       │   └── textfield.dart
+│   │       ├── iot
+│   │       ├── popup.dart
+│   │       ├── snackbar.dart
+│   │       └── text_hyperlink.dart
+│   ├── config
+│   │   └── config.dart
+│   ├── constants
+│   │   ├── api_routes.dart
+│   │   ├── app_route_constants.dart
+│   │   └── logging_constants.dart
+│   ├── database
+│   │   └── sqlite_service.dart
+│   ├── error
 │   │   ├── exceptions.dart
 │   │   └── failures.dart
-│   ├── network/
-│   │   ├── http_client.dart - Client for making HTTP requests (with logging and error handling)
-│   │   └── network_info.dart - Checks network connectivity
-│   ├── theme/
-│   │   ├── app_colors.dart - Contains colors constants used in the app
-│   │   ├── app_fonts.dart - Contains fonts and text styles used in the app
-│   │   └── app_padding.dart - Constant page padding 
-│   ├── utils/
-│   │   ├── input_converter.dart
-│   │   └── logger.dart
-│   └── success/
-│       └── success.dart
-├── data/
-│   ├── datasources/
-│   │   ├── local/
-│   │   │   └── hive_local_datasource.dart
-│   │   └── remote/
-│   │       ├── auth_remote_datasource.dart
-│   │       ├── device_remote_datasource.dart
-│   │       ├── floor_remote_datasource.dart
-│   │       ├── room_remote_datasource.dart
-│   │       ├── node_remote_datasource.dart
-│   │       └── user_remote_datasource.dart
-│   ├── models/
+│   ├── logging
+│   │   ├── custom_logger.dart
+│   │   └── logging_config.dart
+│   ├── models
 │   │   ├── device_model.dart
+│   │   ├── fav_devices_model.dart
 │   │   ├── floor_model.dart
-│   │   ├── room_model.dart
+│   │   ├── no_params.dart
 │   │   ├── node_model.dart
+│   │   ├── room_model.dart
 │   │   ├── user_model.dart
-│   │   └── session_model.dart
-│   └── repositories/
-│       ├── auth_repository_impl.dart
-│       ├── device_repository_impl.dart
-│       ├── floor_repository_impl.dart
-│       ├── room_repository_impl.dart
-│       ├── node_repository_impl.dart
-│       └── user_repository_impl.dart
-├── domain/
-│   ├── entities/
-│   │   ├── device.dart
-│   │   ├── floor.dart
-│   │   ├── room.dart
-│   │   ├── node.dart
-│   │   ├── user.dart
-│   │   └── session.dart
-│   ├── repositories/
-│   │   ├── auth_repository.dart
-│   │   ├── device_repository.dart
-│   │   ├── floor_repository.dart
-│   │   ├── room_repository.dart
-│   │   ├── node_repository.dart
-│   │   └── user_repository.dart
-│   └── usecases/
-│       ├── auth/
-│       │   ├── login_usecase.dart
-│       │   ├── signup_usecase.dart
-│       │   ├── verify_otp_usecase.dart
-│       │   └── reset_password_usecase.dart
-│       ├── device/
-│       │   ├── get_devices_usecase.dart
-│       │   ├── toggle_device_usecase.dart
-│       │   └── add_device_usecase.dart
-│       ├── floor/
-│       │   ├── get_floors_usecase.dart
-│       │   ├── add_floor_usecase.dart
-│       │   └── delete_floor_usecase.dart
-│       ├── room/
-│       │   ├── get_rooms_usecase.dart
-│       │   ├── add_room_usecase.dart
-│       │   └── delete_room_usecase.dart
-│       ├── node/
-│       │   ├── get_nodes_usecase.dart
-│       │   ├── add_node_usecase.dart
-│       │   └── provision_node_usecase.dart
-│       └── user/
-│           └── get_user_details_usecase.dart
-├── presentation/
-│   ├── blocs/
-│   │   ├── auth/
-│   │   │   ├── auth_bloc.dart
-│   │   │   ├── auth_event.dart
-│   │   │   └── auth_state.dart
-│   │   ├── device/
-│   │   │   ├── device_bloc.dart
-│   │   │   ├── device_event.dart
-│   │   │   └── device_state.dart
-│   │   ├── floor/
-│   │   │   ├── floor_bloc.dart
-│   │   │   ├── floor_event.dart
-│   │   │   └── floor_state.dart
-│   │   ├── room/
-│   │   │   ├── room_bloc.dart
-│   │   │   ├── room_event.dart
-│   │   │   └── room_state.dart
-│   │   ├── node/
-│   │   │   ├── node_bloc.dart
-│   │   │   ├── node_event.dart
-│   │   │   └── node_state.dart
-│   │   └── user/
-│   │       ├── user_bloc.dart
-│   │       ├── user_event.dart
-│   │       └── user_state.dart
-│   ├── pages/
-│   │   ├── auth/
-│   │   │   ├── login_page.dart
-│   │   │   ├── signup_page.dart
-│   │   │   ├── otp_verification_page.dart
-│   │   │   └── forgot_password_page.dart
-│   │   ├── home/
-│   │   │   └── home_page.dart
-│   │   ├── devices/
-│   │   │   ├── devices_page.dart
-│   │   │   └── add_device_page.dart
-│   │   ├── floors/
-│   │   │   └── create_floor_page.dart
-│   │   ├── rooms/
-│   │   │   └── create_room_page.dart
-│   │   ├── nodes/
-│   │   │   ├── nodes_page.dart
-│   │   │   ├── add_node_page.dart
-│   │   │   ├── node_provisioning_page.dart
-│   │   │   └── qr_scanner_page.dart
-│   │   ├── profile/
-│   │   │   ├── profile_page.dart
-│   │   │   ├── edit_profile_page.dart
-│   │   │   └── sessions_page.dart
-│   │   └── splash_screen.dart
-│   └── widgets/
-│       ├── buttons/
-│       │   ├── custom_button.dart
-│       │   └── scan_node_add_device_button.dart
-│       ├── dialogs/
-│       │   ├── logout_confirmation_dialog.dart
-│       │   └── delete_confirmation_dialog.dart
-│       ├── input/
-│       │   ├── custom_text_field.dart
-│       │   ├── password_text_field.dart
-│       │   └── custom_dropdown.dart
-│       ├── iot/
-│       │   ├── light_component.dart
-│       │   ├── fan_component.dart
-│       │   └── node_component.dart
-│       ├── selectors/
-│       │   └── floor_room_selector.dart
-│       └── skeletons/
-│           ├── device_skeleton.dart
-│           ├── floor_room_name_skeleton.dart
-│           └── node_skeleton.dart
-├── services/
-│   └── websocket_service.dart
-└── main.dart
+│   │   ├── user_model.g.dart
+│   │   ├── user_session_model.dart
+│   │   └── user_session_model.g.dart
+│   ├── network
+│   │   ├── dio_client.dart
+│   │   ├── dio_interceptors.dart
+│   │   ├── http_client.dart
+│   │   └── network_info.dart
+│   ├── router
+│   │   └── app_router.dart
+│   ├── theme
+│   │   ├── app_colors.dart
+│   │   ├── app_font_sizes.dart
+│   │   ├── app_padding.dart
+│   │   └── custom_gradient_and_padding_container.dart
+│   ├── usecase
+│   │   └── usecase.dart
+│   ├── utils
+│   │   └── repository_exceptions_helper.dart
+│   ├── validators
+│   │   ├── date_validator.dart
+│   │   └── email_regex_validator.dart
+│   └── websocket
+│       ├── websocket_bloc.dart
+│       ├── websocket_event.dart
+│       ├── websocket_messages_models.dart
+│       ├── websocket_service.dart
+│       └── websocket_state.dart
+├── features
+│   ├── auth
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   ├── auth_local_datasource.dart
+│   │   │   │   │   ├── device_info_local_datasource.dart
+│   │   │   │   │   └── fcm_token_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       ├── auth_remote_datasource.dart
+│   │   │   │       └── fcm_token_remote_datasource.dart
+│   │   │   ├── models
+│   │   │   │   ├── device_info_model.dart
+│   │   │   │   ├── fcm_token_api_params.dart
+│   │   │   │   ├── forgot_password_api_parms.dart
+│   │   │   │   ├── login_api_parms.dart
+│   │   │   │   ├── otp_verification_api_parms.dart
+│   │   │   │   └── signup_api_parms.dart
+│   │   │   └── repositories
+│   │   │       ├── auth_abs_class_impl.dart
+│   │   │       ├── device_info_abs_class_impl.dart
+│   │   │       └── fcm_token_repo_abs_class_impl.dart
+│   │   ├── domain
+│   │   │   ├── repository
+│   │   │   │   ├── auth_abs_class.dart
+│   │   │   │   ├── device_info_abs_class.dart
+│   │   │   │   └── fcm_token_repo_abs_class.dart
+│   │   │   └── usecases
+│   │   │       ├── device_info_usecase.dart
+│   │   │       ├── fcm_token_usecase.dart
+│   │   │       ├── forgot_password_usecase.dart
+│   │   │       ├── login_usecase.dart
+│   │   │       ├── otp_verification_usecase.dart
+│   │   │       └── signup_usecase.dart
+│   │   └── presentation
+│   │       ├── blocs
+│   │       │   ├── forgot_password
+│   │       │   │   ├── forgot_password_email_input_bloc.dart
+│   │       │   │   ├── forgot_password_email_input_event.dart
+│   │       │   │   ├── forgot_password_email_input_state.dart
+│   │       │   │   ├── forgot_password_otp_verification_bloc.dart
+│   │       │   │   ├── forgot_password_otp_verification_event.dart
+│   │       │   │   ├── forgot_password_otp_verification_state.dart
+│   │       │   │   ├── forgot_password_reset_password_bloc.dart
+│   │       │   │   ├── forgot_password_reset_password_event.dart
+│   │       │   │   └── forgot_password_reset_password_state.dart
+│   │       │   ├── login
+│   │       │   │   ├── login_email_input_bloc.dart
+│   │       │   │   ├── login_email_input_event.dart
+│   │       │   │   ├── login_email_input_state.dart
+│   │       │   │   ├── login_otp_verification_bloc.dart
+│   │       │   │   ├── login_otp_verification_event.dart
+│   │       │   │   └── login_otp_verification_state.dart
+│   │       │   └── signup
+│   │       │       ├── sign_up_email_input_bloc.dart
+│   │       │       ├── sign_up_email_input_event.dart
+│   │       │       ├── sign_up_email_input_state.dart
+│   │       │       ├── signup_create_new_password_bloc.dart
+│   │       │       ├── signup_create_new_password_event.dart
+│   │       │       ├── signup_create_new_password_state.dart
+│   │       │       ├── signup_details_form_bloc.dart
+│   │       │       ├── signup_details_form_event.dart
+│   │       │       ├── signup_details_form_state.dart
+│   │       │       ├── signup_otp_verification_bloc.dart
+│   │       │       ├── signup_otp_verification_event.dart
+│   │       │       └── signup_otp_verification_state.dart
+│   │       ├── pages
+│   │       │   ├── forgot_password_email_input.dart
+│   │       │   ├── forgot_password_otp_verification.dart
+│   │       │   ├── forgot_password_reset_password.dart
+│   │       │   ├── login_email_input.dart
+│   │       │   ├── login_otp_verification.dart
+│   │       │   ├── signup_create_new_password.dart
+│   │       │   ├── signup_details_form.dart
+│   │       │   ├── signup_email_input.dart
+│   │       │   └── signup_otp_verification.dart
+│   │       └── widgets
+│   │           └── otp_input_widget.dart
+│   ├── common
+│   │   └── presentation
+│   │       └── widgets
+│   │           ├── hold_bottom_sheet_widget.dart
+│   │           ├── iot
+│   │           │   ├── fan_widget.dart
+│   │           │   ├── light_widget.dart
+│   │           │   └── node_widget.dart
+│   │           └── skeletons
+│   │               ├── iot_device_skel.dart
+│   │               └── node_skel.dart
+│   ├── dev
+│   │   ├── data
+│   │   └── presentation
+│   │       ├── pages
+│   │       │   ├── dev_components_test_page.dart
+│   │       │   ├── dev_floor_room_sel.dart
+│   │       │   ├── dev_test_page.dart
+│   │       │   ├── dev_user_details_show.dart
+│   │       │   └── dev_websocket_messages_test.dart
+│   │       └── widgets
+│   │           └── websocket_message.dart
+│   ├── devices
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   └── devices_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       └── devices_remote_datasource.dart
+│   │   │   ├── models
+│   │   │   │   ├── create_device_api_param.dart
+│   │   │   │   ├── delete_device_api_param.dart
+│   │   │   │   ├── get_devices_api_param.dart
+│   │   │   │   └── update_device_api_param.dart
+│   │   │   └── repositories
+│   │   │       └── devices_repository_impl.dart
+│   │   ├── domain
+│   │   │   ├── repositories
+│   │   │   │   └── devices_repository.dart
+│   │   │   └── usecases
+│   │   │       ├── create_device_usecase.dart
+│   │   │       ├── delete_device_usecase.dart
+│   │   │       ├── get_all_devices_usecase.dart
+│   │   │       ├── get_devices_by_node_id_usecase.dart
+│   │   │       ├── get_devices_by_room_id_usecase.dart
+│   │   │       └── update_device_usecase.dart
+│   │   └── presentation
+│   │       └── pages
+│   │           └── devices.dart
+│   ├── fav_devices
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   └── fav_device_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       └── fav_device_remote_datasource.dart
+│   │   │   ├── models
+│   │   │   │   ├── create_fav_devices_api_params.dart
+│   │   │   │   ├── delete_fav_devices_api_params.dart
+│   │   │   │   └── get_fav_devices_api_params.dart
+│   │   │   └── repositories
+│   │   │       └── fav_device_repository_impl.dart
+│   │   └── domain
+│   │       ├── repositories
+│   │       │   └── fav_device_repository.dart
+│   │       └── usecases
+│   │           ├── create_fav_devices.dart
+│   │           ├── get_fav_devices.dart
+│   │           └── remove_fav_devices.dart
+│   ├── floor_room_sel
+│   │   └── presentation
+│   │       ├── bloc
+│   │       │   ├── floor
+│   │       │   │   ├── floor_bloc.dart
+│   │       │   │   ├── floor_event.dart
+│   │       │   │   └── floor_state.dart
+│   │       │   ├── floor_room_sel_bloc.dart
+│   │       │   ├── floor_room_sel_event.dart
+│   │       │   ├── floor_room_sel_state.dart
+│   │       │   └── room
+│   │       │       ├── room_bloc.dart
+│   │       │       ├── room_event.dart
+│   │       │       └── room_state.dart
+│   │       ├── skeletons
+│   │       │   └── floor_room_name_skel.dart
+│   │       └── widgets
+│   │           ├── floor_room_name_button.dart
+│   │           ├── floor_room_sel_widget.dart
+│   │           └── plus_button.dart
+│   ├── floors
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   └── floors_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       └── floors_remote_datasource.dart
+│   │   │   ├── models
+│   │   │   │   ├── create_floor_api_param.dart
+│   │   │   │   ├── delete_floor_api_param.dart
+│   │   │   │   ├── get_floors_api_param.dart
+│   │   │   │   └── update_floor_api_param.dart
+│   │   │   └── repositories
+│   │   │       └── floor_repository_impl.dart
+│   │   ├── domain
+│   │   │   ├── repository
+│   │   │   │   └── floor_repository.dart
+│   │   │   └── usecases
+│   │   │       ├── create_floor_usecase.dart
+│   │   │       ├── delete_floor_usecase.dart
+│   │   │       ├── get_floors_usecase.dart
+│   │   │       └── update_floor_usecase.dart
+│   │   └── presentation
+│   │       ├── bloc
+│   │       │   ├── create_floor_bloc.dart
+│   │       │   ├── create_floor_event.dart
+│   │       │   ├── create_floor_state.dart
+│   │       │   ├── delete_floor_bloc.dart
+│   │       │   ├── delete_floor_event.dart
+│   │       │   ├── delete_floor_state.dart
+│   │       │   ├── edit_floor_bloc.dart
+│   │       │   ├── edit_floor_event.dart
+│   │       │   └── edit_floor_state.dart
+│   │       ├── pages
+│   │       │   └── create_floor_page.dart
+│   │       └── widgets
+│   │           ├── create_floor_widget.dart
+│   │           ├── delete_floor_widget.dart
+│   │           └── edit_floor_widget.dart
+│   ├── home
+│   │   └── presentation
+│   │       └── pages
+│   │           └── home.dart
+│   ├── iot_provisioning
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   ├── ble_local_datasource.dart
+│   │   │   │   │   └── wifi_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       └── .gitkeep
+│   │   │   ├── models
+│   │   │   │   └── node_hw_info.dart
+│   │   │   └── repository
+│   │   │       └── iot_provisioning_repo_imp.dart
+│   │   ├── domain
+│   │   │   ├── repository
+│   │   │   │   └── iot_provisioning_repo.dart
+│   │   │   └── usecase
+│   │   │       ├── iot_provisioning_ble_check_wifi_credentials.dart
+│   │   │       ├── iot_provisioning_ble_get_hw_info.dart
+│   │   │       ├── iot_provisioning_ble_pair_node.dart
+│   │   │       ├── iot_provisioning_ble_upload_config.dart
+│   │   │       └── iot_provisioning_wifi_get_available_nwtworks.dart
+│   │   └── presentation
+│   │       ├── bloc
+│   │       │   ├── iot_provisioning_bloc.dart
+│   │       │   ├── iot_provisioning_event.dart
+│   │       │   └── iot_provisioning_state.dart
+│   │       ├── old
+│   │       │   ├── enter_wifi_credentials.dart
+│   │       │   ├── name_your_node.dart
+│   │       │   ├── provisioning.dart
+│   │       │   ├── select_node_options.dart
+│   │       │   └── wifi_credentials.dart
+│   │       ├── pages
+│   │       │   └── iot_provisioning.dart
+│   │       └── widgets
+│   │           ├── enter_wifi_cred.dart
+│   │           ├── name_your_node.dart
+│   │           └── select_node_location.dart
+│   ├── navigation
+│   │   ├── data
+│   │   ├── domain
+│   │   └── presentation
+│   │       ├── blocs
+│   │       │   ├── navigation_bloc.dart
+│   │       │   ├── navigation_event.dart
+│   │       │   └── navigation_state.dart
+│   │       ├── mixin
+│   │       │   ├── keep_alive_mixin.dart
+│   │       │   └── preload_page_view_mixin.dart
+│   │       ├── pages
+│   │       │   └── navigation_screen.dart
+│   │       └── widgets
+│   │           └── custom_navigation_bar.dart
+│   ├── nodes
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   └── nodes_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       └── nodes_remote_datasource.dart
+│   │   │   ├── models
+│   │   │   │   ├── complete_node_pairing_api_param.dart
+│   │   │   │   ├── delete_node_api_param.dart
+│   │   │   │   ├── get_nodes_by_room_id_api_param.dart
+│   │   │   │   ├── request_node_pairing_api_param.dart
+│   │   │   │   └── update_node_api_param.dart
+│   │   │   └── repositories
+│   │   │       └── node_repository_impl.dart
+│   │   ├── domain
+│   │   │   ├── repository
+│   │   │   │   └── node_repository.dart
+│   │   │   └── usecases
+│   │   │       ├── delete_node_usecase.dart
+│   │   │       ├── get_nodes_by_room_id_usecase.dart
+│   │   │       ├── pair_node_usecase.dart
+│   │   │       └── update_node_usecase.dart
+│   │   └── presentation
+│   │       └── pages
+│   │           └── nodes.dart
+│   ├── onboarding
+│   │   ├── data
+│   │   ├── domain
+│   │   └── presentation
+│   │       ├── bloc
+│   │       └── pages
+│   │           └── splash_screen.dart
+│   ├── rooms
+│   │   ├── data
+│   │   │   ├── datasources
+│   │   │   │   ├── local
+│   │   │   │   │   └── rooms_local_datasource.dart
+│   │   │   │   └── remote
+│   │   │   │       └── rooms_remote_datasource.dart
+│   │   │   ├── models
+│   │   │   │   ├── create_room_api_param.dart
+│   │   │   │   ├── delete_room_api_param.dart
+│   │   │   │   ├── get_rooms_api_param.dart
+│   │   │   │   └── update_room_api_param.dart
+│   │   │   └── repositories
+│   │   │       └── room_repository_impl.dart
+│   │   ├── domain
+│   │   │   ├── repository
+│   │   │   │   └── room_repository.dart
+│   │   │   └── usecases
+│   │   │       ├── create_room_usecase.dart
+│   │   │       ├── delete_room_usecase.dart
+│   │   │       ├── get_rooms_usecase.dart
+│   │   │       └── update_room_usecase.dart
+│   │   └── presentation
+│   │       ├── bloc
+│   │       │   ├── create_room_bloc.dart
+│   │       │   ├── create_room_event.dart
+│   │       │   ├── create_room_state.dart
+│   │       │   ├── delete_room_bloc.dart
+│   │       │   ├── delete_room_event.dart
+│   │       │   ├── delete_room_state.dart
+│   │       │   ├── edit_room_bloc.dart
+│   │       │   ├── edit_room_event.dart
+│   │       │   └── edit_room_state.dart
+│   │       ├── pages
+│   │       │   └── create_room_page.dart
+│   │       └── widgets
+│   │           ├── create_room_widget.dart
+│   │           ├── delete_room_widget.dart
+│   │           └── edit_room_widget.dart
+│   ├── scanner
+│   │   ├── data
+│   │   │   └── models
+│   │   │       ├── pair_iot_node_qr_model.dart
+│   │   │       ├── pair_tv_qr_model.dart
+│   │   │       └── parse_qr_data_model.dart
+│   │   └── presentation
+│   │       ├── bloc
+│   │       │   ├── qr_scanner_bloc.dart
+│   │       │   ├── qr_scanner_event.dart
+│   │       │   └── qr_scanner_state.dart
+│   │       ├── pages
+│   │       │   └── qr_scanner.dart
+│   │       └── widgets
+│   │           ├── scan_instructions.dart
+│   │           └── scanner_overlay.dart
+│   ├── settings
+│   │   ├── data
+│   │   ├── domain
+│   │   └── presentation
+│   └── tv_provisioning
+│       └── presentation
+│           └── pages
+│               └── tv_provisioning.dart
+├── firebase_options.dart
+├── main.dart
+└── service_locator.dart
 ```
 
 ## Layers
