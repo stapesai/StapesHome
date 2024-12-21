@@ -37,23 +37,23 @@ class WebsocketNodeStatusUpdate {
 
 class WebsocketDeviceStatusUpdate {
   final String deviceId;
-  final bool state;
+  final bool isOnline;
 
   WebsocketDeviceStatusUpdate({
     required this.deviceId,
-    required this.state,
+    required this.isOnline,
   });
 
   factory WebsocketDeviceStatusUpdate.fromJson(Map<String, dynamic> json) {
     return WebsocketDeviceStatusUpdate(
       deviceId: json['entity_id'],
-      state: json['state'],
+      isOnline: json['state'],
     );
   }
 
   @override
   String toString() {
-    return 'WebsocketDeviceStatusUpdate{deviceId: $deviceId, state: $state}';
+    return 'WebsocketDeviceStatusUpdate{deviceId: $deviceId, state: $isOnline}';
   }
 }
 
@@ -127,10 +127,10 @@ class WebsocketDeviceControlMessage {
   });
 
   Object toJson() {
-    return jsonEncode({
+    return {
       'entity_id': deviceId,
       'state': state,
-    });
+    };
   }
 
   @override

@@ -6,6 +6,7 @@ import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_components_test_page.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_floor_room_sel.dart';
+import 'package:stapes_home/features/devices/presentation/pages/devices.dart';
 import 'package:stapes_home/features/home/presentation/pages/home.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
@@ -13,6 +14,7 @@ import 'package:stapes_home/features/navigation/presentation/blocs/navigation_st
 import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mixin.dart';
 import 'package:stapes_home/features/dev/presentation/pages/dev_websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
+import 'package:stapes_home/features/nodes/presentation/pages/nodes.dart';
 import 'package:stapes_home/features/scanner/presentation/pages/qr_scanner.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -44,10 +46,12 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
     // CreateRoomPage(floorId: 'test'),
+    KeepAlivePage(child: HomePage()),
+    KeepAlivePage(child: DevicesPage()),
+    KeepAlivePage(child: NodesPage()),
     DevFloorRoomSelPage(),
     QrScannerScreen(),
     DevComponentsTestPage(),
-    KeepAlivePage(child: HomeScreen()),
     // KeepAlivePage(child: HomeScreen()),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'devices')),

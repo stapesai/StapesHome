@@ -135,7 +135,7 @@ class DeviceStatusUpdateWidget extends StatelessWidget {
       animation: animation,
       details: [
         MapEntry('Device ID', data.deviceId),
-        MapEntry('State', data.state.toString()),
+        MapEntry('Is Online', data.isOnline.toString()),
       ],
     );
   }

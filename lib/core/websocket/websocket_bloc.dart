@@ -141,6 +141,7 @@ class WebsocketBloc extends Bloc<WebsocketEvent, WebsocketState> {
   // }
 
   void _onSendDeviceControlRequest(WebsocketSendDeviceControlRequest event, Emitter<WebsocketState> emit) {
+    print('Sending device control request: ${event.deviceId} - ${event.state}');
     WebsocketOutgoingMessage message = WebsocketOutgoingMessage(
       type: WebsocketOutgoingMessageType.controlDevice,
       payload: WebsocketDeviceControlMessage(

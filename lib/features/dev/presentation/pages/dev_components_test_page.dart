@@ -30,10 +30,10 @@ class DevComponentsTestPage extends StatelessWidget {
                       name: 'Test Node',
                       numEntities: 3,
                       roomId: 'test_room_id',
-                      hardwareChip: 'TEST_CHIP',
                       hardwareVersion: 'TEST_VERSION',
                       firmwareVersion: 'TEST_FIRMWARE',
                     ),
+                    isOnline: true,
                   ),
                   IotDevicesSkeleton(),
                   Row(
@@ -49,6 +49,8 @@ class DevComponentsTestPage extends StatelessWidget {
                         ),
                         onToggle: () {},
                         isActivated: true,
+                        isEnabled: true,
+                        isFavorite: true,
                       ),
                       LightComponentWidget(
                         device: DeviceModel(
@@ -60,6 +62,8 @@ class DevComponentsTestPage extends StatelessWidget {
                         ),
                         onToggle: () {},
                         isActivated: false,
+                        isEnabled: true,
+                        isFavorite: false,
                       ),
                     ],
                   ),

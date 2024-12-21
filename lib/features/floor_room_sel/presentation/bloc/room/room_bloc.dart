@@ -50,10 +50,14 @@ class RoomBloc extends Bloc<RoomEvent, RoomState> {
   }
 
   void _onSelectRoom(SelectRoom event, Emitter<RoomState> emit) {
-    if (event.roomId != state.activeRoomId) {
-      emit(state.copyWith(activeRoomId: event.roomId));
-      onRoomSelected(event.roomId);
-    }
+    // TODO: same issue with floor bloc also. fix that first.
+    // if (event.roomId != state.activeRoomId) {
+    //   emit(state.copyWith(activeRoomId: event.roomId));
+    //   onRoomSelected(event.roomId);
+    // }
+
+    emit(state.copyWith(activeRoomId: event.roomId));
+    onRoomSelected(event.roomId);
   }
 
   Future<void> _onDeleteRoom(DeleteRoom event, Emitter<RoomState> emit) async {

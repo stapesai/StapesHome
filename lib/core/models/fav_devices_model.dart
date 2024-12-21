@@ -8,7 +8,7 @@ class FavDevicesModel {
   });
   factory FavDevicesModel.fromJson(Map<String, dynamic> json) {
     return FavDevicesModel(
-      entityId: json['entityid'],
+      entityId: json['entity_id'],
       id: json['id'],
     );
   }
@@ -22,7 +22,7 @@ class FavDevicesModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'entityid': entityId,
+      'entity_id': entityId,
       'id': id,
     };
   }
