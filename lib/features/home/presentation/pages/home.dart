@@ -8,6 +8,7 @@ import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
+import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
 import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_sheet_widget.dart';
@@ -28,10 +29,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin {
-  // State management
   bool isFavouritesSelected = true;
   String? _userName;
   final Map<String, bool> _deviceOnlineStatus = {};
+  final Map<String, bool> _nodeOnlineStatus = {};
   List<DeviceModel> _allDevices = [];
   List<String> _favoriteEntityIds = [];
   List<DeviceModel> _activeDevices = [];
@@ -108,6 +109,15 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
       setState(() {
         _deviceOnlineStatus[state.update.deviceId] = state.update.isOnline;
         _updateActiveDevices();
+      });
+    } else if (state is WebsocketNodeStatusUpdateMessageState) {
+      setState(() {
+        _nodeOnlineStatus[state.update.nodeId] = state.update.isOnline;
+      });
+    } else if (state is WebsocketConnecting) {
+      setState(() {
+        _deviceOnlineStatus.clear();
+        _nodeOnlineStatus.clear();
       });
     }
   }
@@ -239,18 +249,18 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                     return LightComponentWidget(
                       device: device,
                       isActivated: _deviceOnlineStatus[device.id] ?? false,
-                      isEnabled: true,
+                      isEnabled: _nodeOnlineStatus[device.nodeId] ?? false,
                       isFavorite: _favoriteEntityIds.contains(device.id),
-                      // onToggle: isNodeOnline
-                      //     ? () {
-                      //         context.read<WebsocketBloc>().add(
-                      //               WebsocketSendDeviceControlRequest(
-                      //                 deviceId: device.id!,
-                      //                 state: !isDeviceActive,
-                      //               ),
-                      //             );
-                      //       }
-                      //     : null,
+                      onToggle: _nodeOnlineStatus[device.nodeId] ?? false
+                          ? () {
+                              context.read<WebsocketBloc>().add(
+                                    WebsocketSendDeviceControlRequest(
+                                      deviceId: device.id!,
+                                      state: !(_deviceOnlineStatus[device.id] ?? false),
+                                    ),
+                                  );
+                            }
+                          : null,
                       onLongPress: () {
                         if (isFavouritesSelected) {
                           showModalBottomSheet(
