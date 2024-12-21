@@ -7,6 +7,7 @@ import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
@@ -158,133 +159,136 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     final screenSize = MediaQuery.of(context).size;
     final devices = isFavouritesSelected ? _favoriteDevices : _activeDevices;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Header section
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: screenSize.height * 0.05),
-            SizedBox(
-              width: double.infinity,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: EdgeInsets.only(top: screenSize.height * 0.07),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Header section
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: screenSize.height * 0.05),
+              SizedBox(
+                width: double.infinity,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Good Morning,',
+                      style: TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: AppFontSizes.bodyText,
+                        fontFamily: 'Ubuntu',
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Text(
+                      _userName ?? 'User',
+                      style: TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: AppFontSizes.pageHeading,
+                        fontFamily: 'Ubuntu',
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: screenSize.height * 0.03),
+              Row(
                 children: [
-                  Text(
-                    'Good morning,',
-                    style: TextStyle(
-                      color: AppColor.whiteColor,
-                      fontSize: AppFontSizes.bodyText,
-                      fontFamily: 'Ubuntu',
-                      fontWeight: FontWeight.w400,
-                    ),
+                  _buildQuickAccessButton(
+                    'Favourites',
+                    isFavouritesSelected,
+                    'heart-active.svg',
+                    'heart.svg',
                   ),
-                  Text(
-                    _userName ?? 'User',
-                    style: TextStyle(
-                      color: AppColor.whiteColor,
-                      fontSize: AppFontSizes.pageHeading,
-                      fontFamily: 'Ubuntu',
-                      fontWeight: FontWeight.w700,
-                    ),
+                  SizedBox(width: 24),
+                  _buildQuickAccessButton(
+                    'Active',
+                    !isFavouritesSelected,
+                    'lightning-active.svg',
+                    'lightning.svg',
                   ),
                 ],
               ),
-            ),
-            SizedBox(height: screenSize.height * 0.03),
-            Row(
-              children: [
-                _buildQuickAccessButton(
-                  'Favourites',
-                  isFavouritesSelected,
-                  'heart-active.svg',
-                  'heart.svg',
-                ),
-                SizedBox(width: 24),
-                _buildQuickAccessButton(
-                  'Active',
-                  !isFavouritesSelected,
-                  'lightning-active.svg',
-                  'lightning.svg',
-                ),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(height: screenSize.height * 0.05),
-        // Devices grid section
-        Expanded(
-          child: devices.isEmpty
-              ? SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: Center(
-                    child: SizedBox(
-                      child: Center(
-                        child: Text(
-                          isFavouritesSelected
-                              ? "Nothing to show here.\nGo to Devices page and add a device to favorites list."
-                              : "No currently active devices",
-                          style: TextStyle(
-                            color: AppColor.whiteColor.withOpacity(0.8),
-                            fontSize: AppFontSizes.bodyText,
-                            fontFamily: 'Ubuntu',
-                            fontWeight: FontWeight.w400,
+            ],
+          ),
+          SizedBox(height: screenSize.height * 0.05),
+          // Devices grid section
+          Expanded(
+            child: devices.isEmpty
+                ? SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: Center(
+                      child: SizedBox(
+                        child: Center(
+                          child: Text(
+                            isFavouritesSelected
+                                ? "Nothing to show here.\nGo to Devices page and add a device to favorites list."
+                                : "No devices are currently active",
+                            style: TextStyle(
+                              color: AppColor.whiteColor.withOpacity(0.8),
+                              fontSize: AppFontSizes.bodyText,
+                              fontFamily: 'Ubuntu',
+                              fontWeight: FontWeight.w400,
+                            ),
+                            textAlign: TextAlign.center,
                           ),
-                          textAlign: TextAlign.center,
                         ),
                       ),
                     ),
+                  )
+                : GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      crossAxisSpacing: 16,
+                      mainAxisSpacing: 16,
+                    ),
+                    itemCount: devices.length,
+                    itemBuilder: (context, index) {
+                      final device = devices[index];
+                      return LightComponentWidget(
+                        device: device,
+                        isActivated: _deviceOnlineStatus[device.id] ?? false,
+                        isEnabled: _nodeOnlineStatus[device.nodeId] ?? false,
+                        isFavorite: _favoriteEntityIds.contains(device.id),
+                        onToggle: _nodeOnlineStatus[device.nodeId] ?? false
+                            ? () {
+                                context.read<WebsocketBloc>().add(
+                                      WebsocketSendDeviceControlRequest(
+                                        deviceId: device.id!,
+                                        state: !(_deviceOnlineStatus[device.id] ?? false),
+                                      ),
+                                    );
+                              }
+                            : null,
+                        onLongPress: () {
+                          if (isFavouritesSelected) {
+                            showModalBottomSheet(
+                              context: context,
+                              backgroundColor: Colors.transparent,
+                              builder: (context) => HoldBottomSheetWidget(
+                                options: [
+                                  BottomSheetOption(
+                                    icon: Icons.favorite_border,
+                                    label: 'Remove from Favorites',
+                                    onTap: () async {
+                                      await _removeFavorite(device.id!);
+                                    },
+                                  ),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                      );
+                    },
                   ),
-                )
-              : GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                    crossAxisSpacing: 16,
-                    mainAxisSpacing: 16,
-                  ),
-                  itemCount: devices.length,
-                  itemBuilder: (context, index) {
-                    final device = devices[index];
-                    return LightComponentWidget(
-                      device: device,
-                      isActivated: _deviceOnlineStatus[device.id] ?? false,
-                      isEnabled: _nodeOnlineStatus[device.nodeId] ?? false,
-                      isFavorite: _favoriteEntityIds.contains(device.id),
-                      onToggle: _nodeOnlineStatus[device.nodeId] ?? false
-                          ? () {
-                              context.read<WebsocketBloc>().add(
-                                    WebsocketSendDeviceControlRequest(
-                                      deviceId: device.id!,
-                                      state: !(_deviceOnlineStatus[device.id] ?? false),
-                                    ),
-                                  );
-                            }
-                          : null,
-                      onLongPress: () {
-                        if (isFavouritesSelected) {
-                          showModalBottomSheet(
-                            context: context,
-                            backgroundColor: Colors.transparent,
-                            builder: (context) => HoldBottomSheetWidget(
-                              options: [
-                                BottomSheetOption(
-                                  icon: Icons.favorite_border,
-                                  label: 'Remove from Favorites',
-                                  onTap: () async {
-                                    await _removeFavorite(device.id!);
-                                  },
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    );
-                  },
-                ),
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
