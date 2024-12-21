@@ -6,7 +6,6 @@ import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/features/common/presentation/widgets/iot/node_widget.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/node_skel.dart';
@@ -146,9 +145,7 @@ class _NodesPageState extends State<NodesPage> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    return Padding(
-      padding: AppPadding.pagePadding(context),
-    child: Column(
+    return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: screenSize.height * 0.05),
@@ -171,7 +168,6 @@ class _NodesPageState extends State<NodesPage> {
           child: _buildNodesList(),
         ),
       ],
-    ),
     );
   }
 }

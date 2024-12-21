@@ -7,7 +7,6 @@ import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
@@ -159,9 +158,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
     final screenSize = MediaQuery.of(context).size;
     final devices = isFavouritesSelected ? _favoriteDevices : _activeDevices;
 
-    return Padding(
-      padding: EdgeInsets.only(top: screenSize.height * 0.07),
-      child: Column(
+    return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           // Header section
@@ -288,7 +285,6 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                   ),
           ),
         ],
-      ),
     );
   }
 

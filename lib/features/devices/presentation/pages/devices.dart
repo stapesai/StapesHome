@@ -6,7 +6,6 @@ import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/core/theme/app_padding.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_sheet_widget.dart';
@@ -241,9 +240,7 @@ class _DevicesPageState extends State<DevicesPage> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    return Padding(
-      padding: AppPadding.pagePadding(context),
-      child: Column(
+     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: screenSize.height * 0.05),
@@ -268,7 +265,6 @@ class _DevicesPageState extends State<DevicesPage> {
             ),
           ),
         ],
-      ),
     );
   }
 }
