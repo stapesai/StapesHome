@@ -15,6 +15,7 @@ import 'package:stapes_home/features/navigation/presentation/mixin/keep_alive_mi
 import 'package:stapes_home/features/dev/presentation/pages/dev_websocket_messages_test.dart';
 import 'package:stapes_home/features/navigation/presentation/widgets/custom_navigation_bar.dart';
 import 'package:stapes_home/features/nodes/presentation/pages/nodes.dart';
+import 'package:stapes_home/features/profile/presentation/pages/profile.dart';
 import 'package:stapes_home/features/scanner/presentation/pages/qr_scanner.dart';
 
 class NavigationScreen extends StatefulWidget {
@@ -46,8 +47,10 @@ class _NavigationScreenState extends State<NavigationScreen> {
     // widget.navigationShell.branches[2],
     // widget.navigationShell.branches[3],
     // CreateRoomPage(floorId: 'test'),
+    KeepAlivePage(child: HomeScreen()),
     KeepAlivePage(child: DevicesPage()),
     KeepAlivePage(child: NodesPage()),
+    KeepAlivePage(child: ProfilePage()),
     DevFloorRoomSelPage(),
     QrScannerScreen(),
     DevComponentsTestPage(),

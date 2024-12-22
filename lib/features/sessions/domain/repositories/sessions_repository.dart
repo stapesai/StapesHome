@@ -3,7 +3,7 @@ import 'package:stapes_home/features/sessions/domain/entities/sessions_entity.da
 abstract class SessionsRepository {
   Future<List<SessionEntity>> getAllSessions({
     required String userId,
-    required String currentSessionId,
+    required String sessionId,
   });
 
   Future<void> revokeSession({

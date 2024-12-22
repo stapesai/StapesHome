@@ -7,11 +7,11 @@ class GetAllSessions {
 
   Future<List<SessionEntity>> call({
     required String userId,
-    required String currentSessionId,
-  }) async {
-    return await repository.getAllSessions(
+    required String sessionId,
+  }) {
+    return repository.getAllSessions(
       userId: userId,
-      currentSessionId: currentSessionId,
+      sessionId: sessionId,
     );
   }
 }

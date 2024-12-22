@@ -1,15 +1,34 @@
-abstract class SessionsEvent {}
+import 'package:equatable/equatable.dart';
+
+abstract class SessionsEvent extends Equatable {
+  const SessionsEvent();
+
+  @override
+  List<Object> get props => [];
+}
 
 class LoadSessionsEvent extends SessionsEvent {
   final String userId;
-  final String currentSessionId;
+  final String sessionId;
 
-  LoadSessionsEvent(this.userId, this.currentSessionId);
+  const LoadSessionsEvent({
+    required this.userId,
+    required this.sessionId,
+  });
+
+  @override
+  List<Object> get props => [userId, sessionId];
 }
 
 class RevokeSessionEvent extends SessionsEvent {
   final String userId;
   final String sessionId;
 
-  RevokeSessionEvent(this.userId, this.sessionId);
+  const RevokeSessionEvent({
+    required this.userId,
+    required this.sessionId,
+  });
+
+  @override
+  List<Object> get props => [userId, sessionId];
 }
