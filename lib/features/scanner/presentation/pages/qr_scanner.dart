@@ -108,12 +108,10 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
             switch (state.data.type) {
               case QrCodeType.iotNode:
                 debugPrint('Navigating to IoT Provisioning');
-                GoRouter.of(context)
-                    .push(
+                GoRouter.of(context).push(
                   AppRouteConstants.iotProvisioning.routePath,
                   extra: state.data.payload,
-                )
-                    .then((_) {
+                ).then((_) {
                   if (mounted) unawaited(controller.start());
                 });
                 break;
