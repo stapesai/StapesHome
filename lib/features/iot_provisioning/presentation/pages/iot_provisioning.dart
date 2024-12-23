@@ -13,12 +13,31 @@ import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisi
 import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_upload_config.dart';
 import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_wifi_get_available_nwtworks.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_bloc.dart';
+import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/widgets/enter_wifi_cred.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 import 'package:stapes_home/service_locator.dart';
 
+
+ enum StepStatus {
+    pending,
+    current,
+    completed,
+  }
+
+  class ProvisioningStep {
+    final String title;
+
+    final StepStatus status;
+
+    ProvisioningStep({
+      required this.title,
+      required this.status,
+  
+    });
+  }
 class IoTProvisioningScreen extends StatelessWidget {
   final IotQrModel qrData;
 
@@ -40,7 +59,7 @@ class IoTProvisioningScreen extends StatelessWidget {
         requestNodePairingUseCase: serviceLocator<RequestNodePairingUseCase>(),
         completeNodePairingUseCase: serviceLocator<CompleteNodePairingUseCase>(),
         authLocalDataSource: serviceLocator<AuthLocalDataSource>(),
-      ),
+      )..add(PairBleDeviceEvent(qrData)),
       child: Scaffold(
         body: Container(
           decoration: const BoxDecoration(
@@ -102,37 +121,112 @@ class IoTProvisioningScreen extends StatelessWidget {
     );
   }
 
+  
+
   Widget _buildCurrentStep(BuildContext context, IotProvisioningState state) {
-    if (state is BlePairingInProgress) {
-      return _buildStepIndicator('Pairing Bluetooth', true);
-    } else if (state is BlePairingFailure) {
+    List<ProvisioningStep> getSteps(IotProvisioningState state) {
+      return [
+        ProvisioningStep(
+          title: 'Pairing Bluetooth',
+          status: state is BlePairingInProgress 
+              ? StepStatus.current
+              : state is BlePairingSuccess || state is LoadingWifiNetworks || 
+                state is WifiNetworksLoaded || state is CheckingWifiCredentials || 
+                state is WifiCredentialsValid
+                  ? StepStatus.completed 
+                  : StepStatus.pending,
+        
+        ),
+       
+
+        ProvisioningStep(
+          title: 'Checking Wi-Fi credentials',
+          status: state is CheckingWifiCredentials
+              ? StepStatus.current
+              : state is WifiCredentialsValid
+                  ? StepStatus.completed
+                  : StepStatus.pending,
+        ),
+        ProvisioningStep(
+          title: 'Enter Node Name',
+          status: state is CheckingWifiCredentials
+              ? StepStatus.current
+              : state is WifiCredentialsValid
+                  ? StepStatus.completed
+                  : StepStatus.pending,
+        ),
+        ProvisioningStep(
+          title: 'Checking provisioning status',
+          status: state is RequestingNodePairing || 
+                 state is UploadConfigToNode || 
+                 state is CompletingNodePairing
+              ? StepStatus.current
+              : state is NodeProvisioned
+                  ? StepStatus.completed
+                  : StepStatus.pending,
+        ),
+      ];
+    }
+
+    if (state is BlePairingFailure) {
       return _buildErrorState(state.error);
-    } else if (state is BlePairingSuccess || state is LoadingWifiNetworks || state is WifiNetworksLoaded) {
-      return EnterWifiCredWidget();
-    } else if (state is CheckingWifiCredentials) {
-      return _buildStepIndicator('Checking WiFi Credentials', true);
-    } else if (state is WifiCredentialsInvalid) {
-      return _buildErrorState(state.error);
-    } else if (state is WifiCredentialsValid) {
-      return Text('Wifi Credentials Valid');
-      // return NameYourNodeWidget();
-    } else if (state is NodePairingRequestSuccess) {
-      return Text('Node Pairing Request Success');
-      // return SelectNodeLocationWidget();
-    } else if (state is RequestingNodePairing) {
-      return _buildStepIndicator('Requesting Server', true);
-    } else if (state is UploadConfigToNode) {
-      return _buildStepIndicator('Uploading Configuration', true);
-    } else if (state is CompletingNodePairing) {
-      return _buildStepIndicator('Completing Setup', true);
-    } else if (state is NodeProvisioned) {
-      return _buildSuccessState();
+    } 
+    
+     if (state is BlePairingSuccess || 
+              state is LoadingWifiNetworks || 
+              state is WifiNetworksLoaded) {
+      return Column(
+        children: [
+          _buildStepIndicator(getSteps(state)),
+          EnterWifiCredWidget(),
+          const SizedBox(height: 24),
+        ],
+      );
+    }  
+    
+    if (state is CheckingWifiCredentials) {
+      return Column(
+        children: [
+          _buildStepIndicator(getSteps(state)),
+          const SizedBox(height: 24),
+          const Center(child: CircularProgressIndicator()),
+        ],
+      );
+      
+    }
+    if (state is NodeProvisioned) {
+      return Column(
+        children: [
+          _buildStepIndicator([
+            ProvisioningStep(
+              title: 'Pairing Bluetooth',
+              status: StepStatus.completed,
+            ),
+            ProvisioningStep(
+              title: 'Checking Wi-Fi credentials',
+              status: StepStatus.completed,
+            ),
+            ProvisioningStep(
+              title: 'Checking provisioning status',
+              status: StepStatus.completed,
+            ),
+          ]),
+          const SizedBox(height: 24),
+          _buildSuccessState(),
+        ],
+      );
     } else {
-      return _buildStepIndicator('Initializing...', true);
+      return _buildStepIndicator(getSteps(state));
     }
   }
 
-Widget _buildStepIndicator(String title, bool isLoading) {
+ Widget _buildStepIndicator(List<ProvisioningStep> steps) {
+    return Column(
+      children: steps.map((step) => _buildStep(step)).toList(),
+    );
+  }
+
+  Widget _buildStep(ProvisioningStep step) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
@@ -142,24 +236,63 @@ Widget _buildStepIndicator(String title, bool isLoading) {
             height: 44,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: isLoading ? Color(0xFFFF9F1C) : Color(0x7FFF9F1C),
+              color: _getStepColor(step.status),
             ),
-            child: isLoading
-                ? const CircularProgressIndicator(color: Colors.white)
-                : null,
+            child: _getStepIndicator(step.status),
           ),
-          const SizedBox(width: 10),
+          const SizedBox(width: 12),
           Text(
-            title,
+            step.title,
             style: TextStyle(
-              color: isLoading ? Colors.white : Colors.white.withOpacity(0.5),
+              color: _getTextColor(step.status),
               fontSize: 18,
               fontFamily: 'Ubuntu',
             ),
           ),
+          
         ],
       ),
     );
+  }
+
+ 
+
+  Color _getStepColor(StepStatus status) {
+    switch (status) {
+      case StepStatus.current:
+        return const Color(0xFFFF9F1C);
+      case StepStatus.completed:
+        return Colors.green;
+      case StepStatus.pending:
+        return const Color(0x7FFF9F1C);
+    }
+  }
+
+  Color _getTextColor(StepStatus status) {
+    switch (status) {
+      case StepStatus.pending:
+        return Colors.white.withOpacity(0.5);
+      case StepStatus.current:
+      case StepStatus.completed:
+        return Colors.white;
+    }
+  }
+
+  Widget _getStepIndicator(StepStatus status) {
+    switch (status) {
+      case StepStatus.current:
+        return const CircularProgressIndicator(
+          color: Colors.white,
+          strokeWidth: 2,
+        );
+      case StepStatus.completed:
+        return const Icon(
+          Icons.check,
+          color: Colors.white,
+        );
+      case StepStatus.pending:
+        return const SizedBox();
+    }
   }
 
   Widget _buildErrorState(String error) {

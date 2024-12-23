@@ -1,20 +1,20 @@
 import 'dart:async';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:stapes_home/service_locator.dart';
+import 'package:stapes_home/core/theme/app_colors.dart';
+import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import "package:stapes_home/core/common/widgets/button.dart";
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
-import 'package:flutter/material.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
-import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/features/auth/domain/usecases/login_usecase.dart';
+import 'package:stapes_home/features/auth/presentation/widgets/otp_input_widget.dart';
 import 'package:stapes_home/features/auth/domain/usecases/otp_verification_usecase.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_bloc.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_event.dart';
 import 'package:stapes_home/features/auth/presentation/blocs/login/login_otp_verification_state.dart';
-import 'package:stapes_home/features/auth/presentation/widgets/otp_input_widget.dart';
-import 'package:stapes_home/service_locator.dart';
-import "package:stapes_home/core/common/widgets/button.dart";
 
 class LoginOtpVerificationScreen extends StatefulWidget {
   final String email;

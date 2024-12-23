@@ -37,49 +37,67 @@ class _EnterWifiCredWidgetState extends State<EnterWifiCredWidget> {
     return BlocBuilder<IotProvisioningBloc, IotProvisioningState>(
       builder: (context, state) {
         if (state is LoadingWifiNetworks) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(
+              child: Text(
+            "Loading WiFi Networks",
+            style: TextStyle(color: Colors.white),
+          ));
         }
-
+        print("hello $state");
+        print("networks $_selectedNetwork");
         if (state is WifiNetworksLoaded) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              CustomDropdown<String>(
-                hintText: 'Select WiFi Network',
-                value: _selectedNetwork,
-                items: state.networks
-                    .map((network) => DropdownMenuItem(
-                          value: network.ssid,
-                          child: Text(network.ssid),
-                        ))
-                    .toList(),
-                onChanged: (value) => setState(() => _selectedNetwork = value),
-              ),
-              const SizedBox(height: 16),
-              CustomPasswordTextField(
-                controller: _passwordController,
-                hintText: 'WiFi Password',
-              ),
-              const Spacer(),
-              CustomButton(
-                  text: 'Connect',
-                  onPressed: () {
-                    if (_selectedNetwork == null || _passwordController.text.isEmpty) {
-                      return;
-                    }
-                    context.read<IotProvisioningBloc>().add(
-                          CheckWifiCredentialsEvent(
-                            ssid: _selectedNetwork!,
-                            password: _passwordController.text,
-                          ),
-                        );
-                  }),
-            ],
-          );
+          print('Available networks: ${state.networks.first.ssid}');
         }
 
-        return const Center(child: Text('Failed to load WiFi networks'));
+        return const Center(
+            child: Column(
+          children: [
+            Text(
+              "Failed to load networks",
+              style: TextStyle(color: Colors.white),
+            ),
+          
+          ],
+        ));
       },
     );
   }
 }
+
+
+
+ // return Column(
+          //   crossAxisAlignment: CrossAxisAlignment.stretch,
+          //   children: [
+          //     CustomDropdown<String>(
+          //       hintText: 'Select WiFi Network',
+          //       value: _selectedNetwork,
+          //       items: state.networks
+          //           .map((network) => DropdownMenuItem(
+          //                 value: network.ssid,
+          //                 child: Text(network.ssid),
+          //               ))
+          //           .toList(),
+          //       onChanged: (value) => setState(() => _selectedNetwork = value),
+          //     ),
+          //     const SizedBox(height: 16),
+          //     CustomPasswordTextField(
+          //       controller: _passwordController,
+          //       hintText: 'WiFi Password',
+          //     ),
+          //     const Spacer(),
+          //     CustomButton(
+          //         text: 'Connect',
+          //         onPressed: () {
+          //           if (_selectedNetwork == null || _passwordController.text.isEmpty) {
+          //             return;
+          //           }
+          //           context.read<IotProvisioningBloc>().add(
+          //                 CheckWifiCredentialsEvent(
+          //                   ssid: _selectedNetwork!,
+          //                   password: _passwordController.text,
+          //                 ),
+          //               );
+          //         }),
+          //   ],
+          // );
