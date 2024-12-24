@@ -113,9 +113,7 @@ class _NavigationScreenState extends State<NavigationScreen> {
         BlocProvider.value(value: _navigationBloc),
         BlocProvider.value(value: _websocketBloc),
       ],
-      // value: _navigationBloc,
-      // return BlocProvider(
-      //   create: (context) => NavigationBloc(),
+
       child: BlocListener<NavigationBloc, NavigationState>(
         listener: (context, state) {
           final index = NavigationTab.values.indexOf(state.currentTab);
@@ -132,69 +130,15 @@ class _NavigationScreenState extends State<NavigationScreen> {
                 (_) => _isHandlingTap = false,
               );
 
-          // Jump to page without animation
-          // _pageController.jumpToPage(index);
-
-          // Don't know its functionallity - used when using StatefulShellRoute.indexedStack
-          // widget.navigationShell.goBranch(index);
+   
         },
         child: Scaffold(
           backgroundColor: Colors.transparent,
           // FIXME: I am not able to swipe pages when using PhoneLink to connect to phone via PC using ADB.
-          //   body: GestureDetector(
-          //     onHorizontalDragStart: (details) {
-          //       _dragStart = details.globalPosition.dx;
-          //       _dragOffset = _pageController.offset;
-          //     },
-          //     onHorizontalDragUpdate: (details) {
-          //       final currentDrag = details.globalPosition.dx;
-          //       final dragDifference = currentDrag - _dragStart;
 
-          //       // Calculate new position while dragging
-          //       final newOffset = _dragOffset - dragDifference;
-          //       final maxOffset = screenWidth * (NavigationTab.values.length - 1);
-
-          //       // Clamp the offset to prevent overscrolling
-          //       final clampedOffset = newOffset.clamp(0.0, maxOffset);
-
-          //       // Update page position in real-time
-          //       _pageController.jumpTo(clampedOffset);
-          //     },
-          //     onHorizontalDragEnd: (details) {
-          //       final dragEnd = details.primaryVelocity ?? 0;
-          //       final dragDistance = details.globalPosition.dx - _dragStart;
-          //       final currentPage = (_pageController.offset / screenWidth).round();
-          //       int targetPage = currentPage;
-
-          //       if (dragDistance.abs() > screenWidth / 2 || dragEnd.abs() > 800) {
-          //         if (dragDistance < 0 && currentPage < NavigationTab.values.length - 1) {
-          //           targetPage = currentPage + 1;
-          //         } else if (dragDistance > 0 && currentPage > 0) {
-          //           targetPage = currentPage - 1;
-          //         }
-          //       }
-
-          //       final selectedItem = NavigationTab.values[targetPage];
-          //       _navigationBloc.add(NavigationPageSwiped(selectedItem));
-          //     },
-          // child: PageView(
           body: PageView(
             physics: ClampingScrollPhysics(),
-            // physics: PageScrollPhysics(),
-            // physics: const BouncingScrollPhysics(),
-            // physics: const ClampingScrollPhysics(),
-            // physics: const FixedExtentScrollPhysics(),
-            // This will disable the swipe gesture of the PageView.
-            // physics: const NeverScrollableScrollPhysics(),
             controller: _pageController,
-            // onPageChanged: (index) {
-            //   // Update navigation state when page is swiped
-            //   if (!_isHandlingTap) {
-            //     final selectedItem = NavigationTab.values[index];
-            //     // context.read<NavigationBloc>().add(NavigationItemSelected(selectedItem));
-            //     _navigationBloc.add(NavigationPageSwiped(selectedItem));
-            //   }
-            // },
             children: _pages,
           ),
           // ),
