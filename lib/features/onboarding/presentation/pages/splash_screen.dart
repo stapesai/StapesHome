@@ -60,13 +60,18 @@ class SplashScreenState extends State<SplashScreen> {
 
     bool isLoggedIn = sessionBox != null && userBox != null;
 
+    // if (mounted) {
+    //   if (isLoggedIn) {
+    //     _setupFirebase(context);
+    //     GoRouter.of(context).go(AppRouteConstants.main.routePath);
+    //   } else {
+    //     GoRouter.of(context).go(AppRouteConstants.login.routePath);
+    //   }
+    // }
     if (mounted) {
-      if (isLoggedIn) {
-        _setupFirebase(context);
-        GoRouter.of(context).go(AppRouteConstants.main.routePath);
-      } else {
-        GoRouter.of(context).go(AppRouteConstants.login.routePath);
-      }
+            
+      _setupFirebase(context);
+            GoRouter.of(context).go(AppRouteConstants.main.routePath);
     }
   }
 

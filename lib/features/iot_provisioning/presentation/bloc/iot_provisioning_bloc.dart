@@ -58,25 +58,12 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     Emitter<IotProvisioningState> emit,
   ) async {
     emit(BlePairingInProgress());
-    // Future.delayed(Duration(seconds: 2));
-    // emit(BlePairingSuccess());
-    // Future.delayed(Duration(seconds: 2));
-    try {
-      final (success, failureReason, device, configCharResult, hwVersionCharResult, checkWiFiCredentialsCharResult) =
-          await pairBleNodeUseCase(event.qrData);
-
-      configChar = configCharResult;
-      hwVersionChar = hwVersionCharResult;
-      checkWiFiCredentialsChar = checkWiFiCredentialsCharResult;
-
-      if (success) {
-        emit(BlePairingSuccess());
-      } else {
-        emit(BlePairingFailure(failureReason ?? 'Unknown error'));
-      }
-    } catch (e) {
-      emit(BlePairingFailure(e.toString()));
-    }
+    await Future.delayed(Duration(seconds: 2), () {
+      emit(BlePairingSuccess());
+    });
+    await Future.delayed(Duration(seconds: 2), () {
+      emit(BlePairingFailure('Failed to pair'));
+    });
   }
 
   Future<void> _onGetAvailableWifiNetworks(
@@ -84,6 +71,7 @@ class IotProvisioningBloc extends Bloc<IotProvisioningEvent, IotProvisioningStat
     Emitter<IotProvisioningState> emit,
   ) async {
     emit(LoadingWifiNetworks());
+
     try {
       final networks = await getAvailableWifiNetworksUseCase();
       emit(WifiNetworksLoaded(networks));
