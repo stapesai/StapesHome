@@ -1,43 +1,44 @@
 // lib/features/iot_provisioning/presentation/pages/iot_provisioning.dart
 
+import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:lottie/lottie.dart';
+import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
+import 'package:stapes_home/core/theme/app_font_sizes.dart';
+import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
+import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
-import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_check_wifi_credentials.dart';
-import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_get_hw_info.dart';
-import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_pair_node.dart';
-import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_upload_config.dart';
-import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_wifi_get_available_nwtworks.dart';
+import 'package:stapes_home/features/iot_provisioning/presentation/widgets/enter_wifi_cred.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_bloc.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_event.dart';
 import 'package:stapes_home/features/iot_provisioning/presentation/bloc/iot_provisioning_state.dart';
-import 'package:stapes_home/features/iot_provisioning/presentation/widgets/enter_wifi_cred.dart';
-import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
-import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
-import 'package:stapes_home/service_locator.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_pair_node.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_get_hw_info.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_upload_config.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_ble_check_wifi_credentials.dart';
+import 'package:stapes_home/features/iot_provisioning/domain/usecase/iot_provisioning_wifi_get_available_nwtworks.dart';
 
+enum StepStatus {
+  pending,
+  current,
+  completed,
+  error,
+}
 
- enum StepStatus {
-    pending,
-    current,
-    completed,
-  }
+class ProvisioningStep {
+  final String title;
+  final StepStatus status;
+  final String? error;
 
-  class ProvisioningStep {
-    final String title;
+  ProvisioningStep({
+    required this.title,
+    required this.status,
+    this.error,
+  });
+}
 
-    final StepStatus status;
-
-    ProvisioningStep({
-      required this.title,
-      required this.status,
-  
-    });
-  }
 class IoTProvisioningScreen extends StatelessWidget {
   final IotQrModel qrData;
 
@@ -75,7 +76,16 @@ class IoTProvisioningScreen extends StatelessWidget {
                     children: [
                       SizedBox(height: screenSize.height * 0.05),
                       Text(
-                        'Provisioning Node',
+                        'Provisioning',
+                        style: TextStyle(
+                          color: AppColor.whiteColor,
+                          fontSize: AppFontSizes.pageHeading,
+                          fontFamily: 'Ubuntu',
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      Text(
+                        'Node',
                         style: TextStyle(
                           color: AppColor.whiteColor,
                           fontSize: AppFontSizes.pageHeading,
@@ -121,45 +131,41 @@ class IoTProvisioningScreen extends StatelessWidget {
     );
   }
 
-  
-
   Widget _buildCurrentStep(BuildContext context, IotProvisioningState state) {
     List<ProvisioningStep> getSteps(IotProvisioningState state) {
       return [
         ProvisioningStep(
           title: 'Pairing Bluetooth',
-          status: state is BlePairingInProgress 
-              ? StepStatus.current
-              : state is BlePairingSuccess || state is LoadingWifiNetworks || 
-                state is WifiNetworksLoaded || state is CheckingWifiCredentials || 
-                state is WifiCredentialsValid
-                  ? StepStatus.completed 
-                  : StepStatus.pending,
-        
-        ),
-       
-
-        ProvisioningStep(
-          title: 'Checking Wi-Fi credentials',
-          status: state is CheckingWifiCredentials
-              ? StepStatus.current
-              : state is WifiCredentialsValid
-                  ? StepStatus.completed
-                  : StepStatus.pending,
+          status: state is BlePairingFailure
+              ? StepStatus.error
+              : state is BlePairingInProgress
+                  ? StepStatus.current
+                  : state is BlePairingSuccess ||
+                          state is LoadingWifiNetworks ||
+                          state is WifiNetworksLoaded ||
+                          state is WifiNetworksError ||
+                          state is CheckingWifiCredentials ||
+                          state is WifiCredentialsValid
+                      ? StepStatus.completed
+                      : StepStatus.pending,
+          error: state is BlePairingFailure ? state.error : null,
         ),
         ProvisioningStep(
-          title: 'Enter Node Name',
-          status: state is CheckingWifiCredentials
-              ? StepStatus.current
-              : state is WifiCredentialsValid
-                  ? StepStatus.completed
-                  : StepStatus.pending,
+          title: _getWifiStepTitle(state),
+          status: state is WifiNetworksError
+              ? StepStatus.error
+              : state is WifiNetworksLoaded
+                  ? StepStatus.current
+                  : state is CheckingWifiCredentials
+                      ? StepStatus.current
+                      : state is WifiCredentialsValid
+                          ? StepStatus.completed
+                          : StepStatus.pending,
+          error: state is WifiNetworksError ? state.error : null,
         ),
         ProvisioningStep(
           title: 'Checking provisioning status',
-          status: state is RequestingNodePairing || 
-                 state is UploadConfigToNode || 
-                 state is CompletingNodePairing
+          status: state is RequestingNodePairing || state is UploadConfigToNode || state is CompletingNodePairing
               ? StepStatus.current
               : state is NodeProvisioned
                   ? StepStatus.completed
@@ -168,13 +174,7 @@ class IoTProvisioningScreen extends StatelessWidget {
       ];
     }
 
-    if (state is BlePairingFailure) {
-      return _buildErrorState(state.error);
-    } 
-    
-     if (state is BlePairingSuccess || 
-              state is LoadingWifiNetworks || 
-              state is WifiNetworksLoaded) {
+    if (state is BlePairingSuccess || state is LoadingWifiNetworks || state is WifiNetworksLoaded) {
       return Column(
         children: [
           _buildStepIndicator(getSteps(state)),
@@ -182,18 +182,8 @@ class IoTProvisioningScreen extends StatelessWidget {
           const SizedBox(height: 24),
         ],
       );
-    }  
-    
-    if (state is CheckingWifiCredentials) {
-      return Column(
-        children: [
-          _buildStepIndicator(getSteps(state)),
-          const SizedBox(height: 24),
-          const Center(child: CircularProgressIndicator()),
-        ],
-      );
-      
     }
+
     if (state is NodeProvisioned) {
       return Column(
         children: [
@@ -220,7 +210,7 @@ class IoTProvisioningScreen extends StatelessWidget {
     }
   }
 
- Widget _buildStepIndicator(List<ProvisioningStep> steps) {
+  Widget _buildStepIndicator(List<ProvisioningStep> steps) {
     return Column(
       children: steps.map((step) => _buildStep(step)).toList(),
     );
@@ -229,42 +219,73 @@ class IoTProvisioningScreen extends StatelessWidget {
   Widget _buildStep(ProvisioningStep step) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Container(
-            width: 44,
-            height: 44,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: _getStepColor(step.status),
-            ),
-            child: _getStepIndicator(step.status),
+          Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: _getStepColor(step.status),
+                ),
+                child: step.status == StepStatus.error // Add error status handling
+                    ? _getStepIndicator(StepStatus.error)
+                    : _getStepIndicator(step.status),
+              ),
+              const SizedBox(width: 12),
+              Text(
+                step.title,
+                style: TextStyle(
+                  color: _getTextColor(step.status),
+                  fontSize: 18,
+                  fontFamily: 'Ubuntu',
+                ),
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          Text(
-            step.title,
-            style: TextStyle(
-              color: _getTextColor(step.status),
-              fontSize: 18,
-              fontFamily: 'Ubuntu',
+          if (step.error != null) // Show error message if present
+            Padding(
+              padding: const EdgeInsets.only(left: 56, top: 4),
+              child: Text(
+                step.error!,
+                style: TextStyle(
+                  color: _getTextColor(step.status),
+                  fontSize: 14,
+                ),
+              ),
             ),
-          ),
-          
         ],
       ),
     );
   }
 
- 
+  String _getWifiStepTitle(IotProvisioningState state) {
+    if (state is CheckingWifiCredentials) {
+      return 'Checking Wi-Fi credentials';
+    } else if (state is WifiCredentialsValid) {
+      return 'Wi-Fi credentials verified';
+    } else if (state is WifiCredentialsInvalid) {
+      return 'Enter Wi-Fi credentials';
+    } else if (state is WifiNetworksLoaded) {
+      return 'Enter Wi-Fi credentials';
+    } else {
+      return 'Wi-Fi setup';
+    }
+  }
 
   Color _getStepColor(StepStatus status) {
     switch (status) {
       case StepStatus.current:
         return const Color(0xFFFF9F1C);
       case StepStatus.completed:
-        return Colors.green;
+        return const Color.fromARGB(255, 73, 255, 79);
       case StepStatus.pending:
         return const Color(0x7FFF9F1C);
+      case StepStatus.error:
+        return const Color.fromARGB(255, 255, 17, 0);
     }
   }
 
@@ -275,6 +296,8 @@ class IoTProvisioningScreen extends StatelessWidget {
       case StepStatus.current:
       case StepStatus.completed:
         return Colors.white;
+      case StepStatus.error:
+        return Colors.red;
     }
   }
 
@@ -292,6 +315,11 @@ class IoTProvisioningScreen extends StatelessWidget {
         );
       case StepStatus.pending:
         return const SizedBox();
+      case StepStatus.error:
+        return const Icon(
+          Icons.close,
+          color: Colors.white,
+        );
     }
   }
 
