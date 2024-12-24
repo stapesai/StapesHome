@@ -12,11 +12,11 @@ class WifiLocalDataSourceImpl implements WifiLocalDataSource {
   Future<List<WiFiAccessPoint>> getAvailableWifiNetworks() async {
     // Check permissions
     final permissions = await [
-      Permission.locationWhenInUse,
+      Permission.location,
       Permission.storage,
     ].request();
 
-    if (!permissions[Permission.locationWhenInUse]!.isGranted || !permissions[Permission.storage]!.isGranted) {
+    if (!permissions[Permission.location]!.isGranted || !permissions[Permission.storage]!.isGranted) {
       throw Exception('Required permissions not granted');
     }
 

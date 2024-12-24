@@ -53,7 +53,7 @@ class _EnterWifiCredWidgetState extends State<EnterWifiCredWidget> {
             child: Column(
           children: [
             Text(
-              "Failed to load networks",
+              "Select WiFi Network",
               style: TextStyle(color: Colors.white),
             ),
           

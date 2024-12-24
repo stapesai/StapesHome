@@ -7,6 +7,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
+import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
+import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
+import 'package:stapes_home/features/navigation/presentation/blocs/navigation_state.dart';
 import 'package:stapes_home/features/scanner/data/models/parse_qr_data_model.dart';
 import 'package:stapes_home/features/scanner/presentation/bloc/qr_scanner_bloc.dart';
 import 'package:stapes_home/features/scanner/presentation/bloc/qr_scanner_event.dart';
@@ -142,6 +145,23 @@ class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingOb
                 alignment: Alignment.bottomCenter,
                 child: QrScanInstructionPanel(),
               ),
+              // back button
+              Positioned(
+                top: 45,
+                left: 20,
+                child: IconButton(
+                  onPressed: () {
+                    final navigationBloc = context.read<NavigationBloc>();
+                    // Navigate back to the first tab (or whichever tab you want to return to)
+                    navigationBloc.add(NavigationItemSelected(NavigationTab.values[0]));
+                  },
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+
               Positioned(
                 top: 45,
                 right: 20,
