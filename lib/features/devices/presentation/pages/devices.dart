@@ -244,14 +244,21 @@ class _DevicesPageState extends State<DevicesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: screenSize.height * 0.05),
-          const Text(
-            'Linked Devices',
-            style: TextStyle(
-              color: AppColor.whiteColor,
-              fontSize: AppFontSizes.pageHeading,
-              fontFamily: 'Ubuntu',
-              fontWeight: FontWeight.bold,
-            ),
+          Row(
+            children:  [
+               Text(
+                'All Devices',
+                style: TextStyle(
+                  color: AppColor.whiteColor,
+                  fontSize: AppFontSizes.pageHeading,
+                  fontFamily: 'Ubuntu',
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              // add a add icon here
+
+              IconButton(onPressed: (){}, icon: Icon(Icons.add, color: AppColor.whiteColor, size: 30,))
+            ],
           ),
           SizedBox(height: screenSize.height * 0.05),
           FloorRoomSelector(
