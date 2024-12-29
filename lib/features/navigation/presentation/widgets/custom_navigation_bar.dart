@@ -79,7 +79,7 @@ class CustomNavigationBar extends StatelessWidget {
                 child: Stack(
                   children: [
                     AnimatedPositioned(
-                      duration: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 100),
                       curve: Curves.easeInOut,
                       left: itemWidth * state.currentTab.index,
                       child: Container(

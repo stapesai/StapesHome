@@ -14,7 +14,7 @@ class CustomGradientAndPaddingContainer extends StatelessWidget {
     return Container(
       clipBehavior: Clip.antiAlias,
       // color: Colors.red,
-      padding: AppPadding.pagePadding(context),
+      // padding: AppPadding.pagePadding(context),
       decoration: ShapeDecoration(
         gradient: AppColor.backgroundColorgradient,
         shape: RoundedRectangleBorder(
