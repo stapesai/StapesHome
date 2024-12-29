@@ -33,8 +33,6 @@ class Config {
         return true;
       case Environment.production:
         return false;
-      default:
-        return false;
     }
   }
 }
