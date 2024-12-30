@@ -9,7 +9,7 @@ class Config {
   /// The current environment of the application
   // Works in development when server (devel-container)is working and connected to twingate.
   // Works in production every time but websockets are not forwarded yet.
-  static const Environment environment = Environment.development;
+  static const Environment environment = Environment.production;
 
   /// The current version of the application
   static const String appVersion = '1.0.0';
@@ -32,8 +32,6 @@ class Config {
       case Environment.development:
         return true;
       case Environment.production:
-        return false;
-      default:
         return false;
     }
   }

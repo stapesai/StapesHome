@@ -11,8 +11,6 @@ class BaseUrls {
         return '192.168.0.253:8000';
       case Environment.production:
         return 'auth.stapesai.com';
-      default:
-        throw UnsupportedError('Environment not supported');
     }
   }
 
@@ -22,8 +20,6 @@ class BaseUrls {
         return '192.168.0.253:8001';
       case Environment.production:
         return 'backend.stapesai.com';
-      default:
-        throw UnsupportedError('Environment not supported');
     }
   }
 
@@ -33,8 +29,6 @@ class BaseUrls {
         return 'http';
       case Environment.production:
         return 'https';
-      default:
-        throw UnsupportedError('Environment not supported');
     }
   }
 
@@ -43,9 +37,7 @@ class BaseUrls {
       case Environment.development:
         return 'ws://192.168.0.253:8002/ws';
       case Environment.production:
-        return 'ws://23.ip.gl.ply.gg:2876/ws';
-      default:
-        throw UnsupportedError('Environment not supported');
+        return 'wss://ws.stapesai.com/ws';
     }
   }
 }
