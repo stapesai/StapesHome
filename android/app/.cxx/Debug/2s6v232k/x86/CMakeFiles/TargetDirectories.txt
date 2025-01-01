@@ -1,2 +1,0 @@
-/mnt/stapesai/StapesHome/android/app/.cxx/Debug/2s6v232k/x86/CMakeFiles/edit_cache.dir
-/mnt/stapesai/StapesHome/android/app/.cxx/Debug/2s6v232k/x86/CMakeFiles/rebuild_cache.dir
