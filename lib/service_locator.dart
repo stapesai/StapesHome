@@ -106,7 +106,7 @@ void setupServiceLocator() {
   // Optimize the registration of services and use cases.
   // ---------------------Common services---------------------
   serviceLocator.registerSingleton<HttpClient>(HttpClient());
-  serviceLocator.registerSingleton<NetworkInfo>(NetworkInfoImpl(InternetConnectionChecker()));
+  serviceLocator.registerSingleton<NetworkInfo>(NetworkInfoImpl(InternetConnectionChecker.createInstance()));
   // serviceLocator.registerSingleton<WebsocketService>(WebsocketService());
   serviceLocator.registerSingleton<HiveInterface>(Hive);
   serviceLocator.registerSingleton<SQLiteService>(SQLiteService());
