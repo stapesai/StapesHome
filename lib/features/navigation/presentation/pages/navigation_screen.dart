@@ -49,9 +49,9 @@ class _NavigationScreenState extends State<NavigationScreen> {
     KeepAlivePage(child: HomePage()),
     KeepAlivePage(child: DevicesPage()),
     KeepAlivePage(child: NodesPage()),
-    DevFloorRoomSelPage(),
+    // DevFloorRoomSelPage(),
     QrScannerScreen(),
-    DevComponentsTestPage(),
+    // DevComponentsTestPage(),
     // KeepAlivePage(child: HomeScreen()),
     KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'home')),
     // KeepAlivePage(child: DevTestWebsocketMessagesPage(page: 'devices')),
@@ -113,7 +113,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
         BlocProvider.value(value: _navigationBloc),
         BlocProvider.value(value: _websocketBloc),
       ],
-
       child: BlocListener<NavigationBloc, NavigationState>(
         listener: (context, state) {
           final index = NavigationTab.values.indexOf(state.currentTab);
@@ -129,8 +128,6 @@ class _NavigationScreenState extends State<NavigationScreen> {
               .then(
                 (_) => _isHandlingTap = false,
               );
-
-   
         },
         child: Scaffold(
           backgroundColor: Colors.transparent,

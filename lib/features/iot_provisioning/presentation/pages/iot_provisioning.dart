@@ -66,7 +66,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                       ),
                       SizedBox(height: screenSize.height * 0.02),
                       Text(
-                        'Setting up your device...',
+                        'Setting up your device',
                         style: TextStyle(
                           color: AppColor.whiteColor,
                           fontSize: AppFontSizes.pageSubHeading,
@@ -128,7 +128,7 @@ class IoTProvisioningScreen extends StatelessWidget {
     } else if (state is NodeProvisioned) {
       return _buildSuccessState();
     } else {
-      return _buildStepIndicator('Initializing...', true);
+      return _buildStepIndicator('Initializing', true);
     }
   }
 
