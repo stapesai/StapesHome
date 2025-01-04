@@ -93,16 +93,6 @@ class IoTProvisioningScreen extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      SizedBox(height: screenSize.height * 0.02),
-                      Text(
-                        'Setting up your device...',
-                        style: TextStyle(
-                          color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageSubHeading,
-                          fontFamily: 'Ubuntu',
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
                       SizedBox(height: screenSize.height * 0.04),
                       Center(
                         child: SizedBox(
@@ -298,17 +288,6 @@ class IoTProvisioningScreen extends StatelessWidget {
               ),
             ],
           ),
-          if (step.error != null) // Show error message if present
-            Padding(
-              padding: const EdgeInsets.only(left: 56, top: 4),
-              child: Text(
-                step.error!,
-                style: TextStyle(
-                  color: _getTextColor(step.status),
-                  fontSize: 14,
-                ),
-              ),
-            ),
         ],
       ),
     );
