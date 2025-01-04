@@ -262,18 +262,39 @@ class IoTProvisioningScreen extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
               Container(
-                width: 24,
                 height: 24,
+                width: 24,
+                // Top connecting line (skip for first circle)
+                // if (index < steps.length )
+                //   Positioned(
+                //     height: 12, // Small connection at top
+                //     left: 11,
+                //     child: Container(
+                //       width: 2,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // Bottom connecting line (skip for last circle)
+                // if (index < steps.length - 1)
+                //   Positioned(
+                //     bottom: 0,
+                //     height: 12, // Small connection at bottom
+                //     left: 11,
+                //     child: Container(
+                //       width: 2,
+                //       color: Colors.white,
+                //     ),
+                //   ),
+                // Circle
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _getStepColor(step.status),
                 ),
-                child: step.status == StepStatus.error // Add error status handling
+                child: step.status == StepStatus.error
                     ? _getStepIndicator(StepStatus.error)
                     : _getStepIndicator(step.status),
               ),
