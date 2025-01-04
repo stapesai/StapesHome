@@ -89,7 +89,7 @@ class _SignUpCreateNewPasswordScreenState extends State<SignUpCreateNewPasswordS
                         width: double.infinity,
                         child: Text(
                           'Create Password',
-                          style: const TextStyle(
+                          style:  TextStyle(
                             color: AppColor.whiteColor,
                             fontSize: AppFontSizes.pageHeading,
                             fontFamily: 'Ubuntu',
@@ -100,7 +100,7 @@ class _SignUpCreateNewPasswordScreenState extends State<SignUpCreateNewPasswordS
                       SizedBox(height: screenSize.height * 0.02),
                       Text(
                         'Please create a strong password.',
-                        style: const TextStyle(
+                        style: TextStyle(
                           color: AppColor.whiteColor,
                           fontSize: AppFontSizes.pageSubHeading,
                           fontFamily: 'Ubuntu',

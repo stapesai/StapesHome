@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hive/hive.dart';
 import 'package:flutter/material.dart';
 import 'package:stapes_home/firebase_options.dart';
@@ -56,8 +57,12 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomGradientAndPaddingContainer(
-      child: MaterialApp.router(
+    return ScreenUtilInit(
+      designSize: const Size(390, 844),
+      minTextAdapt: true,
+      splitScreenMode: true,
+      child: CustomGradientAndPaddingContainer(
+       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         // showPerformanceOverlay: true,
 
@@ -75,6 +80,8 @@ class MyApp extends StatelessWidget {
         //   highlightColor: Colors.transparent,
         // ),
       ),
+      ),
     );
   }
+
 }

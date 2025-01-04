@@ -89,7 +89,7 @@ class _ForgotPasswordResetPasswordScreenState extends State<ForgotPasswordResetP
                     width: double.infinity,
                     child: Text(
                       'Create New Password',
-                      style: const TextStyle(
+                      style: TextStyle(
                         color: AppColor.whiteColor,
                         fontSize: AppFontSizes.pageHeading,
                         fontFamily: 'Ubuntu',
@@ -100,7 +100,7 @@ class _ForgotPasswordResetPasswordScreenState extends State<ForgotPasswordResetP
                   SizedBox(height: screenSize.height * 0.02),
                   Text(
                     'Enter your new password.',
-                    style: const TextStyle(
+                    style: TextStyle(
                       color: AppColor.whiteColor,
                       fontSize: AppFontSizes.pageSubHeading,
                       fontFamily: 'Ubuntu',

@@ -149,7 +149,7 @@ class _NodesPageState extends State<NodesPage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(height: screenSize.height * 0.05),
-        const Text(
+         Text(
           'Linked Nodes',
           style: TextStyle(
             color: AppColor.whiteColor,

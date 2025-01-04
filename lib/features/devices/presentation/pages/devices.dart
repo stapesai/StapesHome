@@ -244,7 +244,7 @@ class _DevicesPageState extends State<DevicesPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           SizedBox(height: screenSize.height * 0.05),
-          const Text(
+           Text(
             'Linked Devices',
             style: TextStyle(
               color: AppColor.whiteColor,
