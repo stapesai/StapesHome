@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -91,7 +92,7 @@ class _SignUpCreateNewPasswordScreenState extends State<SignUpCreateNewPasswordS
                           'Create Password',
                           style:  TextStyle(
                             color: AppColor.whiteColor,
-                            fontSize: AppFontSizes.pageHeading,
+                            fontSize: 40.sp,
                             fontFamily: 'Ubuntu',
                             fontWeight: FontWeight.w700,
                           ),
@@ -102,7 +103,7 @@ class _SignUpCreateNewPasswordScreenState extends State<SignUpCreateNewPasswordS
                         'Please create a strong password.',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageSubHeading,
+                          fontSize: 18.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w400,
                         ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -136,12 +137,12 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
             fit: BoxFit.contain,
           ),
         ),
-        const Text(
+        Text(
           'stapes.ai',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColor.whiteColor,
-            fontSize: 46,
+            fontSize: 46.sp,
             fontFamily: 'Ubuntu',
             fontWeight: FontWeight.w400,
           ),
@@ -171,11 +172,11 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
               onPressed: () {
                 GoRouter.of(context).push(AppRouteConstants.forgotPassword.routePath);
               },
-              child: const Text(
+              child:Text(
                 'Forgot Password?',
                 style: TextStyle(
                   color: AppColor.textHyperlinkColor,
-                  fontSize: 15,
+                  fontSize: 15.sp,
                   fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.w400,
                 ),
@@ -204,11 +205,11 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text(
+              Text(
                 'Don\'t have an account?',
                 style: TextStyle(
                   color: AppColor.whiteColor,
-                  fontSize: 16,
+                  fontSize: 16.sp,
                   fontFamily: 'Ubuntu',
                   fontWeight: FontWeight.w400,
                 ),
@@ -220,11 +221,11 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
                     MaterialPageRoute(builder: (context) => const SignUpEmailInputScreen()),
                   );
                 },
-                child: const Text(
+                child:Text(
                   'Sign Up',
                   style: TextStyle(
                     color: AppColor.textHyperlinkColor,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontFamily: 'Ubuntu',
                     fontWeight: FontWeight.w400,
                   ),
@@ -243,7 +244,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 30),
           child: Row(
-            children: const [
+            children:[
               Expanded(child: Divider(color: AppColor.whiteColor50, thickness: 1)),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20),
@@ -251,7 +252,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
                   'or continue with',
                   style: TextStyle(
                     color: AppColor.whiteColor50,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontFamily: 'Ubuntu',
                     fontWeight: FontWeight.w400,
                   ),
@@ -298,7 +299,7 @@ class _LoginEmailInputScreenState extends State<LoginEmailInputScreen> {
         child: Center(
           child: Image(
             image: AssetImage(asset),
-            height: 30,
+            height: 30.h,
           ),
         ),
       ),

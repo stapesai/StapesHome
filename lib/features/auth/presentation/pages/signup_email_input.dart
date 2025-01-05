@@ -1,5 +1,6 @@
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/constants/app_route_constants.dart';
@@ -97,8 +98,7 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                         'Sign Up',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          // fontSize: screenSize.width * 0.1,
-                          fontSize: AppFontSizes.pageHeading,
+                          fontSize: 40.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w700,
                         ),
@@ -110,7 +110,7 @@ class _SignUpEmailInputScreenState extends State<SignUpEmailInputScreen> {
                         'Enter your email to receive verification code.',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageSubHeading,
+                          fontSize: 18.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w400,
                         ),
