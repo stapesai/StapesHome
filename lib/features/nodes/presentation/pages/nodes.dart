@@ -2,10 +2,10 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/node_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/features/common/presentation/widgets/iot/node_widget.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/node_skel.dart';
@@ -116,12 +116,12 @@ class _NodesPageState extends State<NodesPage> {
     }
 
     if (_nodes.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No nodes found in this room',
           style: TextStyle(
             color: AppColor.whiteColor,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Ubuntu',
           ),
         ),
@@ -153,7 +153,7 @@ class _NodesPageState extends State<NodesPage> {
           'Linked Nodes',
           style: TextStyle(
             color: AppColor.whiteColor,
-            fontSize: AppFontSizes.pageHeading,
+            fontSize: 40.sp,
             fontFamily: 'Ubuntu',
             fontWeight: FontWeight.bold,
           ),

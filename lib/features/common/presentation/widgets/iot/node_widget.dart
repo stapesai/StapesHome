@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/node_model.dart';
@@ -53,7 +54,7 @@ class NodeComponentWidget extends StatelessWidget {
                     node.name,
                     style: TextStyle(
                       color: Colors.white,
-                      fontSize: 19.63,
+                      fontSize: 19.63.sp,
                       fontFamily: 'Ubuntu',
                       fontWeight: FontWeight.w500,
                     ),

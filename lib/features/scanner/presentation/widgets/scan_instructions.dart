@@ -42,7 +42,7 @@ class QrScanInstructionPanel extends StatelessWidget {
                 'Instructions',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: AppColor.primaryColor, // Replace with AppColor.primaryColor
+                  color: AppColor.primaryColor, 
                   fontSize: fontSize + 4,
                   fontWeight: FontWeight.bold,
                 ),

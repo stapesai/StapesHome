@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
@@ -152,12 +153,12 @@ class _DevicesPageState extends State<DevicesPage> {
     }
 
     if (_devices.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No devices found in this room',
           style: TextStyle(
             color: AppColor.whiteColor,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Ubuntu',
           ),
         ),
@@ -248,7 +249,7 @@ class _DevicesPageState extends State<DevicesPage> {
             'Linked Devices',
             style: TextStyle(
               color: AppColor.whiteColor,
-              fontSize: AppFontSizes.pageHeading,
+              fontSize: 40.sp,
               fontFamily: 'Ubuntu',
               fontWeight: FontWeight.bold,
             ),

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/floor_model.dart';
 import 'package:stapes_home/core/models/room_model.dart';
@@ -67,10 +68,10 @@ class FloorRoomSelectorContent extends StatelessWidget {
   Widget _buildFloorSectionHeader(BuildContext context) {
     return Row(
       children: [
-        const Text(
+         Text(
           'Floors',
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 22.sp,
             fontWeight: FontWeight.w700,
             color: AppColor.whiteColor,
             fontFamily: 'Ubuntu',
@@ -122,12 +123,12 @@ class FloorRoomSelectorContent extends StatelessWidget {
     }
 
     if (state.floors.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No floors available',
           style: TextStyle(
             color: AppColor.whiteColor,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Ubuntu',
           ),
         ),
@@ -187,10 +188,10 @@ class FloorRoomSelectorContent extends StatelessWidget {
   Widget _buildRoomSectionHeader(BuildContext context) {
     return Row(
       children: [
-        const Text(
+         Text(
           'Rooms',
           style: TextStyle(
-            fontSize: 22,
+            fontSize: 22.sp,
             fontWeight: FontWeight.w700,
             color: AppColor.whiteColor,
             fontFamily: 'Ubuntu',
@@ -247,12 +248,12 @@ class FloorRoomSelectorContent extends StatelessWidget {
     }
 
     if (state.rooms.isEmpty) {
-      return const Center(
+      return Center(
         child: Text(
           'No rooms available',
           style: TextStyle(
             color: AppColor.whiteColor,
-            fontSize: 16,
+            fontSize: 16.sp,
             fontFamily: 'Ubuntu',
           ),
         ),

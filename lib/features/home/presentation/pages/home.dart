@@ -2,11 +2,11 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/core/websocket/websocket_state.dart';
@@ -175,7 +175,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                       'Good Morning,',
                       style: TextStyle(
                         color: AppColor.whiteColor,
-                        fontSize: AppFontSizes.bodyText,
+                        fontSize: 16.sp,
                         fontFamily: 'Ubuntu',
                         fontWeight: FontWeight.w400,
                       ),
@@ -184,7 +184,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                       _userName ?? 'User',
                       style: TextStyle(
                         color: AppColor.whiteColor,
-                        fontSize: AppFontSizes.pageHeading,
+                        fontSize: 40.sp,
                         fontFamily: 'Ubuntu',
                         fontWeight: FontWeight.w700,
                       ),
@@ -227,7 +227,7 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
                                 : "No devices are currently active",
                             style: TextStyle(
                               color: AppColor.whiteColor.withOpacity(0.8),
-                              fontSize: AppFontSizes.bodyText,
+                              fontSize: 16.sp,
                               fontFamily: 'Ubuntu',
                               fontWeight: FontWeight.w400,
                             ),
@@ -301,14 +301,14 @@ class _HomePageState extends State<HomePage> with AutomaticKeepAliveClientMixin 
         children: [
           SvgPicture.asset(
             isActive ? 'assets/icons/home/$activeIcon' : 'assets/icons/home/$inactiveIcon',
-            width: 20,
+            width: 20.w,
           ),
           SizedBox(width: 8),
           Text(
             label,
             style: TextStyle(
               color: isActive ? AppColor.whiteColor : AppColor.whiteColor.withOpacity(0.5),
-              fontSize: AppFontSizes.bodyText,
+              fontSize: 16.sp,
               fontFamily: 'Ubuntu',
               fontWeight: FontWeight.w400,
             ),

@@ -1,6 +1,7 @@
 // File: lib/features/floor_room_sel/presentation/widgets/floor_room_name_button.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
 class FloorRoomNameButton extends StatelessWidget {
@@ -28,7 +29,7 @@ class FloorRoomNameButton extends StatelessWidget {
             label,
             style: TextStyle(
               color: isActive ? AppColor.whiteColor : AppColor.whiteColor50,
-              fontSize: 16,
+              fontSize: 16.sp,
               fontFamily: 'Ubuntu',
               fontWeight: FontWeight.w700,
             ),

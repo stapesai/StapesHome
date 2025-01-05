@@ -1,6 +1,7 @@
 // File: lib/features/common/presentation/widgets/iot/light.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
@@ -78,7 +79,7 @@ class LightComponentWidget extends StatelessWidget {
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
-                    fontSize: 16,
+                    fontSize: 16.sp,
                     fontFamily: 'Ubuntu',
                     fontWeight: FontWeight.w700,
                   ),

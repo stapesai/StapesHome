@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:pinput/pinput.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
 class OtpInputWidget extends StatelessWidget {
@@ -44,7 +44,7 @@ class OtpTheme {
       width: 56,
       height: 56,
       textStyle: TextStyle(
-        fontSize: AppFontSizes.pageSubHeading,
+        fontSize: 18.sp,
         color: AppColor.whiteColor,
         fontWeight: FontWeight.w600
       ),

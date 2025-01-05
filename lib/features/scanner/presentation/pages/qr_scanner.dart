@@ -1,5 +1,4 @@
 // lib/features/provisioning/presentation/pages/scanner/qr_scanner.dart
-
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -25,7 +24,6 @@ class QrScannerScreen extends StatefulWidget {
 }
 
 class _QrScannerScreenState extends State<QrScannerScreen> with WidgetsBindingObserver {
-  // late MobileScannerController controller;
   final controller = MobileScannerController(
     autoStart: false,
     torchEnabled: false,

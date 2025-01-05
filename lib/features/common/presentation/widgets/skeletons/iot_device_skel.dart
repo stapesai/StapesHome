@@ -1,6 +1,7 @@
 // File: lib/features/common/presentation/widgets/skeletons/iot_device_skel.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class IotDevicesSkeleton extends StatefulWidget {
   final double width;
@@ -56,17 +57,17 @@ class _DevicesSkeletonState extends State<IotDevicesSkeleton> with SingleTickerP
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                width: 68,
-                height: 68,
+                width: 68.w,
+                height: 68.h,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: _colorAnimation.value,
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 10.h),
               Container(
-                width: 80,
-                height: 16,
+                width: 80.w,
+                height: 16.h,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(8),
                   color: _colorAnimation.value,

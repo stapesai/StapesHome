@@ -1,5 +1,6 @@
 // lib/features/iot_provisioning/presentation/pages/iot_provisioning.dart
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -79,7 +80,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                         'Provisioning',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageHeading,
+                          fontSize: 16.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w700,
                         ),
@@ -88,7 +89,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                         'Node',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageHeading,
+                          fontSize: 40.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w700,
                         ),
@@ -303,7 +304,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                 step.title,
                 style: TextStyle(
                   color: _getStepTextColor(step.status, index, steps),
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontFamily: 'Ubuntu',
                 ),
               ),
