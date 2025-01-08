@@ -1,6 +1,7 @@
 // lib/features/scanner/presentation/widgets/scanner_overlay.dart
 
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 
 class QRScannerOverlay extends StatelessWidget {
@@ -9,7 +10,7 @@ class QRScannerOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    final scanAreaSize = size.width * 0.7;
+    final scanAreaSize = size.width * 0.7.w;
     // final scanAreaOffset = (size.width - scanAreaSize) / 2;
 
     return Stack(
@@ -43,8 +44,8 @@ class QRScannerOverlay extends StatelessWidget {
           child: CustomPaint(
             foregroundPainter: BorderPainter(),
             child: SizedBox(
-              width: scanAreaSize + 25,
-              height: scanAreaSize + 25,
+              width: scanAreaSize + 25.w,
+              height: scanAreaSize + 25.h,
             ),
           ),
         ),
