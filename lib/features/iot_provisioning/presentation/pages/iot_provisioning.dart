@@ -7,7 +7,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';

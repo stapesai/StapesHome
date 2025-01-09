@@ -33,8 +33,8 @@ class CustomBottomSheet extends StatelessWidget {
           // mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 40.w,
-              height: 4.h,
+              width: 40,
+              height: 4,
               margin: const EdgeInsets.symmetric(vertical: 12),
               decoration: BoxDecoration(
                 color: AppColor.whiteColor.withOpacity(0.3),
@@ -66,7 +66,7 @@ class CustomBottomSheet extends StatelessWidget {
                 option.text,
                 style: TextStyle(
                   color: AppColor.whiteColor,
-                  fontSize: 16.sp,
+                  fontSize: 16,
                   fontWeight: FontWeight.w500,
                 ),
               ),
