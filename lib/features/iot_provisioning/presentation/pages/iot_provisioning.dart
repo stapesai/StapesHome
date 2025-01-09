@@ -1,12 +1,12 @@
 // lib/features/iot_provisioning/presentation/pages/iot_provisioning.dart
 
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:stapes_home/service_locator.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
 import 'package:stapes_home/core/theme/app_padding.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/features/nodes/domain/usecases/pair_node_usecase.dart';
 import 'package:stapes_home/features/scanner/data/models/pair_iot_node_qr_model.dart';
 import 'package:stapes_home/features/auth/data/datasources/local/auth_local_datasource.dart';
@@ -79,7 +79,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                         'Provisioning',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageHeading,
+                          fontSize: 28.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w700,
                         ),
@@ -88,7 +88,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                         'Node',
                         style: TextStyle(
                           color: AppColor.whiteColor,
-                          fontSize: AppFontSizes.pageHeading,
+                          fontSize: 40.sp,
                           fontFamily: 'Ubuntu',
                           fontWeight: FontWeight.w700,
                         ),
@@ -150,7 +150,9 @@ class IoTProvisioningScreen extends StatelessWidget {
                       ? StepStatus.current
                       : state is WifiCredentialsValid
                           ? StepStatus.completed
-                          : StepStatus.pending,
+                          : state is BlePairingFailure
+                              ? StepStatus.current
+                              : StepStatus.pending,
           error: state is WifiNetworksError ? state.error : null,
         ),
         ProvisioningStep(
@@ -178,7 +180,9 @@ class IoTProvisioningScreen extends StatelessWidget {
                           state is CompleteNodePairingFailure ||
                           state is NodeProvisioned
                       ? StepStatus.completed
-                      : StepStatus.pending,
+                      : state is WifiCredentialsInvalid
+                          ? StepStatus.current
+                          : StepStatus.pending,
           error: state is NodePairingRequestFailure ? state.error : null,
         ),
         ProvisioningStep(
@@ -194,7 +198,9 @@ class IoTProvisioningScreen extends StatelessWidget {
                           state is CompleteNodePairingFailure ||
                           state is NodeProvisioned
                       ? StepStatus.completed
-                      : StepStatus.pending,
+                      : state is NodePairingRequestFailure
+                          ? StepStatus.current
+                          : StepStatus.pending,
           error: state is UploadConfigToNodeFailure ? state.error : null,
         ),
         ProvisioningStep(
@@ -205,7 +211,9 @@ class IoTProvisioningScreen extends StatelessWidget {
                   ? StepStatus.current
                   : state is CompleteNodePairingSuccess || state is NodeProvisioned
                       ? StepStatus.completed
-                      : StepStatus.pending,
+                      : state is UploadConfigToNodeFailure
+                          ? StepStatus.current
+                          : StepStatus.pending,
           error:
               state is CompleteNodePairingFailure ? state.error : (state is NodeProvisioningError ? state.error : null),
         ),
@@ -303,7 +311,7 @@ class IoTProvisioningScreen extends StatelessWidget {
                 step.title,
                 style: TextStyle(
                   color: _getStepTextColor(step.status, index, steps),
-                  fontSize: 18,
+                  fontSize: 18.sp,
                   fontFamily: 'Ubuntu',
                 ),
               ),
