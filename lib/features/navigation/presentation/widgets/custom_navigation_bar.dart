@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_bloc.dart';
 import 'package:stapes_home/features/navigation/presentation/blocs/navigation_event.dart';
@@ -26,7 +27,11 @@ class CustomNavigationBar extends StatelessWidget {
       data: Theme.of(context).copyWith(
         navigationBarTheme: NavigationBarThemeData(
           labelTextStyle: WidgetStateProperty.all(
-            TextStyle(color: Colors.white),
+            TextStyle(
+              color: Colors.white,
+              fontSize: 16.sp,
+              fontFamily: 'Ubuntu',
+            ),
           ),
         ),
       ),
