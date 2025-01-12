@@ -244,11 +244,12 @@ class _DevicesPageState extends State<DevicesPage> {
       decoration: BoxDecoration(
         gradient: AppColor.backgroundColorgradient,
       ),
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: EdgeInsets.symmetric(horizontal: 12.w),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBar(
+            // leading: Container(),
             backgroundColor: Colors.transparent,
             elevation: 0,
             centerTitle: false,
@@ -262,18 +263,33 @@ class _DevicesPageState extends State<DevicesPage> {
               ),
             ),
             actions: [
-              IconButton(
-                icon: Container(
-                  padding: const EdgeInsets.all(2),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.iconBarColor,
-                  ),
-                  child: const Icon(Icons.add, color: Colors.white),
-                ),
-                onPressed: () {},
-              ),
-            ],
+  PopupMenuButton<void>(
+    icon: Container(
+      padding: const EdgeInsets.all(4),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: AppColor.iconBarColor,
+      ),
+      child: const Icon(Icons.add, color: Colors.white),
+    ),
+    onSelected: (value) {
+      // Handle selection
+    },
+    itemBuilder: (BuildContext context) => [
+      PopupMenuItem<void>(
+        child: Container(
+          width: 200,
+          color: AppColor.backgroundColorDark,
+          padding: const EdgeInsets.all(16),
+          child: const Text(
+            'Add a new device',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    ],
+  ),
+],
           ),
           SizedBox(height: screenSize.height * 0.03),
           FloorRoomSelector(
