@@ -6,7 +6,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:stapes_home/core/common/widgets/snackbar.dart';
 import 'package:stapes_home/core/models/device_model.dart';
 import 'package:stapes_home/core/theme/app_colors.dart';
-import 'package:stapes_home/core/theme/app_font_sizes.dart';
 import 'package:stapes_home/core/websocket/websocket_bloc.dart';
 import 'package:stapes_home/core/websocket/websocket_event.dart';
 import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_sheet_widget.dart';
@@ -168,7 +167,7 @@ class _DevicesPageState extends State<DevicesPage> {
     void showDeviceOptions(BuildContext context, DeviceModel device) {
       showModalBottomSheet(
         context: context,
-        backgroundColor: Colors.transparent,
+        backgroundColor: AppColor.backgroundColorDark,
         builder: (context) => HoldBottomSheetWidget(
           options: [
             BottomSheetOption(
@@ -241,20 +240,42 @@ class _DevicesPageState extends State<DevicesPage> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-     return Column(
+    return Container(
+      decoration: BoxDecoration(
+        gradient: AppColor.backgroundColorgradient,
+      ),
+      padding: EdgeInsets.symmetric(horizontal: 10),
+      child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: screenSize.height * 0.05),
-           Text(
-            'Linked Devices',
-            style: TextStyle(
-              color: AppColor.whiteColor,
-              fontSize: 40.sp,
-              fontFamily: 'Ubuntu',
-              fontWeight: FontWeight.bold,
+          AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0,
+            centerTitle: false,
+            title: Text(
+              'Linked Devices',
+              style: TextStyle(
+                color: AppColor.whiteColor,
+                fontSize: 34.sp,
+                fontFamily: 'Ubuntu',
+                fontWeight: FontWeight.bold,
+              ),
             ),
+            actions: [
+              IconButton(
+                icon: Container(
+                  padding: const EdgeInsets.all(2),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.iconBarColor,
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white),
+                ),
+                onPressed: () {},
+              ),
+            ],
           ),
-          SizedBox(height: screenSize.height * 0.05),
+          SizedBox(height: screenSize.height * 0.03),
           FloorRoomSelector(
             onFloorSelected: _onFloorSelected,
             onRoomSelected: _onRoomSelected,
@@ -266,6 +287,7 @@ class _DevicesPageState extends State<DevicesPage> {
             ),
           ),
         ],
+      ),
     );
   }
 }
