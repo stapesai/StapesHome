@@ -12,6 +12,7 @@ import 'package:stapes_home/features/common/presentation/widgets/hold_bottom_she
 import 'package:stapes_home/features/common/presentation/widgets/iot/light_widget.dart';
 import 'package:stapes_home/features/common/presentation/widgets/skeletons/iot_device_skel.dart';
 import 'package:stapes_home/features/devices/data/models/get_devices_api_param.dart';
+import 'package:stapes_home/features/devices/presentation/pages/add_new_device.dart';
 import 'package:stapes_home/features/fav_devices/data/models/create_fav_devices_api_params.dart';
 import 'package:stapes_home/features/fav_devices/data/models/get_fav_devices_api_params.dart';
 import 'package:stapes_home/features/fav_devices/domain/usecases/create_fav_devices.dart';
@@ -244,12 +245,11 @@ class _DevicesPageState extends State<DevicesPage> {
       decoration: BoxDecoration(
         gradient: AppColor.backgroundColorgradient,
       ),
-      padding: EdgeInsets.symmetric(horizontal: 12.w),
+      padding: EdgeInsets.symmetric(horizontal: 20),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBar(
-            // leading: Container(),
             backgroundColor: Colors.transparent,
             elevation: 0,
             centerTitle: false,
@@ -257,39 +257,31 @@ class _DevicesPageState extends State<DevicesPage> {
               'Linked Devices',
               style: TextStyle(
                 color: AppColor.whiteColor,
-                fontSize: 34.sp,
+                fontSize: 36.sp,
                 fontFamily: 'Ubuntu',
                 fontWeight: FontWeight.bold,
               ),
             ),
             actions: [
-  PopupMenuButton<void>(
-    icon: Container(
-      padding: const EdgeInsets.all(4),
-      decoration: const BoxDecoration(
-        shape: BoxShape.circle,
-        color: AppColor.iconBarColor,
-      ),
-      child: const Icon(Icons.add, color: Colors.white),
-    ),
-    onSelected: (value) {
-      // Handle selection
-    },
-    itemBuilder: (BuildContext context) => [
-      PopupMenuItem<void>(
-        child: Container(
-          width: 200,
-          color: AppColor.backgroundColorDark,
-          padding: const EdgeInsets.all(16),
-          child: const Text(
-            'Add a new device',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    ],
-  ),
-],
+              IconButton(
+                icon: Container(
+                  padding: const EdgeInsets.all(8),
+                  decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: AppColor.iconBarColor,
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const AddNewDevicePage(),
+                    ),
+                  );
+                },
+              ),
+            ],
           ),
           SizedBox(height: screenSize.height * 0.03),
           FloorRoomSelector(
