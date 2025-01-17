@@ -9,66 +9,71 @@ class AddNewDevicePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColor.backgroundColorDark,
-      body: SafeArea(
-        child: SingleChildScrollView(
-          padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Add a new device',
-                style: TextStyle(
-                  color: AppColor.whiteColor,
-                  fontSize: 36.sp,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              SizedBox(height: 16.h),
-              Text(
-                'Enter the details for adding a device',
-                style: TextStyle(
-                  color: AppColor.whiteColor50,
-                  fontSize: 24.sp,
-                ),
-              ),
-              SizedBox(height: 24.h),
-              CustomTextField(hintText: 'Floor'),
-              SizedBox(height: 12.h),
-              CustomTextField(hintText: 'Room'),
-              SizedBox(height: 12.h),
-              CustomTextField(hintText: 'Node'),
-              SizedBox(height: 12.h),
-              CustomTextField(hintText: 'Device Name'),
-              SizedBox(height: 12.h),
-              CustomTextField(hintText: 'Device Type'),
-              SizedBox(height: 12.h),
-              CustomTextField(hintText: 'Channel ID'),
-              SizedBox(height: 24.h),
-              SizedBox(
-                width: double.infinity,
-                height: 48.h,
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: AppColor.iconBarColor,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(40),
-                    ),
-                  ),
-                  onPressed: () {
-                    // Handle Create button
-                  },
-                  child: Text(
-                    'Create',
-                    style: TextStyle(
-                      color: AppColor.whiteColor,
-                      fontSize: 18.sp,
-                      fontWeight: FontWeight.w600,
-                    ),
+      backgroundColor: Colors.transparent,
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: AppColor.backgroundColorgradient,
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 16.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Add a new device',
+                  style: TextStyle(
+                    color: AppColor.whiteColor,
+                    fontSize: 36.sp,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-              ),
-            ],
+                SizedBox(height: 16.h),
+                Text(
+                  'Enter the details for adding a device',
+                  style: TextStyle(
+                    color: AppColor.whiteColor50,
+                    fontSize: 24.sp,
+                  ),
+                ),
+                SizedBox(height: 24.h),
+                CustomTextField(hintText: 'Floor'),
+                SizedBox(height: 12.h),
+                CustomTextField(hintText: 'Room'),
+                SizedBox(height: 12.h),
+                CustomTextField(hintText: 'Node'),
+                SizedBox(height: 12.h),
+                CustomTextField(hintText: 'Device Name'),
+                SizedBox(height: 12.h),
+                CustomTextField(hintText: 'Device Type'),
+                SizedBox(height: 12.h),
+                CustomTextField(hintText: 'Channel ID'),
+                SizedBox(height: 24.h),
+                SizedBox(
+                  width: double.infinity,
+                  height: 48.h,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: AppColor.iconBarColor,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(40),
+                      ),
+                    ),
+                    onPressed: () {
+                      // Handle Create button
+                    },
+                    child: Text(
+                      'Create',
+                      style: TextStyle(
+                        color: AppColor.whiteColor,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
