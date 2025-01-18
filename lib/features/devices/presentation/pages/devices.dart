@@ -241,61 +241,61 @@ class _DevicesPageState extends State<DevicesPage> {
   @override
   Widget build(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
-    return Container(
-      decoration: BoxDecoration(
-        gradient: AppColor.backgroundColorgradient,
-      ),
-      padding: EdgeInsets.symmetric(horizontal: 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0,
-            centerTitle: false,
-            title: Text(
-              'Linked Devices',
-              style: TextStyle(
-                color: AppColor.whiteColor,
-                fontSize: 36.sp,
-                fontFamily: 'Ubuntu',
-                fontWeight: FontWeight.bold,
-              ),
+    // return Container(
+    //   decoration: BoxDecoration(
+    //     gradient: AppColor.backgroundColorgradient,
+    //   ),
+    // padding: EdgeInsets.symmetric(horizontal: 20);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          centerTitle: false,
+          title: Text(
+            'Linked Devices',
+            style: TextStyle(
+              color: AppColor.whiteColor,
+              fontSize: 36.sp,
+              fontFamily: 'Ubuntu',
+              fontWeight: FontWeight.bold,
             ),
-            actions: [
-              IconButton(
-                icon: Container(
-                  padding: const EdgeInsets.all(8),
-                  decoration: const BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: AppColor.iconBarColor,
-                  ),
-                  child: const Icon(Icons.add, color: Colors.white),
+          ),
+          actions: [
+            IconButton(
+              icon: Container(
+                padding: const EdgeInsets.all(8),
+                decoration: const BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColor.iconBarColor,
                 ),
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const AddNewDevicePage(),
-                    ),
-                  );
-                },
+                child: const Icon(Icons.add, color: Colors.white),
               ),
-            ],
-          ),
-          SizedBox(height: screenSize.height * 0.03),
-          FloorRoomSelector(
-            onFloorSelected: _onFloorSelected,
-            onRoomSelected: _onRoomSelected,
-          ),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: _buildDevicesList(),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const AddNewDevicePage(),
+                  ),
+                );
+              },
             ),
+          ],
+        ),
+        SizedBox(height: screenSize.height * 0.03),
+        FloorRoomSelector(
+          onFloorSelected: _onFloorSelected,
+          onRoomSelected: _onRoomSelected,
+        ),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: _buildDevicesList(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
+    // );
   }
 }
