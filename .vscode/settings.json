@@ -28,4 +28,5 @@
         ".flutter-plugins-dependencies": true,
         "pubspec.lock": true,
     },
+    "dart.flutterSdkPath": "/opt/homebrew/Caskroom/flutter/3.27.1/flutter",
 }
